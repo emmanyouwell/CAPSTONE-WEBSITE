@@ -17,17 +17,13 @@ const Home = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
-        className="h-[500px] mt-8 p-4">
+        className="h-[500px] p-4">
         <div className="mt-8 h-full w-full flex flex-col items-center justify-center">
           <Typography style={{ color: '#004080' }} className="font-varela text-center" variant="h1">Welcome to Taguig City Human Milk Bank online portal!</Typography>
           <Typography variant="lead" className="mt-4 text-center">Join our growing community of 1,800+ donors and help provide life-saving nourishment to infants in need.</Typography>
           <Typography variant="lead" classname="text-center">Together, we can make a difference—one drop at a time.</Typography>
           <Link to="/donor-application"><Button color="pink" variant="gradient" size="lg" className="mt-4">Become a Donor Today</Button></Link>
-
-
         </div>
-
-
       </section>
 
       <section className="p-4 mb-8">

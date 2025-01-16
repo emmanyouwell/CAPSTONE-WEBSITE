@@ -9,6 +9,13 @@ export default withMT({
     extend: {
       fontFamily: {
         varela: ["Varela Round", "sans-serif"],
+        concert: ["Concert One", "serif"],
+        dyna: ["DynaPuff", "serif"],
+        pangolin: ["Pangolin", "serif"],
+        playpen: ["Playpen Sans", "serif"],
+        playwrite: ["Playwrite GB S", "serif"],
+        shortstack: ["Short Stack", "serif"],
+        sofia: ["Sofia Sans", "serif"]
       },
       colors: {
         primary: {
@@ -55,6 +62,8 @@ export default withMT({
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 });
 
