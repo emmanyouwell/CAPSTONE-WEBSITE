@@ -21,7 +21,7 @@ const Home = () => {
         <div className="mt-8 h-full w-full flex flex-col items-center justify-center">
           <Typography style={{ color: '#004080' }} className="font-varela text-center" variant="h1">Welcome to Taguig City Human Milk Bank online portal!</Typography>
           <Typography variant="lead" className="mt-4 text-center">Join our growing community of 1,800+ donors and help provide life-saving nourishment to infants in need.</Typography>
-          <Typography variant="lead" classname="text-center">Together, we can make a difference—one drop at a time.</Typography>
+          <Typography variant="lead" className="text-center">Together, we can make a difference—one drop at a time.</Typography>
           <Link to="/donor-application"><Button color="pink" variant="gradient" size="lg" className="mt-4">Become a Donor Today</Button></Link>
         </div>
       </section>
@@ -37,25 +37,25 @@ const Home = () => {
           <div className="flex flex-col items-center">
             <img src={signup} alt="signup" className="w-96" />
             <Typography variant="h4" className="font-varela text-primary">STEP 1: SIGN UP</Typography>
-            <Typography variant="body" className="w-96 text-center">Sign up and complete our interview form to determine your eligibility as a donor based on your medical background.</Typography>
+            <Typography variant="paragraph" className="w-96 text-center">Sign up and complete our interview form to determine your eligibility as a donor based on your medical background.</Typography>
           </div>
           <div className="flex flex-col items-center">
             <img src={screening} alt="screening" className="w-96" />
             <Typography variant="h4" className="font-varela text-primary">STEP 2: SCREENING</Typography>
-            <Typography variant="body" className="w-96 text-center">Eligible donors will be contacted to schedule a blood screening for HIV, Hepatitis B, and Syphilis. This ensures the safety and quality of the donation process.</Typography>
+            <Typography variant="paragraph" className="w-96 text-center">Eligible donors will be contacted to schedule a blood screening for HIV, Hepatitis B, and Syphilis. This ensures the safety and quality of the donation process.</Typography>
           </div>
           <div className="flex flex-col items-center">
             <img src={donate} alt="donate" className="w-96" />
             <Typography variant="h4" className="font-varela text-primary">STEP 3: DONATE</Typography>
-            <Typography variant="body" className="w-96 text-center">Eligible donors can donate their excess breast milk through home pick-up or barangay clinics after screening.</Typography>
+            <Typography variant="paragraph" className="w-96 text-center">Eligible donors can donate their excess breast milk through home pick-up or barangay clinics after screening.</Typography>
           </div>
         </div>
       </section>
 
       <section className="h-max p-4 bg-lightbg relative" >
-        <div class="custom-shape-divider-top-1736524383">
+        <div className="custom-shape-divider-top-1736524383">
           <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
+            <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" className="shape-fill"></path>
           </svg>
         </div>
         <div className="container mx-auto mt-24 p-10">

@@ -1,22 +1,34 @@
 import React, { useEffect } from "react";
 import {
   Navbar,
-  MobileNav,
+  Collapse,
   Typography,
   Button,
   IconButton,
   Card,
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser, getUser } from '../redux/actions/userActions';
 const StickyNavbar = () => {
+  const dispatch = useDispatch();
+  const { isLoggedIn, userDetails } = useSelector(state => state.users);
   const [openNav, setOpenNav] = React.useState(false);
+  const logoutHandler = () => {
 
+    dispatch(logoutUser());
+    window.location.reload();
+
+  }
   useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false),
     );
   }, []);
+  useEffect(() => {
+    dispatch(getUser())
+  }, [])
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -30,36 +42,7 @@ const StickyNavbar = () => {
           Articles
         </Link>
       </Typography>
-      {/* <Typography
-        as="li"
-        variant="small"
-        color="white"
-        className="p-1 font-normal font-varela"
-      >
-        <a href="#" className="flex items-center">
-          Account
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="white"
-        className="p-1 font-normal font-varela"
-      >
-        <a href="#" className="flex items-center">
-          Blocks
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="white"
-        className="p-1 font-normal font-varela"
-      >
-        <a href="#" className="flex items-center">
-          Docs
-        </a>
-      </Typography> */}
+
     </ul>
   );
 
@@ -77,16 +60,27 @@ const StickyNavbar = () => {
         <div className="flex items-center gap-4">
           <div className="mr-4 hidden lg:block">{navList}</div>
           <div className="flex items-center gap-x-1">
-            <Link to="/login">
-            <Button
-              variant="gradient"
-              size="sm"
-              color="white"
-              className="hidden lg:inline-block"
-            >
-              <span>Log In</span>
-            </Button>
-            </Link>
+            {userDetails ? (<>
+
+              <Button
+                variant="gradient"
+                size="sm"
+                color="white"
+                className="hidden lg:inline-block"
+                onClick={logoutHandler}
+              >
+                <span>Log out</span>
+              </Button></>) : (<Link to="/login">
+                <Button
+                  variant="gradient"
+                  size="sm"
+                  color="white"
+                  className="hidden lg:inline-block"
+                >
+                  <span>Log In</span>
+                </Button>
+              </Link>)}
+
           </div>
           <IconButton
             variant="text"
@@ -127,7 +121,7 @@ const StickyNavbar = () => {
           </IconButton>
         </div>
       </div>
-      <MobileNav open={openNav}>
+      <Collapse open={openNav}>
         {navList}
         {/* <div className="flex items-center gap-x-1">
             <Button fullWidth variant="text" size="sm" className="">
@@ -137,7 +131,7 @@ const StickyNavbar = () => {
               <span>Sign in</span>
             </Button>
           </div> */}
-      </MobileNav>
+      </Collapse>
     </Navbar>
 
 
