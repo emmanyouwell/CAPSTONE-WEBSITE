@@ -64,6 +64,7 @@ export default withMT({
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/forms'),
   ],
 });
 

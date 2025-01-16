@@ -108,3 +108,24 @@ export const registerUser = createAsyncThunk(
     }
   }
 )
+
+
+export const getUser = createAsyncThunk(
+  'user/getUser', // Action type prefix
+  async (_, thunkAPI) => {
+    try {
+      if (typeof window !== 'undefined') {
+        const user = sessionStorage.getItem('user');
+        if (user) {
+          // Parse and return the user data
+          return JSON.parse(user);
+        } else {
+          // Reject if user data is not found
+          return thunkAPI.rejectWithValue('No user found in session storage');
+        }
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
