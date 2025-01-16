@@ -26,9 +26,9 @@ const StickyNavbar = () => {
         color="white"
         className="p-1 font-normal font-varela"
       >
-        <a href="#" className="flex items-center">
+        <Link to="/articles" className="flex items-center">
           Articles
-        </a>
+        </Link>
       </Typography>
       {/* <Typography
         as="li"
@@ -65,11 +65,11 @@ const StickyNavbar = () => {
 
   return (
 
-    <Navbar className="sticky top-3 z-20 h-max w-[50%] mx-auto rounded-3xl px-4 py-2 lg:px-8 lg:py-4 bg-[#E53777]">
+    <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4 bg-[#E53777]">
       <div className="flex items-center justify-between text-light">
         <Typography
           as="a"
-          href="#"
+          href="/"
           className="mr-4 cursor-pointer py-1.5 font-bold font-varela"
         >
           TCHMB Portal
