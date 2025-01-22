@@ -14,7 +14,7 @@ function App() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/donor-application" element={<DonorApplication/>}/>
       <Route path="/articles" element={<Article/>}/>
-      <Route path="/article/id" element={<SingleArticle/>}/>
+      <Route path="/article/:id" element={<SingleArticle/>}/>
     </Routes>
     <FooterWithLogo/>
    </BrowserRouter>

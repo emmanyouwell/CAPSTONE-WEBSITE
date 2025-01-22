@@ -42,7 +42,7 @@ const Home = () => {
           <div className="flex flex-col items-center">
             <img src={screening} alt="screening" className="w-96" />
             <Typography variant="h4" className="font-varela text-primary">STEP 2: SCREENING</Typography>
-            <Typography variant="paragraph" className="w-96 text-center">Eligible donors will be contacted to schedule a blood screening for HIV, Hepatitis B, and Syphilis. This ensures the safety and quality of the donation process.</Typography>
+            <Typography variant="paragraph" className="w-96 text-center">Eligible donors will be contacted to schedule a blood screening for HIV, Hepatitis B, and Syphilis. This ensures the safety and quality of the breast milk donated</Typography>
           </div>
           <div className="flex flex-col items-center">
             <img src={donate} alt="donate" className="w-96" />
