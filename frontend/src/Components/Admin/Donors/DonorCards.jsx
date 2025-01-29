@@ -1,5 +1,6 @@
+import { Button } from '@material-tailwind/react'
 import React from 'react'
-
+import { Link } from 'react-router-dom'
 const DonorCards = ({ donor }) => {
     return (
 
@@ -31,7 +32,7 @@ const DonorCards = ({ donor }) => {
                         </svg>
                         <p>{donor.phone}</p>
                     </li>
-                    
+
                     <li>
                         <svg
                             id="map"
@@ -51,9 +52,8 @@ const DonorCards = ({ donor }) => {
                     <li>Donations: {donor.donation.length}</li>
                 </ul>
             </div>
-            <hr
-                className="w-full group-hover:h-5 h-3 bg-secondary group-hover:transition-all group-hover:duration-300 transition-all duration-300"
-            />
+            <Link to={`/admin/donors/${donor._id}`} className="w-full"><Button className="w-full bg-secondary group-hover:transition-all group-hover:duration-300 transition-all duration-300">See information</Button></Link>
+            
 
         </div>
 

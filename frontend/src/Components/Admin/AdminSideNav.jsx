@@ -29,7 +29,7 @@ const AdminSideNav = () => {
     return (
         <div className="h-[calc(100vh-2rem)] w-full max-w-[20rem] border py-4">
             <div className="flex flex-col items-center">
-                <Typography variant="h2" className="mb-4 text-primary">Admin Panel</Typography>
+                <Link to="/admin/dashboard" onClick={()=>setPageTitle('Dashboard')}><Typography variant="h2" className="mb-4 text-primary">Admin Panel</Typography></Link>
                 <List className="w-full">
                     {data.map((items) => (
                         <Link to={items.route} key={items.id}>
