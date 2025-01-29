@@ -20,10 +20,10 @@ const Announcement = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, [])
     return (
-        <Card className="h-[calc(100vh-2rem)] w-full p-4 shadow-xl shadow-blue-gray-900/5">
+        <Card className="h-[calc(100vh-2rem)] w-full p-4" color="transparent">
             <Typography variant="h2" className="text-primary mb-4">Announcements</Typography>
             <div className="overflow-y-auto gap-2 flex flex-col">
-                <div className="max-h-96 w-72 bg-lightbg shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col">
+                <div className="max-h-96 w-72 bg-white border border-primary-dark p-4 rounded-lg flex flex-col">
                     <img src="https://plus.unsplash.com/premium_photo-1682090496470-6eec9f5bcc89?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" className="object-cover w-full" />
                     <Typography variant={IsLargeScreen ? "h3" : "h4"} className="mt-2 text-primary">
                         Article title #1

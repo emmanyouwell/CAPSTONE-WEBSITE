@@ -57,7 +57,7 @@ const SingleArticle = () => {
                             {articleDetails.description}
                         </pre>
                     </div>
-                    <div className="flex flex-col gap-4 items-center justify-center">
+                    <div className="flex flex-col gap-4 items-center ">
                         <RelatedArticles articles={articles}/>
                         <Announcement />
                     </div>

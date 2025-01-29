@@ -32,7 +32,7 @@ const RelatedArticles = ({ articles }) => {
         return () => window.removeEventListener("resize", handleResize);
     }, [])
     return (
-        <Card className="h-[calc(100vh-2rem)] w-full p-4 shadow-xl shadow-blue-gray-900/5">
+        <Card className="h-[calc(100vh-2rem)] w-full p-4 " color="transparent">
             <Typography variant="h2" className="text-primary mb-4">Other Articles</Typography>
             <div className="overflow-y-auto gap-2 flex flex-col">
                 {articles.map((article,index) => {
@@ -43,7 +43,7 @@ const RelatedArticles = ({ articles }) => {
                         day: 'numeric', // "21"
                     });
                     return (
-                        <div key={index} className="max-h-96 w-72 bg-lightbg shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col">
+                        <div key={index} className="max-h-96 w-72 bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col">
                             <img src={article.images[0].url} alt="" className="object-cover h-40" />
                             <Typography variant={IsLargeScreen ? "h3" : "h4"} className="mt-2 text-primary">
                                 {article.title}
