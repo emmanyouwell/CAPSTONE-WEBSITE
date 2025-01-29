@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { authenticate, getToken, logout } from '../../utils/helper';
-// const VITE_APP_URL = import.meta.env.VITE_APP_URL;
-const VITE_APP_URL = 'http://localhost:4000';
+const VITE_APP_URL = import.meta.env.VITE_APP_URL;
+// const VITE_APP_URL = 'http://localhost:4000';
 export const getDonors = createAsyncThunk(
     'donor/getDonors',
     async ({ search="", page = 1, pageSize = 12, brgy="", type="" }, thunkAPI) => {
