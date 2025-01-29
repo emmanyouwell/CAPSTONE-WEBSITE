@@ -13,7 +13,7 @@ import { Typography, Input, Button } from '@material-tailwind/react'
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoggedIn, loading, error } = useSelector(state => state.users)
+  const { isLoggedIn, userDetails, loading, error } = useSelector(state => state.users)
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -35,10 +35,21 @@ const Login = () => {
     },
   });
   useEffect(() => {
-    if (isLoggedIn) {
+    
+    if (isLoggedIn && (userDetails.role === 'Admin' || userDetails.role === 'SuperAdmin')) {
+      navigate('/admin/dashboard');
+
+    }
+    else if (isLoggedIn){
       navigate('/');
     }
-  }, [isLoggedIn])
+    
+  }, [isLoggedIn, userDetails])
+  useEffect(()=>{
+    if (userDetails){
+      console.log("user: ", userDetails);
+    }
+  },[userDetails])
   return (
     <>
       <StickyNavbar />
