@@ -135,7 +135,15 @@ const DonorsPage = () => {
 
 
             </div>
-
+            <div className="w-full grid grid-cols-2 gap-4">
+                {currentPage > 0 ? <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer " onClick={prevPageHandler}>
+                    <ArrowLongLeftIcon className="h-14 w-14" /> <span className="font-semibold text-2xl">Previous Page</span>
+                </div> : <div></div>}
+                {currentPage < totalPages - 1 ?
+                    <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-end items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={nextPageHandler}>
+                        <span className="font-semibold text-2xl">Next Page</span><ArrowLongRightIcon className="h-14 w-14" />
+                    </div> : <div></div>}
+            </div>
             <div className="grid grid-cols-4 gap-4 w-full h-full">
                 {donors.map((donor, index) => (
                     <div className="w-1/4" key={index}>

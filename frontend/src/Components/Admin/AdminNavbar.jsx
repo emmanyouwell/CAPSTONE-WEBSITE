@@ -120,7 +120,7 @@ function ProfileMenu() {
   );
 }
 
-export function ComplexNavbar() {
+export function ComplexNavbar({pageTitle}) {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
@@ -140,7 +140,7 @@ export function ComplexNavbar() {
           href="#"
           className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
         >
-          Dashboard
+          {pageTitle}
         </Typography>
         <div className="hidden lg:block">
 

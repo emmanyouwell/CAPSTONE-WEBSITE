@@ -45,3 +45,11 @@ export const errMsg = (message = '') => toast.error(message, {
 export const successMsg = (message = '') => toast.success(message, {
     position: toast.POSITION.BOTTOM_CENTER
 });
+
+export const formatDate = (date) => {
+    return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    })
+}
