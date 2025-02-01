@@ -15,24 +15,43 @@ import { useMediaQuery } from 'react-responsive';
 import { ComplexNavbar } from "./Components/Admin/AdminNavbar";
 import DonorsPage from "./Pages/Admin/Donors/DonorsPage";
 import SingleDonor from "./Components/Admin/Donors/SingleDonor";
+import RecipientPage from "./Pages/Admin/Recipients/RecipientPage";
+import SingleRecipient from "./Components/Admin/Recipients/SingleRecipient";
+import Schedule from "./Pages/Admin/Calendar/Schedule";
+import EditEvent from "./Components/Admin/Calendar/EditEvent";
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
   const isAdministrativePersonnelRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/staff');
   const isAdministrativePersonnelUser = getUser() && (getUser().role === 'Admin' || getUser().role === 'Staff' || getUser().role === 'SuperAdmin');
   const donorMatch = useMatch('/admin/donors/:id');
+  const recipientMatch = useMatch('/admin/recipient/:id');
+  const eventMatch = useMatch('/admin/events/:id');
   useEffect(() => {
     // Set the page title based on the current path
     const path = location.pathname;
 
 
+    
     if (donorMatch) {
       setPageTitle('Donor Information');
+    }
+    else if (recipientMatch){
+      setPageTitle('Recipient Information');
+    }
+    else if (eventMatch){
+      setPageTitle('Edit Event');
     }
     else {
       switch (path) {
         case '/admin/donors':
           setPageTitle('Donor Record');
+          break;
+        case '/admin/recipients':
+          setPageTitle('Recipient Record');
+          break;
+        case '/admin/schedules':
+          setPageTitle('Schedules');
           break;
         case '/admin/dashboard':
         default:
@@ -64,6 +83,10 @@ function MainContent() {
             <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true}><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
             <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
+            <Route path="/admin/recipients" element={<ProtectedRoute isAdmin={true}><RecipientPage/></ProtectedRoute>}/>
+            <Route path="/admin/recipient/:id" element={<ProtectedRoute isAdmin={true}><SingleRecipient/></ProtectedRoute>}/>
+            <Route path="/admin/schedules" element={<ProtectedRoute isAdmin={true}><Schedule/></ProtectedRoute>}/>
+            <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent/></ProtectedRoute>}/>
           </Routes>
         </div>) :
         (
