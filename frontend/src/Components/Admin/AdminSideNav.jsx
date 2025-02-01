@@ -13,8 +13,8 @@ import {
 import { Link } from 'react-router-dom';
 const superAdminItems = [
     { id: '1', title: 'Donor Records', route: '/admin/donors', icon: <HeartIcon className="h-5 w-5" /> },
-    { id: '2', title: 'Recipient Records', route: 'superadmin_recipient_record', icon: <UserCircleIcon className="h-5 w-5" /> },
-    { id: '3', title: 'Schedules', route: 'superadmin_schedules', icon: <CalendarIcon className="h-5 w-5" /> },
+    { id: '2', title: 'Recipient Records', route: '/admin/recipients', icon: <UserCircleIcon className="h-5 w-5" /> },
+    { id: '3', title: 'Schedules', route: '/admin/schedules', icon: <CalendarIcon className="h-5 w-5" /> },
     { id: '4', title: 'Inventory', route: 'superadmin_inventories', icon: <ArchiveBoxIcon className="h-5 w-5" /> },
     { id: '5', title: 'Account Management', route: 'superadmin_account_management', icon: <UsersIcon className="h-5 w-5" /> },
     { id: '6', title: 'Announcement Creation', icon: <MegaphoneIcon className="h-5 w-5" /> },

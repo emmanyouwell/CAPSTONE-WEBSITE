@@ -28,7 +28,7 @@ const SingleDonor = () => {
                         <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                     </div>
                 </Link>
-                <div className="flex  h-max gap-4">
+                <div className="flex flex-col h-max gap-10">
                     <div className="w-full flex flex-col gap-4">
                         <Typography color="black" variant="h1">{donorDetails && donorDetails.name && `${donorDetails.name.first} ${donorDetails.name.middle} ${donorDetails.name.last}`}</Typography>
                         <div className="flow-root">
