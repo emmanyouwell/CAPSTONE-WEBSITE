@@ -18,6 +18,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux'
 import { addEvents, getEvents } from "../../../redux/actions/eventActions";
 import { getUser } from "../../../utils/helper";
+import { resetSuccess } from "../../../redux/slices/eventSlice";
 export function AddEvent() {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
@@ -63,6 +64,15 @@ export function AddEvent() {
     });
     useEffect(() => {
         if (success) {
+            formik.setValues({
+                title: "",
+                description: "",
+                status: "",
+                start: "",
+                end: "",
+                user: getUser()._id
+            })
+            dispatch(resetSuccess());
             dispatch(getEvents());
         }
     }, [success])
