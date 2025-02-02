@@ -45,19 +45,20 @@ export function AddEvent() {
         },
         validationSchema,
         onSubmit: (values) => {
-            const localStart = new Date(values.start)
-            const localEnd = new Date(values.end)
+            const localStart = new Date(values.start);
+            const localEnd = new Date(values.end);
 
-            const utcStart = new Date(localStart.getTime() - localStart.getTimezoneOffset() * 60000)
-            const utcEnd = new Date(localEnd.getTime() - localEnd.getTimezoneOffset() * 60000)
+            // Send the local date in ISO string format (including the local timezone offset)
+            const startDate = localStart.toISOString();
+            const endDate = localEnd.toISOString();
             const formData = new FormData()
             formData.append('title', values.title)
             formData.append('description', values.description)
             formData.append('status', values.status)
-            formData.append('start', utcStart)
-            formData.append('end', utcEnd)
+            formData.append('start', localStart)
+            formData.append('end', localEnd)
             formData.append('user', getUser()._id)
-            
+            console.log("date and time", localStart)
             dispatch(addEvents(formData));
             handleOpen();
         },

@@ -40,14 +40,13 @@ const EditEvent = () => {
             const localStart = new Date(values.start)
             const localEnd = new Date(values.end)
 
-            const utcStart = new Date(localStart.getTime() - localStart.getTimezoneOffset() * 60000)
-            const utcEnd = new Date(localEnd.getTime() - localEnd.getTimezoneOffset() * 60000)
+            
             const formData = new FormData()
             formData.append('title', values.title)
             formData.append('description', values.description)
             formData.append('status', values.status)
-            formData.append('start', utcStart)
-            formData.append('end', utcEnd)
+            formData.append('start', localStart)
+            formData.append('end', localEnd)
             formData.append('user', getUser()._id)
             formData.append('id', id)
             dispatch(editEvents(formData));
@@ -68,12 +67,15 @@ const EditEvent = () => {
 
     useEffect(() => {
         if (eventDetails && eventDetails.eventDetails) {
+            const start = new Date(eventDetails.eventDetails.start)
+            const end = new Date(eventDetails.eventDetails.end)
+           
             formik.setValues({
                 title: eventDetails.title,
                 description: eventDetails.description,
                 status: eventDetails.eventStatus,
-                start: new Date(eventDetails.eventDetails.start).toISOString().slice(0, 16), // Format for datetime-local
-                end: new Date(eventDetails.eventDetails.end).toISOString().slice(0, 16),
+                start: new Date(start.getTime() - start.getTimezoneOffset() * 60000).toISOString().slice(0, 16), // Format for datetime-local
+                end: new Date(end.getTime() - end.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
             });
         }
     }, [eventDetails]); // Run when `eventDetails` updates
