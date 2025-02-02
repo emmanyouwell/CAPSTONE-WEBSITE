@@ -15,7 +15,7 @@ const Schedule = () => {
     return (
         <div className="w-full p-4">
             <div className="flex items-center gap-4">
-                <Typography variant="h1" className="mb-4" >Schedule</Typography>
+                <Typography variant="h1" className="mb-4" >Schedules</Typography>
                 <AddEvent />
             </div>
 
