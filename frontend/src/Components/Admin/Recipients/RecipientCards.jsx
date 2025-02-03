@@ -47,7 +47,7 @@ const RecipientCards = ({ recipients }) => {
                                 fill="#444"
                             ></path>
                         </svg>
-                        <p>{recipients.address}</p>
+                        <p>{`${recipients.home_address.street}, ${recipients.home_address.brgy}, ${recipients.home_address.city}`}</p>
                     </li>
                     <li>
                         <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" className="fill-stone-700 " viewBox="0 0 640 512">
