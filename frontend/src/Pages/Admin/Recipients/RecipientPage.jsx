@@ -90,7 +90,7 @@ const RecipientPage = () => {
         }
     }
     useEffect(() => {
-        dispatch(getRecipients({ search: search, type: type, page: currentPage + 1, pageSize: pageSize }))
+        dispatch(getRecipients({ search: search, brgy: brgy, type: type, page: currentPage + 1, pageSize: pageSize }))
             .unwrap()
             .then((data) => console.log('Recipients fetched:', data))
             .catch((err) => console.error('Error fetching Recipients:', err));
