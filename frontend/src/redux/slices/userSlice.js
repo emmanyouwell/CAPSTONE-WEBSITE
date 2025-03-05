@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginUser, logoutUser, getUserDetails, registerUser, getUser} from '../actions/userActions';
+import { loginUser, logoutUser, getUserDetails, registerUser, getUser, getAllUsers} from '../actions/userActions';
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -9,6 +9,10 @@ export const userSlice = createSlice({
     loading: false, // Useful for async actions like login/signup
     error: null, // To handle errors
     isRegistered: false,
+    users: [],
+    pageSize: 0,
+    totalUsers: 0,
+    totalPages: 0,
   },
   reducers: {
     resetRegister: (state) => {
@@ -76,6 +80,22 @@ export const userSlice = createSlice({
         state.userDetails = action.payload;
       })
       .addCase(getUser.rejected, (state, action)=>{
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(getAllUsers.pending, (state, action)=>{
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action)=>{
+        state.users = action.payload.users;
+        state.totalUsers = action.payload.totalUsers;
+        state.totalPages = action.payload.totalPages;
+        state.pageSize = action.payload.pageSize;
+        state.loading = false;
+      })
+      .addCase(getAllUsers.rejected, (state, action)=>{
         state.loading = false;
         state.error = action.payload;
       })
