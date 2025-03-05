@@ -43,7 +43,7 @@ const Article = () => {
                     <div className="w-[80%]">
                         <Typography variant={IsLargeScreen ? "lead" : "small"} className="mt-4 text-center">Welcome to our Articles Page! Here, you’ll find a wealth of information about breastmilk, breastfeeding, and maternal health. Explore expert tips, inspiring stories, and the latest research to support your journey. Whether you're looking for advice, answers to common questions, or simply inspiration, this is your go-to resource for all things related to human milk and nurturing care.</Typography>
                     </div>
-                    <div className="flex items-center w-1/4 mt-4">
+                    <div className="flex items-center lg:w-1/4 mt-4">
                         <Input
                             type="text"
                             className="bg-white"

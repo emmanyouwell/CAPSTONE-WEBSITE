@@ -35,8 +35,9 @@ function ProfileMenu() {
 
   const closeMenu = () => setIsMenuOpen(false);
   const logoutHandler = () => {
-    setIsMenuOpen(false);
+    
     dispatch(logoutUser());
+    setIsMenuOpen(false);
     window.location.reload();
 
   }

@@ -15,7 +15,10 @@ export default withMT({
         playpen: ["Playpen Sans", "serif"],
         playwrite: ["Playwrite GB S", "serif"],
         shortstack: ["Short Stack", "serif"],
-        sofia: ["Sofia Sans", "serif"]
+        sofia: ["Sofia Sans", "serif"],
+        holtwood: ["Holtwood One SC", "serif"],
+        dm: ["DM Serif Text", "serif"],
+        parkinsans: ["Parkinsans", "serif"],
       },
       colors: {
         primary: {

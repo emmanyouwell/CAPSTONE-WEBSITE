@@ -79,7 +79,7 @@ export function AddEvent() {
     }, [success])
     return (
         <>
-            <Button onClick={handleOpen} className="flex items-center gap-2 bg-primary" size="sm">
+            <Button onClick={handleOpen} className="flex items-center gap-2 bg-secondary" size="sm">
                 <PlusIcon className="h-5 w-5" strokeWidth={2} /> Add Event
             </Button>
             <Dialog size="sm" open={open} handler={handleOpen} className="p-4">

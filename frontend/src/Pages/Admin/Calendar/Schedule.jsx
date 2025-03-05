@@ -14,8 +14,8 @@ const Schedule = () => {
     }, [dispatch])
     return (
         <div className="w-full p-4">
-            <div className="flex items-center gap-4">
-                <Typography variant="h1" className="mb-4" >Schedules</Typography>
+            <div className="flex items-center gap-4 mb-4">
+              
                 <AddEvent />
             </div>
 

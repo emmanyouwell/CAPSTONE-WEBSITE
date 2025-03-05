@@ -14,16 +14,16 @@ const ProtectedRoute = ({ children, isAuthorized = false, isAdmin = false, isSta
 
     if (loading === false) {
         if (!user) {
-            return <Navigate to="/login" />
+            return <Navigate to="/login" replace/>
         }
         if (isAuthorized === true && user.role === 'User') {
-            return <Navigate to="/" />
+            return <Navigate to="/" replace/>
         }
         if (isAdmin === true && (user.role !== 'Admin' && user.role !== 'SuperAdmin')) {
-            return <Navigate to="/" />
+            return <Navigate to="/" replace/>
         }
         if (isStaff === true && user.role !== 'Staff') {
-            return <Navigate to="/" />
+            return <Navigate to="/" replace/>
         }
         return children
     }

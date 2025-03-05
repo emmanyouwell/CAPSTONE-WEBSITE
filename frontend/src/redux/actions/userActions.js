@@ -41,7 +41,7 @@ export const logoutUser = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
       await logout();
@@ -100,8 +100,8 @@ export const registerUser = createAsyncThunk(
     try {
 
       const response = await axios.post(`${VITE_APP_URL}/api/v1/register`, userData, config);
-      await authenticate(response.data, () => { });
-      return response;
+
+      return response.data;
 
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -129,3 +129,47 @@ export const getUser = createAsyncThunk(
     }
   }
 );
+
+export const getAllUsers = createAsyncThunk(
+  'user/getAllUsers',
+  async ({ search = "", sortBy = "", order = "", role = "", page=1, pageSize=12 }, thunkAPI) => {
+
+    const token = await getToken();
+    console.log('Token Retrieved:', token);
+
+    if (!token) {
+      throw new Error('No token available');
+    }
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    }
+    try {
+      let urlString = `${VITE_APP_URL}/api/v1/super/users?page=${page}&pageSize=${pageSize}`;
+      if (search) {
+        urlString += `&search=${encodeURIComponent(search)}`;
+      }
+      if (sortBy) {
+        urlString += `&sortBy=${encodeURIComponent(sortBy)}`;
+      }
+      if (order) {
+        urlString += `&order=${encodeURIComponent(order)}`;
+      }
+      if (role) {
+        urlString += `&role=${encodeURIComponent(role)}`;
+      }
+      const response = await axios.get(urlString, config);
+
+
+      return response.data;
+
+    } catch (error) {
+      console.log('Error:', error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+)
