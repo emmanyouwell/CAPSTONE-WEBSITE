@@ -35,7 +35,7 @@ function ProfileMenu() {
 
   const closeMenu = () => setIsMenuOpen(false);
   const logoutHandler = () => {
-    
+
     dispatch(logoutUser());
     setIsMenuOpen(false);
     window.location.reload();
@@ -121,7 +121,7 @@ function ProfileMenu() {
   );
 }
 
-export function ComplexNavbar({pageTitle}) {
+export function ComplexNavbar({ pageTitle }) {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
@@ -136,25 +136,27 @@ export function ComplexNavbar({pageTitle}) {
   return (
     <Navbar className="top-0 z-10 mx-auto max-w-full p-2 rounded-none lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-        <Typography
-          as="a"
-          href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
-        >
-          {pageTitle}
-        </Typography>
-        <div className="hidden lg:block">
-
+        <div className="flex">
+          <IconButton
+            size="sm"
+            color="blue-gray"
+            variant="text"
+            onClick={toggleIsNavOpen}
+            className="mr-2 lg:hidden"
+          >
+            <Bars2Icon className="h-6 w-6" />
+          </IconButton>
+          <Typography
+            as="a"
+            href="#"
+            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
+          >
+            {pageTitle}
+          </Typography>
         </div>
-        <IconButton
-          size="sm"
-          color="blue-gray"
-          variant="text"
-          onClick={toggleIsNavOpen}
-          className="ml-auto mr-2 lg:hidden"
-        >
-          <Bars2Icon className="h-6 w-6" />
-        </IconButton>
+
+
+
 
 
         <ProfileMenu />

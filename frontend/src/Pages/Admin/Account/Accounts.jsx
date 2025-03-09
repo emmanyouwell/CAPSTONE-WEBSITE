@@ -84,9 +84,9 @@ const Accounts = () => {
         dispatch(getAllUsers({ search: search, page: currentPage, pageSize: pageSize, sortBy: sortBy, order: sortOrder, role: roleType }));
     }, [dispatch, search, currentPage, sortBy, sortOrder, roleType])
     return (
-        <div className="flex flex-col items-center justify-center w-full gap-4 p-8 h-full">
+        <div className="flex flex-col items-center justify-center w-full gap-4 p-4 mt-4 h-full">
             <div className="flex w-full items-center justify-start gap-4">
-                <div className="flex items-center justify-between gap-4 w-full mt-4">
+                <div className="flex items-center justify-between gap-4 w-full">
                     <div className="flex items-center gap-4">
                         <div className="relative flex w-full gap-2 md:w-max">
                             <Input

@@ -6,6 +6,7 @@ import RelatedArticles from '../Components/RelatedArticles'
 import Announcement from '../Components/Announcements'
 import { useDispatch, useSelector } from 'react-redux';
 import { getArticleDetails, getArticles } from '../redux/actions/articleActions'
+import ArticleList from '../Components/Articles/ArticleList'
 const SingleArticle = () => {
     const dispatch = useDispatch();
     const { articles, articleDetails, loading, error } = useSelector((state) => state.articles);
@@ -17,6 +18,7 @@ const SingleArticle = () => {
         month: 'short', // "Jan"
         day: 'numeric', // "21"
     });
+
     useEffect(() => {
         dispatch(getArticleDetails(id));
         dispatch(getArticles());
@@ -39,39 +41,30 @@ const SingleArticle = () => {
             <StickyNavbar />
             <section
                 className="p-4 bg-lightbg"
-
             >
-                <div className="flex flex-col lg:flex-row text-center text-light h-auto">
+                <div className="mt-4 p-4 border border-gray-200 rounded">
 
+                    <div className="article-content" dangerouslySetInnerHTML={{ __html: articleDetails.content }} />
+                    <span className="article-content font-parkinsans text-primary italic">Published on {formattedDate}</span>
+                    
+                </div>
 
-                    <div className="flex flex-col col-span-4 items-center px-4">
-                        <Typography variant="h1" className="text-4xl font-bold text-primary text-center">
-                            {articleDetails.title}
-                        </Typography>
+            </section>
 
-                        <Typography variant="small" className="italic text-gray-600 mt-2">
-                            Published on {formattedDate}
-                        </Typography>
+            <section className="relative p-4">
+                <div className="custom-shape-divider-top-1741406764">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
+                    </svg>
+                </div>
+                <div className="mt-20 ">
 
-                        {articleDetails?.images?.length > 0 && (
-                            <img
-                                src={articleDetails.images[0].url}
-                                alt="image of a mother breastfeeding"
-                                className="h-96 max-w-full object-cover mt-4 rounded-lg shadow-md mb-8"
-                            />
-                        )}
-
-                        <div className="prose lg:prose-lg text-gray-800 text-left w-[75%]">
-                            <div dangerouslySetInnerHTML={{ __html: articleDetails.description }} />
-                        </div>
-
-                    </div>
-
-                    <div className="flex flex-col gap-4 items-center">
-                        <RelatedArticles articles={articles} />
-                        <Announcement />
+                    <Typography variant="h2" className="text-center font-parkinsans">Other Articles</Typography>
+                    <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                        <ArticleList articles={articles} isLargeScreen={IsLargeScreen} />
                     </div>
                 </div>
+
             </section>
         </>
     )

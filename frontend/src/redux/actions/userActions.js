@@ -8,7 +8,7 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (credentials, thunkAPI) => {
-    const { email, password } = credentials;
+    
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -16,9 +16,14 @@ export const loginUser = createAsyncThunk(
       withCredentials: true
     };
     try {
-      console.log(`${VITE_APP_URL}/api/v1/login`);
+      console.log(credentials.get('isEmp'));
+      let url = `${VITE_APP_URL}/api/v1/login`
+      if (credentials.get('isEmp')) {
+        url = `${VITE_APP_URL}/api/v1/login/?emp=true`
+      }
+      
       // console.log(credentials);
-      const response = await axios.post(`${VITE_APP_URL}/api/v1/login`, credentials, config);
+      const response = await axios.post(url, credentials, config);
 
       await authenticate(response.data, () => { });
       return response.data;

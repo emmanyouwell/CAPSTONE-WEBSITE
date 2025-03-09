@@ -5,8 +5,8 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 
 export const getEvents = createAsyncThunk(
     'event/getEvents',
-    async (query, thunkAPI) => {
-
+    async ({upcoming=false}, thunkAPI) => {
+        
         const token = await getToken();
         console.log('Token Retrieved:', token);
         console.log("Getting events")
@@ -22,8 +22,12 @@ export const getEvents = createAsyncThunk(
             withCredentials: true
         }
         try {
-
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/events`, config)
+            let url = `${VITE_APP_URL}/api/v1/events`;
+            if (upcoming){
+                url += '/?upcoming=true'
+            }
+            console.log("url: ", url);
+            const response = await axios.get(url, config)
             
             return response.data;
 

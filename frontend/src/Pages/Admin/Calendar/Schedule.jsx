@@ -10,12 +10,17 @@ const Schedule = () => {
     const dispatch = useDispatch();
     const { events, loading, error } = useSelector((state) => state.events);
     useEffect(() => {
-        dispatch(getEvents());
+        dispatch(getEvents({ upcoming: false }));
     }, [dispatch])
+
+    useEffect(()=>{
+        if (events) {
+            console.log(events);
+        }
+    },[events])
     return (
         <div className="w-full p-4">
             <div className="flex items-center gap-4 mb-4">
-              
                 <AddEvent />
             </div>
 

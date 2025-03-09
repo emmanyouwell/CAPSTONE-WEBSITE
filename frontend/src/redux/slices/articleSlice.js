@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getArticles, addArticles, updateArticle, getArticleDetails, deleteArticle } from '../actions/articleActions';
+import { getArticles, addArticles, addHTMLArticles,updateHTMLArticle, updateArticle, getArticleDetails, deleteArticle } from '../actions/articleActions';
 
 export const articleSlice = createSlice({
     name: 'article',
     initialState: {
         articles: [],
+        success: false,
         loading: false,
         error: null,
         articleDetails: {},
@@ -12,7 +13,15 @@ export const articleSlice = createSlice({
         isDeleted: false,
     },
     reducers: {
-
+        resetUpdate: (state) => {
+            state.isUpdated = false;
+        },
+        resetDelete: (state) => {
+            state.isDeleted = false;
+        },
+        resetSuccess: (state) => {
+            state.success = false;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -38,6 +47,17 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
+            .addCase(addHTMLArticles.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(addHTMLArticles.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload.success;
+            })
+            .addCase(addHTMLArticles.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
             .addCase(updateArticle.pending, (state, action) => {
                 state.loading = true;
             })
@@ -46,6 +66,17 @@ export const articleSlice = createSlice({
                 state.isUpdated = action.payload.success;
             })
             .addCase(updateArticle.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(updateHTMLArticle.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(updateHTMLArticle.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isUpdated = action.payload.success;
+            })
+            .addCase(updateHTMLArticle.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
@@ -73,5 +104,5 @@ export const articleSlice = createSlice({
             })
     }
 })
-
+export const { resetUpdate, resetDelete, resetSuccess } = articleSlice.actions;
 export default articleSlice.reducer;
