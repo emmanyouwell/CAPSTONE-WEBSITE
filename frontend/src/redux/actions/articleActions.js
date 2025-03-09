@@ -60,6 +60,56 @@ export const addArticles = createAsyncThunk(
     }
 )
 
+
+export const addHTMLArticles = createAsyncThunk(
+    'article/addHTMLArticles',
+    async(req, thunkAPI) => {
+        
+        const token = await getToken();
+        if (!token) {
+            throw new Error('No token available');
+        }
+        const config = {
+            headers: {
+                
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        try {
+           
+            const response = await axios.post(`${VITE_APP_URL}/api/v1/html-article`, req, config);
+            console.log("response: ", response.data);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
+export const updateHTMLArticle = createAsyncThunk(
+    'article/updateHTMLArticle',
+    async(req, thunkAPI) => {
+        const token = await getToken();
+        if (!token) {
+            throw new Error('No token available');
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        try {
+            const response = await axios.put(`${VITE_APP_URL}/api/v1/html-article/${req.id}`, req, config);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
 export const updateArticle = createAsyncThunk(
     'article/updateArticle',
     async(req, thunkAPI) => {
@@ -98,7 +148,7 @@ export const deleteArticle = createAsyncThunk(
             withCredentials: true
         }
         try {
-            const response = await axios.delete(`${VITE_APP_URL}/api/v1/articles/${id}`, config);
+            const response = await axios.delete(`${VITE_APP_URL}/api/v1/article/${id}`, config);
             return response.data;
         }catch (error){
             return thunkAPI.rejectWithValue(error.message);

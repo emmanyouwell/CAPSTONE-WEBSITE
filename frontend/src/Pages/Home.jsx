@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import StickyNavbar from '../Components/Navbar'
 import { Button, Typography } from '@material-tailwind/react'
@@ -7,8 +7,17 @@ import donate from '../assets/image/donate.png'
 import screening from '../assets/image/screening.png'
 import signup from '../assets/image/signup.png'
 import { AccordionCustomIcon } from '../Components/Accordion'
+import Schedule from './Admin/Calendar/Schedule'
+import UpcomingEvents from '../Components/Admin/Calendar/UpcomingEvents'
+import {useDispatch, useSelector} from 'react-redux'
+import { getEvents } from '../redux/actions/eventActions'
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const {events, loading, error} = useSelector(state => state.events);
+  useEffect(() => {
+    dispatch(getEvents({upcoming: true}));
+  }, [dispatch])
   return (
     <>
       <StickyNavbar />
@@ -55,6 +64,11 @@ const Home = () => {
           <DefaultGallery />
         </div>
       </section>
+
+      <section className="p-4 mb-8 w-full">
+          <UpcomingEvents events={events}/>
+      </section>
+
       <section className="h-max p-4 mb-24">
         <Typography variant="h1" style={{ color: '#004080' }} className="font-varela text-center">How TCHMB Portal works?</Typography>
         <div className="flex flex-col xl:flex-row justify-center items-center md:justify-evenly p-4">

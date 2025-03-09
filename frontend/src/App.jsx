@@ -21,6 +21,11 @@ import Schedule from "./Pages/Admin/Calendar/Schedule";
 import EditEvent from "./Components/Admin/Calendar/EditEvent";
 import CreateAdmin from "./Pages/Admin/Account/CreateAdmin";
 import Accounts from "./Pages/Admin/Account/Accounts";
+import EmployeeLogin from "./Pages/EmployeeLogin";
+import Resources from "./Pages/Admin/Resources/Resources";
+import Announcement from "./Pages/Admin/Announcement/Announcement";
+import CreateResources from "./Pages/Admin/Resources/CreateResources";
+import EditArticle from "./Pages/Admin/Resources/EditArticle";
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -61,6 +66,12 @@ function MainContent() {
         case '/admin/account/create-admin':
           setPageTitle('Create Admin');
           break;
+        case '/admin/resources':
+          setPageTitle('Resources');
+          break;
+        case '/admin/resources/create':
+          setPageTitle('Create Resources');
+          break;
         case '/admin/dashboard':
         default:
           setPageTitle('Dashboard');
@@ -83,6 +94,7 @@ function MainContent() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/employee/login" element={<EmployeeLogin />} />
             <Route path="/donor-application" element={<DonorApplication />} />
             <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
             <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
@@ -97,13 +109,17 @@ function MainContent() {
             <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
             <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
             <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
-
+            <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
+            <Route path="/admin/announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
+            <Route path="/admin/resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
+            <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle/></ProtectedRoute>}/>
           </Routes>
         </div>) :
         (
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/employee/login" element={<EmployeeLogin />} />
             <Route path="/donor-application" element={<DonorApplication />} />
             <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
             <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
@@ -120,6 +136,10 @@ function MainContent() {
             <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
             <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
             <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
+            <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
+            <Route path="/admin/announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
+            <Route path="/admin/resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
+            <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle/></ProtectedRoute>}/>
           </Routes>
         )}
 

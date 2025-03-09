@@ -28,6 +28,7 @@ export function AddEvent() {
         title: Yup.string().required("Title is required"),
         description: Yup.string(),
         status: Yup.string().required("Status is required"),
+        type: Yup.string().required("Type is required"),
         start: Yup.date().required("Start date is required"),
         end: Yup.date()
             .required("End date is required")
@@ -41,6 +42,7 @@ export function AddEvent() {
             status: "",
             start: "",
             end: "",
+            type: "",
             user: getUser()._id
         },
         validationSchema,
@@ -55,6 +57,7 @@ export function AddEvent() {
             formData.append('title', values.title)
             formData.append('description', values.description)
             formData.append('status', values.status)
+            formData.append('type', values.type)
             formData.append('start', localStart)
             formData.append('end', localEnd)
             formData.append('user', getUser()._id)
@@ -70,11 +73,12 @@ export function AddEvent() {
                 description: "",
                 status: "",
                 start: "",
+                type: "",
                 end: "",
                 user: getUser()._id
             })
             dispatch(resetSuccess());
-            dispatch(getEvents());
+            dispatch(getEvents({upcoming: false}));
         }
     }, [success])
     return (
@@ -132,28 +136,52 @@ export function AddEvent() {
                                 value={formik.values.description}
                             />
                         </div>
-
-                        <div>
-                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                Status
-                            </Typography>
-                            <Select
-                                name="status"
-                                onChange={(val) => formik.setFieldValue("status", val)}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.status}
-                                error={formik.touched.status && Boolean(formik.errors.status)}
-                            >
-                                <Option value="Not-Due">Not-Due</Option>
-                                <Option value="On-Going">On-Going</Option>
-                                <Option value="Done">Done</Option>
-                            </Select>
-                            {formik.touched.status && formik.errors.status && (
-                                <Typography color="red" variant="small">
-                                    {formik.errors.status}
+                        <div className="flex gap-4">
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Status
                                 </Typography>
-                            )}
+                                <Select
+                                    name="status"
+                                    onChange={(val) => formik.setFieldValue("status", val)}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.status}
+                                    error={formik.touched.status && Boolean(formik.errors.status)}
+                                >
+                                    <Option value="Not-Due">Not-Due</Option>
+                                    <Option value="On-Going">On-Going</Option>
+                                    <Option value="Done">Done</Option>
+                                </Select>
+                                {formik.touched.status && formik.errors.status && (
+                                    <Typography color="red" variant="small">
+                                        {formik.errors.status}
+                                    </Typography>
+                                )}
+                            </div>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Type
+                                </Typography>
+                                <Select
+                                    name="type"
+                                    onChange={(val) => formik.setFieldValue("type", val)}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.type}
+                                    error={formik.touched.type && Boolean(formik.errors.type)}
+                                >
+                                    <Option value="Regular Milk Letting">Regular Milk Letting</Option>
+                                    <Option value="Grand Milk Letting">Grand Milk Letting</Option>
+                                    <Option value="Other">Other</Option>
+
+                                </Select>
+                                {formik.touched.type && formik.errors.type && (
+                                    <Typography color="red" variant="small">
+                                        {formik.errors.type}
+                                    </Typography>
+                                )}
+                            </div>
                         </div>
+
 
                         <div className="flex gap-4">
                             <div className="w-full">
