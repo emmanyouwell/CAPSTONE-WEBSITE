@@ -5,11 +5,120 @@ import {
   Typography,
   Button,
   IconButton,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
   Card,
 } from "@material-tailwind/react";
+import { Bars3Icon, InboxArrowDownIcon, PresentationChartBarIcon, ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser, getUser } from '../redux/actions/userActions';
+import { useNavigate } from "react-router-dom";
+
+function ProfileMenu() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [profileMenuItems, setProfileMenuItems] = React.useState([]);
+  const { userDetails } = useSelector(state => state.users);
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch])
+  const closeMenu = () => setIsMenuOpen(false);
+  const logoutHandler = () => {
+
+    dispatch(logoutUser());
+    setIsMenuOpen(false);
+    window.location.reload();
+
+  }
+  const goToDashboard = () => {
+    navigate("/admin/dashboard");
+  }
+  useEffect(() => {
+    if (userDetails) {
+      if (userDetails.role === "User") {
+        setProfileMenuItems([
+          {
+            label: "Inbox",
+            icon: InboxArrowDownIcon,
+          },
+          {
+            label: "Logout",
+            icon: ArrowLeftStartOnRectangleIcon,
+            onPress: logoutHandler
+          },
+        ])
+      }
+      else {
+        setProfileMenuItems([
+          {
+            label: "Dashboard",
+            icon: PresentationChartBarIcon,
+            onPress: goToDashboard
+          },
+          {
+            label: "Inbox",
+            icon: InboxArrowDownIcon,
+          },
+          {
+            label: "Logout",
+            icon: ArrowLeftStartOnRectangleIcon,
+            onPress: logoutHandler
+          },
+        ])
+      }
+
+    }
+  }, [userDetails]);
+
+
+
+  return (
+    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
+      <MenuHandler>
+        <Button
+          variant="text"
+          color="blue-gray"
+          className="flex items-center gap-1 border rounded-full py-0.5 pr-2 pl-2 lg:ml-auto"
+        >
+          <Bars3Icon className="h-6 w-6 p-0.5" strokeWidth={2.5} color="white" />
+        </Button>
+      </MenuHandler>
+      <MenuList className="p-1">
+        {profileMenuItems.map(({ label, icon, onPress }, key) => {
+          const isLastItem = key === profileMenuItems.length - 1;
+          return (
+            <MenuItem
+              key={label}
+              onClick={onPress}
+              className={`flex items-center gap-2 rounded ${isLastItem
+                ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                : ""
+                }`}
+            >
+              {React.createElement(icon, {
+                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                strokeWidth: 2,
+              })}
+              <Typography
+                as="span"
+                variant="small"
+                className="font-normal"
+                color={isLastItem ? "red" : "inherit"}
+              >
+                {label}
+              </Typography>
+            </MenuItem>
+          );
+        })}
+      </MenuList>
+    </Menu>
+  );
+}
+
 const StickyNavbar = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, userDetails } = useSelector(state => state.users);
@@ -60,17 +169,8 @@ const StickyNavbar = () => {
         <div className="flex items-center gap-4">
           <div className="mr-4 hidden lg:block">{navList}</div>
           <div className="flex items-center gap-x-1">
-            {userDetails ? (<>
-
-              <Button
-                variant="gradient"
-                size="sm"
-                color="white"
-                className="hidden lg:inline-block"
-                onClick={logoutHandler}
-              >
-                <span>Log out</span>
-              </Button></>) : (<Link to="/login">
+            {userDetails ? (<ProfileMenu />) : (
+              <Link to="/login">
                 <Button
                   variant="gradient"
                   size="sm"
@@ -123,14 +223,29 @@ const StickyNavbar = () => {
       </div>
       <Collapse open={openNav}>
         {navList}
-        {/* <div className="flex items-center gap-x-1">
-            <Button fullWidth variant="text" size="sm" className="">
-              <span>Log In</span>
-            </Button>
-            <Button fullWidth variant="gradient" size="sm" className="">
-              <span>Sign in</span>
-            </Button>
-          </div> */}
+        <div className="flex items-center gap-x-1">
+          {userDetails ? (<>
+
+            <Button
+              variant="gradient"
+              size="sm"
+              color="white"
+              className=""
+              onClick={logoutHandler}
+            >
+              <span>Log out</span>
+            </Button></>) : (<Link to="/login">
+              <Button
+                variant="gradient"
+                size="sm"
+                color="white"
+                className=""
+              >
+                <span>Log In</span>
+              </Button>
+            </Link>)}
+
+        </div>
       </Collapse>
     </Navbar>
 
