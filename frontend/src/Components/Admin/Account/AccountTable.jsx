@@ -17,6 +17,7 @@ const AccountTable = ({ users, currentPage, totalPages }) => {
                             <th className="border-b p-4">Employee ID</th>
                             <th className="border-b p-4">First Name</th>
                             <th className="border-b p-4">Last Name</th>
+                            <th className="border-b p-4">Middle Name</th>
                             <th className="border-b p-4">Phone</th>
                             <th className="border-b p-4">Email</th>
                             <th className="border-b p-4">Role</th>
@@ -24,11 +25,12 @@ const AccountTable = ({ users, currentPage, totalPages }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(({ employeeID, firstName, lastName, phone, email, role }, index) => (
+                        {users.map(({ employeeID,name, phone, email, role }, index) => (
                             <tr key={employeeID}>
                                 <td className="p-4">{employeeID}</td>
-                                <td className="p-4">{firstName}</td>
-                                <td className="p-4">{lastName}</td>
+                                <td className="p-4">{name && name.first}</td>
+                                <td className="p-4">{name && name.last}</td>
+                                <td className="p-4">{name && name.middle ? name.middle : "--"}</td>
                                 <td className="p-4">{phone}</td>
                                 <td className="p-4">{email}</td>
                                 <td className="p-4">{role}</td>
