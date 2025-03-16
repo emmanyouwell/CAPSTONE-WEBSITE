@@ -94,7 +94,49 @@ const AdminSideNav = () => {
                                         </ListItem>
                                     </List>
                                 </AccordionBody>
-                            </Accordion> : <Link to={items.route} key={items.id}>
+                            </Accordion> : items.title === 'Schedules' ? <>
+                                <Accordion
+                                    open={open === 2}
+                                    icon={
+                                        <ChevronDownIcon
+                                            strokeWidth={2.5}
+                                            className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
+                                        />
+                                    }
+                                    key={items.id}
+                                >
+                                    <ListItem className="p-0 text-primary" selected={open === 2}>
+                                        <AccordionHeader onClick={() => handleOpen(2)} className="border-b-0 p-3">
+                                            <ListItemPrefix className="text-primary">
+                                                {items.icon}
+                                            </ListItemPrefix>
+                                            <Typography className="text-primary mr-auto font-normal">
+                                                {items.title}
+                                            </Typography>
+                                        </AccordionHeader>
+                                    </ListItem>
+                                    <AccordionBody className="py-1">
+                                        <List className="p-0">
+                                            <Link to="/admin/pickup/schedules">
+                                                <ListItem>
+
+                                                    <ListItemPrefix>
+                                                        <Squares2X2Icon strokeWidth={3} className="h-3 w-5" />
+                                                    </ListItemPrefix>
+                                                    Pick-up Schedules
+                                                </ListItem>
+                                            </Link>
+                                            <Link to="/admin/event/schedules">
+                                                <ListItem>
+                                                    <ListItemPrefix>
+                                                        <Squares2X2Icon strokeWidth={3} className="h-3 w-5" />
+                                                    </ListItemPrefix>
+                                                    Event Schedules
+                                                </ListItem>
+                                            </Link>
+                                        </List>
+                                    </AccordionBody>
+                                </Accordion></> : <Link to={items.route} key={items.id}>
                                 <ListItem className="text-primary">
                                     <ListItemPrefix className="text-primary">
                                         {items.icon && items.icon}

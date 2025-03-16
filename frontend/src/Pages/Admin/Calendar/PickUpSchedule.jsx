@@ -1,43 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getEvents } from '../../../redux/actions/eventActions'
+import { getAllSchedules } from '../../../redux/actions/scheduleActions'
 
 import { Typography } from '@material-tailwind/react'
 import ScheduleComponent from '../../../Components/Admin/Calendar/Calendar'
 import { AddEvent } from '../../../Components/Admin/Calendar/AddEvent'
 
-const Schedule = () => {
+const PickUpSchedule = () => {
     const dispatch = useDispatch();
-    const { events, loading, error } = useSelector((state) => state.events);
+    const { schedules, loading, error } = useSelector((state) => state.schedules);
     useEffect(() => {
-        dispatch(getEvents({ upcoming: false }));
+        dispatch(getAllSchedules());
     }, [dispatch])
 
     useEffect(()=>{
-        if (events) {
-            console.log(events);
+        if (schedules) {
+            console.log(schedules);
         }
-    },[events])
+    },[schedules])
     return (
         <div className="w-full p-4">
-            <div className="flex items-center gap-4 mb-4">
-                <AddEvent />
-            </div>
+           
 
-            {events && <ScheduleComponent events={events} type="events"/>}
+            {schedules && <ScheduleComponent events={schedules} type="pickup" />}
             <div className="flex flex-col">
                 <Typography variant="h2">Legend</Typography>
                 <div className="flex items-center">
                     <div className="w-5 h-5 bg-neutral-dark"></div>
-                    <Typography className="ml-2" variant="lead">Not-Due</Typography>
+                    <Typography className="ml-2" variant="lead">Pending</Typography>
                 </div>
                 <div className="flex items-center">
                     <div className="w-5 h-5 bg-secondary"></div>
-                    <Typography className="ml-2" variant="lead">On-Going</Typography>
+                    <Typography className="ml-2" variant="lead">Approved</Typography>
                 </div>
                 <div className="flex items-center">
                     <div className="w-5 h-5 bg-success"></div>
-                    <Typography className="ml-2" variant="lead">Done</Typography>
+                    <Typography className="ml-2" variant="lead">Completed</Typography>
                 </div>
 
             </div>
@@ -46,4 +44,4 @@ const Schedule = () => {
     )
 }
 
-export default Schedule
+export default PickUpSchedule

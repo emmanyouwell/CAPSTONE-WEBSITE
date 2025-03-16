@@ -29,6 +29,8 @@ import EditArticle from "./Pages/Admin/Resources/EditArticle";
 import Homepage from "./Pages/Admin/Inventory/Homepage";
 import Refrigerator from "./Pages/Admin/Inventory/Refrigerator";
 import Profile from "./Pages/Admin/Profile/Profile";
+import PickUpSchedule from "./Pages/Admin/Calendar/PickUpSchedule";
+import PickUpDetails from "./Components/Admin/Calendar/Schedule/PickUpDetails";
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -60,7 +62,7 @@ function MainContent() {
         case '/admin/recipients':
           setPageTitle('Recipient Record');
           break;
-        case '/admin/schedules':
+        case '/admin/event/schedules':
           setPageTitle('Schedules');
           break;
         case '/admin/account':
@@ -114,8 +116,10 @@ function MainContent() {
             <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
             <Route path="/admin/recipients" element={<ProtectedRoute isAdmin={true}><RecipientPage /></ProtectedRoute>} />
             <Route path="/admin/recipient/:id" element={<ProtectedRoute isAdmin={true}><SingleRecipient /></ProtectedRoute>} />
-            <Route path="/admin/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
+            <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
+            <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule/></ProtectedRoute>}/>
             <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
+            <Route path="/admin/schedules/:id" element={<ProtectedRoute isAdmin={true}><PickUpDetails/></ProtectedRoute>}/>
             <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
             <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
             <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
@@ -143,8 +147,10 @@ function MainContent() {
             <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
             <Route path="/admin/recipients" element={<ProtectedRoute isAdmin={true}><RecipientPage /></ProtectedRoute>} />
             <Route path="/admin/recipient/:id" element={<ProtectedRoute isAdmin={true}><SingleRecipient /></ProtectedRoute>} />
-            <Route path="/admin/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
+            <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
+            <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule/></ProtectedRoute>}/>
             <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
+            <Route path="/admin/schedules/:id" element={<ProtectedRoute isAdmin={true}><PickUpDetails/></ProtectedRoute>}/>
             <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
             <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
             <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
