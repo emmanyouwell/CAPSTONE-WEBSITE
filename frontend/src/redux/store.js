@@ -7,6 +7,7 @@ import recipientReducer from './slices/recipientSlice';
 import eventReducer from './slices/eventSlice';
 import inventoryReducer from './slices/inventorySlice';
 import fridgeReducer from './slices/fridgeSlice';
+import scheduleReducer from './slices/scheduleSlice'
 const store = configureStore({
   reducer: {
     users: userReducer,// Add your reducers here
@@ -16,6 +17,7 @@ const store = configureStore({
     events: eventReducer,
     inventories: inventoryReducer,
     fridges: fridgeReducer,
+    schedules: scheduleReducer,
   },
 });
 
