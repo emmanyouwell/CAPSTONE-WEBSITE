@@ -24,11 +24,9 @@ const CreateAdmin = () => {
       .matches(/^\d+$/, "Employee ID must be a number") // Ensures only digits are allowed
       .required("Employee ID is required"),
     firstName: Yup.string().required("First Name is required"),
+
     lastName: Yup.string().required("Last Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    confirmEmail: Yup.string()
-      .oneOf([Yup.ref("email"), null], "Emails must match")
-      .required("Confirm Email is required"),
     phoneNumber: Yup.string().required("Phone Number is required"),
     role: Yup.string().required("Role is required"),
   });
@@ -37,6 +35,7 @@ const CreateAdmin = () => {
     initialValues: {
       employeeID: "",
       firstName: "",
+      middleName: "",
       lastName: "",
       email: "",
       confirmEmail: "",
@@ -45,8 +44,9 @@ const CreateAdmin = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(registerUser(values));
       console.log("Form submitted", values);
+      dispatch(registerUser(values));
+
     },
   });
   useEffect(() => {
@@ -133,6 +133,7 @@ const CreateAdmin = () => {
                   <div className="text-red-500 text-sm">{formik.errors.firstName}</div>
                 )}
               </div>
+
               <div className="w-full">
                 <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                   Last Name
@@ -148,6 +149,23 @@ const CreateAdmin = () => {
                 />
                 {formik.touched.lastName && formik.errors.lastName && (
                   <div className="text-red-500 text-sm">{formik.errors.lastName}</div>
+                )}
+              </div>
+              <div className="w-full">
+                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                  Middle Name
+                </Typography>
+                <Input
+                  name="middleName"
+                  size="lg"
+                  placeholder="L."
+                  className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.middleName}
+                />
+                {formik.touched.middleName && formik.errors.middleName && (
+                  <div className="text-red-500 text-sm">{formik.errors.middleName}</div>
                 )}
               </div>
             </div>
