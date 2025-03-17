@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import StickyNavbar from '../Components/Navbar'
 import { Button, Typography } from '@material-tailwind/react'
@@ -9,14 +9,14 @@ import signup from '../assets/image/signup.png'
 import { AccordionCustomIcon } from '../Components/Accordion'
 import Schedule from './Admin/Calendar/Schedule'
 import UpcomingEvents from '../Components/Admin/Calendar/UpcomingEvents'
-import {useDispatch, useSelector} from 'react-redux'
-import { getEvents } from '../redux/actions/eventActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { getEvents, getUpcomingEvents } from '../redux/actions/eventActions'
 
 const Home = () => {
   const dispatch = useDispatch();
-  const {events, loading, error} = useSelector(state => state.events);
+  const { events, loading, error } = useSelector(state => state.events);
   useEffect(() => {
-    dispatch(getEvents({upcoming: true}));
+    dispatch(getUpcomingEvents());
   }, [dispatch])
   return (
     <>
@@ -25,7 +25,7 @@ const Home = () => {
         className="hero h-[500px] p-4">
         <div className="mt-8 h-full w-full flex flex-col items-center justify-center px-4">
           <Typography
-            
+
             className="font-dm text-white text-center text-4xl sm:text-3xl md:text-4xl lg:text-5xl max-w-3xl font-bold"
           >
             Welcome to Taguig City Human Milk Bank online portal!
@@ -66,7 +66,7 @@ const Home = () => {
       </section>
 
       <section className="p-4 mb-8 w-full">
-          <UpcomingEvents events={events}/>
+        <UpcomingEvents events={events} />
       </section>
 
       <section className="h-max p-4 mb-24">
