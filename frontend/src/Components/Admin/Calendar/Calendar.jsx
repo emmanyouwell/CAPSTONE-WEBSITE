@@ -95,7 +95,7 @@ const ScheduleComponent = ({ events, type }) => {
                                 else if (event.status === 'Done') backgroundColor = '#4CAF50';
                             }
                             else if (type === "pickup") {
-                                if (event.status === 'Pending') backgroundColor = '#7A7A7A';
+                                if (event.status === 'Pending') backgroundColor = '#FFC107';
                                 else if (event.status === 'Approved') backgroundColor = '#E53777';
                                 else if (event.status === 'Completed') backgroundColor = '#4CAF50';
                             }

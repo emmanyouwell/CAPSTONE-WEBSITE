@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { approveSchedule, getDonorSchedules, requestSchedule } from '../actions/scheduleActions';
+import { approveSchedule, getDonorSchedules, requestSchedule, updateSchedule } from '../actions/scheduleActions';
 import { getAllSchedules } from '../actions/scheduleActions';
+import { getSingleSchedule } from '../actions/scheduleActions';
 
 export const lettingSlice = createSlice({
     name: 'schedule',
@@ -10,9 +11,13 @@ export const lettingSlice = createSlice({
         error: null,
         success: false,
         schedules: [],
+        schedule: {},
         count: 0,
     },
     reducers: {
+        resetSuccess: (state) => {
+            state.success = false;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -65,7 +70,31 @@ export const lettingSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
+            .addCase(getSingleSchedule.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(getSingleSchedule.fulfilled, (state, action) => {
+                state.loading = false;
+                state.schedule = action.payload.schedule;
+                state.count = action.payload.count;
+            })
+            .addCase(getSingleSchedule.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(updateSchedule.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(updateSchedule.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.message = action.payload.message;
+            })
+            .addCase(updateSchedule.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
     },
 });
-
+export const { resetSuccess } = lettingSlice.actions;
 export default lettingSlice.reducer;
