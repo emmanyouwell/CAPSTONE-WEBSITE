@@ -26,15 +26,15 @@ const PickUpSchedule = () => {
             <div className="flex flex-col">
                 <Typography variant="h2">Legend</Typography>
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-neutral-dark"></div>
+                    <div className="w-5 h-5 bg-[#FFC107]"></div>
                     <Typography className="ml-2" variant="lead">Pending</Typography>
                 </div>
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-secondary"></div>
+                    <div className="w-5 h-5 bg-[#E53777]"></div>
                     <Typography className="ml-2" variant="lead">Approved</Typography>
                 </div>
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-success"></div>
+                    <div className="w-5 h-5 bg-[#4CAF50]"></div>
                     <Typography className="ml-2" variant="lead">Completed</Typography>
                 </div>
 

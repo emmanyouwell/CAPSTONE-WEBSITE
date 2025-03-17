@@ -1,0 +1,181 @@
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { getSingleSchedule, updateSchedule } from '../../../../redux/actions/scheduleActions'
+import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, Input, Typography } from '@material-tailwind/react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import BagDetails from './BagDetails'
+import { useNavigate } from 'react-router-dom'
+import { resetSuccess } from '../../../../redux/slices/scheduleSlice'
+const PickUpDetails = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const { schedule, loading, success, error } = useSelector(state => state.schedules);
+    const [open, setOpen] = useState(false);
+
+    const validationSchema = Yup.object({
+
+        newDate: Yup.date().required("New date is required"),
+
+    });
+    const handleApprove = () => {
+        const data = {
+            id,
+            status: 'Approved'
+        }
+        dispatch(updateSchedule(data))
+    }
+    const handleComplete = () => {
+        const data = {
+            id,
+            status: 'Completed'
+        }
+        dispatch(updateSchedule(data))
+    }
+    const formik = useFormik({
+        initialValues: {
+            newDate: "",
+        },
+        validationSchema,
+        onSubmit: (values) => {
+            const data = {
+                id,
+                dates: values.newDate,
+                status: 'Approved'
+            }
+            dispatch(updateSchedule(data))
+            handleOpen();
+        },
+    });
+    const handleOpen = () => {
+        setOpen(!open);
+    }
+    useEffect(() => {
+        dispatch(getSingleSchedule(id));
+    }, [dispatch, id])
+    useEffect(() => {
+        if (schedule && schedule.dates) {
+            const date = new Date(schedule.dates)
+
+            formik.setValues({
+                newDate: new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+            })
+        }
+    }, [schedule])
+    useEffect(() => {
+        if (success) {
+            dispatch(resetSuccess());
+            navigate('/admin/pickup/schedules')
+        }
+    }, [dispatch, navigate, success])
+    return (
+        <>
+            <div className="p-8 flex flex-col gap-4 justify-between items-center">
+                <div className="font-parkinsans text-2xl text-center">Pick Up Details</div>
+                <Card className='w-full border-l-8 border-accent-green' style={{ boderLeftWidth: '8px', borderColor: schedule && schedule.status === 'Pending' ? 'rgb(255 193 7)' : schedule && schedule.status === 'Approved' ? 'rgb(229 55 119)' : 'rgb(76 175 80)' }}>
+                    <CardBody>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center justify-between">
+                                <span className="font-parkinsans text-lg">Name of Donor</span>
+                                <span className="font-parkinsans text-lg">{schedule && schedule.donorDetails && `${schedule.donorDetails.donorId.user.name.first} ${schedule.donorDetails.donorId.user.name.middle} ${schedule.donorDetails.donorId.user.name.last}`}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="font-parkinsans text-lg">Express Date Range</span>
+                                <span className="font-parkinsans text-lg">{schedule && new Date(schedule.oldestExpressDate).toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                })} - {schedule && new Date(schedule.latestExpressDate).toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                })}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="font-parkinsans text-lg">Pick Up Date and Time</span>
+                                <span className="font-parkinsans text-lg">{schedule && new Date(schedule.dates).toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                    hour12: true, // Ensures AM/PM format
+                                })}</span>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                                <span className="font-parkinsans text-lg">Pick Up Address</span>
+                                <span className="font-parkinsans text-lg">{schedule && schedule.address}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="font-parkinsans text-lg">Pick Up Status</span>
+                                <span className="font-parkinsans text-lg">{schedule && schedule.status}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="font-parkinsans text-lg">Total Volume</span>
+                                <span className="font-parkinsans text-3xl text-secondary font-bold">{schedule && schedule.totalVolume} ml</span>
+                            </div>
+                        </div>
+                    </CardBody>
+
+                    <CardFooter>
+                        {schedule && schedule.status === 'Pending' ?
+                            <div className="w-full flex items-start justify-end gap-4">
+                                <Button onClick={handleOpen} color="deep-orange">Change Date</Button>
+                                <Button color="pink" onClick={handleApprove}>Approve</Button>
+                            </div> : schedule && schedule.status === 'Approved' ?
+                                <div className="w-full flex items-start justify-end gap-4">
+                                    <Button color="green" onClick={handleComplete}>Complete</Button>
+                                </div> :
+                                <div className="w-full flex items-start justify-end gap-4">
+                                    <Button disabled color="blue-gray">Picked Up</Button>
+                                </div>}
+
+                        <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
+                            <form onSubmit={formik.handleSubmit}>
+                                <div className="w-full">
+                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                        Pick Up Date and Time
+                                    </Typography>
+                                    <Input
+                                        type="datetime-local"
+                                        name="newDate"
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values.newDate}
+                                        error={formik.touched.newDate && Boolean(formik.errors.newDate)}
+                                    />
+                                    {formik.touched.newDate && formik.errors.newDate && (
+                                        <Typography color="red" variant="small">
+                                            {formik.errors.newDate}
+                                        </Typography>
+                                    )}
+                                </div>
+                                <div className="flex items-start justify-end pt-4">
+                                    <Button type="submit" color="deep-orange">
+                                        Update
+                                    </Button>
+                                </div>
+
+                            </form>
+                        </Dialog>
+                    </CardFooter>
+                </Card>
+                <div className="font-parkinsans text-2xl text-center">Milk Bag Details</div>
+
+                <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
+                    {schedule?.donorDetails?.bags?.map((bag, index) => (
+                        <div key={index} className="min-w-max">
+                            <BagDetails bag={bag} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+        </>
+    )
+}
+
+export default PickUpDetails
