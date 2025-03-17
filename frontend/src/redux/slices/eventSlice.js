@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addEvents, getEvents, editEvents, getEventDetails, deleteEvents } from '../actions/eventActions';
+import { addEvents, getEvents, editEvents, getEventDetails, deleteEvents, getUpcomingEvents } from '../actions/eventActions';
 export const eventSlice = createSlice({
   name: 'event',
   initialState: {
@@ -80,7 +80,18 @@ export const eventSlice = createSlice({
       .addCase(deleteEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(getUpcomingEvents.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getUpcomingEvents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.events = action.payload.events;
+      })
+      .addCase(getUpcomingEvents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   }
 });
 export const {resetUpdate, resetDelete, resetSuccess} = eventSlice.actions;

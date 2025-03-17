@@ -5,8 +5,8 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 
 export const getEvents = createAsyncThunk(
     'event/getEvents',
-    async ({upcoming=false}, thunkAPI) => {
-        
+    async (req, thunkAPI) => {
+
         const token = await getToken();
         console.log('Token Retrieved:', token);
         console.log("Getting events")
@@ -22,13 +22,27 @@ export const getEvents = createAsyncThunk(
             withCredentials: true
         }
         try {
-            let url = `${VITE_APP_URL}/api/v1/events`;
-            if (upcoming){
-                url += '/?upcoming=true'
-            }
-            console.log("url: ", url);
-            const response = await axios.get(url, config)
-            
+
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/events`, config)
+
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
+export const getUpcomingEvents = createAsyncThunk(
+    'event/getUpcomingEvents',
+    async (req, thunkAPI) => {
+        console.log("Getting upcoming events")
+        
+        try {
+
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/events/upcoming`)
+
             return response.data;
 
         } catch (error) {
@@ -153,7 +167,7 @@ export const getEventDetails = createAsyncThunk(
         try {
 
             const response = await axios.get(`${VITE_APP_URL}/api/v1/event/${id}`, config)
-            
+
             return response.data;
 
         } catch (error) {
