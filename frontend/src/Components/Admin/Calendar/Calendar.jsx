@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const localizer = momentLocalizer(moment);
 import { useDispatch } from 'react-redux';
 import { getEventDetails } from '../../../redux/actions/eventActions';
+import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 // Custom agenda component
 const CustomAgenda = ({ event }) => (
     <>
@@ -35,12 +37,29 @@ const CustomEvent = ({ event }) => {
 const ScheduleComponent = ({ events, type }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [selectedOption, setSelectedOption] = useState("edit"); // Default to "standard"
 
+    const handleChange = (event) => {
+        setSelectedOption(event.target.value);
+    };
+    const handleChooseAction = () => {
+        if (selectedOption === "edit") {
+            navigate(`/admin/events/${id}`);
+        }
+        else if (selectedOption === "host") {
+            navigate(`/admin/events/attendance/${id}`);
+        }
+        setOpen(!open);
+        // Perform an action based on selectedOption
+    };
     const [items, setItems] = useState([]);
-
+    const [open, setOpen] = useState(false);
+    const [id, setId] = useState('');
     const handleOpen = async (event, type) => {
         if (type === "events") {
-            navigate(`/admin/events/${event.id}`);
+            setId(event.id);
+            setOpen(!open);
+            // navigate(`/admin/events/${event.id}`);
         }
         else if (type === "pickup") {
             navigate(`/admin/schedules/${event.id}`);
@@ -48,7 +67,7 @@ const ScheduleComponent = ({ events, type }) => {
     };
     useEffect(() => {
         if (type === "events") {
-            const result = events.map((event) => { return { title: event.title, description: event.description, start: new Date(event.eventDetails.start), end: new Date(event.eventDetails.end), id: event._id, status: event.eventStatus } });
+            const result = events.map((event) => { return { title: event.activity, description: event.description, start: new Date(event.actDetails.start), end: new Date(event.actDetails.end), id: event._id, status: event.status, venue: event.venue } });
             setItems(result);
         }
         else if (type === "pickup") {
@@ -110,6 +129,88 @@ const ScheduleComponent = ({ events, type }) => {
                         };
                     }}
                 />
+                <Dialog size="sm" open={open} handler={() => handleOpen(events, type)} className="p-4">
+                    <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
+                        <DialogHeader className="relative m-0 block">
+                            <Typography variant="h4" color="blue-gray">
+                                Choose an action
+                            </Typography>
+                            <Typography className="mt-1 font-normal text-gray-600">
+                                Please select your desired action for this event.
+                            </Typography>
+                            <IconButton
+                                size="sm"
+                                variant="text"
+                                className="!absolute right-3.5 top-3.5"
+                                onClick={() => handleOpen(events, type)}
+                            >
+                                <XMarkIcon className="h-4 w-4 stroke-2" />
+                            </IconButton>
+                        </DialogHeader>
+                        <DialogBody>
+                            <div className="space-y-4">
+                                <div>
+                                    <input
+                                        type="radio"
+                                        id="edit"
+                                        name="edit"
+                                        
+                                        value="edit"
+                                        className="peer hidden"
+                                        required
+                                        checked={selectedOption === "edit"}
+                                        onChange={handleChange}
+                                    />
+                                    <label
+                                        htmlFor="edit"
+                                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                    >
+                                        <div className="block">
+                                            <Typography className="font-semibold">
+                                                Edit Event
+                                            </Typography>
+                                            <Typography className="font-normal text-gray-600">
+                                                Edit the title, description, venue, dates, and status.
+
+                                            </Typography>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div>
+                                    <input
+                                        type="radio"
+                                        id="host"
+                                        name="host"
+                                        value="host"
+                                        className="peer hidden"
+                                        required
+                                        checked={selectedOption === "host"}
+                                        onChange={handleChange}
+                                    />
+                                    <label
+                                        htmlFor="host"
+                                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                    >
+                                        <div className="block">
+                                            <Typography className="font-semibold">
+                                                Host Event
+                                            </Typography>
+                                            <Typography className="font-normal text-gray-600">
+                                                List the attendance of donors and track their donated milk bags.
+                                            </Typography>
+                                        </div>
+                                    </label>
+                                </div>
+                                
+                            </div>
+                        </DialogBody>
+                        <DialogFooter>
+                            <Button className="ml-auto" onClick={handleChooseAction}>
+                                choose action
+                            </Button>
+                        </DialogFooter>
+                    </Dialog>
+                </Dialog>
             </div>
 
         </>

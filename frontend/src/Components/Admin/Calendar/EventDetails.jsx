@@ -25,7 +25,7 @@ const EventDetails = ({ event }) => {
         <>
             <div className="w-96 p-4 bg-white rounded-lg shadow-md border flex flex-col h-full">
                 <div className="flex items-center justify-center gap-4">
-                    <div className="w-full h-auto bg-secondary rounded-lg flex justify-center items-center">
+                    {/* <div className="w-full h-auto bg-secondary rounded-lg flex justify-center items-center">
                         {event.eventType === "Grand Milk Letting" ? (
                             <img src={grand} alt="grand milk letting" />
                         ) : event.eventType === "Regular Milk Letting" ? (
@@ -33,17 +33,17 @@ const EventDetails = ({ event }) => {
                         ) : (
                             <img src={info} alt="other information" />
                         )}
-                    </div>
+                    </div> */}
                     <div className="w-full">
                         {/* Title */}
                         <div className="mt-2">
-                            <span className="font-dm text-xl break-words whitespace-normal">{event.title}</span>
+                            <span className="font-dm text-xl break-words whitespace-normal">{event.activity}</span>
                         </div>
 
                         {/* Start & End Date Chips */}
                         <div className="flex flex-wrap items-center gap-2 mt-2">
-                            <Chip value={`Start: ${formattedDate(event.eventDetails.start)}`} className="w-full px-2 py-1 text-xs bg-secondary" />
-                            <Chip value={`End: ${formattedDate(event.eventDetails.end)}`} className="w-full px-2 py-1 text-xs bg-primary" />
+                            <Chip value={`Start: ${formattedDate(event.actDetails.start)}`} className="w-full px-2 py-1 text-xs bg-secondary" />
+                            <Chip value={`End: ${formattedDate(event.actDetails.end)}`} className="w-full px-2 py-1 text-xs bg-primary" />
                         </div>
                     </div>
                 </div>

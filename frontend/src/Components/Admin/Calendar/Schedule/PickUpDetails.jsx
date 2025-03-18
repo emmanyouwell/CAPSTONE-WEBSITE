@@ -31,7 +31,7 @@ const PickUpDetails = () => {
         }
         dispatch(updateSchedule(data))
     }
-    
+
     const formik = useFormik({
         initialValues: {
             newDate: "",
@@ -58,8 +58,8 @@ const PickUpDetails = () => {
                 status: 'Completed',
                 admin: values.admin
             }
-            dispatch(updateSchedule(data)).then(()=>{
-                dispatch(recordPrivateRecord({scheduleId: id, donorId: schedule.donorDetails.donorId._id}))
+            dispatch(updateSchedule(data)).then(() => {
+                dispatch(recordPrivateRecord({ scheduleId: id, donorId: schedule.donorDetails.donorId._id }))
             })
             handleCompleteOpen();
         },
@@ -146,85 +146,85 @@ const PickUpDetails = () => {
                                 <Button color="pink" onClick={handleApprove}>Approve</Button>
                             </div> : schedule && schedule.status === 'Approved' ?
                                 <div className="w-full flex items-start justify-end gap-4">
-                                    <Button color="green" onClick={handleCompleteOpen}>Complete</Button>
+                                    <Button color="green" disabled={schedule && (new Date(schedule.dates).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0))} onClick={handleCompleteOpen}>Complete</Button>
                                 </div> :
-                                <div className="w-full flex items-start justify-end gap-4">
-                                    <Button disabled color="blue-gray">Picked Up</Button>
-                                </div>}
+                    <div className="w-full flex items-start justify-end gap-4">
+                        <Button disabled color="blue-gray">Picked Up</Button>
+                    </div>}
 
-                        <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
-                            <form onSubmit={formik.handleSubmit}>
-                                <div className="w-full">
-                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                        Pick Up Date and Time
+                    <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
+                        <form onSubmit={formik.handleSubmit}>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Pick Up Date and Time
+                                </Typography>
+                                <Input
+                                    type="datetime-local"
+                                    name="newDate"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.newDate}
+                                    error={formik.touched.newDate && Boolean(formik.errors.newDate)}
+                                />
+                                {formik.touched.newDate && formik.errors.newDate && (
+                                    <Typography color="red" variant="small">
+                                        {formik.errors.newDate}
                                     </Typography>
-                                    <Input
-                                        type="datetime-local"
-                                        name="newDate"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.newDate}
-                                        error={formik.touched.newDate && Boolean(formik.errors.newDate)}
-                                    />
-                                    {formik.touched.newDate && formik.errors.newDate && (
-                                        <Typography color="red" variant="small">
-                                            {formik.errors.newDate}
-                                        </Typography>
-                                    )}
-                                </div>
-                                <div className="flex items-start justify-end pt-4">
-                                    <Button type="submit" color="deep-orange">
-                                        Update
-                                    </Button>
-                                </div>
+                                )}
+                            </div>
+                            <div className="flex items-start justify-end pt-4">
+                                <Button type="submit" color="deep-orange">
+                                    Update
+                                </Button>
+                            </div>
 
-                            </form>
-                        </Dialog>
-                        <Dialog size="sm" open={complete} handler={handleCompleteOpen} className="p-4">
-                            <form onSubmit={formik2.handleSubmit}>
-                                <div className="w-full">
-                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                        Choose Admin
+                        </form>
+                    </Dialog>
+                    <Dialog size="sm" open={complete} handler={handleCompleteOpen} className="p-4">
+                        <form onSubmit={formik2.handleSubmit}>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Choose Admin
+                                </Typography>
+                                <Select
+                                    name="admin"
+                                    onChange={(val) => formik2.setFieldValue("admin", val)}
+                                    onBlur={formik2.handleBlur}
+                                    value={formik2.values.admin}
+                                    error={formik2.touched.admin && Boolean(formik2.errors.admin)}
+                                >
+
+                                    {users && users.map((user, index) => (
+                                        <Option key={index} value={user._id}>{user.name.first} {user.name.middle} {user.name.last}</Option>
+                                    ))}
+
+                                </Select>
+                                {formik2.touched.admin && formik2.errors.admin && (
+                                    <Typography color="red" variant="small">
+                                        {formik2.errors.admin}
                                     </Typography>
-                                    <Select
-                                        name="admin"
-                                        onChange={(val) => formik2.setFieldValue("admin", val)}
-                                        onBlur={formik2.handleBlur}
-                                        value={formik2.values.admin}
-                                        error={formik2.touched.admin && Boolean(formik2.errors.admin)}
-                                    >
-                                       
-                                        {users && users.map((user, index) => (
-                                            <Option key={index} value={user._id}>{user.name.first} {user.name.middle} {user.name.last}</Option>
-                                        ))}
-                                        
-                                    </Select>
-                                    {formik2.touched.admin && formik2.errors.admin && (
-                                        <Typography color="red" variant="small">
-                                            {formik2.errors.admin}
-                                        </Typography>
-                                    )}
-                                </div>
-                                <div className="flex items-start justify-end pt-4">
-                                    <Button type="submit" color="deep-orange">
-                                        Update
-                                    </Button>
-                                </div>
+                                )}
+                            </div>
+                            <div className="flex items-start justify-end pt-4">
+                                <Button type="submit" color="deep-orange">
+                                    Update
+                                </Button>
+                            </div>
 
-                            </form>
-                        </Dialog>
-                    </CardFooter>
-                </Card>
-                <div className="font-parkinsans text-2xl text-center">Milk Bag Details</div>
+                        </form>
+                    </Dialog>
+                </CardFooter>
+            </Card>
+            <div className="font-parkinsans text-2xl text-center">Milk Bag Details</div>
 
-                <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
-                    {schedule?.donorDetails?.bags?.map((bag, index) => (
-                        <div key={index} className="min-w-max">
-                            <BagDetails bag={bag} />
-                        </div>
-                    ))}
-                </div>
+            <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
+                {schedule?.donorDetails?.bags?.map((bag, index) => (
+                    <div key={index} className="min-w-max">
+                        <BagDetails bag={bag} />
+                    </div>
+                ))}
             </div>
+        </div >
 
         </>
     )
