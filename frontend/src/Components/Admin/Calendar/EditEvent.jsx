@@ -9,18 +9,20 @@ import { getUser } from "../../../utils/helper";
 import { useParams } from 'react-router-dom';
 import { editEvents, deleteEvents } from '../../../redux/actions/eventActions';
 import { useNavigate } from 'react-router-dom';
-import { resetDelete, resetUpdate } from '../../../redux/slices/eventSlice';
+import { resetDelete, resetUpdate } from '../../../redux/slices/lettingSlice';
 import { Link } from 'react-router-dom';
+import { deleteLetting, getLettingDetails, updateLetting } from '../../../redux/actions/lettingActions';
 const EditEvent = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useDispatch();
-    const { eventDetails, loading, isUpdated, isDeleted, error } = useSelector((state) => state.events);
+    const { lettingDetails, isUpdated, isDeleted } = useSelector(state => state.lettings);
     const validationSchema = Yup.object({
         title: Yup.string().required("Title is required"),
         description: Yup.string(),
+        venue: Yup.string(),
         status: Yup.string().required("Status is required"),
-        type: Yup.string().required("Type is required"),
+
         start: Yup.date().required("Start date is required"),
         end: Yup.date()
             .required("End date is required")
@@ -33,72 +35,75 @@ const EditEvent = () => {
             description: '',
             status: '',
             start: '',
-            type: '',
+            venue: '',
+
             end: '',
             user: getUser()._id
         },
         validationSchema,
         onSubmit: (values) => {
-            const localStart = new Date(values.start)
-            const localEnd = new Date(values.end)
-
-
-            const formData = new FormData()
-            formData.append('title', values.title)
-            formData.append('description', values.description)
-            formData.append('status', values.status)
-            formData.append('type', values.type)
-            formData.append('start', localStart)
-            formData.append('end', localEnd)
-            formData.append('user', getUser()._id)
-            formData.append('id', id)
-            dispatch(editEvents(formData));
+            const localStart = new Date(values.start);
+            const localEnd = new Date(values.end);
+            const formData = {
+                activity: values.title,
+                venue: values.venue,
+                actDetails: {
+                    start: localStart,
+                    end: localEnd,
+                },
+                status: values.status,
+                description: values.description,
+                admin: getUser()._id,
+                id
+            }
+            dispatch(updateLetting(formData));
 
 
         },
     });
     const handleDelete = () => {
-        dispatch(deleteEvents(id));
+        dispatch(deleteLetting(id));
     }
     useEffect(() => {
         const getDetails = async () => {
-            await dispatch(getEventDetails(id));
+            await dispatch(getLettingDetails(id));
         };
 
         getDetails();
     }, [dispatch, id]); // Depend on `id` to fetch when it changes
 
     useEffect(() => {
-        if (eventDetails && eventDetails.eventDetails) {
-            const start = new Date(eventDetails.eventDetails.start)
-            const end = new Date(eventDetails.eventDetails.end)
+        if (lettingDetails && lettingDetails.actDetails) {
+            const start = new Date(lettingDetails.actDetails.start)
+            const end = new Date(lettingDetails.actDetails.end)
 
             formik.setValues({
-                title: eventDetails.title,
-                description: eventDetails.description,
-                status: eventDetails.eventStatus,
-                type: eventDetails.eventType,
+                title: lettingDetails.activity,
+                description: lettingDetails.description,
+                venue: lettingDetails.venue,
+                status: lettingDetails.status,
+
                 start: new Date(start.getTime() - start.getTimezoneOffset() * 60000).toISOString().slice(0, 16), // Format for datetime-local
                 end: new Date(end.getTime() - end.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
             });
         }
-    }, [eventDetails]); // Run when `eventDetails` updates
+    }, [lettingDetails]); // Run when `eventDetails` updates
 
     useEffect(() => {
         if (isUpdated) {
             dispatch(resetUpdate());
-            navigate('/admin/schedules');
+            navigate('/admin/event/schedules');
         }
         if (isDeleted) {
             dispatch(resetDelete());
-            navigate('/admin/schedules');
+            navigate('/admin/event/schedules');
         }
 
     }, [isUpdated, isDeleted, navigate])
     return (
         <>
             <div className="p-8">
-                <Link to="/admin/schedules">
+                <Link to="/admin/event/schedules">
                     <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                         <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                     </div>
@@ -143,7 +148,24 @@ const EditEvent = () => {
                                     </Typography>
                                 )}
                             </div>
-
+                            <div>
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Venue
+                                </Typography>
+                                <Input
+                                    name="venue"
+                                    placeholder="e.g. Taguig City"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.venue}
+                                    error={formik.touched.venue && Boolean(formik.errors.venue)}
+                                />
+                                {formik.touched.venue && formik.errors.venue && (
+                                    <Typography color="red" variant="small">
+                                        {formik.errors.venue}
+                                    </Typography>
+                                )}
+                            </div>
                             {/* Description */}
                             <div>
                                 <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
@@ -181,28 +203,7 @@ const EditEvent = () => {
                                         </Typography>
                                     )}
                                 </div>
-                                <div className="w-full">
-                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                        Type
-                                    </Typography>
-                                    <Select
-                                        name="type"
-                                        onChange={(val) => formik.setFieldValue("type", val)}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.type}
-                                        error={formik.touched.type && Boolean(formik.errors.type)}
-                                    >
-                                        <Option value="Regular Milk Letting">Regular Milk Letting</Option>
-                                        <Option value="Grand Milk Letting">Grand Milk Letting</Option>
-                                        <Option value="Other">Other</Option>
 
-                                    </Select>
-                                    {formik.touched.type && formik.errors.type && (
-                                        <Typography color="red" variant="small">
-                                            {formik.errors.type}
-                                        </Typography>
-                                    )}
-                                </div>
                             </div>
 
                             {/* Date Fields */}

@@ -5,26 +5,24 @@ import { getEvents } from '../../../redux/actions/eventActions'
 import { Typography } from '@material-tailwind/react'
 import ScheduleComponent from '../../../Components/Admin/Calendar/Calendar'
 import { AddEvent } from '../../../Components/Admin/Calendar/AddEvent'
+import { getLettings } from '../../../redux/actions/lettingActions'
 
 const Schedule = () => {
     const dispatch = useDispatch();
-    const { events, loading, error } = useSelector((state) => state.events);
+    
+    const {lettings, loading, error} = useSelector((state) => state.lettings);
     useEffect(() => {
-        dispatch(getEvents({ upcoming: false }));
+        dispatch(getLettings());
     }, [dispatch])
 
-    useEffect(()=>{
-        if (events) {
-            console.log(events);
-        }
-    },[events])
+   
     return (
         <div className="w-full p-4">
             <div className="flex items-center gap-4 mb-4">
                 <AddEvent />
             </div>
 
-            {events && <ScheduleComponent events={events} type="events"/>}
+            {lettings && <ScheduleComponent events={lettings} type="events"/>}
             <div className="flex flex-col">
                 <Typography variant="h2">Legend</Typography>
                 <div className="flex items-center">

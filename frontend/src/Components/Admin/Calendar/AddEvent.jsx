@@ -19,16 +19,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addEvents, getEvents } from "../../../redux/actions/eventActions";
 import { getUser } from "../../../utils/helper";
 import { resetSuccess } from "../../../redux/slices/eventSlice";
+import { createLetting, getLettings } from "../../../redux/actions/lettingActions";
 export function AddEvent() {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
-    const { loading, success, error } = useSelector((state) => state.events);
+    const {success} = useSelector(state => state.lettings);
     const handleOpen = () => setOpen(!open);
     const validationSchema = Yup.object({
         title: Yup.string().required("Title is required"),
         description: Yup.string(),
+        venue: Yup.string(),
         status: Yup.string().required("Status is required"),
-        type: Yup.string().required("Type is required"),
+
         start: Yup.date().required("Start date is required"),
         end: Yup.date()
             .required("End date is required")
@@ -39,30 +41,29 @@ export function AddEvent() {
         initialValues: {
             title: "",
             description: "",
+            venue: "",
             status: "",
             start: "",
             end: "",
-            type: "",
+
             user: getUser()._id
         },
         validationSchema,
         onSubmit: (values) => {
             const localStart = new Date(values.start);
             const localEnd = new Date(values.end);
-
-            // Send the local date in ISO string format (including the local timezone offset)
-            const startDate = localStart.toISOString();
-            const endDate = localEnd.toISOString();
-            const formData = new FormData()
-            formData.append('title', values.title)
-            formData.append('description', values.description)
-            formData.append('status', values.status)
-            formData.append('type', values.type)
-            formData.append('start', localStart)
-            formData.append('end', localEnd)
-            formData.append('user', getUser()._id)
-            console.log("date and time", localStart)
-            dispatch(addEvents(formData));
+            const formData = {
+                activity: values.title,
+                venue: values.venue,
+                actDetails: {
+                    start: localStart,
+                    end: localEnd,
+                },
+                status: values.status,
+                description: values.description,
+                admin: getUser()._id
+            }
+            dispatch(createLetting(formData));
             handleOpen();
         },
     });
@@ -73,12 +74,13 @@ export function AddEvent() {
                 description: "",
                 status: "",
                 start: "",
-                type: "",
+                venue: "",
+
                 end: "",
                 user: getUser()._id
             })
             dispatch(resetSuccess());
-            dispatch(getEvents({upcoming: false}));
+            dispatch(getLettings());
         }
     }, [success])
     return (
@@ -123,7 +125,24 @@ export function AddEvent() {
                                 </Typography>
                             )}
                         </div>
-
+                        <div>
+                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                Venue
+                            </Typography>
+                            <Input
+                                name="venue"
+                                placeholder="e.g. Taguig City"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.venue}
+                                error={formik.touched.venue && Boolean(formik.errors.venue)}
+                            />
+                            {formik.touched.venue && formik.errors.venue && (
+                                <Typography color="red" variant="small">
+                                    {formik.errors.venue}
+                                </Typography>
+                            )}
+                        </div>
                         <div>
                             <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                                 Description (Optional)
@@ -158,28 +177,7 @@ export function AddEvent() {
                                     </Typography>
                                 )}
                             </div>
-                            <div className="w-full">
-                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                    Type
-                                </Typography>
-                                <Select
-                                    name="type"
-                                    onChange={(val) => formik.setFieldValue("type", val)}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.type}
-                                    error={formik.touched.type && Boolean(formik.errors.type)}
-                                >
-                                    <Option value="Regular Milk Letting">Regular Milk Letting</Option>
-                                    <Option value="Grand Milk Letting">Grand Milk Letting</Option>
-                                    <Option value="Other">Other</Option>
 
-                                </Select>
-                                {formik.touched.type && formik.errors.type && (
-                                    <Typography color="red" variant="small">
-                                        {formik.errors.type}
-                                    </Typography>
-                                )}
-                            </div>
                         </div>
 
 

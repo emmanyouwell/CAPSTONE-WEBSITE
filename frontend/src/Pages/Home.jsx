@@ -11,12 +11,13 @@ import Schedule from './Admin/Calendar/Schedule'
 import UpcomingEvents from '../Components/Admin/Calendar/UpcomingEvents'
 import { useDispatch, useSelector } from 'react-redux'
 import { getEvents, getUpcomingEvents } from '../redux/actions/eventActions'
+import { getUpcomingLettings } from '../redux/actions/lettingActions'
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { events, loading, error } = useSelector(state => state.events);
+  const {lettings} = useSelector(state => state.lettings)
   useEffect(() => {
-    dispatch(getUpcomingEvents());
+    dispatch(getUpcomingLettings());
   }, [dispatch])
   return (
     <>
@@ -66,7 +67,7 @@ const Home = () => {
       </section>
 
       <section className="p-4 mb-8 w-full">
-        <UpcomingEvents events={events} />
+        <UpcomingEvents events={lettings} />
       </section>
 
       <section className="h-max p-4 mb-24">
