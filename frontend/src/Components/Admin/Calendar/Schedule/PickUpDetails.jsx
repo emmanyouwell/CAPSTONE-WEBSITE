@@ -2,23 +2,27 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getSingleSchedule, updateSchedule } from '../../../../redux/actions/scheduleActions'
-import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, Input, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, Input, Option, Select, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import BagDetails from './BagDetails'
 import { useNavigate } from 'react-router-dom'
 import { resetSuccess } from '../../../../redux/slices/scheduleSlice'
+import { getAllUsers } from '../../../../redux/actions/userActions'
+import { recordPrivateRecord } from '../../../../redux/actions/collectionActions'
 const PickUpDetails = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id } = useParams();
     const { schedule, loading, success, error } = useSelector(state => state.schedules);
+    const { users } = useSelector(state => state.users);
     const [open, setOpen] = useState(false);
-
+    const [complete, setComplete] = useState(false);
     const validationSchema = Yup.object({
-
         newDate: Yup.date().required("New date is required"),
-
+    });
+    const validationSchema2 = Yup.object({
+        admin: Yup.string().required("Admin is required"),
     });
     const handleApprove = () => {
         const data = {
@@ -27,13 +31,7 @@ const PickUpDetails = () => {
         }
         dispatch(updateSchedule(data))
     }
-    const handleComplete = () => {
-        const data = {
-            id,
-            status: 'Completed'
-        }
-        dispatch(updateSchedule(data))
-    }
+    
     const formik = useFormik({
         initialValues: {
             newDate: "",
@@ -49,11 +47,32 @@ const PickUpDetails = () => {
             handleOpen();
         },
     });
+    const formik2 = useFormik({
+        initialValues: {
+            admin: "",
+        },
+        validationSchema2,
+        onSubmit: (values) => {
+            const data = {
+                id,
+                status: 'Completed',
+                admin: values.admin
+            }
+            dispatch(updateSchedule(data)).then(()=>{
+                dispatch(recordPrivateRecord({scheduleId: id, donorId: schedule.donorDetails.donorId._id}))
+            })
+            handleCompleteOpen();
+        },
+    });
     const handleOpen = () => {
         setOpen(!open);
     }
+    const handleCompleteOpen = () => {
+        setComplete(!complete);
+    }
     useEffect(() => {
         dispatch(getSingleSchedule(id));
+        dispatch(getAllUsers({ role: "Admin" }))
     }, [dispatch, id])
     useEffect(() => {
         if (schedule && schedule.dates) {
@@ -127,7 +146,7 @@ const PickUpDetails = () => {
                                 <Button color="pink" onClick={handleApprove}>Approve</Button>
                             </div> : schedule && schedule.status === 'Approved' ?
                                 <div className="w-full flex items-start justify-end gap-4">
-                                    <Button color="green" onClick={handleComplete}>Complete</Button>
+                                    <Button color="green" onClick={handleCompleteOpen}>Complete</Button>
                                 </div> :
                                 <div className="w-full flex items-start justify-end gap-4">
                                     <Button disabled color="blue-gray">Picked Up</Button>
@@ -150,6 +169,39 @@ const PickUpDetails = () => {
                                     {formik.touched.newDate && formik.errors.newDate && (
                                         <Typography color="red" variant="small">
                                             {formik.errors.newDate}
+                                        </Typography>
+                                    )}
+                                </div>
+                                <div className="flex items-start justify-end pt-4">
+                                    <Button type="submit" color="deep-orange">
+                                        Update
+                                    </Button>
+                                </div>
+
+                            </form>
+                        </Dialog>
+                        <Dialog size="sm" open={complete} handler={handleCompleteOpen} className="p-4">
+                            <form onSubmit={formik2.handleSubmit}>
+                                <div className="w-full">
+                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                        Choose Admin
+                                    </Typography>
+                                    <Select
+                                        name="admin"
+                                        onChange={(val) => formik2.setFieldValue("admin", val)}
+                                        onBlur={formik2.handleBlur}
+                                        value={formik2.values.admin}
+                                        error={formik2.touched.admin && Boolean(formik2.errors.admin)}
+                                    >
+                                       
+                                        {users && users.map((user, index) => (
+                                            <Option key={index} value={user._id}>{user.name.first} {user.name.middle} {user.name.last}</Option>
+                                        ))}
+                                        
+                                    </Select>
+                                    {formik2.touched.admin && formik2.errors.admin && (
+                                        <Typography color="red" variant="small">
+                                            {formik2.errors.admin}
                                         </Typography>
                                     )}
                                 </div>
