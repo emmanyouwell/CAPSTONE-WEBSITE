@@ -32,6 +32,8 @@ import Profile from "./Pages/Admin/Profile/Profile";
 import PickUpSchedule from "./Pages/Admin/Calendar/PickUpSchedule";
 import PickUpDetails from "./Components/Admin/Calendar/Schedule/PickUpDetails";
 import Attendance from "./Components/Admin/Calendar/Letting/Attendance";
+import NewDonorForm from "./Components/Admin/Calendar/Letting/NewDonorForm";
+import Redirect from "./Redirect";
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -108,9 +110,10 @@ function MainContent() {
             <Route path="/login" element={<Login />} />
             <Route path="/employee/login" element={<EmployeeLogin />} />
             <Route path="/donor-application" element={<DonorApplication />} />
+            <Route path="/new-donor-form" element={<NewDonorForm />} />
             <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
             <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
-
+            <Route path="/redirect" element={<Redirect />} />
             {/* Superadmin routes */}
             <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
@@ -129,7 +132,7 @@ function MainContent() {
             <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
             <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
             <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
-            <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance/></ProtectedRoute>}/>
+            <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
           </Routes>
         </div>) :
         (
@@ -138,9 +141,10 @@ function MainContent() {
             <Route path="/login" element={<Login />} />
             <Route path="/employee/login" element={<EmployeeLogin />} />
             <Route path="/donor-application" element={<DonorApplication />} />
+            <Route path="/new-donor-form" element={<NewDonorForm />} />
             <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
             <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
-
+            <Route path="/redirect" element={<Redirect />} />
             {/* Superadmin routes */}
             <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
@@ -159,7 +163,7 @@ function MainContent() {
             <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
             <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
             <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
-            <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance/></ProtectedRoute>}/>
+            <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
           </Routes>
         )}
 
