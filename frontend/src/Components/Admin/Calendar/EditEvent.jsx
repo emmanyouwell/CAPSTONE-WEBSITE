@@ -47,10 +47,8 @@ const EditEvent = () => {
             const formData = {
                 activity: values.title,
                 venue: values.venue,
-                actDetails: {
-                    start: localStart,
-                    end: localEnd,
-                },
+                start: localStart,
+                end: localEnd,
                 status: values.status,
                 description: values.description,
                 admin: getUser()._id,

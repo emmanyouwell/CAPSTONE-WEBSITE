@@ -109,8 +109,8 @@ const EmployeeLogin = () => {
 
                                 {/* Signup Link */}
                                 <p className="text-gray-900 mt-4">
-                                    Are you an employee?{" "}
-                                    <a href="#" className="text-sm text-secondary hover:underline mt-4">
+                                    Sign in with email?{" "}
+                                    <a href="/login" className="text-sm text-secondary hover:underline mt-4">
                                         Login here.
                                     </a>
                                 </p>

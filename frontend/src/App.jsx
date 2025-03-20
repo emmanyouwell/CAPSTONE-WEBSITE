@@ -34,6 +34,9 @@ import PickUpDetails from "./Components/Admin/Calendar/Schedule/PickUpDetails";
 import Attendance from "./Components/Admin/Calendar/Letting/Attendance";
 import NewDonorForm from "./Components/Admin/Calendar/Letting/NewDonorForm";
 import Redirect from "./Redirect";
+import DonationDetails from "./Components/Admin/Calendar/Letting/DonationDetails";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/ReactToastify.css'
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -114,6 +117,7 @@ function MainContent() {
             <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
             <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
             <Route path="/redirect" element={<Redirect />} />
+            <Route path="/admin/events/attendance/donations/:id" element={<ProtectedRoute isAdmin={true}><DonationDetails /></ProtectedRoute>} />
             {/* Superadmin routes */}
             <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
@@ -166,7 +170,7 @@ function MainContent() {
             <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
           </Routes>
         )}
-
+      <ToastContainer />
     </div>
   )
 }

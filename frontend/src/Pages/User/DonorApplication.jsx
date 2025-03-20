@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 const DonorApplication = () => {
-  const formURL = `https://tally.so/r/3NM8XQ?first_name=${encodeURIComponent("emmanuel")}`;
+  const formURL = `https://tally.so/r/3NM8XQ`;
     useEffect(() => {
       // Load the Tally embed script
       const script = document.createElement("script");
