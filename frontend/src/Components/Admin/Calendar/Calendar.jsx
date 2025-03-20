@@ -44,20 +44,21 @@ const ScheduleComponent = ({ events, type }) => {
     };
     const handleChooseAction = () => {
         if (selectedOption === "edit") {
-            navigate(`/admin/events/${id}`);
+            navigate(`/admin/events/${event.id}`);
         }
         else if (selectedOption === "host") {
-            navigate(`/admin/events/attendance/${id}`);
+            navigate(`/admin/events/attendance/${event.id}`);
         }
         setOpen(!open);
         // Perform an action based on selectedOption
     };
     const [items, setItems] = useState([]);
     const [open, setOpen] = useState(false);
-    const [id, setId] = useState('');
+    const [event, setEvent] = useState('');
     const handleOpen = async (event, type) => {
         if (type === "events") {
-            setId(event.id);
+            console.log("events: ", event);
+            setEvent(event);
             setOpen(!open);
             // navigate(`/admin/events/${event.id}`);
         }
@@ -67,7 +68,7 @@ const ScheduleComponent = ({ events, type }) => {
     };
     useEffect(() => {
         if (type === "events") {
-            const result = events.map((event) => { return { title: event.activity, description: event.description, start: new Date(event.actDetails.start), end: new Date(event.actDetails.end), id: event._id, status: event.status, venue: event.venue } });
+            const result = events.map((event) => { return { title: event.activity, description: event.description, start: new Date(event.actDetails.start), end: new Date(event.actDetails.end), id: event._id, status: event.status, venue: event.venue, attendance: event.attendance} });
             setItems(result);
         }
         else if (type === "pickup") {
@@ -176,9 +177,11 @@ const ScheduleComponent = ({ events, type }) => {
                                         </div>
                                     </label>
                                 </div>
+                            
                                 <div>
                                     <input
                                         type="radio"
+                                        disabled={event && event.status !== "On-Going"}
                                         id="host"
                                         name="host"
                                         value="host"
@@ -193,7 +196,7 @@ const ScheduleComponent = ({ events, type }) => {
                                     >
                                         <div className="block">
                                             <Typography className="font-semibold">
-                                                Host Event
+                                                Host Event {event && event.status !== "On-Going" && <span className="text-sm text-neutral-dark">(Event must be On-Going)</span>}
                                             </Typography>
                                             <Typography className="font-normal text-gray-600">
                                                 List the attendance of donors and track their donated milk bags.

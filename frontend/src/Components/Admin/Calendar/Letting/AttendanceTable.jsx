@@ -1,38 +1,35 @@
-import React, { useState, useEffect } from 'react'
-import { Card, Typography } from "@material-tailwind/react";
+import { Card } from '@material-tailwind/react'
+import React from 'react'
 
-
-const AccountTable = ({ users, currentPage, totalPages }) => {
-
+const AttendanceTable = ({attendance, currentPage, totalPages}) => {
+    const getTotalVolume = (bags) => {
+        return bags.reduce((acc, bag) => acc + bag.volume, 0)
+    }
     return (
         <div className="w-full h-full">
             <Card className="h-full w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">
                     <thead>
                         <tr>
-                            <th className="border-b p-4">Employee ID</th>
-                            <th className="border-b p-4">First Name</th>
-                            <th className="border-b p-4">Last Name</th>
-                            <th className="border-b p-4">Middle Name</th>
+                            <th className="border-b p-4">No.</th>
+                            <th className="border-b p-4">Last Breast Milk Donation / New Donor</th>
+                            <th className="border-b p-4">Total Volume of Breast Milk</th>
+                            <th className="border-b p-4">Name</th>
+                            <th className="border-b p-4">Complete Address</th>
                             <th className="border-b p-4">Phone</th>
-                            <th className="border-b p-4">Email</th>
-                            <th className="border-b p-4">Role</th>
-                            <th className="border-b p-4">Actions</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(({ employeeID,name, phone, email, role }, index) => (
-                            <tr key={employeeID}>
-                                <td className="p-4">{employeeID}</td>
+                        {attendance && attendance.map((attendees, index) => (
+                            <tr key={attendees._id}>
+                                <td className="p-4">{index+1}</td>
                                 <td className="p-4">{name && name.first}</td>
-                                <td className="p-4">{name && name.last}</td>
-                                <td className="p-4">{name && name.middle ? name.middle : "--"}</td>
-                                <td className="p-4">{phone}</td>
-                                <td className="p-4">{email}</td>
-                                <td className="p-4">{role}</td>
-                                <td className="p-4">
-                                    <a href="#" className="text-blue-500">Edit</a>
-                                </td>
+                                <td className="p-4">{getTotalVolume(attendees.bags)} ml</td>
+                                <td className="p-4">{`${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`}</td>
+                                <td className="p-4">{`${attendees.donor.home_address.street} ${attendees.donor.home_address.brgy} ${attendees.donor.home_address.city}`}</td>
+                                <td className="p-4">{attendees.donor.user.phone}</td>
+                                
                             </tr>
                         ))}
                     </tbody>
@@ -71,4 +68,4 @@ const AccountTable = ({ users, currentPage, totalPages }) => {
     )
 }
 
-export default AccountTable
+export default AttendanceTable
