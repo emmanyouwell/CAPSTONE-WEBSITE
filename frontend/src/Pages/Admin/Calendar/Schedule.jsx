@@ -2,27 +2,35 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getEvents } from '../../../redux/actions/eventActions'
 
-import { Typography } from '@material-tailwind/react'
+import { Button, Typography } from '@material-tailwind/react'
 import ScheduleComponent from '../../../Components/Admin/Calendar/Calendar'
 import { AddEvent } from '../../../Components/Admin/Calendar/AddEvent'
 import { getLettings } from '../../../redux/actions/lettingActions'
+import { ClockIcon } from '@heroicons/react/24/outline'
+import { Link } from 'react-router-dom'
 
 const Schedule = () => {
     const dispatch = useDispatch();
-    
-    const {lettings, loading, error} = useSelector((state) => state.lettings);
+
+    const { lettings, loading, error } = useSelector((state) => state.lettings);
     useEffect(() => {
         dispatch(getLettings());
     }, [dispatch])
 
-   
+
     return (
         <div className="w-full p-4">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center justify-between gap-4 mb-4">
                 <AddEvent />
+                <Link to="/admin/event/history">
+                <Button size="sm" color="deep-orange" className="flex items-center justify-center gap-2">
+                    <ClockIcon className="w-5 h-5" />
+                    History
+                </Button>
+                </Link>
             </div>
 
-            {lettings && <ScheduleComponent events={lettings} type="events"/>}
+            {lettings && <ScheduleComponent events={lettings} type="events" />}
             <div className="flex flex-col">
                 <Typography variant="h2">Legend</Typography>
                 <div className="flex items-center">

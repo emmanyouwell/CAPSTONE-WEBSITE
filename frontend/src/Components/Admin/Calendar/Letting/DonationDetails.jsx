@@ -26,6 +26,7 @@ import { markAttendance } from '../../../../redux/actions/lettingActions';
 const DonationDetails = () => {
     const dispatch = useDispatch();
     const { donors, pageSize, totalDonors, totalPages, loading, error } = useSelector((state) => state.donors);
+    const { loading: submitLoading } = useSelector((state) => state.lettings);
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -43,16 +44,17 @@ const DonationDetails = () => {
         setMenuOpen(false); // Close the menu
     };
     const [donorType, setDonorType] = useState("");
+    const [lastDonation, setLastDonation] = useState(null);
+    const handleDateChange = (e) => {
+        setLastDonation(new Date(e.target.value));
+    }
     const handleChange = (e) => {
         setDonorType(e.target.value)
     }
     const handleTextChange = (e) => {
         setSearch(e.target.value);
     }
-    const handleSubmit = () => {
-        setCurrentPage(0);
-        dispatch(getDonors({ search: search }));
-    }
+
     const searchDonor = () => {
         dispatch(getDonors({ search: search }))
     }
@@ -89,18 +91,30 @@ const DonationDetails = () => {
             toast.error("Milk letting event not found.", { position: "bottom-right" });
             return;
         }
+        let newData;
+        if (lastDonation) {
+            newData = {
+                lettingId: id,
+                donorId: selectedDonor,
+                donorType: donorType,
+                bags: bags,
+                lastDonation
+            };
+        }
+        else {
+            newData = {
+                lettingId: id,
+                donorId: selectedDonor,
+                donorType: donorType,
+                bags: bags,
+            }
+        }
 
-        const newData = {
-            lettingId: id,
-            donorId: selectedDonor,
-            donorType: donorType,
-            bags: bags,
-        };
 
         dispatch(markAttendance(newData))
             .then((res) => {
                 toast.success("Attendance recorded.", { position: "bottom-right" });
-                
+
             })
             .catch((error) => {
                 console.error("Error adding inventory:", error);
@@ -129,6 +143,7 @@ const DonationDetails = () => {
                                     }}
                                     onChange={handleTextChange}
                                     className="sticky top-0"
+                                    onKeyDown={(e) => e.key === 'Enter' && searchDonor()}
                                 />
                                 <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={searchDonor} />
                             </div>
@@ -204,7 +219,31 @@ const DonationDetails = () => {
                             </div>
                         </Card>
                     </>)}
+                {donorType && donorType === "Old Donor" && (
+                    <>
+                        <div className="font-parkinsans text-2xl text-center">Last Breast Milk Donation</div>
+                        <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4'>
+                            <div className="flex items-center justify-between">
+                                <List className="w-full">
+                                    <div className="relative flex w-full gap-2">
+                                        <Input
+                                            type="date"
+                                            label="Date"
+                                            containerProps={{
+                                                className: "mb-4",
+                                            }}
+                                            onChange={handleDateChange}
+                                            className="sticky top-0"
 
+                                        />
+
+                                    </div>
+
+                                </List>
+                            </div>
+                        </Card>
+                    </>
+                )}
                 <div className="font-parkinsans text-2xl text-center">Bag details</div>
                 <Card className='w-full border-l-8 border-secondary p-4 mx-auto'>
 
@@ -249,7 +288,7 @@ const DonationDetails = () => {
                     </CardFooter>
                 </Card>
                 <div className="flex justify-end w-full my-4">
-                    <Button className="bg-success" onClick={submitAttendance}>Save Attendance</Button>
+                    <Button disabled={submitLoading} className="bg-success" onClick={submitAttendance}>Save Attendance</Button>
                 </div>
 
             </div>
