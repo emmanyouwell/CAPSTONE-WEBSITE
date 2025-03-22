@@ -37,6 +37,7 @@ import Redirect from "./Redirect";
 import DonationDetails from "./Components/Admin/Calendar/Letting/DonationDetails";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/ReactToastify.css'
+import History from "./Components/Admin/Calendar/Letting/History";
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -137,6 +138,7 @@ function MainContent() {
             <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
             <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
             <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
+            <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
           </Routes>
         </div>) :
         (
@@ -168,6 +170,7 @@ function MainContent() {
             <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
             <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
             <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
+            <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
           </Routes>
         )}
       <ToastContainer />

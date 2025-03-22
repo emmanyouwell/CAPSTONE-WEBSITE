@@ -1,7 +1,7 @@
 import { Card } from '@material-tailwind/react'
 import React from 'react'
 
-const AttendanceTable = ({attendance, currentPage, totalPages}) => {
+const AttendanceTable = ({ attendance, currentPage, totalPages }) => {
     const getTotalVolume = (bags) => {
         return bags.reduce((acc, bag) => acc + bag.volume, 0)
     }
@@ -17,19 +17,25 @@ const AttendanceTable = ({attendance, currentPage, totalPages}) => {
                             <th className="border-b p-4">Name</th>
                             <th className="border-b p-4">Complete Address</th>
                             <th className="border-b p-4">Phone</th>
-                           
+
                         </tr>
                     </thead>
                     <tbody>
                         {attendance && attendance.map((attendees, index) => (
                             <tr key={attendees._id}>
-                                <td className="p-4">{index+1}</td>
-                                <td className="p-4">{name && name.first}</td>
+                                <td className="p-4">{index + 1}</td>
+                                <td className="p-4">{attendees.lastDonation ? new Date(attendees.lastDonation).toLocaleString("en-US", {
+                                    weekday: "short",
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                    hour12: true, // Ensures AM/PM format
+                                }) : "New Donor"}</td>
                                 <td className="p-4">{getTotalVolume(attendees.bags)} ml</td>
                                 <td className="p-4">{`${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`}</td>
                                 <td className="p-4">{`${attendees.donor.home_address.street} ${attendees.donor.home_address.brgy} ${attendees.donor.home_address.city}`}</td>
                                 <td className="p-4">{attendees.donor.user.phone}</td>
-                                
+
                             </tr>
                         ))}
                     </tbody>
