@@ -9,7 +9,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../../redux/actions/userActions";
+import { getUserDetails, registerUser } from "../../../redux/actions/userActions";
 import { resetRegister } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/outline";
@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 const CreateAdmin = () => {
   const navigation = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, isRegistered, user } = useSelector((state) => state.users);
+  const { loading, error, isRegistered, userDetails, user } = useSelector((state) => state.users);
 
   const validationSchema = Yup.object({
     employeeID: Yup.string()
@@ -57,8 +57,8 @@ const CreateAdmin = () => {
     }
   }, [dispatch, isRegistered, navigation])
   useEffect(() => {
-    console.log('isRegistered changed:', isRegistered);
-  }, [isRegistered]);
+    dispatch(getUserDetails())
+  }, [dispatch]);
   return (
     <section className="w-full p-8">
       <div className="p-8">
@@ -201,7 +201,7 @@ const CreateAdmin = () => {
                   value={formik.values.role}
                 >
                   <option value="" label="Select Role" />
-                  <option value="Admin" label="Admin" />
+                  {userDetails?.role === "SuperAdmin" && <option value="Admin" label="Admin" />}
                   <option value="Staff" label="Staff" />
                 </select>
                 {formik.touched.role && formik.errors.role && (

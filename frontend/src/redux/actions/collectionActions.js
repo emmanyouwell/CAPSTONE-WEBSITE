@@ -64,3 +64,35 @@ export const recordPrivateRecord = createAsyncThunk(
         }
     }
 )
+
+
+// Mark Attendance of donors
+export const getAllCollections = createAsyncThunk(
+    'collection/getAllCollections',
+    async (req, thunkAPI) => {
+
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        try {
+
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/collections`, config)
+            
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)

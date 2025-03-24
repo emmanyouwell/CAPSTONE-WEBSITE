@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const History = () => {
     const dispatch = useDispatch();
-    const { lettings } = useSelector((state) => state.lettings);
+    const { lettings, loading } = useSelector((state) => state.lettings);
     useEffect(() => {
         dispatch(getLettings());
     }, [dispatch])
@@ -22,8 +22,9 @@ const History = () => {
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>
             </Link>
-            <div className="w-1/2 mx-auto flex flex-col justify-center items-center gap-4">
-                <div className="font-parkinsans text-2xl text-center">Event History</div>
+            <div className="font-parkinsans text-2xl text-center">Event History</div>
+            {loading ? <div>Loading...</div> : <div className="w-1/2 h-[calc(100vh-20rem)] overflow-y-auto mx-auto flex flex-col items-center gap-4">
+
                 {filteredLettings.length > 0 && filteredLettings.map((lets, index) => (
                     <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4 flex justify-between items-center flex-row'>
                         <div>
@@ -52,7 +53,8 @@ const History = () => {
                         </Link>
                     </Card>))}
 
-            </div>
+            </div>}
+
 
         </div>
     )

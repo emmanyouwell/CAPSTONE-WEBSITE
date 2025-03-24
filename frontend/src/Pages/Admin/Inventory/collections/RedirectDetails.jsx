@@ -1,0 +1,27 @@
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+
+const RedirectDetails = () => {
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const location = useLocation();
+    const type = location.state?.type
+    useEffect(() => {
+        if (type) {
+            if (type === "Public") {
+                navigate(`/admin/events/attendance/${id}`, {state: {from: "RedirectDetails"}});
+            } else if (type === "Private") {
+                navigate(`/admin/schedules/${id}`, {state: {from: "RedirectDetails"}}); // Fallback if no previous page is found
+            }
+            console.log("Type: ", type)
+        }
+        else {
+            console.log("none")
+        }
+
+    }, [navigate, type, id]);
+
+    return <p>Redirecting...</p>;
+};
+
+export default RedirectDetails;

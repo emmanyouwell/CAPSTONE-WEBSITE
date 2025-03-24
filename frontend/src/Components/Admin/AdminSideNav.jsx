@@ -71,6 +71,14 @@ const AdminSideNav = () => {
                                 </ListItem>
                                 <AccordionBody className="py-1">
                                     <List className="p-0">
+                                        <Link to="/admin/collections">
+                                            <ListItem>
+                                                <ListItemPrefix>
+                                                    <Squares2X2Icon strokeWidth={3} className="h-3 w-5" />
+                                                </ListItemPrefix>
+                                                Collections
+                                            </ListItem>
+                                        </Link>
                                         <Link to="/admin/inventory/refrigerator">
                                             <ListItem>
 
@@ -80,18 +88,6 @@ const AdminSideNav = () => {
                                                 Refrigerator Inventory
                                             </ListItem>
                                         </Link>
-                                        <ListItem>
-                                            <ListItemPrefix>
-                                                <Squares2X2Icon strokeWidth={3} className="h-3 w-5" />
-                                            </ListItemPrefix>
-                                            Equipment Inventory
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemPrefix>
-                                                <Squares2X2Icon strokeWidth={3} className="h-3 w-5" />
-                                            </ListItemPrefix>
-                                            Milk Letting Inventory
-                                        </ListItem>
                                     </List>
                                 </AccordionBody>
                             </Accordion> : items.title === 'Schedules' ? <>

@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { recordPrivateRecord, recordPublicRecord } from '../actions/collectionActions';
+import { getAllCollections, recordPrivateRecord, recordPublicRecord } from '../actions/collectionActions';
 
 export const collectionSlice = createSlice({
   name: 'collection',
   initialState: {
+    collections: [],
+    collectionDetails: {},
     message: '',
     loading: false,
-    error: null, 
+    error: null,
     success: false,
   },
   reducers: {
@@ -35,6 +37,18 @@ export const collectionSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(recordPrivateRecord.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAllCollections.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllCollections.fulfilled, (state, action) => {
+        state.loading = false;
+        state.collections = action.payload.collections;
+      })
+      .addCase(getAllCollections.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
