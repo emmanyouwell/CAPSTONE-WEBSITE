@@ -38,6 +38,9 @@ import DonationDetails from "./Components/Admin/Calendar/Letting/DonationDetails
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/ReactToastify.css'
 import History from "./Components/Admin/Calendar/Letting/History";
+import UnpasteurizedMilk from "./Pages/Admin/Inventory/UnpasteurizedMilk";
+import CollectionsTable from "./Pages/Admin/Inventory/collections/CollectionsTable";
+import RedirectDetails from "./Pages/Admin/Inventory/collections/RedirectDetails";
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -70,7 +73,7 @@ function MainContent() {
           setPageTitle('Recipient Record');
           break;
         case '/admin/event/schedules':
-          setPageTitle('Schedules');
+          setPageTitle('Event schedules');
           break;
         case '/admin/account':
           setPageTitle('Accounts');
@@ -89,6 +92,15 @@ function MainContent() {
           break;
         case '/admin/profile':
           setPageTitle('Profile');
+          break;
+        case '/admin/inventory/refrigerator':
+          setPageTitle('Refrigerator Inventory');
+          break;
+        case '/admin/pickup/schedules':
+          setPageTitle('Pick-up Schedules');
+          break;
+        case '/admin/collections':
+          setPageTitle('Milk Collections');
           break;
         case '/admin/dashboard':
         default:
@@ -139,6 +151,9 @@ function MainContent() {
             <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
             <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
             <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
+            <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
+            <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
+            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails/></ProtectedRoute>}/>
           </Routes>
         </div>) :
         (
@@ -171,6 +186,8 @@ function MainContent() {
             <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
             <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
             <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
+            <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
+            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails/></ProtectedRoute>}/>
           </Routes>
         )}
       <ToastContainer />

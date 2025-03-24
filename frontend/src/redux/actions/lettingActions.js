@@ -287,3 +287,33 @@ export const updateLetting = createAsyncThunk(
         }
     }
 )
+
+export const updateAttendance = createAsyncThunk(
+    'letting/updateAttendance',
+    async (req, thunkAPI) =>{
+        
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+        console.log("Update Lettings: ", req)
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        try {
+            const response = await axios.put(`${VITE_APP_URL}/api/v1/additional-bags/${req.lettingId}`, req, config)
+            
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)

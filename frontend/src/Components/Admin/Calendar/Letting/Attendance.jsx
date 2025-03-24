@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { finalizeSession, getLettingDetails } from '../../../../redux/actions/lettingActions';
 import AttendanceTable from './AttendanceTable';
 import { useFormik } from 'formik';
@@ -16,9 +16,10 @@ const Attendance = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation();
   const { lettingDetails, loading, error, success } = useSelector((state) => state.lettings);
   const { userDetails } = useSelector((state) => state.users);
-
+  const from = location.state?.from;
   const openForm = () => {
     localStorage.setItem('redirectUrl', window.location.href);
     navigate('/new-donor-form')
@@ -94,18 +95,22 @@ const Attendance = () => {
                 Finalize Attendance
               </Button>
             </div>
-          </>) : <> <Link to={`/admin/event/history`}>
+          </>) : <> {from === "RedirectDetails" ? <Link to={`/admin/collections`}>
             <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
               <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
             </div>
-          </Link>
+          </Link>: <Link to={`/admin/event/history`}>
+            <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
+              <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
+            </div>
+          </Link>}
           
           <Typography variant="h2">Total volume: {lettingDetails.totalVolume} ml</Typography>
           
           </>}
 
         </div>
-        {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} />}
+        {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} lettingId={lettingDetails._id}/>}
 
       </div>
 

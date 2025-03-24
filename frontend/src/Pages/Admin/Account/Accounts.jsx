@@ -4,7 +4,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import admin from '../../../assets/image/admin-icon.png';
 import staff from '../../../assets/image/staff-icon.png';
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllUsers } from '../../../redux/actions/userActions';
+import { getAllUsers, getUserDetails } from '../../../redux/actions/userActions';
 import { Link } from 'react-router-dom';
 import AccountTable from '../../../Components/Admin/Account/AccountTable';
 const sortTypes = [
@@ -21,7 +21,7 @@ const roleTypes = [
 ]
 const Accounts = () => {
     const dispatch = useDispatch();
-    const { users, totalPages, pageSize } = useSelector(state => state.users);
+    const { users, totalPages, userDetails, pageSize } = useSelector(state => state.users);
     const [search, setSearch] = useState('');
     const [role, setRole] = useState('');
     const [roleType, setRoletype] = useState('');
@@ -82,6 +82,7 @@ const Accounts = () => {
     useEffect(() => {
         console.log("Getting all users");
         dispatch(getAllUsers({ search: search, page: currentPage, pageSize: pageSize, sortBy: sortBy, order: sortOrder, role: roleType }));
+        dispatch(getUserDetails())
     }, [dispatch, search, currentPage, sortBy, sortOrder, roleType])
     return (
         <div className="flex flex-col items-center justify-center w-full gap-4 p-4 mt-4 h-full">
@@ -109,13 +110,16 @@ const Accounts = () => {
                                 ))}
                             </Select>
                         </div>
-                        <div className="w-max">
-                            <Select label="Role" color="pink" variant="standard" value={role} onChange={(value) => handleRole(value)}>
-                                {roleTypes.map((types, index) => (
-                                    <Option key={index} value={types}>{types}</Option>
-                                ))}
-                            </Select>
-                        </div>
+                        {userDetails?.role === "SuperAdmin" &&
+                            <div className="w-max">
+                                <Select label="Role" color="pink" variant="standard" value={role} onChange={(value) => handleRole(value)}>
+                                    {roleTypes.map((types, index) => (
+                                        <Option key={index} value={types}>{types}</Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        }
+
                         <div className="w-max">
                             <Button onClick={handleReset} className='bg-secondary w-max' size="sm">Delete filters</Button>
                         </div>

@@ -20,25 +20,37 @@ import {
 import DonorCards from '../../../../Components/Admin/Donors/DonorCards'
 import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Select, Option } from '@material-tailwind/react'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { markAttendance } from '../../../../redux/actions/lettingActions';
+import { resetSuccess } from '../../../../redux/slices/lettingSlice';
 const DonationDetails = () => {
     const dispatch = useDispatch();
     const { donors, pageSize, totalDonors, totalPages, loading, error } = useSelector((state) => state.donors);
-    const { loading: submitLoading } = useSelector((state) => state.lettings);
+    const { loading: submitLoading, success } = useSelector((state) => state.lettings);
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
-
+    const navigate = useNavigate()
     const [bagDetails, setBagDetails] = useState(() => ({
         volume: "",
         quantity: ""
     }))
-
+    
     const [selectedDonor, setSelectedDonor] = useState(null); // State to store selected donor
     const { id } = useParams();
     const [bags, setBags] = useState([]);
+    const resetStates = () => {
+        setSelectedDonor(null);
+        setDonorType("");
+        setLastDonation(null);
+        setBagDetails({
+            volume: "",
+            quantity: ""
+        });
+        setBags([]);
+        setSearch("");
+    }
     const handleSelect = (donor) => {
         setSelectedDonor(donor); // Update state with selected donor
         setMenuOpen(false); // Close the menu
@@ -114,13 +126,20 @@ const DonationDetails = () => {
         dispatch(markAttendance(newData))
             .then((res) => {
                 toast.success("Attendance recorded.", { position: "bottom-right" });
-
+               
             })
             .catch((error) => {
                 console.error("Error adding inventory:", error);
                 toast.error("Failed to add attendance.", { position: "bottom-right" });
             });
     };
+    useEffect(()=>{
+        if (success){
+            dispatch(resetSuccess());
+            navigate(`/admin/events/attendance/${id}`);
+            resetStates();
+        }
+    },[dispatch, success])
     return (
         <div className="p-8">
             <Link to={`/admin/events/attendance/${id}`}>
