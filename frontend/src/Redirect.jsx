@@ -4,9 +4,10 @@ const Redirect = () => {
     const navigate = useNavigate();
   
     useEffect(() => {
-      const previousPage = localStorage.getItem("previousPage");
+      const previousPage = localStorage.getItem("redirectUrl");
+      const url = new URL(previousPage).pathname;
       if (previousPage) {
-        navigate(previousPage);
+        navigate(url);
       } else {
         navigate("/"); // Fallback if no previous page is found
       }
