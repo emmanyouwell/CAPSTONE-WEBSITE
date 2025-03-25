@@ -96,45 +96,49 @@ const RecipientPage = () => {
             .catch((err) => console.error('Error fetching Recipients:', err));
     }, [dispatch, search, currentPage, brgy, type])
     return (
-        <div className="p-4 flex flex-col justify-between h-full gap-4">
-            <div className="flex items-center gap-4 w-1/2 mt-4">
-                <div className="relative flex w-full gap-2 md:w-max">
-                    <Input
-                        type="search"
-                        color="gray"
-                        label="Search for donors..."
-                        className="pr-10"
-                        onChange={handleTextChange}
-                        containerProps={{
-                            className: "min-w-[288px]",
-                        }}
-                    />
-                    <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
+        <div className="p-4 flex flex-col h-[calc(100vh-2rem)] gap-4">
+            <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">
+                <div className="flex items-center gap-4 mt-4">
+                    <div className="relative flex w-full gap-2 md:w-max">
+                        <Input
+                            type="search"
+                            color="gray"
+                            label="Search for donors..."
+                            className="pr-10"
+                            onChange={handleTextChange}
+                            containerProps={{
+                                className: "min-w-[288px]",
+                            }}
+                        />
+                        <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
 
+                    </div>
+                    <div className="w-full">
+                        <Button color="pink" onClick={handleReset} className='w-max'>Delete filters</Button>
+                    </div>
                 </div>
-                <div className="w-max">
-                    <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
-                        {locations.map((location, index) => (
-                            <Option key={index} value={location}>{location}</Option>
-                        ))}
-                    </Select>
+                <div className="flex items-center gap-4 justify-center flex-wrap">
+                    <div className="w-max">
+                        <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
+                            {locations.map((location, index) => (
+                                <Option key={index} value={location}>{location}</Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="w-max">
+                        <Select label="Filter by Patient Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
+                            {patientTypes.map((donorType, index) => (
+                                <Option key={index} value={donorType}>{donorType}</Option>
+                            ))}
+                        </Select>
+                    </div>
                 </div>
-                <div className="w-max">
-                    <Select label="Filter by Patient Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
-                        {patientTypes.map((donorType, index) => (
-                            <Option key={index} value={donorType}>{donorType}</Option>
-                        ))}
-                    </Select>
-                </div>
-
-                <div className="w-full">
-                    <Button color="pink" onClick={handleReset} className='w-max'>Delete filters</Button>
-                </div>
-
-
 
             </div>
-            <div className="w-full grid grid-cols-2 gap-4">
+
+
+
+            {totalPages > 1 && <div className="w-full grid grid-cols-2 gap-4">
                 {currentPage > 0 ? <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer " onClick={prevPageHandler}>
                     <ArrowLongLeftIcon className="h-14 w-14" /> <span className="font-semibold text-2xl">Previous Page</span>
                 </div> : <div></div>}
@@ -142,16 +146,17 @@ const RecipientPage = () => {
                     <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-end items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer" onClick={nextPageHandler}>
                         <span className="font-semibold text-2xl">Next Page</span><ArrowLongRightIcon className="h-14 w-14" />
                     </div> : <div></div>}
-            </div>
-            <div className="grid grid-cols-4 gap-4 w-full h-full">
+            </div>}
+
+            <div className="grid lg:grid-cols-4 gap-4 min-w-max place-items-center">
                 {recipients.map((recipient, index) => (
-                    <div className="w-1/4" key={index}>
-                        <RecipientCards recipients={recipient}/>
+                    <div className="" key={index}>
+                        <RecipientCards recipients={recipient} />
                     </div>
                 ))}
             </div>
 
-            <div className="w-full grid grid-cols-2 gap-4">
+            {totalPages > 1 && <div className="w-full grid grid-cols-2 gap-4">
                 {currentPage > 0 ? <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer " onClick={prevPageHandler}>
                     <ArrowLongLeftIcon className="h-14 w-14" /> <span className="font-semibold text-2xl">Previous Page</span>
                 </div> : <div></div>}
@@ -159,7 +164,8 @@ const RecipientPage = () => {
                     <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-end items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer" onClick={nextPageHandler}>
                         <span className="font-semibold text-2xl">Next Page</span><ArrowLongRightIcon className="h-14 w-14" />
                     </div> : <div></div>}
-            </div>
+            </div>}
+
         </div>
     )
 }
