@@ -42,6 +42,47 @@ import UnpasteurizedMilk from "./Pages/Admin/Inventory/UnpasteurizedMilk";
 import CollectionsTable from "./Pages/Admin/Inventory/collections/CollectionsTable";
 import RedirectDetails from "./Pages/Admin/Inventory/collections/RedirectDetails";
 import SidebarComponent from "./Components/Admin/SidebarComponent";
+
+
+function RoutesComponent() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/employee/login" element={<EmployeeLogin />} />
+      <Route path="/donor-application" element={<DonorApplication />} />
+      <Route path="/new-donor-form" element={<NewDonorForm />} />
+      <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
+      <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
+      <Route path="/redirect" element={<Redirect />} />
+      <Route path="/admin/events/attendance/donations/:id" element={<ProtectedRoute isAdmin={true}><DonationDetails /></ProtectedRoute>} />
+      {/* Superadmin routes */}
+      <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
+      <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
+      <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
+      <Route path="/admin/recipients" element={<ProtectedRoute isAdmin={true}><RecipientPage /></ProtectedRoute>} />
+      <Route path="/admin/recipient/:id" element={<ProtectedRoute isAdmin={true}><SingleRecipient /></ProtectedRoute>} />
+      <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
+      <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule /></ProtectedRoute>} />
+      <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
+      <Route path="/admin/schedules/:id" element={<ProtectedRoute isAdmin={true}><PickUpDetails /></ProtectedRoute>} />
+      <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
+      <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
+      <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
+      <Route path="/admin/announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
+      <Route path="/admin/resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
+      <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
+      <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
+      <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
+      <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
+      <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
+      <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
+      <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
+      <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
+    </Routes>
+  )
+
+}
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -121,82 +162,19 @@ function MainContent() {
   const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1024px' })
   const [isNavOpen, setIsNavOpen] = useState(false)
   return (
-    <div className={`flex  flex-row`}>
+    <div>
       {/* {isAdministrativePersonnelUser && isAdministrativePersonnelRoute && <AdminSideNav isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen}/>} */}
-      {isAdministrativePersonnelUser && isAdministrativePersonnelRoute && <SidebarComponent userDetails={userDetails} />}
-      <ScrollToTop />
-      {isAdministrativePersonnelUser && isAdministrativePersonnelRoute ? (
-        <div className="w-full flex flex-col gap-2">
-          <ComplexNavbar pageTitle={pageTitle} isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/employee/login" element={<EmployeeLogin />} />
-            <Route path="/donor-application" element={<DonorApplication />} />
-            <Route path="/new-donor-form" element={<NewDonorForm />} />
-            <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
-            <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
-            <Route path="/redirect" element={<Redirect />} />
-            <Route path="/admin/events/attendance/donations/:id" element={<ProtectedRoute isAdmin={true}><DonationDetails /></ProtectedRoute>} />
-            {/* Superadmin routes */}
-            <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
-            <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
-            <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
-            <Route path="/admin/recipients" element={<ProtectedRoute isAdmin={true}><RecipientPage /></ProtectedRoute>} />
-            <Route path="/admin/recipient/:id" element={<ProtectedRoute isAdmin={true}><SingleRecipient /></ProtectedRoute>} />
-            <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
-            <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule /></ProtectedRoute>} />
-            <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
-            <Route path="/admin/schedules/:id" element={<ProtectedRoute isAdmin={true}><PickUpDetails /></ProtectedRoute>} />
-            <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
-            <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
-            <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
-            <Route path="/admin/announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
-            <Route path="/admin/resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
-            <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
-            <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
-            <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
-            <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
-            <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
-            <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
-            <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
-            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
-          </Routes>
-        </div>) :
-        (
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/employee/login" element={<EmployeeLogin />} />
-            <Route path="/donor-application" element={<DonorApplication />} />
-            <Route path="/new-donor-form" element={<NewDonorForm />} />
-            <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
-            <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
-            <Route path="/redirect" element={<Redirect />} />
-            {/* Superadmin routes */}
-            <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
-            <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
-            <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
-            <Route path="/admin/recipients" element={<ProtectedRoute isAdmin={true}><RecipientPage /></ProtectedRoute>} />
-            <Route path="/admin/recipient/:id" element={<ProtectedRoute isAdmin={true}><SingleRecipient /></ProtectedRoute>} />
-            <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
-            <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule /></ProtectedRoute>} />
-            <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
-            <Route path="/admin/schedules/:id" element={<ProtectedRoute isAdmin={true}><PickUpDetails /></ProtectedRoute>} />
-            <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
-            <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
-            <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
-            <Route path="/admin/announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
-            <Route path="/admin/resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
-            <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
-            <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
-            <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
-            <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
-            <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
-            <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
-            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
-          </Routes>
-        )}
+      {isAdministrativePersonnelRoute && isAdministrativePersonnelUser ?
+        <div className="flex">
+          <SidebarComponent userDetails={userDetails} />
+          <ScrollToTop />
+          <div className="w-full flex flex-col gap-2">
+            <ComplexNavbar pageTitle={pageTitle} isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+            <RoutesComponent />
+          </div>
+        </div> : <RoutesComponent/>}
+
+      
       <ToastContainer />
     </div>
   )
