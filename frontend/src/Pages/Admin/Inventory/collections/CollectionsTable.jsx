@@ -15,7 +15,7 @@ const CollectionsTable = ({currentPage, totalPages}) => {
     return (
         <div className="w-full h-full p-8">
             <Card className="h-full w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
+                <table className="w-full table-auto text-left">
                     <thead className="bg-secondary text-white">
                         <tr>
                             <th className="border-b p-4">Collection Date</th>
