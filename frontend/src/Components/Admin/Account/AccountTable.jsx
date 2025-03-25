@@ -5,9 +5,9 @@ import { Card, Typography } from "@material-tailwind/react";
 const AccountTable = ({ users, currentPage, totalPages }) => {
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full p-8">
             <Card className="h-full w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
+                <table className="w-full table-auto text-left">
                     <thead>
                         <tr>
                             <th className="border-b p-4">Employee ID</th>

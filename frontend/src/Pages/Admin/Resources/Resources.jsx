@@ -37,7 +37,7 @@ const Resources = () => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, [])
-    
+
     useEffect(() => {
         dispatch(getArticles());
     }, [dispatch])
@@ -53,8 +53,8 @@ const Resources = () => {
         <>
             <section className="p-4">
                 <div className="flex w-full items-center justify-start gap-4">
-                    <div className="flex items-center justify-between gap-4 w-full mb-4">
-                        <div className="flex items-center gap-4">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full mb-4">
+                        <div className="flex justify-center items-center gap-4">
                             <div className="relative flex w-full gap-2 md:w-max">
                                 <Input
                                     type="search"
@@ -83,15 +83,19 @@ const Resources = () => {
                                     ))}
                                 </Select>
                             </div> */}
+
+                        </div>
+                        <div className="flex items-center justify-center gap-4">
                             <div className="w-max">
                                 <Button onClick={handleReset} className='bg-secondary w-max' size="sm">Delete filters</Button>
                             </div>
+                            <Link to="/admin/resources/create" className="w-max">
+                                <Button className="bg-secondary" size="sm">
+                                    Create New Article
+                                </Button>
+                            </Link>
                         </div>
-                        <Link to="/admin/resources/create" className="w-max">
-                            <Button className="bg-secondary" size="sm">
-                                Create New Article
-                            </Button>
-                        </Link>
+
 
                     </div>
 
