@@ -41,6 +41,7 @@ import History from "./Components/Admin/Calendar/Letting/History";
 import UnpasteurizedMilk from "./Pages/Admin/Inventory/UnpasteurizedMilk";
 import CollectionsTable from "./Pages/Admin/Inventory/collections/CollectionsTable";
 import RedirectDetails from "./Pages/Admin/Inventory/collections/RedirectDetails";
+import SidebarComponent from "./Components/Admin/SidebarComponent";
 function MainContent() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -49,12 +50,18 @@ function MainContent() {
   const donorMatch = useMatch('/admin/donors/:id');
   const recipientMatch = useMatch('/admin/recipient/:id');
   const eventMatch = useMatch('/admin/events/:id');
+  const [userDetails, setUserDetails] = useState({});
+  useEffect(() => {
+    if (getUser()) {
+      setUserDetails({
+        name: `${getUser().name.first} ${getUser().name.last}`,
+        email: getUser().email
+      })
+    }
+  }, [location.pathname])
   useEffect(() => {
     // Set the page title based on the current path
     const path = location.pathname;
-
-
-
     if (donorMatch) {
       setPageTitle('Donor Information');
     }
@@ -108,19 +115,19 @@ function MainContent() {
           break;
       }
     }
-
-
     // Save the current page title to localStorage
     localStorage.setItem('pageTitle', pageTitle);
   }, [location, pageTitle]);
   const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1024px' })
+  const [isNavOpen, setIsNavOpen] = useState(false)
   return (
-    <div className={`flex  ${isAdministrativePersonnelUser && isAdministrativePersonnelRoute && isDesktopOrLaptop ? 'flex-row' : 'flex-col'}`}>
-      {isAdministrativePersonnelUser && isAdministrativePersonnelRoute && <AdminSideNav />}
+    <div className={`flex  flex-row`}>
+      {/* {isAdministrativePersonnelUser && isAdministrativePersonnelRoute && <AdminSideNav isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen}/>} */}
+      {isAdministrativePersonnelUser && isAdministrativePersonnelRoute && <SidebarComponent userDetails={userDetails} />}
       <ScrollToTop />
       {isAdministrativePersonnelUser && isAdministrativePersonnelRoute ? (
         <div className="w-full flex flex-col gap-2">
-          <ComplexNavbar pageTitle={pageTitle} />
+          <ComplexNavbar pageTitle={pageTitle} isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -153,7 +160,7 @@ function MainContent() {
             <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
             <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
             <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
-            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails/></ProtectedRoute>}/>
+            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
           </Routes>
         </div>) :
         (
@@ -187,7 +194,7 @@ function MainContent() {
             <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
             <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
             <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
-            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails/></ProtectedRoute>}/>
+            <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
           </Routes>
         )}
       <ToastContainer />
