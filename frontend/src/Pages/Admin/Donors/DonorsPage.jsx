@@ -98,7 +98,7 @@ const DonorsPage = () => {
     }, [dispatch, search, currentPage, brgy, type])
     return (
         <div className="p-4 flex flex-col  h-[calc(100vh-2rem)] overflow-auto gap-4">
-            <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:w-1/2 mt-4">
+            <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">
 
                 <div className="flex gap-4 items-center justify-center">
                     <div className="relative flex w-full gap-2 md:w-max">
