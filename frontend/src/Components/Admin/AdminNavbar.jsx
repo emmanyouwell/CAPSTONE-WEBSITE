@@ -115,8 +115,8 @@ function ProfileMenu() {
   );
 }
 
-export function ComplexNavbar({ pageTitle }) {
-  const [isNavOpen, setIsNavOpen] = React.useState(false);
+export function ComplexNavbar({ pageTitle, isNavOpen, setIsNavOpen }) {
+  
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
@@ -131,7 +131,7 @@ export function ComplexNavbar({ pageTitle }) {
     <Navbar className="top-0 z-10 mx-auto max-w-full p-2 rounded-none lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
         <div className="flex">
-          <IconButton
+          {/* <IconButton
             size="sm"
             color="blue-gray"
             variant="text"
@@ -139,7 +139,7 @@ export function ComplexNavbar({ pageTitle }) {
             className="mr-2 lg:hidden"
           >
             <Bars2Icon className="h-6 w-6" />
-          </IconButton>
+          </IconButton> */}
           <Typography
             as="a"
             href="#"
