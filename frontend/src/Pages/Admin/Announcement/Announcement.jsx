@@ -3,13 +3,19 @@ import { Typography, Button, Input } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
-import { getArticles } from '../../../redux/actions/articleActions';
+import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
 import ArticleList from '../../../Components/Articles/ArticleList';
+import { resetDelete } from '../../../redux/slices/articleSlice';
 const Announcement = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
-    const { articles, loading, error } = useSelector((state) => state.articles);
+    const { articles, isDeleted, loading, error } = useSelector((state) => state.articles);
     const [search, setSearch] = useState('');
+
+
+    const handleDelete = (id) => {
+        dispatch(deleteArticle(id));
+    }
     const handleReset = () => {
         setSearch('');
     }
@@ -17,7 +23,6 @@ const Announcement = () => {
         setSearch(e.target.value);
     }
     const handleSubmit = () => {
-
 
     }
     useEffect(() => {
@@ -32,26 +37,29 @@ const Announcement = () => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, [])
+
     useEffect(() => {
         dispatch(getArticles());
     }, [dispatch])
 
     useEffect(() => {
-        if (articles) {
-            console.log(articles);
+        if (isDeleted) {
+            console.log("deleted");
+            dispatch(resetDelete());
+            dispatch(getArticles());
         }
-    }, [articles])
+    }, [isDeleted, dispatch])
     return (
         <>
             <section className="p-4">
                 <div className="flex w-full items-center justify-start gap-4">
-                    <div className="flex items-center justify-between gap-4 w-full mb-4">
-                        <div className="flex items-center gap-4">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full mb-4">
+                        <div className="flex justify-center items-center gap-4">
                             <div className="relative flex w-full gap-2 md:w-max">
                                 <Input
                                     type="search"
                                     color="gray"
-                                    label="Search for announcements..."
+                                    label="Search for articles..."
                                     className="pr-10"
                                     onChange={handleTextChange}
                                     containerProps={{
@@ -75,22 +83,26 @@ const Announcement = () => {
                                     ))}
                                 </Select>
                             </div> */}
+
+                        </div>
+                        <div className="flex items-center justify-center gap-4">
                             <div className="w-max">
                                 <Button onClick={handleReset} className='bg-secondary w-max' size="sm">Delete filters</Button>
                             </div>
+                            <Link to="/admin/resources/create" className="w-max">
+                                <Button className="bg-secondary" size="sm">
+                                    Create New Article
+                                </Button>
+                            </Link>
                         </div>
-                        <Link to="/admin/account/create-admin" className="w-max">
-                            <Button className="bg-secondary" size="sm">
-                                Create New Announcements
-                            </Button>
-                        </Link>
+
 
                     </div>
 
 
                 </div>
                 <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                    <ArticleList articles={articles} isLargeScreen={IsLargeScreen} />
+                    <ArticleList articles={articles} isLargeScreen={IsLargeScreen} handleDelete={handleDelete} />
 
                 </div>
             </section>
