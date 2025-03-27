@@ -83,7 +83,7 @@ const Attendance = () => {
         style: { borderLeft: "4px solid #3498db" },
         position: "top-right",
         autoClose: false,
-        closeOnClick: false,
+        closeOnClick: true,
       }
     );
   };

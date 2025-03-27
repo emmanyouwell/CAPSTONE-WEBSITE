@@ -63,6 +63,7 @@ export function AddEvent() {
                 description: values.description,
                 admin: getUser()._id
             }
+            console.log("formData", formData)
             dispatch(createLetting(formData));
             handleOpen();
         },

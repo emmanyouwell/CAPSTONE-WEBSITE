@@ -15,7 +15,8 @@ import {
     UsersIcon,
     MegaphoneIcon,
     NewspaperIcon,
-    ClockIcon
+    ClockIcon,
+    Box
 } from 'lucide-react'
 
 const superAdminItems = [
@@ -25,8 +26,8 @@ const superAdminItems = [
     { title: "Event Schedules", route: "/admin/event/schedules", icon: <CalendarIcon size={20} />, category: "Schedules" },
     { title: "Pick-up Schedules", route: "/admin/pickup/schedules", icon: <ClockIcon size={20} />, category: "Schedules" },
 
-    { title: "Collections", route: "/admin/collections", icon: <Boxes size={20} />, category: "Inventory" },
-
+    { title: "Collections", route: "/admin/collections", icon: <Box size={20} />, category: "Inventory" },
+    { title: "Refrigerators", route: "/admin/inventory/refrigerator", icon: <Boxes size={20} />, category: "Inventory" },
     { title: "Account Management", route: "/admin/account", icon: <UsersIcon size={20} />, category: "Management" },
     { title: "Announcement Creation", route: "/admin/announcement", icon: <MegaphoneIcon size={20} />, category: "Management" },
     { title: "Resources Management", route: "/admin/resources", icon: <NewspaperIcon size={20} />, category: "Management" },
