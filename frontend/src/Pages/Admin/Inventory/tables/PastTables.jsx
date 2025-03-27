@@ -4,50 +4,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
-import { getAllCollections } from '../../../../redux/actions/collectionActions'
-const CollectionsTable = ({currentPage, totalPages}) => {
-    const dispatch = useDispatch()
-    const {collections, loading, error} = useSelector(state => state.collections)
-    useEffect(() => {
-        dispatch(getAllCollections())
-    }, [dispatch])
+const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
     
     return (
-        <div className="w-full h-full p-8">
-            <Card className="h-full w-full overflow-scroll">
-                <table className="w-full table-auto text-left">
+        <div className="w-full h-full">
+            <Card className="h-64 w-full overflow-scroll">
+                <table className="w-full min-w-max table-auto text-left">
                     <thead className="bg-secondary text-white">
                         <tr>
-                        <th className="border-b p-4">Event Name</th>
-                            <th className="border-b p-4">Collection Date</th>
-                            <th className="border-b p-4">Collection Type</th>
-                            <th className="border-b p-4">Status</th>
-                            <th className="border-b p-4">Details</th>
+                            <th className="border-b p-4">Fridge Name</th>
+                            <th className="border-b p-4">Fridge Type</th>
+                            <th className="border-b p-4">Total Volume</th>
                             <th className="border-b p-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {collections && collections.map(({ _id, collectionDate, status, collectionType, privDetails, pubDetails }, index) => (
-                            <tr key={_id}>
-                                <td className="p-4">{pubDetails?.activity || `${privDetails?.donorDetails.donorId.user.name.first} ${privDetails?.donorDetails.donorId.user.name.last}`}</td>
-                                <td className="p-4">{new Date(collectionDate).toLocaleString("en-US", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                    hour: "numeric",
-                                    minute: "numeric",
-                                })}</td>
-                                <td className="p-4">{collectionType}</td>
-                                <td className="p-4">{status}</td>
+                        {pasteurizedFridges.map(({ _id, name, fridgeType, totalVolume }, index) => (
+                            <tr key={index}>
                                 <td className="p-4">
-                                    <Link to={`/admin/collections/details/${pubDetails?._id || privDetails?._id}`} state={{type: collectionType, collectionId: _id}} className="text-blue-500">View Details</Link>
-                                </td>
+                                    <Link to={`/admin/inventory/fridge/${_id}`} className="text-blue-500">{name}</Link></td>
+                                <td className="p-4">{fridgeType}</td>
+                                <td className="p-4">{totalVolume || 0} ml</td>
                                 <td className="p-4 flex items-center gap-2">
                                     <div className="bg-blue-500 p-2 rounded-lg text-white w-max hover:cursor-pointer">
-                                        <PencilSquareIcon className="w-5 h-5" />
+                                        <PencilSquareIcon className="w-5 h-5"/>
                                     </div>
                                     <div className="bg-red-500 p-2 rounded-lg text-white w-max hover:cursor-pointer">
-                                        <TrashIcon className="w-5 h-5" />
+                                        <TrashIcon className="w-5 h-5"/>
                                     </div>
                                 </td>
 
@@ -89,4 +72,4 @@ const CollectionsTable = ({currentPage, totalPages}) => {
     )
 }
 
-export default CollectionsTable
+export default PastTables

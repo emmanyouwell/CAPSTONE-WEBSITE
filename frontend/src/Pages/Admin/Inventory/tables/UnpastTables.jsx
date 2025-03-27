@@ -4,13 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
-const UnpastTables = ({ currentPage, totalPages }) => {
-    const dispatch = useDispatch()
-    const { fridges, loading, error } = useSelector(state => state.fridges)
-    useEffect(() => {
-        dispatch(getFridges())
-    }, [dispatch])
-    const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
+const UnpastTables = ({ currentPage, totalPages, unpasteurizedFridges }) => {
+    
+   
     return (
         <div className="w-full h-full">
             <Card className="h-64 w-full overflow-scroll">
@@ -19,15 +15,17 @@ const UnpastTables = ({ currentPage, totalPages }) => {
                         <tr>
                             <th className="border-b p-4">Fridge Name</th>
                             <th className="border-b p-4">Fridge Type</th>
+                            <th className="border-b p-4">Total Volume</th>
                             <th className="border-b p-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {unpasteurizedFridges.map(({ _id, name, fridgeType }, index) => (
+                        {unpasteurizedFridges.map(({ _id, name, fridgeType, totalVolume}, index) => (
                             <tr key={index}>
                                 <td className="p-4">
                                     <Link to={`/admin/inventory/fridge/${_id}`} className="text-blue-500">{name}</Link></td>
                                 <td className="p-4">{fridgeType}</td>
+                                <td className="p-4">{totalVolume || 0} ml</td>
                                 <td className="p-4 flex items-center gap-2">
                                     <div className="bg-blue-500 p-2 rounded-lg text-white w-max hover:cursor-pointer">
                                         <PencilSquareIcon className="w-5 h-5"/>

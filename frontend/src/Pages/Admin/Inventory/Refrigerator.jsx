@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import UnpastTables from './tables/UnpastTables'
+import PastTables from './tables/PastTables'
 const Refrigerator = () => {
     const dispatch = useDispatch()
     const { fridges, loading, error } = useSelector(state => state.fridges)
@@ -26,19 +27,20 @@ const Refrigerator = () => {
                                 </div>
                             </Link>
                         ))} */}
-                        <UnpastTables/>
+                        <UnpastTables unpasteurizedFridges={unpasteurizedFridges}/>
                     </div>
                 </div>
                 <div className="w-full">
-                    <div className="font-parkinsans text-lg my-4">Pasteurized Refrigerator</div>
-                    <div className="flex items-center justify-start w-full gap-4">
+                    <div className="font-parkinsans text-2xl my-4">Pasteurized Refrigerator</div>
+                    {/* <div className="flex items-center justify-start w-full gap-4">
                         {pasteurizedFridges && pasteurizedFridges.map((fridge, index) => (
                             <div key={index} className="p-8 bg-secondary w-96 rounded-lg flex justify-between items-center">
                                 <span className="font-parkinsans text-xl text-white">{fridge.name}</span>
                                 <span className="font-parkinsans text-sm text-white">{fridge.fridgeType}</span>
                             </div>
                         ))}
-                    </div>
+                    </div> */}
+                    <PastTables pasteurizedFridges={pasteurizedFridges}/>
                 </div>
             </div>
 
