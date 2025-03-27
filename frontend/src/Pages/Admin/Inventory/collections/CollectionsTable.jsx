@@ -18,16 +18,18 @@ const CollectionsTable = ({currentPage, totalPages}) => {
                 <table className="w-full table-auto text-left">
                     <thead className="bg-secondary text-white">
                         <tr>
+                        <th className="border-b p-4">Event Name</th>
                             <th className="border-b p-4">Collection Date</th>
                             <th className="border-b p-4">Collection Type</th>
+                            <th className="border-b p-4">Status</th>
                             <th className="border-b p-4">Details</th>
                             <th className="border-b p-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {collections && collections.map(({ _id, collectionDate, collectionType, privDetails, pubDetails }, index) => (
+                        {collections && collections.map(({ _id, collectionDate, status, collectionType, privDetails, pubDetails }, index) => (
                             <tr key={_id}>
-                                
+                                <td className="p-4">{pubDetails.activity}</td>
                                 <td className="p-4">{new Date(collectionDate).toLocaleString("en-US", {
                                     year: "numeric",
                                     month: "long",
@@ -36,8 +38,9 @@ const CollectionsTable = ({currentPage, totalPages}) => {
                                     minute: "numeric",
                                 })}</td>
                                 <td className="p-4">{collectionType}</td>
+                                <td className="p-4">{status}</td>
                                 <td className="p-4">
-                                    <Link to={`/admin/collections/details/${pubDetails?._id || privDetails?._id}`} state={{type: collectionType}} className="text-blue-500">View Details</Link>
+                                    <Link to={`/admin/collections/details/${pubDetails?._id || privDetails?._id}`} state={{type: collectionType, collectionId: _id}} className="text-blue-500">View Details</Link>
                                 </td>
                                 <td className="p-4 flex items-center gap-2">
                                     <div className="bg-blue-500 p-2 rounded-lg text-white w-max hover:cursor-pointer">

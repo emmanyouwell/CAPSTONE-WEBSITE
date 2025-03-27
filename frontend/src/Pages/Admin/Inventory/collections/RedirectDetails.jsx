@@ -6,12 +6,13 @@ const RedirectDetails = () => {
     const { id } = useParams();
     const location = useLocation();
     const type = location.state?.type
+    const collectionId = location.state?.collectionId
     useEffect(() => {
         if (type) {
             if (type === "Public") {
-                navigate(`/admin/events/attendance/${id}`, {state: {from: "RedirectDetails"}});
+                navigate(`/admin/events/attendance/${id}`, {state: {from: "RedirectDetails", collectionId: collectionId}});
             } else if (type === "Private") {
-                navigate(`/admin/schedules/${id}`, {state: {from: "RedirectDetails"}}); // Fallback if no previous page is found
+                navigate(`/admin/schedules/${id}`, {state: {from: "RedirectDetails", collectionId: collectionId}}); // Fallback if no previous page is found
             }
             console.log("Type: ", type)
         }
