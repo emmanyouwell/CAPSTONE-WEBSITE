@@ -141,7 +141,7 @@ const DonationDetails = () => {
         }
     },[dispatch, success])
     return (
-        <div className="p-8">
+        <div className="p-8 h-[calc(100vh-2rem)] overflow-y-auto">
             <Link to={`/admin/events/attendance/${id}`}>
                 <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>

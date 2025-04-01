@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    Button,
     Card,
+    CardBody,
+    CardFooter,
+    Dialog,
+    DialogBody,
+    DialogFooter,
+    DialogHeader,
+    IconButton,
+    Input,
+    Typography,
 } from "@material-tailwind/react";
-import { Link, useParams } from "react-router-dom";
-import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLongLeftIcon, HandThumbUpIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { getFridges, openFridge } from "../../../redux/actions/fridgeActions";
+import { CheckIcon, CheckSquare, Milk, PlusSquare, SquareCheck } from 'lucide-react'
+import { getUserDetails } from "../../../redux/actions/userActions";
+import { toast } from "react-toastify";
+import { updateBag } from "../../../redux/actions/bagActions";
+import { addInventory } from "../../../redux/actions/inventoryActions";
 function Icon({ id, open }) {
     return (
         <svg
@@ -21,32 +37,497 @@ function Icon({ id, open }) {
 }
 const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [open, setOpen] = useState(0);
+    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [totalVolume, setTotalVolume] = useState(0);
+    const [selectedBags, setSelectedBags] = useState([]);
+    const [batchDetails, setBatchDetails] = useState(() => ({
+        batch: "",
+        pool: "",
+        pasteurizationDate: "",
+        qty: 0,
+    }))
+    const [formError, setFormError] = useState(() => ({
+        batch: false,
+        pool: false,
+        fridge: false,
+        qty: false,
+        date: false
+    }));
+    const { fridges, fridgeContent, allBags, loading, error } = useSelector(state => state.fridges)
+    const { userDetails } = useSelector(state => state.users);
+    const handleOpen = () => setOpen(!open);
+    const handleChange = (e) => {
+        setFormError((prev) => ({
+            ...prev,
+            fridge: false
+        }))
+        setSelectedOption(e.target.value)
+    }
+    const handleBatch = (e) => {
+        setFormError((prev) => ({
+            ...prev,
+            batch: false
+        }))
+        setBatchDetails((prev) => ({
+            ...prev,
+            batch: e.target.value
+        }))
+    }
+    const handlePool = (e) => {
+        setFormError((prev) => ({
+            ...prev,
+            pool: false
+        }))
+        setBatchDetails((prev) => ({
+            ...prev,
+            pool: e.target.value
+        }))
+    }
+    const handleQty = (e) => {
+        const newValue = Number(e.target.value); // Convert input value to a number
+        setFormError((prev) => ({
+            ...prev,
+            qty: false
+        }))
+        setBatchDetails((prev) => ({
+            ...prev,
+            qty: newValue > 20 ? 20 : newValue // Ensure the value does not exceed 20
+        }));
+    }
+    const handleDateChange = (e) => {
+        setBatchDetails({
+            ...batchDetails,
+            pasteurizationDate: e.target.value
+        })
+    }
+    const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
+    const formatDate = (date, type) => {
+        if (type === "full") {
+            return new Date(date).toLocaleString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            });
+        }
+        if (type === "short") {
+            return new Date(date).toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            });
+        }
+        if (type === "time") {
+            return new Date(date).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+            });
+        }
 
-    const handleOpen = (value) => setOpen(open === value ? 0 : value);
+    }
+    const formatDateRange = (startDate, endDate) => {
+        const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+        const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
+        const optionsShortDate = { month: 'short', day: 'numeric', year: 'numeric' };
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        const formattedStartDate = start.toLocaleDateString('en-US', optionsDate);
+        const formattedEndDate = end.toLocaleDateString('en-US', optionsDate);
+        const formattedStartTime = start.toLocaleTimeString('en-US', optionsTime);
+        const formattedEndTime = end.toLocaleTimeString('en-US', optionsTime);
+        const formattedShortStartDate = start.toLocaleDateString('en-US', optionsShortDate);
+        const formattedShortEndDate = end.toLocaleDateString('en-US', optionsShortDate);
+
+        if (formattedStartDate === formattedEndDate) {
+            return `${formattedStartDate} at ${formattedStartTime} - ${formattedEndTime}`;
+        } else {
+            return `${formattedShortStartDate} at ${formattedStartTime} - ${formattedShortEndDate} at ${formattedEndTime}`;
+        }
+    };
+    const handleCheckboxChange = (bag) => {
+
+        setSelectedRows((prevSelected) => {
+
+            const isAlreadySelected = prevSelected.some((item) => item === bag._id);
+
+            if (isAlreadySelected) {
+                setTotalVolume((prevTotal) => {
+                    if (prevTotal - bag.volume < 0) {
+                        return 0; // Prevent negative total volume
+                    } else {
+                        return prevTotal - bag.volume; // Subtract current bag volume
+                    }
+                })
+                setSelectedBags((prevSelected) => prevSelected.filter((item) => item._id !== bag._id))
+                return prevSelected.filter((item) => item !== bag._id); // Remove if unchecked
+
+            } else {
+                setTotalVolume((prevTotal) => {
+                    if (prevTotal === 0) {
+                        return bag.volume; // If no previous selection, set to current bag volume
+                    } else {
+                        return prevTotal + bag.volume; // Add current bag volume
+                    }
+                })
+                setSelectedBags((prevSelected) => ([...prevSelected, bag]))
+                return [...prevSelected, bag._id]; // Add if checked
+            }
+        });
+
+
+    };
+    const resetStates = () => {
+        setBatchDetails(() => ({
+            batch: "",
+            pool: "",
+            qty: 0,
+        }))
+        setTotalVolume(0)
+        setSelectedRows([])
+        setSelectedBags([])
+        setSelectedOption('')
+        setFormError(() => ({
+            batch: false,
+            pool: false,
+            fridge: false,
+            qty: false,
+        }))
+        setOpen(false)
+        
+
+    }
+    const pasteurize = () => {
+        console.log("Errors: ", formError)
+        if (totalVolume < 2000) {
+
+            return;
+        }
+        if (totalVolume > 2000 && totalVolume < 4000) {
+
+            return;
+        }
+        if (!selectedOption || selectedOption === "") {
+            setFormError((prev) => ({
+                ...prev,
+                fridge: true
+            }))
+
+        }
+
+        if (!batchDetails.batch || batchDetails.batch === "") {
+            setFormError((prev) => ({
+                ...prev,
+                batch: true
+            }))
+
+        }
+
+        if (!batchDetails.pool || batchDetails.pool === "") {
+            setFormError((prev) => ({
+                ...prev,
+                pool: true
+            }))
+
+        }
+        if (!batchDetails.qty || batchDetails.qty === 0) {
+            setFormError((prev) => ({
+                ...prev,
+                qty: true
+            }))
+        }
+        if (!batchDetails.pasteurizationDate || batchDetails.pasteurizationDate === "") {
+            setFormError((prev) => ({
+                ...prev,
+                date: true
+            }))
+        }
+        if (!selectedOption || !batchDetails.pasteurizationDate || !batchDetails.batch || !batchDetails.pool || totalVolume < 2000 || (totalVolume > 2000 && totalVolume < 4000) || !batchDetails.qty) {
+            return;
+        }
+        const userInfo = [
+            ...new Set(selectedBags.map(bag => bag.donor._id)) // Extract unique donor IDs
+          ];
+        const data = {
+            fridgeId: selectedOption,
+            pasteurizedDetails: {
+                batch: batchDetails.batch,
+                pool: batchDetails.pool,
+                donors: userInfo,
+                bottleType: totalVolume === 2000 ? 100 : totalVolume === 4000 ? 200 : 0,
+                bottleQty: batchDetails.qty,
+                pasteurizationDate: batchDetails.pasteurizationDate,
+            },
+            userId: userDetails._id
+        }
+        dispatch(addInventory(data)).then(async () => {
+            for (const bags of selectedBags) {
+               dispatch(updateBag({ id: bags._id, status: "Pasteurized"}))
+            }
+            toast.success("Milk pasteurized successfully", { position: "bottom-right" })
+        }).catch((error) => {
+            toast.error("Failed to pasteurized milk. Please try again.", { position: "bottom-right" });
+            console.error(error);
+
+        })
+
+
+
+
+        resetStates();
+        
+        console.log("data: ", data);
+        console.log("donors: ", selectedBags);
+    }
+
+
+    useEffect(() => {
+        dispatch(openFridge(id));
+        dispatch(getFridges())
+        dispatch(getUserDetails());
+    }, [dispatch])
     return (
-        <div className="w-full h-full p-8" >
-            <Link to={`/admin/inventory/refrigerator`}>
-                <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
-                    <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
-                </div>
-            </Link>
-            <Card className="h-64 w-full overflow-scroll">
+        <div className="w-full h-[calc(100vh-2rem)] overflow-y-scroll p-8" >
+            <div className="flex justify-between items-center mb-4">
+                <Link to={`/admin/inventory/refrigerator`}>
+                    <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
+                        <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
+                    </div>
+                </Link>
+                {totalVolume > 0 && <div className="flex justify-center items-center gap-4">
+                    <Typography variant="h2">Selected milk: {totalVolume && totalVolume} ml</Typography>
+                    {selectedRows.length > 0 && (<SquareCheck onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />)}
+
+                </div>}
+
+                <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
+                    <DialogHeader className="relative m-0 block">
+                        <Typography variant="h4" color="blue-gray">
+                            Choose Refrigerator
+                        </Typography>
+                        <Typography className="mt-1 font-normal text-gray-600">
+                            Please select the fridge you would like to store the milk in.
+                        </Typography>
+                        <IconButton
+                            size="sm"
+                            variant="text"
+                            className="!absolute right-3.5 top-3.5"
+                            onClick={handleOpen}
+                        >
+                            <XMarkIcon className="h-4 w-4 stroke-2" />
+                        </IconButton>
+                    </DialogHeader>
+                    <DialogBody>
+                        <div className="space-y-4">
+
+                            {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge, index) => (
+                                <div key={index}>
+                                    <input
+                                        type="radio"
+                                        id={fridge.name}
+                                        name={fridge.name}
+                                        value={fridge._id}
+                                        className="peer hidden"
+                                        required
+                                        checked={selectedOption === fridge._id}
+                                        onChange={handleChange}
+                                    />
+                                    <label
+                                        htmlFor={fridge.name}
+                                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                    >
+                                        <div className="block">
+                                            <Typography className="font-semibold">
+                                                {fridge.name}
+                                            </Typography>
+                                            <Typography className="font-normal text-gray-600">
+                                                {fridge.fridgeType}
+                                            </Typography>
+                                        </div>
+                                    </label>
+                                </div>
+                            ))}
+
+                            {formError.fridge && <span className="text-sm text-red-500 p-4">Please choose a fridge</span>}
+                        </div>
+                        <span className="flex items-center my-4">
+
+
+                            <span className="h-px flex-1 bg-gray-500"></span>
+                        </span>
+                        <div className="space-y-4">
+                            <div>
+                                <Typography variant="h4" color="blue-gray">
+                                    Enter pasteurization details
+                                </Typography>
+                                <Typography className="mt-1 font-normal text-gray-600">
+                                    Enter the Batch number, Pool number, and number of available bottles.
+                                </Typography>
+                            </div>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Express date
+                                </Typography>
+                                <Input
+                                    type="datetime-local"
+                                    name="pasteurizationDate"
+                                    onChange={handleDateChange}
+                                    value={batchDetails.pasteurizationDate || ""}
+                                />
+                                {formError.date && <span className="text-sm text-red-500">Please enter pasteurization date</span>}
+                            </div>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Batch number
+                                </Typography>
+                                <Input
+                                    type="text"
+                                    name="batch"
+                                    onChange={handleBatch}
+                                    value={batchDetails.batch} />
+                                {formError.batch && <span className="text-sm text-red-500">Please enter batch number</span>}
+                            </div>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Pool number
+                                </Typography>
+                                <Input
+                                    type="text"
+                                    name="pool"
+                                    onChange={handlePool}
+                                    value={batchDetails.pool} />
+                                {formError.pool && <span className="text-sm text-red-500">Please enter pool number</span>}
+                            </div>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    No. of available bottle
+                                </Typography>
+                                <div className="relative w-full">
+                                    <Input
+                                        type="number"
+                                        value={batchDetails.qty}
+                                        onChange={handleQty}
+                                        className="!border-t-blue-gray-200 placeholder:text-blue-gray-300 placeholder:opacity-100  focus:!border-t-gray-900 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        labelProps={{
+                                            className: "before:content-none after:content-none",
+                                        }}
+                                        containerProps={{
+                                            className: "min-w-0",
+                                        }}
+                                        min="0"
+                                        max="20"
+                                    />
+                                    <div className="absolute right-1 top-1 flex gap-0.5">
+                                        <IconButton
+                                            size="sm"
+                                            className="rounded"
+                                            onClick={() => {
+                                                if (batchDetails.qty === 0) {
+                                                    setFormError((prev) => ({
+                                                        ...prev,
+                                                        qty: true
+                                                    }))
+                                                }
+                                                else if (batchDetails.qty > 0) {
+                                                    setFormError((prev) => ({
+                                                        ...prev,
+                                                        qty: false
+                                                    }))
+                                                }
+                                                setBatchDetails((cur) => ({ ...cur, qty: cur.qty === 0 ? 0 : cur.qty - 1 }))
+                                            }}
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 16 16"
+                                                fill="currentColor"
+                                                className="h-4 w-4"
+                                            >
+                                                <path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
+                                            </svg>
+                                        </IconButton>
+                                        <IconButton
+                                            size="sm"
+                                            className="rounded"
+                                            onClick={() => {
+                                                setFormError((prev) => ({
+                                                    ...prev,
+                                                    qty: false
+                                                }))
+
+                                                setBatchDetails((cur) => ({ ...cur, qty: cur.qty === 20 ? 20 : cur.qty + 1 }))
+                                            }}
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 16 16"
+                                                fill="currentColor"
+                                                className="h-4 w-4"
+                                            >
+                                                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                                            </svg>
+                                        </IconButton>
+                                    </div>
+                                </div>
+                                {formError.qty && <span className="text-sm text-red-500">Please enter quantity</span>}
+                            </div>
+                            <div className="w-full">
+                                <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                    Bottle Type
+                                </Typography>
+                                <Input
+                                    type="text"
+                                    name="pool"
+                                    disabled
+
+                                    value={totalVolume === 2000 ? "100 ml" : totalVolume === 4000 ? "200 ml" : totalVolume > 2000 && totalVolume < 4000 ? "Select 2000 ml or 4000 ml of milk" : "Select at least 2000 ml of milk"} />
+                                {totalVolume < 2000 || (totalVolume > 2000 && totalVolume < 4000) ? <span className="text-sm text-red-500">Please select either 2000 ml or 4000 ml of milk</span> : ""}
+                            </div>
+                        </div>
+
+                    </DialogBody>
+                    <DialogFooter>
+                        <Button className="ml-auto" onClick={pasteurize}>
+                            Pasteurize
+                        </Button>
+                    </DialogFooter>
+                </Dialog>
+
+            </div>
+
+            <Card className="h-[calc(100vh-2rem)] w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">
                     <thead>
                         <tr>
-                            <th className="border-b p-4">Collection Date</th>
-                            <th className="border-b p-4">Collection Type</th>
-                            <th className="border-b p-4">Date Expressed</th>
-                            <th className="border-b p-4">No. of Milk Bags</th>
-                            <th className="border-b p-4">Milk Collected</th>
-                            <th className="border-b p-4">Expiration Date</th>
+                            <th className="border-b p-4">Donor name</th>
+                            <th className="border-b p-4">Express Date</th>
+                            <th className="border-b p-4">Volume (ml)</th>
                             <th className="border-b p-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        {allBags?.map((bags, index) => (
+                            <tr key={index}>
+                                <td className="p-4">{`${bags.donor.user.name.first} ${bags.donor.user.name.last}`}</td>
+                                <td className="p-4">{formatDate(bags.expressDate, "full")}</td>
+                                <td className="p-4">{bags.volume}</td>
+                                <td className="p-4">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedRows.some((item) => item === bags._id)}
+                                        onChange={() => handleCheckboxChange(bags)}
+                                    />
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </Card>

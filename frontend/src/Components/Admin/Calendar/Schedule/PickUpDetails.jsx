@@ -2,25 +2,37 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { getSingleSchedule, updateSchedule } from '../../../../redux/actions/scheduleActions'
-import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, Input, Option, Select, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Option, Select, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import BagDetails from './BagDetails'
 import { useNavigate } from 'react-router-dom'
 import { resetSuccess } from '../../../../redux/slices/scheduleSlice'
-import { getAllUsers } from '../../../../redux/actions/userActions'
+import { getAllUsers, getUserDetails } from '../../../../redux/actions/userActions'
 import { recordPrivateRecord } from '../../../../redux/actions/collectionActions'
-import { ArrowLongLeftIcon } from '@heroicons/react/24/solid'
+import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { getFridges } from '../../../../redux/actions/fridgeActions'
+import { addInventory } from '../../../../redux/actions/inventoryActions'
+import { toast } from 'react-toastify'
 const PickUpDetails = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = useParams();
     const from = location.state?.from;
+
+    const { fridges } = useSelector((state) => state.fridges);
     const { schedule, loading, success, error } = useSelector(state => state.schedules);
-    const { users } = useSelector(state => state.users);
+    const { users, userDetails } = useSelector(state => state.users);
     const [open, setOpen] = useState(false);
     const [complete, setComplete] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('');
+    const [openFridge, setOpenFridge] = useState(false);
+    const collectionId = location.state?.collectionId;
+    const handleOpenFridge = () => setOpenFridge(!openFridge);
+    const handleChange = (e) => {
+        setSelectedOption(e.target.value)
+    }
     const validationSchema = Yup.object({
         newDate: Yup.date().required("New date is required"),
     });
@@ -76,7 +88,10 @@ const PickUpDetails = () => {
     useEffect(() => {
         dispatch(getSingleSchedule(id));
         dispatch(getAllUsers({ role: "Admin" }))
+        dispatch(getUserDetails());
+        dispatch(getFridges());
     }, [dispatch, id])
+    const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
     useEffect(() => {
         if (schedule && schedule.dates) {
             const date = new Date(schedule.dates)
@@ -92,6 +107,28 @@ const PickUpDetails = () => {
             navigate('/admin/pickup/schedules')
         }
     }, [dispatch, navigate, success])
+    const submitFridge = () => {
+        if (!selectedOption) {
+            toast.error("Please select a fridge", { position: "bottom-right" });
+            setOpenFridge(false);
+            return;
+        }
+        console.log('selected option: ', selectedOption)
+        const data = {
+            fridgeId: selectedOption,
+            unpasteurizedDetails: { collectionId },
+            userId: userDetails._id
+        }
+        dispatch(addInventory(data)).then(() => {
+            toast.success("Collection stored successfully", { position: "bottom-right" });
+            setOpenFridge(false);
+        }).catch((error) => {
+            toast.error("Failed to store collection. Please try again.", { position: "bottom-right" });
+            console.error(error);
+            setOpenFridge(false)
+        })
+
+    }
     return (
         <div className="p-8">
             {from === "RedirectDetails" ? <Link to={`/admin/collections`}>
@@ -155,7 +192,9 @@ const PickUpDetails = () => {
                     </CardBody>
 
                     <CardFooter>
-                        {schedule && schedule.status === 'Pending' ?
+                        {from === "RedirectDetails" ? <div className="w-full flex items-start justify-end gap-4">
+                            <Button color="green" onClick={handleOpenFridge}>Confirm</Button>
+                        </div> : schedule && schedule.status === 'Pending' ?
                             <div className="w-full flex items-start justify-end gap-4">
                                 <Button onClick={handleOpen} color="deep-orange">Change Date</Button>
                                 <Button color="pink" onClick={handleApprove}>Approve</Button>
@@ -228,6 +267,63 @@ const PickUpDetails = () => {
 
                             </form>
                         </Dialog>
+                        <Dialog size="sm" open={openFridge} handler={handleOpenFridge} className="p-4">
+                            <DialogHeader className="relative m-0 block">
+                                <Typography variant="h4" color="blue-gray">
+                                    Choose Refrigerator
+                                </Typography>
+                                <Typography className="mt-1 font-normal text-gray-600">
+                                    Please select the fridge you would like to store the milk in.
+                                </Typography>
+                                <IconButton
+                                    size="sm"
+                                    variant="text"
+                                    className="!absolute right-3.5 top-3.5"
+                                    onClick={handleOpenFridge}
+                                >
+                                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                                </IconButton>
+                            </DialogHeader>
+                            <DialogBody>
+                                <div className="space-y-4">
+
+                                    {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge, index) => (
+                                        <div key={index}>
+                                            <input
+                                                type="radio"
+                                                id={fridge.name}
+                                                name={fridge.name}
+                                                value={fridge._id}
+                                                className="peer hidden"
+                                                required
+                                                checked={selectedOption === fridge._id}
+                                                onChange={handleChange}
+                                            />
+                                            <label
+                                                htmlFor={fridge.name}
+                                                className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                            >
+                                                <div className="block">
+                                                    <Typography className="font-semibold">
+                                                        {fridge.name}
+                                                    </Typography>
+                                                    <Typography className="font-normal text-gray-600">
+                                                        {fridge.fridgeType}
+                                                    </Typography>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    ))}
+
+
+                                </div>
+                            </DialogBody>
+                            <DialogFooter>
+                                <Button className="ml-auto" onClick={submitFridge}>
+                                    Select
+                                </Button>
+                            </DialogFooter>
+                        </Dialog>
                     </CardFooter>
                 </Card>
                 <div className="font-parkinsans text-2xl text-center">Milk Bag Details</div>
@@ -235,7 +331,7 @@ const PickUpDetails = () => {
                 <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
                     {schedule?.donorDetails?.bags?.map((bag, index) => (
                         <div key={index} className="min-w-max">
-                            <BagDetails bag={bag} />
+                            <BagDetails bag={bag} from={from} scheduleId={id} />
                         </div>
                     ))}
                 </div>
