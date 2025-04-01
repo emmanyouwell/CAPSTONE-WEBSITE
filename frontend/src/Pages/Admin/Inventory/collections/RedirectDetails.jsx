@@ -7,6 +7,7 @@ const RedirectDetails = () => {
     const location = useLocation();
     const type = location.state?.type
     const collectionId = location.state?.collectionId
+    const details = location.state?.details
     useEffect(() => {
         if (type) {
             if (type === "Public") {

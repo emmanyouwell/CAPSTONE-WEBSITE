@@ -44,6 +44,7 @@ import RedirectDetails from "./Pages/Admin/Inventory/collections/RedirectDetails
 import SidebarComponent from "./Components/Admin/SidebarComponent";
 
 
+
 function RoutesComponent() {
   return (
     <Routes>
@@ -79,6 +80,7 @@ function RoutesComponent() {
       <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
       <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
       <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
+      
     </Routes>
   )
 
@@ -172,9 +174,9 @@ function MainContent() {
             <ComplexNavbar pageTitle={pageTitle} isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
             <RoutesComponent />
           </div>
-        </div> : <RoutesComponent/>}
+        </div> : <RoutesComponent />}
 
-      
+
       <ToastContainer />
     </div>
   )
@@ -185,7 +187,7 @@ function App() {
     <BrowserRouter>
       <MainContent />
 
-      <FooterWithLogo />
+      {/* <FooterWithLogo /> */}
     </BrowserRouter>
   );
 }

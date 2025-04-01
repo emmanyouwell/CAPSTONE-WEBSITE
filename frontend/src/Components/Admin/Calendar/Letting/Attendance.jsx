@@ -7,7 +7,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { getUser } from '../../../../utils/helper';
 import { Alert, Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, select, Select, Textarea, Typography } from '@material-tailwind/react';
-import { ArrowLongLeftIcon, XMarkIcon, HandThumbUpIcon } from '@heroicons/react/24/outline';
+import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { recordPublicRecord } from '../../../../redux/actions/collectionActions';
 import { toast } from 'react-toastify';
@@ -41,6 +42,7 @@ const Attendance = () => {
     dispatch(getLettingDetails(id));
     dispatch(getUserDetails());
     dispatch(getFridges());
+    
   }, [dispatch, id])
   const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
   const handleSubmit = () => {

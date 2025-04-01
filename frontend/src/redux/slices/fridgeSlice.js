@@ -4,6 +4,8 @@ import {
   deleteFridges,
   getFridgeDetails, 
   getFridges, 
+  openFridge, 
+  
   updateFridge
 } from '../actions/fridgeActions';
 
@@ -14,6 +16,8 @@ export const fridgeSlice = createSlice({
     loading: false, // Useful for async actions like login/signup
     error: null, // To handle errors
     fridgeDetails: {},
+    fridgeContent: {},
+    allBags: [],
     isUpdated: false,
     isDeleted: false,
   },
@@ -80,7 +84,20 @@ export const fridgeSlice = createSlice({
       .addCase(deleteFridges.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(openFridge.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(openFridge.fulfilled, (state, action) => {
+        state.loading = false;
+        state.fridgeContent = action.payload;
+        state.allBags = action.payload.allBags;
+      })
+      .addCase(openFridge.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
       
   },
 });

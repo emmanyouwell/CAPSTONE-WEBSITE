@@ -3,11 +3,10 @@ import axios from 'axios';
 import { authenticate, getToken, logout } from '../../utils/helper';
 
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
-// Get All Fridge
-export const getFridges = createAsyncThunk(
-    'fridge/getFridge',
-    async (query, thunkAPI) => {
-        
+
+export const createBag = createAsyncThunk(
+    'bag/createBag',
+    async (req, thunkAPI) => {
         const token = await getToken();
         console.log('Token Retrieved:', token);
 
@@ -21,33 +20,53 @@ export const getFridges = createAsyncThunk(
                 Authorization: `Bearer ${token}`
             },
             withCredentials: true
-        }
+        };
+
         try {
-            let urlString = ''
-            if (query){
-                urlString = `${VITE_APP_URL}/api/v1/fridges?search=${query}`
-            }
-            else {
-                urlString = `${VITE_APP_URL}/api/v1/fridges`
-            }
+            let urlString = `${VITE_APP_URL}/api/v1/bag`;
+           
+
+            const response = await axios.post(urlString, req, config);
+
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+export const getBags = createAsyncThunk(
+    'bag/getBags',
+    async (req, thunkAPI) => {
+        const token = await getToken();
+        console.log('Token Retrieved:', token);
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        };
+
+        try {
+            let urlString = `${VITE_APP_URL}/api/v1/bag/donor/${req}`;
+           
 
             const response = await axios.get(urlString, config);
-            console.log("Response", response.data)
-            console.log("URL: ", urlString)
 
             return response.data;
-
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }
     }
-)
-
-// Add Fridge 
-export const addFridges = createAsyncThunk(
-    'fridge/addFridges',
+);
+export const getSingleBag = createAsyncThunk(
+    'bag/getSingleBag',
     async (req, thunkAPI) => {
-
         const token = await getToken();
         console.log('Token Retrieved:', token);
 
@@ -61,25 +80,24 @@ export const addFridges = createAsyncThunk(
                 Authorization: `Bearer ${token}`
             },
             withCredentials: true
-        }
-        try {
+        };
 
-            const response = await axios.post(`${VITE_APP_URL}/api/v1/fridges`, req, config)
+        try {
+            let urlString = `${VITE_APP_URL}/api/v1/bag/${req}`;
+           
+
+            const response = await axios.get(urlString, config);
 
             return response.data;
-
         } catch (error) {
-
             return thunkAPI.rejectWithValue(error.message);
         }
     }
-)
+);
 
-// Update Fridge
-export const updateFridge = createAsyncThunk(
-    'fridge/updateFridge',
+export const updateBag = createAsyncThunk(
+    'bag/updateBag',
     async (req, thunkAPI) => {
-
         const token = await getToken();
         console.log('Token Retrieved:', token);
 
@@ -93,24 +111,24 @@ export const updateFridge = createAsyncThunk(
                 Authorization: `Bearer ${token}`
             },
             withCredentials: true
-        }
+        };
+
         try {
-            const response = await axios.put(`${VITE_APP_URL}/api/v1/fridge/${req.id}`, req, config)
-            console.log(response)
+            let urlString = `${VITE_APP_URL}/api/v1/bag/${req.id}`;
+           
+
+            const response = await axios.put(urlString, req, config);
+
             return response.data;
-
         } catch (error) {
-
             return thunkAPI.rejectWithValue(error.message);
         }
     }
-)
+);
 
-// Delete Fridge
-export const deleteFridges = createAsyncThunk(
-    'fridge/deleteFridges',
-    async (id, thunkAPI) => {
-
+export const deleteBag = createAsyncThunk(
+    'bag/deleteBag',
+    async (req, thunkAPI) => {
         const token = await getToken();
         console.log('Token Retrieved:', token);
 
@@ -124,24 +142,25 @@ export const deleteFridges = createAsyncThunk(
                 Authorization: `Bearer ${token}`
             },
             withCredentials: true
-        }
+        };
+
         try {
-            const response = await axios.delete(`${VITE_APP_URL}/api/v1/fridge/${id}`, config)
+            let urlString = `${VITE_APP_URL}/api/v1/bag/${req}`;
+           
+
+            const response = await axios.delete(urlString, config);
 
             return response.data;
-
         } catch (error) {
-
             return thunkAPI.rejectWithValue(error.message);
         }
     }
-)
+);
 
-// Get Fridge Details
-export const getFridgeDetails = createAsyncThunk(
-    'fridge/getFridgeDetails',
-    async (id, thunkAPI) => {
 
+export const getAllBags = createAsyncThunk(
+    'bag/getAllBags',
+    async (req, thunkAPI) => {
         const token = await getToken();
         console.log('Token Retrieved:', token);
 
@@ -155,47 +174,16 @@ export const getFridgeDetails = createAsyncThunk(
                 Authorization: `Bearer ${token}`
             },
             withCredentials: true
-        }
+        };
+
         try {
+            const urlString = `${VITE_APP_URL}/api/v1/bags`;
 
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/fridge/${id}`, config)
-            console.log("Response: ", response.data)
+            const response = await axios.get(urlString, config);
+
             return response.data;
-
         } catch (error) {
-
             return thunkAPI.rejectWithValue(error.message);
         }
     }
-)
-// Get Fridge Details
-export const openFridge = createAsyncThunk(
-    'fridge/openFridge',
-    async (id, thunkAPI) => {
-
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            withCredentials: true
-        }
-        try {
-
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/fridge/open/${id}`, config)
-            console.log("Response: ", response.data)
-            return response.data;
-
-        } catch (error) {
-
-            return thunkAPI.rejectWithValue(error.message);
-        }
-    }
-)
+);
