@@ -26,6 +26,7 @@ const Attendance = () => {
   const { userDetails } = useSelector((state) => state.users);
   const from = location.state?.from;
   const collectionId = location.state?.collectionId;
+  const status = location.state?.status;
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
   const handleOpen = () => setOpen(!open);
@@ -144,7 +145,7 @@ const Attendance = () => {
 
             <div className="flex justify-center items-center gap-4">
               <Typography variant="h2">Total volume: {lettingDetails.totalVolume} ml</Typography>
-              <HandThumbUpIcon onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />
+              {from && status && from === "RedirectDetails" && status !== "Stored" && <HandThumbUpIcon onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />}
             </div>
             <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
               <DialogHeader className="relative m-0 block">
