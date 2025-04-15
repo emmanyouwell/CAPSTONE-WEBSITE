@@ -41,7 +41,7 @@ const SingleRecipient = () => {
 
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                                     <dt className="font-medium text-gray-900">Address</dt>
-                                    <dd className="text-gray-700 sm:col-span-2">{patientDetails && patientDetails.address}</dd>
+                                    <dd className="text-gray-700 sm:col-span-2">{patientDetails && patientDetails.home_address && `${patientDetails.home_address.street} ${patientDetails.home_address.brgy} ${patientDetails.home_address.city}`}</dd>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
@@ -56,7 +56,7 @@ const SingleRecipient = () => {
 
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                                     <dt className="font-medium text-gray-900">Staff in-charge:</dt>
-                                    <dd className="text-gray-700 sm:col-span-2">{patientDetails && patientDetails.staff && patientDetails.staff.name}</dd>
+                                    <dd className="text-gray-700 sm:col-span-2">{patientDetails && patientDetails.staff && patientDetails.staff.name && `${patientDetails.staff.name.first} ${patientDetails.staff.name.middle} ${patientDetails.staff.name.last}`}</dd>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
