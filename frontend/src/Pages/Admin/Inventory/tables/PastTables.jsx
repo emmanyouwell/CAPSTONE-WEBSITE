@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Card } from '@material-tailwind/react'
+import { Button, Card } from '@material-tailwind/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { EyeIcon } from 'lucide-react'
 const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
-    
+
     return (
         <div className="w-full h-full">
             <Card className="h-full w-full overflow-scroll">
@@ -22,14 +23,14 @@ const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
                         {pasteurizedFridges.map(({ _id, name, fridgeType, totalVolume }, index) => (
                             <tr key={index}>
                                 <td className="p-4">
-                                    <Link to={`/admin/inventory/fridge/pasteurized/${_id}`} className="text-blue-500">{name}</Link></td>
+                                    {name}
+                                </td>
                                 <td className="p-4">{fridgeType}</td>
                                 <td className="p-4">{totalVolume || 0} ml</td>
                                 <td className="p-4 flex items-center gap-2">
-                                    <div className="bg-blue-500 p-2 rounded-lg text-white w-max hover:cursor-pointer">
-                                        <PencilSquareIcon className="w-5 h-5"/>
-                                    </div>
-                                   
+                                    <Link to={`/admin/inventory/fridge/pasteurized/${_id}`}>
+                                        <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                                    </Link>
                                 </td>
 
                             </tr>
