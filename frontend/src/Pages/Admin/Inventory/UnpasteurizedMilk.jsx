@@ -202,7 +202,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
             qty: false,
         }))
         setOpen(false)
-        
+
 
     }
     const pasteurize = () => {
@@ -255,7 +255,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
         }
         const userInfo = [
             ...new Set(selectedBags.map(bag => bag.donor._id)) // Extract unique donor IDs
-          ];
+        ];
         const data = {
             fridgeId: selectedOption,
             pasteurizedDetails: {
@@ -270,7 +270,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
         }
         dispatch(addInventory(data)).then(async () => {
             for (const bags of selectedBags) {
-               dispatch(updateBag({ id: bags._id, status: "Pasteurized"}))
+                dispatch(updateBag({ id: bags._id, status: "Pasteurized" }))
             }
             toast.success("Milk pasteurized successfully", { position: "bottom-right" })
         }).catch((error) => {
@@ -278,12 +278,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
             console.error(error);
 
         })
-
-
-
-
         resetStates();
-        
         console.log("data: ", data);
         console.log("donors: ", selectedBags);
     }
@@ -359,8 +354,6 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                             {formError.fridge && <span className="text-sm text-red-500 p-4">Please choose a fridge</span>}
                         </div>
                         <span className="flex items-center my-4">
-
-
                             <span className="h-px flex-1 bg-gray-500"></span>
                         </span>
                         <div className="space-y-4">

@@ -4,6 +4,13 @@ import { getFridges } from '../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import UnpastTables from './tables/UnpastTables'
 import PastTables from './tables/PastTables'
+import {
+    Tabs,
+    TabsHeader,
+    TabsBody,
+    Tab,
+    TabPanel,
+} from "@material-tailwind/react";
 const Refrigerator = () => {
     const dispatch = useDispatch()
     const { fridges, loading, error } = useSelector(state => state.fridges)
@@ -13,39 +20,26 @@ const Refrigerator = () => {
     const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
     const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
     return (
-        <section className="flex flex-col justify-center w-full p-4">
-            
-            <div className="">
-                <div className="w-full">
-                    <div className="font-parkinsans text-2xl my-4">Unpasteurized Refrigerator</div>
-                    <div className="flex items-center justify-start w-full gap-4">
-                        {/* {unpasteurizedFridges && unpasteurizedFridges.map((fridge, index) => (
-                            <Link to={`/admin/inventory/fridge/${fridge._id}`}>
-                                <div key={index} className="p-8 bg-secondary w-96 rounded-lg flex justify-between items-center">
-                                    <span className="font-parkinsans text-xl text-white">{fridge.name}</span>
-                                    <span className="font-parkinsans text-sm text-white">{fridge.fridgeType}</span>
-                                </div>
-                            </Link>
-                        ))} */}
-                        <UnpastTables unpasteurizedFridges={unpasteurizedFridges}/>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="font-parkinsans text-2xl my-4">Pasteurized Refrigerator</div>
-                    {/* <div className="flex items-center justify-start w-full gap-4">
-                        {pasteurizedFridges && pasteurizedFridges.map((fridge, index) => (
-                            <div key={index} className="p-8 bg-secondary w-96 rounded-lg flex justify-between items-center">
-                                <span className="font-parkinsans text-xl text-white">{fridge.name}</span>
-                                <span className="font-parkinsans text-sm text-white">{fridge.fridgeType}</span>
-                            </div>
-                        ))}
-                    </div> */}
-                    <PastTables pasteurizedFridges={pasteurizedFridges}/>
-                </div>
-            </div>
+        <div>
+            <Tabs value="Unpasteurized">
+                <TabsHeader>
+                    {fridges.map(({ fridgeType }) => (
+                        <Tab key={fridgeType} value={fridgeType}>
+                            {fridgeType}
+                        </Tab>
+                    ))}
+                </TabsHeader>
+                <TabsBody animate={false}>
+                    <TabPanel value="Unpasteurized" className="h-full">
+                        <UnpastTables unpasteurizedFridges={unpasteurizedFridges} />
+                    </TabPanel>
+                    <TabPanel value="Pasteurized" className="h-full">
+                        <PastTables pasteurizedFridges={pasteurizedFridges} />
+                    </TabPanel>
+                </TabsBody>
+            </Tabs>
 
-
-        </section>
+        </div>
     )
 }
 

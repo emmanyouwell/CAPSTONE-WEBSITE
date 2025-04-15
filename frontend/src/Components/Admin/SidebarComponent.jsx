@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Sidebar, { SidebarItem } from './Sidebar'
 import {
     LifeBuoy,
@@ -18,6 +18,7 @@ import {
     ClockIcon,
     Box
 } from 'lucide-react'
+import { useLocation } from 'react-router-dom';
 
 const superAdminItems = [
     { title: "Donor Records", route: "/admin/donors", icon: <HeartIcon size={20} />, category: "Records" },
@@ -32,25 +33,45 @@ const superAdminItems = [
     { title: "Announcement Creation", route: "/admin/announcement", icon: <MegaphoneIcon size={20} />, category: "Management" },
     { title: "Resources Management", route: "/admin/resources", icon: <NewspaperIcon size={20} />, category: "Management" },
 
-    { title: "Metrics", route: "/superadmin_metrics", icon: <BarChart3 size={20} />, category: "Analytics" },
+
 ];
+
+const staffItems = [
+    { title: "Recipient Records", route: "/admin/recipients", icon: <UserCircleIcon size={20} />, category: "Records" },
+    { title: "Request", route: "/staff/request", icon: <LifeBuoy size={20} />, category: "Records" },
+]
 const SidebarComponent = ({ userDetails }) => {
-    const groupedItems = superAdminItems.reduce((acc, item) => {
+
+
+    const sidebarItems =
+        userDetails?.role === "Admin" || userDetails?.role === "SuperAdmin"
+            ? superAdminItems
+            : userDetails?.role === "Staff"
+                ? staffItems
+                : [];
+
+    const groupedItems = sidebarItems.reduce((acc, item) => {
+        if (!item.category) return acc;
         acc[item.category] = acc[item.category] || [];
         acc[item.category].push(item);
         return acc;
     }, {});
+
     return (
         <main>
             <Sidebar userDetails={userDetails}>
-                <SidebarItem
-                    icon={<LayoutDashboard size={20} />}
-                    text="Dashboard"
-                    alert
-                />
+                {userDetails && (userDetails?.role === "Admin" || userDetails?.role === "SuperAdmin") &&
+                    <SidebarItem
+                        icon={<LayoutDashboard size={20} />}
+                        text="Dashboard"
+                        path="/admin/dashboard"
+                        alert
+                    />
+                }
+
                 {Object.entries(groupedItems).map(([category, items], index) => (
                     <div key={category}>
-                        {/* {index !== 0 && } */}
+
                         <span className="flex items-center">
 
                             <span className="h-px flex-1 bg-gray-400"></span>

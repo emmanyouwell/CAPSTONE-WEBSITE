@@ -27,7 +27,7 @@ export default function Sidebar({ children, userDetails }) {
                             <h4 className='font-semibold'>{userDetails.name}</h4>
                             <span className="text-sx text-gray-600">{userDetails.email}</span>
                         </div>
-                        <MoreVertical size={20} />
+                        
                     </div>
                 </div>
             </nav>

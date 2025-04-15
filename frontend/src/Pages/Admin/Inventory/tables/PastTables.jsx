@@ -8,7 +8,7 @@ const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
     
     return (
         <div className="w-full h-full">
-            <Card className="h-64 w-full overflow-scroll">
+            <Card className="h-full w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">
                     <thead className="bg-secondary text-white">
                         <tr>
@@ -22,16 +22,14 @@ const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
                         {pasteurizedFridges.map(({ _id, name, fridgeType, totalVolume }, index) => (
                             <tr key={index}>
                                 <td className="p-4">
-                                    <Link to={`/admin/inventory/fridge/${_id}`} className="text-blue-500">{name}</Link></td>
+                                    <Link to={`/admin/inventory/fridge/pasteurized/${_id}`} className="text-blue-500">{name}</Link></td>
                                 <td className="p-4">{fridgeType}</td>
                                 <td className="p-4">{totalVolume || 0} ml</td>
                                 <td className="p-4 flex items-center gap-2">
                                     <div className="bg-blue-500 p-2 rounded-lg text-white w-max hover:cursor-pointer">
                                         <PencilSquareIcon className="w-5 h-5"/>
                                     </div>
-                                    <div className="bg-red-500 p-2 rounded-lg text-white w-max hover:cursor-pointer">
-                                        <TrashIcon className="w-5 h-5"/>
-                                    </div>
+                                   
                                 </td>
 
                             </tr>

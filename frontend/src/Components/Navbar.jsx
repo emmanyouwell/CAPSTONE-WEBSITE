@@ -35,7 +35,12 @@ function ProfileMenu() {
 
   }
   const goToDashboard = () => {
-    navigate("/admin/dashboard");
+    if (userDetails.role === "Admin" || userDetails.role === "SuperAdmin") {
+      navigate("/admin/dashboard");
+    }
+    else if (userDetails.role === "Staff") {
+      navigate("/staff/dashboard");
+    }
   }
   useEffect(() => {
     if (userDetails) {
