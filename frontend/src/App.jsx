@@ -42,6 +42,8 @@ import UnpasteurizedMilk from "./Pages/Admin/Inventory/UnpasteurizedMilk";
 import CollectionsTable from "./Pages/Admin/Inventory/collections/CollectionsTable";
 import RedirectDetails from "./Pages/Admin/Inventory/collections/RedirectDetails";
 import SidebarComponent from "./Components/Admin/SidebarComponent";
+import PasteurizedMilk from "./Pages/Admin/Inventory/PasteurizedMilk";
+import StaffDashboard from "./Pages/Staff/StaffDashboard";
 
 
 
@@ -77,9 +79,11 @@ function RoutesComponent() {
       <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
       <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
       <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
-      <Route path="/admin/inventory/fridge/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
+      <Route path="/admin/inventory/fridge/unpasteurized/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
+      <Route path="/admin/inventory/fridge/pasteurized/:id" element={<ProtectedRoute isAdmin={true}><PasteurizedMilk /></ProtectedRoute>} />
       <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
       <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
+      <Route path="/staff/dashboard" element={<ProtectedRoute isStaff={true}><StaffDashboard/></ProtectedRoute>}/>
       
     </Routes>
   )
@@ -98,7 +102,8 @@ function MainContent() {
     if (getUser()) {
       setUserDetails({
         name: `${getUser().name.first} ${getUser().name.last}`,
-        email: getUser().email
+        email: getUser().email,
+        role: getUser().role,
       })
     }
   }, [location.pathname])
