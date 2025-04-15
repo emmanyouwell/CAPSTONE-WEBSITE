@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 // import Loader from '../components/Layouts/Loader'
 import { getUser } from '../utils/helper';
 
-const ProtectedRoute = ({ children, isAuthorized = false, isAdmin = false, isStaff = false }) => {
+const ProtectedRoute = ({ children, isAuthorized = false, isAdmin = false, isStaff = false, is}) => {
 
     const [loading, setLoading] = useState(getUser() === false && false)
     const [error, setError] = useState('')
