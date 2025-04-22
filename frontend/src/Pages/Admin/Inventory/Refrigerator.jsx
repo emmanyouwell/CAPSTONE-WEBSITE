@@ -20,14 +20,15 @@ const Refrigerator = () => {
     const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
     const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
     return (
-        <div>
+        <div className="p-8">
             <Tabs value="Unpasteurized">
                 <TabsHeader>
-                    {fridges.map(({ fridgeType }) => (
-                        <Tab key={fridgeType} value={fridgeType}>
-                            {fridgeType}
-                        </Tab>
-                    ))}
+                    <Tab value="Unpasteurized" className="text-secondary">
+                        Unpasteurized
+                    </Tab>
+                    <Tab value="Pasteurized" className="text-secondary">
+                        Pasteurized
+                    </Tab>
                 </TabsHeader>
                 <TabsBody animate={false}>
                     <TabPanel value="Unpasteurized" className="h-full">

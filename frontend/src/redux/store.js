@@ -11,6 +11,7 @@ import scheduleReducer from './slices/scheduleSlice'
 import collectionReducer from './slices/collectionSlice';
 import lettingReducer from './slices/lettingSlice';
 import bagReducer from './slices/bagSlice';
+import requestReducer from './slices/requestSlice';
 const store = configureStore({
   reducer: {
     users: userReducer,// Add your reducers here
@@ -23,7 +24,8 @@ const store = configureStore({
     schedules: scheduleReducer,
     collections: collectionReducer,
     lettings: lettingReducer,
-    bags: bagReducer
+    bags: bagReducer,
+    requests: requestReducer
   },
 });
 

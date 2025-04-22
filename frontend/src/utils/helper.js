@@ -46,10 +46,52 @@ export const successMsg = (message = '') => toast.success(message, {
     position: toast.POSITION.BOTTOM_CENTER
 });
 
-export const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    })
+
+export const formatDate = (date, type="full") => {
+    if (type === "full") {
+        return new Date(date).toLocaleString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+        });
+    }
+    if (type === "short") {
+        return new Date(date).toLocaleString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        });
+    }
+    if (type === "time") {
+        return new Date(date).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+        });
+    }
+
 }
+export const formatDateRange = (startDate, endDate) => {
+    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+    const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
+    const optionsShortDate = { month: 'short', day: 'numeric', year: 'numeric' };
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const formattedStartDate = start.toLocaleDateString('en-US', optionsDate);
+    const formattedEndDate = end.toLocaleDateString('en-US', optionsDate);
+    const formattedStartTime = start.toLocaleTimeString('en-US', optionsTime);
+    const formattedEndTime = end.toLocaleTimeString('en-US', optionsTime);
+    const formattedShortStartDate = start.toLocaleDateString('en-US', optionsShortDate);
+    const formattedShortEndDate = end.toLocaleDateString('en-US', optionsShortDate);
+
+    if (formattedStartDate === formattedEndDate) {
+        return `${formattedStartDate} at ${formattedStartTime} - ${formattedEndTime}`;
+    } else {
+        return `${formattedShortStartDate} at ${formattedStartTime} - ${formattedShortEndDate} at ${formattedEndTime}`;
+    }
+};
