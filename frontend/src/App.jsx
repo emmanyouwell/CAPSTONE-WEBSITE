@@ -44,6 +44,7 @@ import RedirectDetails from "./Pages/Admin/Inventory/collections/RedirectDetails
 import SidebarComponent from "./Components/Admin/SidebarComponent";
 import PasteurizedMilk from "./Pages/Admin/Inventory/PasteurizedMilk";
 import StaffDashboard from "./Pages/Staff/StaffDashboard";
+import RequestView from "./Pages/Admin/Inventory/requests/RequestView";
 
 
 
@@ -63,8 +64,8 @@ function RoutesComponent() {
       <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
       <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
       <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
-      <Route path="/admin/recipients" element={<ProtectedRoute isAdmin={true}><RecipientPage /></ProtectedRoute>} />
-      <Route path="/admin/recipient/:id" element={<ProtectedRoute isAdmin={true}><SingleRecipient /></ProtectedRoute>} />
+      <Route path="/admin/recipients" element={<ProtectedRoute isAuthorized={true}><RecipientPage /></ProtectedRoute>} />
+      <Route path="/admin/recipient/:id" element={<ProtectedRoute isAuthorized={true}><SingleRecipient /></ProtectedRoute>} />
       <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
       <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule /></ProtectedRoute>} />
       <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
@@ -83,8 +84,9 @@ function RoutesComponent() {
       <Route path="/admin/inventory/fridge/pasteurized/:id" element={<ProtectedRoute isAdmin={true}><PasteurizedMilk /></ProtectedRoute>} />
       <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
       <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
-      <Route path="/staff/dashboard" element={<ProtectedRoute isStaff={true}><StaffDashboard/></ProtectedRoute>}/>
-      
+      <Route path="/admin/requests" element={<ProtectedRoute isAdmin={true}><RequestView /></ProtectedRoute>} />
+      <Route path="/staff/dashboard" element={<ProtectedRoute isStaff={true}><StaffDashboard /></ProtectedRoute>} />
+
     </Routes>
   )
 
@@ -156,6 +158,9 @@ function MainContent() {
           break;
         case '/admin/collections':
           setPageTitle('Milk Collections');
+          break;
+        case '/admin/requests':
+          setPageTitle('Requests');
           break;
         case '/admin/dashboard':
         default:

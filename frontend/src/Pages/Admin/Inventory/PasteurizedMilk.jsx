@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { updateBag } from "../../../redux/actions/bagActions";
 import { addInventory } from "../../../redux/actions/inventoryActions";
 import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
+import { formatDate } from "../../../utils/helper";
 function Icon({ id, open }) {
     return (
         <svg
@@ -74,54 +75,7 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
     }
 
     const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
-    const formatDate = (date, type) => {
-        if (type === "full") {
-            return new Date(date).toLocaleString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-            });
-        }
-        if (type === "short") {
-            return new Date(date).toLocaleString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-            });
-        }
-        if (type === "time") {
-            return new Date(date).toLocaleString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-            });
-        }
-
-    }
-    const formatDateRange = (startDate, endDate) => {
-        const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
-        const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
-        const optionsShortDate = { month: 'short', day: 'numeric', year: 'numeric' };
-
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        const formattedStartDate = start.toLocaleDateString('en-US', optionsDate);
-        const formattedEndDate = end.toLocaleDateString('en-US', optionsDate);
-        const formattedStartTime = start.toLocaleTimeString('en-US', optionsTime);
-        const formattedEndTime = end.toLocaleTimeString('en-US', optionsTime);
-        const formattedShortStartDate = start.toLocaleDateString('en-US', optionsShortDate);
-        const formattedShortEndDate = end.toLocaleDateString('en-US', optionsShortDate);
-
-        if (formattedStartDate === formattedEndDate) {
-            return `${formattedStartDate} at ${formattedStartTime} - ${formattedEndTime}`;
-        } else {
-            return `${formattedShortStartDate} at ${formattedStartTime} - ${formattedShortEndDate} at ${formattedEndTime}`;
-        }
-    };
+    
 
     const resetStates = () => {
         setBatchDetails(() => ({
