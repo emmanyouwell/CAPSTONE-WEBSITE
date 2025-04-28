@@ -48,6 +48,7 @@ import RequestView from "./Pages/Admin/Inventory/requests/RequestView";
 
 
 
+
 function RoutesComponent() {
   return (
     <Routes>
@@ -66,6 +67,8 @@ function RoutesComponent() {
       <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
       <Route path="/admin/recipients" element={<ProtectedRoute isAuthorized={true}><RecipientPage /></ProtectedRoute>} />
       <Route path="/admin/recipient/:id" element={<ProtectedRoute isAuthorized={true}><SingleRecipient /></ProtectedRoute>} />
+      
+
       <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
       <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule /></ProtectedRoute>} />
       <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />

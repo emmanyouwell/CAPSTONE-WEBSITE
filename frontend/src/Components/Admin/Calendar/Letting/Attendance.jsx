@@ -38,6 +38,7 @@ const Attendance = () => {
     navigate('/new-donor-form')
   }
 
+
   useEffect(() => {
     console.log('dispatching getlettingdetails')
     dispatch(getLettingDetails(id));
@@ -112,13 +113,26 @@ const Attendance = () => {
     })
     
   }
+
+  useEffect(()=>{
+     // Load the Tally embed script
+     const script = document.createElement("script");
+     script.src = "https://tally.so/widgets/embed.js";
+     script.async = true;
+     document.body.appendChild(script);
+
+     // Cleanup the script when the component is unmounted
+     return () => {
+       document.body.removeChild(script);
+     };
+  },[])
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full gap-4 p-4 mt-4 h-full">
         <div className="flex w-full items-center justify-between gap-4">
           {lettingDetails && lettingDetails.status !== 'Done' ? (<>
             <div className='flex gap-4'>
-              <Button className="bg-secondary" size="sm" onClick={openForm}>
+              <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
                 Create New Donor
               </Button>
               <Link to={`/admin/events/attendance/donations/${id}`}>
