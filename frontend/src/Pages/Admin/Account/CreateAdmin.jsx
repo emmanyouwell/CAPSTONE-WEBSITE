@@ -53,7 +53,7 @@ const CreateAdmin = () => {
     if (isRegistered) {
       console.log('User registered successfully');
       dispatch(resetRegister());
-      navigation('/admin/account');
+      navigation('/dashboard/account');
     }
   }, [dispatch, isRegistered, navigation])
   useEffect(() => {
@@ -62,7 +62,7 @@ const CreateAdmin = () => {
   return (
     <section className="w-full p-8">
       <div className="p-8">
-        <Link to="/admin/account">
+        <Link to="/dashboard/account">
           <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
             <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
           </div>

@@ -44,10 +44,10 @@ const ScheduleComponent = ({ events, type }) => {
     };
     const handleChooseAction = () => {
         if (selectedOption === "edit") {
-            navigate(`/admin/events/${event.id}`);
+            navigate(`/dashboard/events/${event.id}`);
         }
         else if (selectedOption === "host") {
-            navigate(`/admin/events/attendance/${event.id}`);
+            navigate(`/dashboard/events/attendance/${event.id}`);
         }
         setOpen(!open);
         // Perform an action based on selectedOption
@@ -63,7 +63,7 @@ const ScheduleComponent = ({ events, type }) => {
             // navigate(`/admin/events/${event.id}`);
         }
         else if (type === "pickup") {
-            navigate(`/admin/schedules/${event.id}`);
+            navigate(`/dashboard/schedules/${event.id}`);
         }
     };
     useEffect(() => {

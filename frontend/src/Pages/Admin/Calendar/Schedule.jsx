@@ -22,7 +22,7 @@ const Schedule = () => {
         <div className="w-full p-4">
             <div className="flex items-center justify-between gap-4 mb-4">
                 <AddEvent />
-                <Link to="/admin/event/history">
+                <Link to="/dashboard/event/history">
                 <Button size="sm" color="deep-orange" className="flex items-center justify-center gap-2">
                     <ClockIcon className="w-5 h-5" />
                     History

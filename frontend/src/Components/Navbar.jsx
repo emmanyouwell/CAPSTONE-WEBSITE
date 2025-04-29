@@ -22,24 +22,23 @@ function ProfileMenu() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [profileMenuItems, setProfileMenuItems] = React.useState([]);
-  const { userDetails } = useSelector(state => state.users);
+  const { userDetails, isLoggedIn } = useSelector(state => state.users);
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch])
   const closeMenu = () => setIsMenuOpen(false);
+
   const logoutHandler = () => {
 
     dispatch(logoutUser());
     setIsMenuOpen(false);
-    window.location.reload();
-
   }
   const goToDashboard = () => {
     if (userDetails.role === "Admin" || userDetails.role === "SuperAdmin") {
-      navigate("/admin/dashboard");
+      navigate("/dashboard");
     }
     else if (userDetails.role === "Staff") {
-      navigate("/staff/dashboard");
+      navigate("/dashboard/staff");
     }
   }
   useEffect(() => {
@@ -79,7 +78,12 @@ function ProfileMenu() {
     }
   }, [userDetails]);
 
-
+  
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/login')
+    }
+  }, [isLoggedIn])
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">

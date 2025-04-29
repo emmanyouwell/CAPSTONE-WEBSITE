@@ -41,7 +41,7 @@ const CollectionsTable = ({ currentPage, totalPages }) => {
                                 <td className="p-4">{collectionType}</td>
                                 <td className="p-4">{status}</td>
                                 <td className="p-4">
-                                    <Link to={`/admin/collections/details/${pubDetails?._id || privDetails?._id}`} state={{ type: collectionType, collectionId: _id, status: status }} className="text-blue-500">
+                                    <Link to={`/dashboard/collections/details/${pubDetails?._id || privDetails?._id}`} state={{ type: collectionType, collectionId: _id, status: status }} className="text-blue-500">
 
                                         <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
 

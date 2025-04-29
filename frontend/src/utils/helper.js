@@ -31,12 +31,12 @@ export const getUser = () => {
 };
 
 // remove token from session storage
-export const logout = next => {
+export const logout = () => {
     if (window !== 'undefined') {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user');
     }
-    next();
+    
 };
 
 export const errMsg = (message = '') => toast.error(message, {

@@ -54,7 +54,7 @@ const CreateResources = () => {
     useEffect(()=>{
         if (success){
             console.log("Success");
-            navigate('/admin/resources');
+            navigate('/dashboard/resources');
             dispatch(resetSuccess());
         }
     },[success, navigate, dispatch])

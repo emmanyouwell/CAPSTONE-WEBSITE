@@ -6,7 +6,7 @@ import placeholder from '../../assets/image/placeholder-image.webp'
 const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
     
     const location = useLocation();
-    const isAdminLocation = location.pathname.includes('admin');
+    const isAdminLocation = location.pathname.includes('dashboard');
     useEffect(()=>{
         if (articles){
             console.log(articles);
@@ -37,7 +37,7 @@ const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
                         </Typography>
                         <Link to={`/article/${article._id}`} className="w-full"><Button className="bg-secondary w-full">See more</Button></Link>
                         {isAdminLocation && <div className='flex justify-evenly items-center gap-4'>
-                            <Link to={`/admin/edit-article/${article._id}`} className="w-full"><Button className="bg-primary w-full mt-2">Edit</Button></Link>
+                            <Link to={`/dashboard/edit-article/${article._id}`} className="w-full"><Button className="bg-primary w-full mt-2">Edit</Button></Link>
                             <Button className="bg-danger w-full mt-2" onClick={()=>handleDelete(article._id)}>Delete</Button>
                         </div>}
                     </div>

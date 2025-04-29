@@ -17,7 +17,7 @@ const Profile = () => {
         <section className="w-full p-4">
 
             <div className=" w-full h-full p-4">
-                <Link to="/admin/dashboard">
+                <Link to="/dashboard">
                     <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                         <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                     </div>

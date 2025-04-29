@@ -22,27 +22,27 @@ import {
 import { useLocation } from 'react-router-dom';
 
 const superAdminItems = [
-    { title: "Donor Records", route: "/admin/donors", icon: <HeartIcon size={20} />, category: "Records" },
-    { title: "Recipient Records", route: "/admin/recipients", icon: <UserCircleIcon size={20} />, category: "Records" },
+    { title: "Donor Records", route: "/dashboard/donors", icon: <HeartIcon size={20} />, category: "Records" },
+    { title: "Recipient Records", route: "/dashboard/recipients", icon: <UserCircleIcon size={20} />, category: "Records" },
 
-    { title: "Event Schedules", route: "/admin/event/schedules", icon: <CalendarIcon size={20} />, category: "Schedules" },
-    { title: "Pick-up Schedules", route: "/admin/pickup/schedules", icon: <ClockIcon size={20} />, category: "Schedules" },
+    { title: "Event Schedules", route: "/dashboard/event/schedules", icon: <CalendarIcon size={20} />, category: "Schedules" },
+    { title: "Pick-up Schedules", route: "/dashboard/pickup/schedules", icon: <ClockIcon size={20} />, category: "Schedules" },
 
-    { title: "Collections", route: "/admin/collections", icon: <Boxes size={20} />, category: "Inventory" },
-    { title: "Refrigerators", route: "/admin/inventory/refrigerator", icon: <Box size={20} />, category: "Inventory" },
+    { title: "Collections", route: "/dashboard/collections", icon: <Boxes size={20} />, category: "Inventory" },
+    { title: "Refrigerators", route: "/dashboard/inventory/refrigerator", icon: <Box size={20} />, category: "Inventory" },
 
-    { title: "Requests", route: "/admin/requests", icon: <PackageOpenIcon size={20} />, category: "Inventory" },
+    { title: "Requests", route: "/dashboard/requests", icon: <PackageOpenIcon size={20} />, category: "Inventory" },
 
-    { title: "Account Management", route: "/admin/account", icon: <UsersIcon size={20} />, category: "Management" },
-    { title: "Announcement Creation", route: "/admin/announcement", icon: <MegaphoneIcon size={20} />, category: "Management" },
-    { title: "Resources Management", route: "/admin/resources", icon: <NewspaperIcon size={20} />, category: "Management" },
+    { title: "Account Management", route: "/dashboard/account", icon: <UsersIcon size={20} />, category: "Management" },
+    { title: "Announcement Creation", route: "/dashboard/announcement", icon: <MegaphoneIcon size={20} />, category: "Management" },
+    { title: "Resources Management", route: "/dashboard/resources", icon: <NewspaperIcon size={20} />, category: "Management" },
 
 
 ];
 
 const staffItems = [
     { title: "Recipient Records", route: "/admin/recipients", icon: <UserCircleIcon size={20} />, category: "Records" },
-    { title: "Request", route: "/staff/request", icon: <LifeBuoy size={20} />, category: "Records" },
+    { title: "Request", route: "/dashboard/requests", icon: <LifeBuoy size={20} />, category: "Records" },
 ]
 const SidebarComponent = ({ userDetails }) => {
 

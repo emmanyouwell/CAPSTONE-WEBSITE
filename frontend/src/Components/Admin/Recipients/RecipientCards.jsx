@@ -57,7 +57,7 @@ const RecipientCards = ({ recipients }) => {
                     <li>Requests: {recipients.requested.length}</li>
                 </ul>
             </div>
-            <Link to={`/admin/recipient/${recipients._id}`} className="w-full"><Button className="w-full bg-secondary group-hover:transition-all group-hover:duration-300 transition-all duration-300">See information</Button></Link>
+            <Link to={`/dashboard/recipient/${recipients._id}`} className="w-full"><Button className="w-full bg-secondary group-hover:transition-all group-hover:duration-300 transition-all duration-300">See information</Button></Link>
 
 
         </div>

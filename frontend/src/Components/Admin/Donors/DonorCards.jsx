@@ -52,7 +52,7 @@ const DonorCards = ({ donor }) => {
                     <li>Donations: </li>
                 </ul>
             </div>
-            <Link to={`/admin/donors/${donor._id}`} className="w-full"><Button className="w-full bg-secondary group-hover:transition-all group-hover:duration-300 transition-all duration-300">See information</Button></Link>
+            <Link to={`/dashboard/donors/${donor._id}`} className="w-full"><Button className="w-full bg-secondary group-hover:transition-all group-hover:duration-300 transition-all duration-300">See information</Button></Link>
             
 
         </div>
