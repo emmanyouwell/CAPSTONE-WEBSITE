@@ -44,6 +44,7 @@ export const userSlice = createSlice({
         state.token = null;
       })
       .addCase(logoutUser.rejected, (state, action) => {
+        console.log('Logout error:', action.payload);
         state.error = action.payload;
       })
       .addCase(getUserDetails.pending, (state) => {

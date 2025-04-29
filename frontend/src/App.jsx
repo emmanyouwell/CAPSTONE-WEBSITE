@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation, useMatch } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useMatch, useNavigate } from 'react-router-dom';
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import { FooterWithLogo } from "./Components/Footer";
@@ -45,6 +45,9 @@ import SidebarComponent from "./Components/Admin/SidebarComponent";
 import PasteurizedMilk from "./Pages/Admin/Inventory/PasteurizedMilk";
 import StaffDashboard from "./Pages/Staff/StaffDashboard";
 import RequestView from "./Pages/Admin/Inventory/requests/RequestView";
+import CreateRequest from "./Pages/Staff/Requests/CreateRequest";
+import DashboardLayout from "./Pages/DashboardLayout";
+import { useSelector } from "react-redux";
 
 
 
@@ -59,34 +62,38 @@ function RoutesComponent() {
       <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
       <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
       <Route path="/redirect" element={<Redirect />} />
-      <Route path="/admin/events/attendance/donations/:id" element={<ProtectedRoute isAdmin={true}><DonationDetails /></ProtectedRoute>} />
-      {/* Superadmin routes */}
-      <Route path="/admin/dashboard" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Dashboard /></ProtectedRoute>} />
-      <Route path="/admin/donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
-      <Route path="/admin/donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
-      <Route path="/admin/recipients" element={<ProtectedRoute isAuthorized={true}><RecipientPage /></ProtectedRoute>} />
-      <Route path="/admin/recipient/:id" element={<ProtectedRoute isAuthorized={true}><SingleRecipient /></ProtectedRoute>} />
-      <Route path="/admin/event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
-      <Route path="/admin/pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule /></ProtectedRoute>} />
-      <Route path="/admin/events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
-      <Route path="/admin/schedules/:id" element={<ProtectedRoute isAdmin={true}><PickUpDetails /></ProtectedRoute>} />
-      <Route path="/admin/account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
-      <Route path="/admin/account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
-      <Route path="/admin/resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
-      <Route path="/admin/announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
-      <Route path="/admin/resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
-      <Route path="/admin/edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
-      <Route path="/admin/inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
-      <Route path="/admin/profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
-      <Route path="/admin/events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
-      <Route path="/admin/event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
-      <Route path="/admin/inventory/fridge/unpasteurized/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
-      <Route path="/admin/inventory/fridge/pasteurized/:id" element={<ProtectedRoute isAdmin={true}><PasteurizedMilk /></ProtectedRoute>} />
-      <Route path="/admin/collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
-      <Route path="/admin/collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
-      <Route path="/admin/requests" element={<ProtectedRoute isAdmin={true}><RequestView /></ProtectedRoute>} />
-      <Route path="/staff/dashboard" element={<ProtectedRoute isStaff={true}><StaffDashboard /></ProtectedRoute>} />
 
+      {/* Superadmin routes */}
+
+      <Route path="/dashboard" element={<ProtectedRoute isAuthorized={true}><DashboardLayout /></ProtectedRoute>}>
+        <Route index element={<ProtectedRoute isAuthorized={true}><Dashboard /></ProtectedRoute>} />
+        <Route path="donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
+        <Route path="donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
+        <Route path="recipients" element={<ProtectedRoute isAuthorized={true}><RecipientPage /></ProtectedRoute>} />
+        <Route path="recipient/:id" element={<ProtectedRoute isAuthorized={true}><SingleRecipient /></ProtectedRoute>} />
+        <Route path="event/schedules" element={<ProtectedRoute isAdmin={true}><Schedule /></ProtectedRoute>} />
+        <Route path="pickup/schedules" element={<ProtectedRoute isAdmin={true}><PickUpSchedule /></ProtectedRoute>} />
+        <Route path="events/:id" element={<ProtectedRoute isAdmin={true}><EditEvent /></ProtectedRoute>} />
+        <Route path="schedules/:id" element={<ProtectedRoute isAdmin={true}><PickUpDetails /></ProtectedRoute>} />
+        <Route path="account" element={<ProtectedRoute isAuthorized={true} isAdmin={true}><Accounts /></ProtectedRoute>} />
+        <Route path="account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
+        <Route path="resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
+        <Route path="announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
+        <Route path="resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
+        <Route path="edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
+        <Route path="inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
+        <Route path="inventory/fridge/unpasteurized/:id" element={<ProtectedRoute isAdmin={true}><UnpasteurizedMilk /></ProtectedRoute>} />
+        <Route path="inventory/fridge/pasteurized/:id" element={<ProtectedRoute isAdmin={true}><PasteurizedMilk /></ProtectedRoute>} />
+        <Route path="profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
+        <Route path="events/attendance/:id" element={<ProtectedRoute isAdmin={true}><Attendance /></ProtectedRoute>} />
+        <Route path="event/history" element={<ProtectedRoute isAdmin={true}><History /></ProtectedRoute>} />
+        <Route path="events/attendance/donations/:id" element={<ProtectedRoute isAdmin={true}><DonationDetails /></ProtectedRoute>} />
+        <Route path="collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
+        <Route path="collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
+        <Route path="requests" element={<ProtectedRoute isAdmin={true}><RequestView /></ProtectedRoute>} />
+        <Route path="staff" element={<ProtectedRoute isStaff={true}><StaffDashboard /></ProtectedRoute>} />
+        <Route path="create-requests" element={<ProtectedRoute isAuthorized={true}><CreateRequest /></ProtectedRoute>} />
+      </Route>
     </Routes>
   )
 
@@ -100,6 +107,7 @@ function MainContent() {
   const recipientMatch = useMatch('/admin/recipient/:id');
   const eventMatch = useMatch('/admin/events/:id');
   const [userDetails, setUserDetails] = useState({});
+  const {isLoggedIn} = useSelector((state)=>state.users)
   useEffect(() => {
     if (getUser()) {
       setUserDetails({
@@ -109,6 +117,7 @@ function MainContent() {
       })
     }
   }, [location.pathname])
+ 
   useEffect(() => {
     // Set the page title based on the current path
     const path = location.pathname;

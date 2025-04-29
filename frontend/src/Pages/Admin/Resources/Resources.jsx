@@ -89,7 +89,7 @@ const Resources = () => {
                             <div className="w-max">
                                 <Button onClick={handleReset} className='bg-secondary w-max' size="sm">Delete filters</Button>
                             </div>
-                            <Link to="/admin/resources/create" className="w-max">
+                            <Link to="/dashboard/resources/create" className="w-max">
                                 <Button className="bg-secondary" size="sm">
                                     Create New Article
                                 </Button>

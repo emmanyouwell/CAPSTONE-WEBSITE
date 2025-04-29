@@ -39,6 +39,7 @@ export const logoutUser = createAsyncThunk(
   'user/logoutUser',
   async (_, thunkAPI) => {
     try {
+      console.log("Logging out");
       const response = await axios.get(
         `${VITE_APP_URL}/api/v1/logout`,
         {},

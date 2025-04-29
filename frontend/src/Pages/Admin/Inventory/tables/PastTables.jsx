@@ -28,7 +28,7 @@ const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
                                 <td className="p-4">{fridgeType}</td>
                                 <td className="p-4">{totalVolume || 0} ml</td>
                                 <td className="p-4 flex items-center gap-2">
-                                    <Link to={`/admin/inventory/fridge/pasteurized/${_id}`}>
+                                    <Link to={`/dashboard/inventory/fridge/pasteurized/${_id}`}>
                                         <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
                                     </Link>
                                 </td>

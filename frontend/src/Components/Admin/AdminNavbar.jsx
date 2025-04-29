@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navbar,
   MobileNav,
@@ -20,7 +20,7 @@ import {
   Bars3Icon,
   UserIcon
 } from "@heroicons/react/24/solid";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/actions/userActions";
 import { useNavigate } from "react-router-dom";
 
@@ -29,17 +29,14 @@ function ProfileMenu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
+  const {isLoggedIn} = useSelector(state => state.users);
   const closeMenu = () => setIsMenuOpen(false);
   const logoutHandler = () => {
-
     dispatch(logoutUser());
     setIsMenuOpen(false);
-    window.location.reload();
-
   }
   const goToProfile = () => {
-    navigate('/admin/profile');
+    navigate('/dashboard/profile');
   }
   // profile menu component
   const profileMenuItems = [
@@ -58,8 +55,13 @@ function ProfileMenu() {
       onPress: logoutHandler
     },
   ];
-
-
+   
+    useEffect(()=>{
+      if (!isLoggedIn){
+        navigate('/login')
+      }
+    },[isLoggedIn])
+  
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       <MenuHandler>
@@ -145,7 +147,7 @@ export function ComplexNavbar({ pageTitle, isNavOpen, setIsNavOpen }) {
             href="#"
             className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
           >
-            {pageTitle}
+            {/* {pageTitle} */} Dashboard
           </Typography>
         </div>
 

@@ -104,7 +104,7 @@ const PickUpDetails = () => {
     useEffect(() => {
         if (success) {
             dispatch(resetSuccess());
-            navigate('/admin/pickup/schedules')
+            navigate('/dashboard/pickup/schedules')
         }
     }, [dispatch, navigate, success])
     const submitFridge = () => {
@@ -131,11 +131,11 @@ const PickUpDetails = () => {
     }
     return (
         <div className="p-8">
-            {from === "RedirectDetails" ? <Link to={`/admin/collections`}>
+            {from === "RedirectDetails" ? <Link to={`/dashboard/collections`}>
                 <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>
-            </Link> : <Link to={`/admin/pickup/schedules`}>
+            </Link> : <Link to={`/dashboard/pickup/schedules`}>
                 <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>

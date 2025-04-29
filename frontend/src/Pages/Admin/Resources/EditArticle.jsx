@@ -56,7 +56,7 @@ const EditArticle = () => {
     useEffect(() => {
         if (isUpdated) {
             dispatch(resetUpdate());
-            navigate('/admin/resources');
+            navigate('/dashboard/resources');
         }
     }, [isUpdated, navigate, dispatch])
 

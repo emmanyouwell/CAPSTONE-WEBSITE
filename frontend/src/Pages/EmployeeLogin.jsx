@@ -43,11 +43,11 @@ const EmployeeLogin = () => {
     useEffect(() => {
 
         if (isLoggedIn && (userDetails.role === 'Admin' || userDetails.role === 'SuperAdmin')) {
-            navigate('/admin/dashboard');
+            navigate('/dashboard');
 
         }
         else if (isLoggedIn && userDetails.role === 'Staff'){
-            navigate('/staff/dashboard');
+            navigate('/dashboard/staff');
         }
         else if (isLoggedIn) {
             navigate('/');
