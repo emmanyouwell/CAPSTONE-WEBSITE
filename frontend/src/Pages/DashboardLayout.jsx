@@ -3,6 +3,7 @@ import SidebarComponent from '../Components/Admin/SidebarComponent'
 import { ComplexNavbar } from '../Components/Admin/AdminNavbar'
 import { Outlet, useLocation } from 'react-router-dom'
 import { getUser } from '../utils/helper'
+import TemplateScriptsLoader from '../Components/TemplateScriptsLoader'
 
 const DashboardLayout = () => {
     const location = useLocation()
@@ -17,6 +18,8 @@ const DashboardLayout = () => {
         }
     }, [location.pathname])
     return (
+        <>
+        <TemplateScriptsLoader/>
         <div className="flex w-[100%] flex-1 items-stretch">
             <div className="min-h-[100vh] w-[100%] flex items-stretch">
                 <SidebarComponent userDetails={userDetails} />
@@ -31,6 +34,7 @@ const DashboardLayout = () => {
                 </div>
             </div>
         </div>
+        </>
     )
 }
 
