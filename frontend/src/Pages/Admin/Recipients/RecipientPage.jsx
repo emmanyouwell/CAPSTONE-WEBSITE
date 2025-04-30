@@ -95,45 +95,63 @@ const RecipientPage = () => {
             .then((data) => console.log('Recipients fetched:', data))
             .catch((err) => console.error('Error fetching Recipients:', err));
     }, [dispatch, search, currentPage, brgy, type])
+
+    useEffect(() => {
+        // Load the Tally embed script
+        const script = document.createElement("script");
+        script.src = "https://tally.so/widgets/embed.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        // Cleanup the script when the component is unmounted
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, [])
     return (
         <div className="p-4 flex flex-col h-[calc(100vh-2rem)] gap-4">
-            <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">
-                <div className="flex items-center gap-4 mt-4">
-                    <div className="relative flex w-full gap-2 md:w-max">
-                        <Input
-                            type="search"
-                            color="gray"
-                            label="Search for donors..."
-                            className="pr-10"
-                            onChange={handleTextChange}
-                            containerProps={{
-                                className: "min-w-[288px]",
-                            }}
-                        />
-                        <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+                <div className="flex flex-col lg:flex-row justify-start items-center gap-4">
+                    <div className="flex items-center gap-4 mt-4">
+                        <div className="relative flex w-full gap-2 md:w-max">
+                            <Input
+                                type="search"
+                                color="gray"
+                                label="Search for donors..."
+                                className="pr-10"
+                                onChange={handleTextChange}
+                                containerProps={{
+                                    className: "min-w-[288px]",
+                                }}
+                            />
+                            <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
 
+                        </div>
+                        <div className="w-full">
+                            <Button color="pink" onClick={handleReset} className='w-max'>Delete filters</Button>
+                        </div>
                     </div>
-                    <div className="w-full">
-                        <Button color="pink" onClick={handleReset} className='w-max'>Delete filters</Button>
+                    <div className="flex items-center gap-4 justify-center flex-wrap">
+                        <div className="w-max">
+                            <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
+                                {locations.map((location, index) => (
+                                    <Option key={index} value={location}>{location}</Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="w-max">
+                            <Select label="Filter by Patient Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
+                                {patientTypes.map((donorType, index) => (
+                                    <Option key={index} value={donorType}>{donorType}</Option>
+                                ))}
+                            </Select>
+                        </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-4 justify-center flex-wrap">
-                    <div className="w-max">
-                        <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
-                            {locations.map((location, index) => (
-                                <Option key={index} value={location}>{location}</Option>
-                            ))}
-                        </Select>
-                    </div>
-                    <div className="w-max">
-                        <Select label="Filter by Patient Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
-                            {patientTypes.map((donorType, index) => (
-                                <Option key={index} value={donorType}>{donorType}</Option>
-                            ))}
-                        </Select>
-                    </div>
-                </div>
 
+                <div>
+                    <Button color="pink" data-tally-open="mOrazY" data-tally-emoji-text="👋" data-tally-emoji-animation="wave">Add New Patient</Button>
+                </div>
             </div>
 
 
