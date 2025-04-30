@@ -56,11 +56,7 @@ function ProfileMenu() {
     },
   ];
    
-    useEffect(()=>{
-      if (!isLoggedIn){
-        navigate('/login')
-      }
-    },[isLoggedIn])
+    
   
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
