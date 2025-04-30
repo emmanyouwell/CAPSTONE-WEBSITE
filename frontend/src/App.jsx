@@ -48,6 +48,7 @@ import RequestView from "./Pages/Admin/Inventory/requests/RequestView";
 import CreateRequest from "./Pages/Staff/Requests/CreateRequest";
 import DashboardLayout from "./Pages/DashboardLayout";
 import { useSelector } from "react-redux";
+import RequestDataTable from "./Components/DataTables/RequestDataTable";
 
 
 
@@ -90,9 +91,10 @@ function RoutesComponent() {
         <Route path="events/attendance/donations/:id" element={<ProtectedRoute isAdmin={true}><DonationDetails /></ProtectedRoute>} />
         <Route path="collections" element={<ProtectedRoute isAdmin={true}><CollectionsTable /></ProtectedRoute>} />
         <Route path="collections/details/:id" element={<ProtectedRoute isAdmin={true}><RedirectDetails /></ProtectedRoute>} />
-        <Route path="requests" element={<ProtectedRoute isAdmin={true}><RequestView /></ProtectedRoute>} />
+        <Route path="requests" element={<ProtectedRoute isAuthorized={true}><RequestView /></ProtectedRoute>} />
         <Route path="staff" element={<ProtectedRoute isStaff={true}><StaffDashboard /></ProtectedRoute>} />
         <Route path="create-requests" element={<ProtectedRoute isAuthorized={true}><CreateRequest /></ProtectedRoute>} />
+        <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable/></ProtectedRoute>}/>
       </Route>
     </Routes>
   )
