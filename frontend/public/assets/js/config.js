@@ -11,7 +11,7 @@
 window.config = {
   colors: {
     primary: '#8c57ff',
-    secondary: '#8a8d93',
+    secondary: '#E53777',
     success: '#56ca00',
     info: '#16b1ff',
     warning: '#ffb400',
