@@ -25,7 +25,7 @@ const RequestView = () => {
                         Outpatient
                     </Tab>
                 </TabsHeader>
-                <TabsBody animate={{initial: {opacity: 1}, mount: {opacity: 1}, unmount: {opacity: 1}}}>
+                <TabsBody className="h-[calc(100vh-8rem)]" animate={{initial: {opacity: 1}, mount: {opacity: 1}, unmount: {opacity: 1}}}>
                     <TabPanel value="Inpatient" className="h-full">
                         <RequestTable requests={inpatient} />
                     </TabPanel>
