@@ -167,7 +167,7 @@ const StickyNavbar = () => {
         <Typography
           as="a"
           href="/"
-          className="mr-4 cursor-pointer py-1.5 font-bold font-varela"
+          className="mr-4 cursor-pointer py-1.5  text-white font-bold font-varela"
         >
           TCHMB Portal
         </Typography>

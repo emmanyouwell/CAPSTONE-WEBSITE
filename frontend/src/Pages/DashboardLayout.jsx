@@ -19,7 +19,7 @@ const DashboardLayout = () => {
     }, [location.pathname])
     return (
         <>
-        <TemplateScriptsLoader/>
+        {/* <TemplateScriptsLoader/> */}
         <div className="flex w-[100%] flex-1 items-stretch">
             <div className="min-h-[100vh] w-[100%] flex items-stretch">
                 <SidebarComponent userDetails={userDetails} />
