@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../redux/actions/userActions'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Typography, Input, Button } from '@material-tailwind/react'
 import logo from '../assets/image/TCHMB-logo.png'
 
@@ -113,9 +113,9 @@ const EmployeeLogin = () => {
                                 {/* Signup Link */}
                                 <p className="text-gray-900 mt-4">
                                     Sign in with email?{" "}
-                                    <a href="/login" className="text-sm text-secondary hover:underline mt-4">
+                                    <Link to="/login" className="text-sm text-secondary hover:underline mt-4">
                                         Login here.
-                                    </a>
+                                    </Link>
                                 </p>
 
                                 {/* Submit Button */}

@@ -6,7 +6,11 @@ import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { EyeIcon } from 'lucide-react'
 const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
-
+    useEffect(()=>{
+        if (pasteurizedFridges){
+            console.log("past: " , pasteurizedFridges)
+        }
+    },[pasteurizedFridges])
     return (
         <div className="w-full h-full">
             <Card className="h-full w-full overflow-scroll">

@@ -33,6 +33,7 @@ function ProfileMenu() {
   const closeMenu = () => setIsMenuOpen(false);
   const logoutHandler = () => {
     dispatch(logoutUser());
+    navigate('/');
     setIsMenuOpen(false);
   }
   const goToProfile = () => {
@@ -56,7 +57,7 @@ function ProfileMenu() {
     },
   ];
    
-    
+  
   
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -118,13 +119,12 @@ export function ComplexNavbar({ pageTitle, isNavOpen, setIsNavOpen }) {
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener(
       "resize",
-      () => window.innerWidth >= 960 && setIsNavOpen(false),
+      () => window.innerWidth >= 960 && toggleIsNavOpen(),
     );
   }, []);
-
   return (
     <Navbar className="top-0 z-10 mx-auto max-w-full p-2 rounded-none lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">

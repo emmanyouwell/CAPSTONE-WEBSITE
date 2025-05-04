@@ -163,3 +163,34 @@ export const getInventoryDetails = createAsyncThunk(
         }
     }
 )
+
+
+// Update inventory
+export const reserveInventory = createAsyncThunk(
+    'inventory/reserveInventory',
+    async (req, thunkAPI) => {
+
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        try {
+            const response = await axios.put(`${VITE_APP_URL}/api/v1/reserved-bottle/${req.id}`, req, config)
+
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)

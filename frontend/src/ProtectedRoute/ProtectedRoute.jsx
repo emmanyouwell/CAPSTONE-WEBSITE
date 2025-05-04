@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, isAuthorized = false, isAdmin = false, isSta
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     console.log(children.type.name, loading)
     const { userDetails, isLoggedIn } = useSelector(state => state.users)
-
+    
     if (!loading) {
         if (!user) {
             console.log("1")

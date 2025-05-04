@@ -36,7 +36,6 @@ export const logout = () => {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user');
     }
-    
 };
 
 export const errMsg = (message = '') => toast.error(message, {
