@@ -17,6 +17,7 @@ const DashboardLayout = () => {
             })
         }
     }, [location.pathname])
+    const [isNavOpen, setIsNavOpen] = useState(false)
     return (
         <>
         {/* <TemplateScriptsLoader/> */}
@@ -24,7 +25,7 @@ const DashboardLayout = () => {
             <div className="min-h-[100vh] w-[100%] flex items-stretch">
                 <SidebarComponent userDetails={userDetails} />
                 <div className="flex flex-1 items-stretch basis-[100%] flex-col p-0">
-                    <ComplexNavbar />
+                    <ComplexNavbar setIsNavOpen={setIsNavOpen}/>
                     <div className="flex flex-1 flex-col items-stretch justify-between">
                         <div className="flex-grow">
                             <Outlet />

@@ -163,7 +163,7 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
                                     Available bottles
                                 </Typography>
                                 <Typography className="mt-1 font-normal text-gray-600">
-                                    {inventory?.pasteurizedDetails?.bottles.length}
+                                    {inventory?.pasteurizedDetails?.bottles.map(b=>b.status).filter(b=>b === "Available").length}
                                 </Typography>
 
                             </div>
@@ -233,19 +233,22 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
                             <th className="border-b p-4">Batch Number</th>
                             <th className="border-b p-4">Pool Number</th>
                             <th className="border-b p-4">Batch Volume (ml)</th>
+                            <th className="border-b p-4">Available Volume (ml)</th>
                             <th className="border-b p-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {fridgeContent?.map((inv, index) => {
+                        {fridgeContent.filter((f)=>f.status === "Available")?.map((inv, index) => {
+                            console.log(inv)
                             const item = inv.pasteurizedDetails;
-
+                            const availableVolume = item.bottles.map(b => b.status).filter(b => b === "Available").length * item.bottleType;
                             return (
                                 <tr key={index}>
                                     <td className="p-4">{formatDate(item.pasteurizationDate, "full")}</td>
                                     <td className="p-4">{item.batch}</td>
                                     <td className="p-4">{item.pool}</td>
-                                    <td className="p-4">{item.batchVolume}</td>
+                                    <td className="p-4">{item.batchVolume} ml</td>
+                                    <td className="p-4">{availableVolume} ml</td>
                                     <td className="p-4">
                                         <div className="bg-secondary w-max p-3 rounded-lg">
                                             <EyeIcon className="h-5 w-5 text-white hover:cursor-pointer" onClick={() => handleOpen(inv)} />

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getRequests } from '../../../../redux/actions/requestActions';
 import RequestCardComponent from './RequestCardComponent';
 import RequestTable from './RequestTable';
-import { Tab, TabPanel, Tabs, TabsBody, TabsHeader } from '@material-tailwind/react';
+import { Button, Tab, TabPanel, Tabs, TabsBody, TabsHeader } from '@material-tailwind/react';
 const RequestView = () => {
     const dispatch = useDispatch();
     const { request, loading, error } = useSelector(state => state.requests)
@@ -13,7 +13,7 @@ const RequestView = () => {
     }, [dispatch])
     const inpatient = request ? request.filter((r) => r.patient?.patientType === 'Inpatient' && r.status !== "Done") : [];
     const outpatient = request ? request.filter((r) => r.patient?.patientType === 'Outpatient' && r.status !== "Done") : [];
-
+    
     return (
         <div className="p-8">
             <Tabs value="Inpatient">
@@ -25,8 +25,9 @@ const RequestView = () => {
                         Outpatient
                     </Tab>
                 </TabsHeader>
-                <TabsBody className="h-[calc(100vh-8rem)]" animate={{initial: {opacity: 1}, mount: {opacity: 1}, unmount: {opacity: 1}}}>
+                <TabsBody className="h-[calc(100vh-8rem)]" animate={{ initial: { opacity: 1 }, mount: { opacity: 1 }, unmount: { opacity: 1 } }}>
                     <TabPanel value="Inpatient" className="h-full">
+                        
                         <RequestTable requests={inpatient} />
                     </TabPanel>
                     <TabPanel value="Outpatient" className="h-full">

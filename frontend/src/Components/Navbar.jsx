@@ -78,8 +78,8 @@ function ProfileMenu() {
     }
   }, [userDetails]);
 
-  
-  
+
+
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -128,12 +128,14 @@ const StickyNavbar = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, userDetails } = useSelector(state => state.users);
   const [openNav, setOpenNav] = React.useState(false);
+  const navigate = useNavigate();
   const logoutHandler = () => {
 
     dispatch(logoutUser());
-    window.location.reload();
+    navigate('/');
 
   }
+
   useEffect(() => {
     window.addEventListener(
       "resize",
@@ -143,6 +145,7 @@ const StickyNavbar = () => {
   useEffect(() => {
     dispatch(getUser())
   }, [])
+
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">

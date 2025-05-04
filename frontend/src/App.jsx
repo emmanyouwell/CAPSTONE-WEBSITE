@@ -49,6 +49,8 @@ import CreateRequest from "./Pages/Staff/Requests/CreateRequest";
 import DashboardLayout from "./Pages/DashboardLayout";
 import { useSelector } from "react-redux";
 import RequestDataTable from "./Components/DataTables/RequestDataTable";
+import RequestCardComponent from "./Pages/Admin/Inventory/requests/RequestCardComponent";
+import SingleRequest from "./Pages/Admin/Inventory/requests/SingleRequest";
 
 
 
@@ -94,7 +96,8 @@ function RoutesComponent() {
         <Route path="requests" element={<ProtectedRoute isAuthorized={true}><RequestView /></ProtectedRoute>} />
         <Route path="staff" element={<ProtectedRoute isStaff={true}><StaffDashboard /></ProtectedRoute>} />
         <Route path="create-requests" element={<ProtectedRoute isAuthorized={true}><CreateRequest /></ProtectedRoute>} />
-        <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable/></ProtectedRoute>}/>
+        <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable /></ProtectedRoute>} />
+        <Route path="request/:id" element={<ProtectedRoute isAuthorized={true}><SingleRequest/></ProtectedRoute>}/>
       </Route>
     </Routes>
   )
@@ -109,7 +112,7 @@ function MainContent() {
   const recipientMatch = useMatch('/admin/recipient/:id');
   const eventMatch = useMatch('/admin/events/:id');
   const [userDetails, setUserDetails] = useState({});
-  const {isLoggedIn} = useSelector((state)=>state.users)
+  const { isLoggedIn } = useSelector((state) => state.users)
   useEffect(() => {
     if (getUser()) {
       setUserDetails({
@@ -119,7 +122,7 @@ function MainContent() {
       })
     }
   }, [location.pathname])
- 
+
   useEffect(() => {
     // Set the page title based on the current path
     const path = location.pathname;

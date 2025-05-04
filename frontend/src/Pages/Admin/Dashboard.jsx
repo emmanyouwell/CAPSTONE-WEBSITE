@@ -1,10 +1,5 @@
 import React from 'react'
-import AdminSideNav from '../../Components/Admin/AdminSideNav'
-import MenuGrid from '../../Components/Admin/MenuGrid'
-import StickyNavbar from '../../Components/Navbar'
-import { ComplexNavbar } from '../../Components/Admin/AdminNavbar'
-import { Card, CardBody, CardFooter, CardHeader, Typography } from '@material-tailwind/react'
-import { BanknotesIcon } from '@heroicons/react/24/solid'
+
 
 
 const Dashboard = () => {
