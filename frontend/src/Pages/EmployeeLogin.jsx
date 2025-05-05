@@ -47,7 +47,7 @@ const EmployeeLogin = () => {
 
         }
         else if (isLoggedIn && userDetails.role === 'Staff'){
-            navigate('/dashboard/staff');
+            navigate('/dashboard/recipients');
         }
         else if (isLoggedIn) {
             navigate('/');
