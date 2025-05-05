@@ -23,17 +23,17 @@ const EventDetails = ({ event }) => {
 
     return (
         <>
-            <div className="w-96 p-4 bg-white rounded-lg shadow-md border flex flex-col h-full">
+            <div className="w-96 p-4 bg-white rounded-lg shadow-md border flex flex-col h-100">
                 <div className="flex items-center justify-center gap-4">
-                    {/* <div className="w-full h-auto bg-secondary rounded-lg flex justify-center items-center">
+                    <div className="w-full h-auto bg-secondary rounded-lg flex justify-center items-center">
                         {event.eventType === "Grand Milk Letting" ? (
                             <img src={grand} alt="grand milk letting" />
                         ) : event.eventType === "Regular Milk Letting" ? (
                             <img src={regular} alt="regular milk letting" />
                         ) : (
-                            <img src={info} alt="other information" />
+                            <img src={regular} alt="other information" />
                         )}
-                    </div> */}
+                    </div>
                     <div className="w-full">
                         {/* Title */}
                         <div className="mt-2">
@@ -56,7 +56,7 @@ const EventDetails = ({ event }) => {
                 </span>
                 {/* Description */}
                 <div className="flex flex-col flex-grow mt-2">
-                    <span className="font-poppins text-lg break-words whitespace-normal">{event.description}</span>
+                    <span className="font-poppins text-lg break-words whitespace-normal">📍 {event.venue}</span>
                 </div>
             </div>
 

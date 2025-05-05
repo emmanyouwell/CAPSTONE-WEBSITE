@@ -38,7 +38,7 @@ function ProfileMenu() {
       navigate("/dashboard");
     }
     else if (userDetails.role === "Staff") {
-      navigate("/dashboard/staff");
+      navigate("/dashboard/recipients");
     }
   }
   useEffect(() => {
