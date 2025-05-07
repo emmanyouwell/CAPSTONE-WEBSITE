@@ -42,37 +42,43 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
             }))
             return;
         }
-        const data = {
-            transport: selectedOption,
-            request: id,
-            approvedBy: getUser()._id
+        if (id) {
+            const data = {
+                transport: selectedOption,
+                request: id,
+                approvedBy: getUser()._id
+            }
+            console.log(data);
+
+            dispatch(outpatientDispense(data)).then(() => {
+                setOpenTransport(false);
+                setId(null);
+                setSelectedOption(null);
+                toast.success("Request Dispensed successfully", { position: 'bottom-right' });
+            })
         }
-        console.log(data);
+        else if (reservedRequest.length === filteredRequest.length) {
 
-        dispatch(outpatientDispense(data)).then(() => {
-            setOpenTransport(false);
-            toast.success("Request Dispensed successfully", { position: 'bottom-right' });
+            const data = {
+                transport: selectedOption,
+                request: reservedRequest,
+                approvedBy: getUser()._id
+            }
+            dispatch(inpatientDispense(data)).then(() => {
+                setOpenTransport(false);
+                setId(null);
+                setSelectedOption(null);
+                setReservedRequest([]);
+                setFilteredRequest([]);
+                toast.success("Request Dispensed successfully", { position: 'bottom-right' });
+            })
+        }
 
-        })
     }
 
     const dispenseInpatient = () => {
-        if (reservedRequest.length === 0) {
-            toast.error("No reserved requests available for dispensing", { position: 'bottom-right' });
-            return;
-        }
-        const data = {
-            transport: selectedOption,
-            request: reservedRequest,
-            approvedBy: getUser()._id
-        }
         setOpenTransport(true);
         console.log(reservedRequest);
-        // dispatch(inpatientDispense(data)).then(()=>{
-        //     setOpenTransport(false);
-        //     toast.success("Request Dispensed successfully", { position: 'bottom-right' });
-        // })
-     
     }
     useEffect(() => {
         const filteredRequest = requests.filter(
@@ -88,12 +94,10 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
         setFilteredRequest(filteredRequest);
         setReservedRequest(reservedRequest);
     }, [requests])
-    
+
     return (
         <div className="w-full h-full">
-            {reservedRequest.length === filteredRequest.length && <Button color="green" onClick={dispenseInpatient} className="mb-4">
-                Reserve
-            </Button>}
+
 
             <Card className="h-full w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">
@@ -106,7 +110,9 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
                             <th className="border-b p-4">Days</th>
                             <th className="border-b p-4">Prescribed by</th>
                             <th className="border-b p-4">Status</th>
-                            <th className="border-b p-4">View Details</th>
+                            <th className="border-b p-4">  {reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length ? <Button color="green" onClick={dispenseInpatient}>
+                                <CheckCheck className="h-5 w-5" />
+                            </Button> : 'View Details'}</th>
                         </tr>
                     </thead>
                     <tbody>
