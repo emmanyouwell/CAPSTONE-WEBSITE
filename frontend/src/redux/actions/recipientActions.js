@@ -6,8 +6,8 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 // Get All Patient
 export const getRecipients = createAsyncThunk(
     'recipient/getRecipients',
-    async ({search="", page=1, pageSize=12, type="", brgy=""}, thunkAPI) => {
-        
+    async ({ search = "", page = 1, pageSize = 10 }, thunkAPI) => {
+
         const token = await getToken();
         console.log('Token Retrieved:', token);
 
@@ -27,13 +27,7 @@ export const getRecipients = createAsyncThunk(
             if (search) {
                 urlString += `&search=${encodeURIComponent(search)}`;
             }
-            if (type){
-                urlString += `&type=${encodeURIComponent(type)}`;
-            }
-            if (brgy){
-                urlString += `&brgy=${encodeURIComponent(brgy)}`;
-            }
-           
+
             const response = await axios.get(urlString, config);
 
             console.log("Response", response.data)
@@ -42,7 +36,7 @@ export const getRecipients = createAsyncThunk(
             return response.data;
 
         } catch (error) {
-            
+
             return thunkAPI.rejectWithValue(error.message);
         }
     }

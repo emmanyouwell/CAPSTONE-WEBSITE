@@ -260,3 +260,11 @@ div.table-responsive>div.dt-container>div.row>div[class^=col-]:last-child {
 .table.table-sm thead tr th {
   padding-block: 1.115rem;
 }
+
+.list-wrapper{
+  min-height: 0;
+  max-height: calc(50vh - 12rem);
+  inline-size: 100%;
+  overflow-x: auto;
+  overflow-y: auto
+}

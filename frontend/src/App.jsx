@@ -51,6 +51,8 @@ import { useSelector } from "react-redux";
 import RequestDataTable from "./Components/DataTables/RequestDataTable";
 import RequestCardComponent from "./Pages/Admin/Inventory/requests/RequestCardComponent";
 import SingleRequest from "./Pages/Admin/Inventory/requests/SingleRequest";
+import StaffRequest from "./Pages/Staff/Requests/StaffRequest";
+import StaffRequestView from "./Pages/Staff/Requests/StaffRequestView";
 
 
 
@@ -98,6 +100,7 @@ function RoutesComponent() {
         <Route path="create-requests" element={<ProtectedRoute isAuthorized={true}><CreateRequest /></ProtectedRoute>} />
         <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable /></ProtectedRoute>} />
         <Route path="request/:id" element={<ProtectedRoute isAuthorized={true}><SingleRequest/></ProtectedRoute>}/>
+        <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView/></ProtectedRoute>}/>
       </Route>
     </Routes>
   )
