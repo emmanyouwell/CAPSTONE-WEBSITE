@@ -71,7 +71,7 @@ function RoutesComponent() {
       {/* Superadmin routes */}
 
       <Route path="/dashboard" element={<ProtectedRoute isAuthorized={true}><DashboardLayout /></ProtectedRoute>}>
-        <Route index element={<ProtectedRoute isAuthorized={true}><Dashboard /></ProtectedRoute>} />
+        <Route index element={<ProtectedRoute isAdmin={true}><Dashboard /></ProtectedRoute>} />
         <Route path="donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
         <Route path="donors/:id" element={<ProtectedRoute isAdmin={true}><SingleDonor /></ProtectedRoute>} />
         <Route path="recipients" element={<ProtectedRoute isAuthorized={true}><RecipientPage /></ProtectedRoute>} />
