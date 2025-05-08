@@ -96,6 +96,8 @@ const StaffRequestView = () => {
     };
     const handleTextChange = (e) => {
         setSearch(e.target.value);
+        setSelectedPatient(null)
+        dispatch(getRecipients({ search: e.target.value, page: 1, pageSize: 100 }))
     }
 
     const searchPatient = () => {
@@ -133,36 +135,121 @@ const StaffRequestView = () => {
                 </Tabs>
             </div>
 
-            <Dialog open={open} handler={handleOpen} size="lg">
-                <DialogHeader>Request Milk</DialogHeader>
-                <DialogBody className="flex flex-col items-center justify-center gap-4">
-                    <div className="w-full mx-auto flex flex-col justify-center items-center gap-4">
+            <Dialog open={open} handler={handleOpen} size="sm" dismiss={{ outsidePress: false }} className="overflow-hidden">
 
-                        <Card className='w-full p-4 mx-auto mb-4'>
-                            <CardHeader floated={false} shadow={false} className="mb-4 flex items-center justify-between"><div className="font-parkinsans text-2xl">Search Patients</div></CardHeader>
-                            <CardBody>
-                                <div className="flex flex-col items-center justify-between">
-                                    <div className="relative flex w-full gap-2">
+                <DialogBody className="h-[42rem] overflow-scroll">
+                    <div className="w-full mx-auto flex flex-col justify-center items-center gap-4">
+                        <Card className='w-full p-4 mx-auto mb-4' shadow={false}>
+                            <CardHeader floated={false} shadow={false}>
+                                <Typography variant="h4" color="blue-gray" className="mb-2">
+                                    Request Milk
+                                </Typography>
+                                <Typography color="gray" className="font-normal">
+                                    Select a patient to request milk for
+                                </Typography>
+                            </CardHeader>
+                            <CardBody >
+                                <Typography variant="h6" color="blue-gray">
+                                    Search for a Patient
+                                </Typography>
+                                <div className="w-100 max-w-screen-lg">
+                                    <div className="mb-1 flex flex-col gap-4">
+                                        <div className="flex flex-col">
+                                            <div className="relative flex w-full gap-2">
+                                                <Input
+                                                    label="Search"
+                                                    onChange={handleTextChange}
+                                                    className="sticky top-0"
+                                                    onKeyDown={(e) => e.key === 'Enter' && searchPatient()}
+                                                />
+                                                <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={searchPatient} />
+
+                                            </div>
+                                            {!selectedPatient && <List className="w-full list-wrapper">
+                                                {loadingPatients ? <p>Loading...</p> : recipients && recipients.map((d, index) => (
+                                                    <ListItem key={index}
+                                                        className="border-b-2"
+                                                        onClick={() => handleSelect(d)} >{`${d.name} | ${d.home_address.street} ${d.home_address.brgy} ${d.home_address.city} | ${d.phone}`}</ListItem>
+                                                ))}
+                                            </List>}
+                                        </div>
+
+
+                                        {selectedPatient && (<Typography variant="h6" color="blue-gray" className="mb-2">
+                                            {selectedPatient.name}
+                                        </Typography>)}
+                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                            Department
+                                        </Typography>
                                         <Input
-                                            label="Search"
-                                            containerProps={{
-                                                className: "mb-4",
+                                            size="lg"
+                                            placeholder="Department"
+                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                            labelProps={{
+                                                className: "before:content-none after:content-none",
                                             }}
-                                            onChange={handleTextChange}
-                                            className="sticky top-0"
-                                            onKeyDown={(e) => e.key === 'Enter' && searchPatient()}
                                         />
-                                        <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={searchPatient} />
+                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                            Diagnosis
+                                        </Typography>
+                                        <Input
+                                            size="lg"
+                                            placeholder="Diagnosis"
+                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                            labelProps={{
+                                                className: "before:content-none after:content-none",
+                                            }}
+                                        />
+                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                            Reason
+                                        </Typography>
+                                        <Input
+                                            size="lg"
+                                            placeholder="Reason"
+                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                            labelProps={{
+                                                className: "before:content-none after:content-none",
+                                            }}
+                                        />
+                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                            Doctor
+                                        </Typography>
+                                        <Input
+                                            size="lg"
+                                            placeholder="Doctor"
+                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                            labelProps={{
+                                                className: "before:content-none after:content-none",
+                                            }}
+                                        />
+                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                            Volume
+                                        </Typography>
+                                        <Input
+                                            size="lg"
+                                            placeholder="Volume (ml)"
+                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                            labelProps={{
+                                                className: "before:content-none after:content-none",
+                                            }}
+                                        />
+                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                            Days
+                                        </Typography>
+                                        <Input
+                                            size="lg"
+                                            placeholder="Days"
+                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                            labelProps={{
+                                                className: "before:content-none after:content-none",
+                                            }}
+                                        />
                                     </div>
-                                    <List className="w-full list-wrapper">
-                                        {loadingPatients ? <p>Loading...</p> : !selectedPatient ? recipients && recipients.map((d, index) => (
-                                            <ListItem key={index}
-                                                className="border-b-2"
-                                                onClick={() => handleSelect(d)} >{`${d.name} | ${d.home_address.street} ${d.home_address.brgy} ${d.home_address.city} | ${d.phone}`}</ListItem>
-                                        )) : null}
-                                    </List>
+
                                 </div>
-                                <div>{selectedPatient ? selectedPatient.name : 'No patient selected'}</div>
+
+
+
                             </CardBody>
                         </Card>
 
@@ -173,12 +260,6 @@ const StaffRequestView = () => {
 
 
 
-                    <div className="flex flex-col items-center justify-center gap-4">
-                        <CheckCheck className="h-10 w-10 text-green-500" />
-                        <Typography variant="h5" color="green" className="text-center">
-                            Request for milk has been sent successfully.
-                        </Typography>
-                    </div>
 
                 </DialogBody>
                 <DialogFooter>
