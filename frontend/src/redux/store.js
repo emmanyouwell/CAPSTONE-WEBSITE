@@ -12,6 +12,7 @@ import collectionReducer from './slices/collectionSlice';
 import lettingReducer from './slices/lettingSlice';
 import bagReducer from './slices/bagSlice';
 import requestReducer from './slices/requestSlice';
+import notifReducer from './slices/notifSlice';
 const store = configureStore({
   reducer: {
     users: userReducer,// Add your reducers here
@@ -25,7 +26,8 @@ const store = configureStore({
     collections: collectionReducer,
     lettings: lettingReducer,
     bags: bagReducer,
-    requests: requestReducer
+    requests: requestReducer,
+    devices: notifReducer,
   },
 });
 

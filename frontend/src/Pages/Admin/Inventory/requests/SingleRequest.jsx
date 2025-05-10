@@ -10,7 +10,7 @@ import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { toast } from 'react-toastify'
 import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { getInventories, reserveInventory } from '../../../../redux/actions/inventoryActions';
-import { formatDate } from '../../../../utils/helper';
+import { formatDate, getUser } from '../../../../utils/helper';
 import placeholder from '../../../../assets/image/placeholder-image.webp'
 
 const SingleRequest = () => {
@@ -364,7 +364,7 @@ const SingleRequest = () => {
                                     </div>
                                 </CardBody>
                                 <CardFooter>
-                                    {requestDetails.status === 'Pending' ? <div className="w-full flex items-center justify-end gap-4">
+                                    {getUser()?.role === "Admin" || getUser?.role === "SuperAdmin" && requestDetails.status === 'Pending' ? <div className="w-full flex items-center justify-end gap-4">
                                         <Button onClick={handleUpdateVolume} color="deep-orange">Adjust Volume</Button>
                                         <Button color="green" onClick={handleOpenFridge}>Approve</Button>
                                     </div> : null}
