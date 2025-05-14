@@ -8,10 +8,11 @@ const RedirectDetails = () => {
     const type = location.state?.type
     const collectionId = location.state?.collectionId
     const details = location.state?.details
+    const status = location.state?.status
     useEffect(() => {
         if (type) {
             if (type === "Public") {
-                navigate(`/dashboard/events/attendance/${id}`, {state: {from: "RedirectDetails", collectionId: collectionId}});
+                navigate(`/dashboard/events/attendance/${id}`, {state: {from: "RedirectDetails", status: status, collectionId: collectionId}});
             } else if (type === "Private") {
                 navigate(`/dashboard/schedules/${id}`, {state: {from: "RedirectDetails", collectionId: collectionId}}); // Fallback if no previous page is found
             }
