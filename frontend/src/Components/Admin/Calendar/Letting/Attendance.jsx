@@ -126,6 +126,14 @@ const Attendance = () => {
        document.body.removeChild(script);
      };
   },[])
+  useEffect(()=>{
+    if (from) {
+      console.log("from: ", from);
+    }
+    if (status) {
+      console.log("status: ", status);
+    }
+  },[from, status])
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full gap-4 p-4 mt-4 h-full">
