@@ -69,7 +69,7 @@ const SidebarComponent = ({ userDetails }) => {
                     <SidebarItem
                         icon={<LayoutDashboard size={20} />}
                         text="Dashboard"
-                        path="/admin/dashboard"
+                        path="/dashboard"
                         alert
                     />
                 }
