@@ -13,6 +13,7 @@ export const fridgeSlice = createSlice({
   name: 'fridge',
   initialState: {
     fridges: [],
+    available: 0,
     loading: false, // Useful for async actions like login/signup
     error: null, // To handle errors
     fridgeDetails: {},
@@ -32,6 +33,7 @@ export const fridgeSlice = createSlice({
       .addCase(getFridges.fulfilled, (state, action) => {
         state.loading = false;
         state.fridges = action.payload.fridges;
+        state.available = action.payload.availableMilk;
       })
       .addCase(getFridges.rejected, (state, action) => {
         state.loading = false;

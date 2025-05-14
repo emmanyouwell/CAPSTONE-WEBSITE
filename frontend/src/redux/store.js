@@ -13,6 +13,7 @@ import lettingReducer from './slices/lettingSlice';
 import bagReducer from './slices/bagSlice';
 import requestReducer from './slices/requestSlice';
 import notifReducer from './slices/notifSlice';
+import metricReducer from './slices/metricSlice';
 const store = configureStore({
   reducer: {
     users: userReducer,// Add your reducers here
@@ -28,6 +29,7 @@ const store = configureStore({
     bags: bagReducer,
     requests: requestReducer,
     devices: notifReducer,
+    metrics: metricReducer,
   },
 });
 

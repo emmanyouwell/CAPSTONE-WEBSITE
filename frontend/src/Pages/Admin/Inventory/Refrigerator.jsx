@@ -13,7 +13,7 @@ import {
 } from "@material-tailwind/react";
 const Refrigerator = () => {
     const dispatch = useDispatch()
-    const { fridges, loading, error } = useSelector(state => state.fridges)
+    const { fridges, available, loading, error } = useSelector(state => state.fridges)
     useEffect(() => {
         dispatch(getFridges())
     }, [dispatch])
@@ -35,7 +35,7 @@ const Refrigerator = () => {
                         <UnpastTables unpasteurizedFridges={unpasteurizedFridges} />
                     </TabPanel>
                     <TabPanel value="Pasteurized" className="h-full">
-                        <PastTables pasteurizedFridges={pasteurizedFridges} />
+                        <PastTables available={available} pasteurizedFridges={pasteurizedFridges} />
                     </TabPanel>
                 </TabsBody>
             </Tabs>

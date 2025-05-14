@@ -5,7 +5,7 @@ import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { EyeIcon } from 'lucide-react'
-const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
+const PastTables = ({ currentPage, totalPages, pasteurizedFridges, available}) => {
     useEffect(()=>{
         if (pasteurizedFridges){
             console.log("past: " , pasteurizedFridges)
