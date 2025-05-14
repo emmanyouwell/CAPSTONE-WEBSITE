@@ -207,11 +207,11 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
     }
     const pasteurize = () => {
         console.log("Errors: ", formError)
-        if (totalVolume < 2000) {
+        if (totalVolume <= 0) {
 
             return;
         }
-        if (totalVolume > 2000 && totalVolume < 4000) {
+        if (totalVolume > 4000) {
 
             return;
         }
@@ -250,7 +250,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                 date: true
             }))
         }
-        if (!selectedOption || !batchDetails.pasteurizationDate || !batchDetails.batch || !batchDetails.pool || totalVolume < 2000 || (totalVolume > 2000 && totalVolume < 4000) || !batchDetails.qty) {
+        if (!selectedOption || !batchDetails.pasteurizationDate || !batchDetails.batch || !batchDetails.pool || totalVolume <= 0 || totalVolume > 4000 || !batchDetails.qty) {
             return;
         }
         const userInfo = [
@@ -262,7 +262,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                 batch: batchDetails.batch,
                 pool: batchDetails.pool,
                 donors: userInfo,
-                bottleType: totalVolume === 2000 ? 100 : totalVolume === 4000 ? 200 : 0,
+                bottleType: totalVolume === 2000 ? 100 : totalVolume === 4000 ? 200 : 100,
                 bottleQty: batchDetails.qty,
                 pasteurizationDate: batchDetails.pasteurizationDate,
             },
@@ -480,9 +480,8 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                                     type="text"
                                     name="pool"
                                     disabled
+                                    value={totalVolume === 2000 || totalVolume < 2000 ? "100 ml" : totalVolume === 4000 || (totalVolume > 2000 && totalVolume < 4000) ? "200 ml" : "Select at least 2000 ml of milk"} />
 
-                                    value={totalVolume === 2000 ? "100 ml" : totalVolume === 4000 ? "200 ml" : totalVolume > 2000 && totalVolume < 4000 ? "Select 2000 ml or 4000 ml of milk" : "Select at least 2000 ml of milk"} />
-                                {totalVolume < 2000 || (totalVolume > 2000 && totalVolume < 4000) ? <span className="text-sm text-red-500">Please select either 2000 ml or 4000 ml of milk</span> : ""}
                             </div>
                         </div>
 
