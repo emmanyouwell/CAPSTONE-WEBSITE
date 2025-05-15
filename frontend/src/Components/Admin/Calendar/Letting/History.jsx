@@ -48,7 +48,7 @@ const History = () => {
 
                             <div className="font-parkinsans text-md">Donors: {lets.attendance.length}</div>
                         </div>
-                        <Link to={`/admin/events/attendance/${lets._id}`}>
+                        <Link to={`/dashboard/events/attendance/${lets._id}`}>
                             <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
                         </Link>
                     </Card>))}
