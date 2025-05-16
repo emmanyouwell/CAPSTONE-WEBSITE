@@ -212,3 +212,34 @@ export const getExpiringMilk = createAsyncThunk(
         }
     }
 )
+
+
+export const getVolumePerLocation = createAsyncThunk(
+    'donorsPerMonth/getVolumePerLocation',
+    async (thunkAPI) => {
+
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        
+        try {
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/donationLocation`, config)
+            
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
