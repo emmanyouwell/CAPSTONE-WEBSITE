@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getRequestsPerMonth } from '../actions/metricActions';
+import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth } from '../actions/metricActions';
 import { getAvailableMilk } from '../actions/metricActions';
 import { getExpiringMilk } from '../actions/metricActions';
 export const metricSlice = createSlice({
@@ -10,6 +10,7 @@ export const metricSlice = createSlice({
         stats: {},
         available: 0,
         expiring: 0,
+        volumePerLocation: {},
         monthlyDonors: {},
         dispensedMilk: {},
         monthlyPatients: {},
@@ -99,6 +100,18 @@ export const metricSlice = createSlice({
                 state.expiring = action.payload.expiringMilk;
             })
             .addCase(getExpiringMilk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            .addCase(getVolumePerLocation.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(getVolumePerLocation.fulfilled, (state, action) => {
+                state.loading = false;
+                state.volumePerLocation = action.payload.volumePerLocation;
+            })
+            .addCase(getVolumePerLocation.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

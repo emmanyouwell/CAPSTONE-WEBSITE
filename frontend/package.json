@@ -17,6 +17,7 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.7.9",
     "chart.js": "^4.4.9",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "datatables.net-bs5": "^2.2.2",
     "datatables.net-dt": "^2.2.2",
     "datatables.net-react": "^1.0.1",

@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMilkPerMonth, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk } from '../../redux/actions/metricActions'
+import { getMilkPerMonth,getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk } from '../../redux/actions/metricActions'
 import { LifebuoyIcon, UserIcon } from '@heroicons/react/24/solid'
 
 import {
   Chart as ChartJS,
   BarElement,
+  ArcElement,
   CategoryScale,
   LinearScale,
   Tooltip,
   Legend
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Bar, Pie } from 'react-chartjs-2';
 import { Accordion, AccordionHeader, AccordionBody, Card, CardHeader, Typography } from '@material-tailwind/react';
 import { formatNumber } from '../../utils/helper'
+import { milkCollectedChartData, milkDonatedPerBarangay, monthlyDispensedMilkChartData, monthlyDonorsChartData, monthlyPatientsChartData } from '../../data/metricsData';
 
 // Register required components
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+ChartJS.register(BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
 
 
 function Icon({ id, open }) {
@@ -35,7 +38,7 @@ function Icon({ id, open }) {
 }
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { stats, available, monthlyDonors, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
+  const { stats, available, monthlyDonors, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
 
   useEffect(() => {
     dispatch(getMilkPerMonth());
@@ -45,159 +48,14 @@ const Dashboard = () => {
     dispatch(getRequestsPerMonth());
     dispatch(getAvailableMilk());
     dispatch(getExpiringMilk());
+    dispatch(getVolumePerLocation());
   }, [dispatch])
 
-  const months = Object.keys(stats).filter((key) => key !== 'total');
-  const communityData = months.map((month) => stats[month].community);
-  const privateData = months.map((month) => stats[month].private);
-
-  const data = {
-    labels: months,
-    datasets: [
-      {
-        label: 'Community',
-        data: communityData,
-        backgroundColor: '#336699'
-      },
-      {
-        label: 'Private',
-        data: privateData,
-        backgroundColor: '#F06395'
-      }
-    ]
-  };
-
-  // Optional config
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.parsed.y || 0;
-            return `${label}: ${value.toLocaleString()} ml`;
-          }
-        }
-      }
-    }
-  };
-  const months2 = Object.keys(monthlyDonors).filter((key) => key !== 'total');
-  const communityData2 = months2.map((month) => monthlyDonors[month].community);
-  const privateData2 = months2.map((month) => monthlyDonors[month].private);
-  const data2 = {
-    labels: months,
-    datasets: [
-      {
-        label: 'Community',
-        data: communityData2,
-        backgroundColor: '#336699'
-      },
-      {
-        label: 'Private',
-        data: privateData2,
-        backgroundColor: '#F06395'
-      }
-    ]
-  };
-
-  // Optional config
-  const options2 = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.parsed.y || 0;
-            return `${label}: ${value.toLocaleString()}`;
-          }
-        }
-      }
-    }
-  };
-  const months3 = Object.keys(monthlyPatients).filter((key) => key !== 'total');
-  const inpatientData = months3.map((month) => monthlyPatients[month].inpatient);
-  const outpatientData = months3.map((month) => monthlyPatients[month].outpatient);
-  const data3 = {
-    labels: months,
-    datasets: [
-      {
-        label: 'Inpatient',
-        data: inpatientData,
-        backgroundColor: '#336699'
-      },
-      {
-        label: 'Outpatient',
-        data: outpatientData,
-        backgroundColor: '#F06395'
-      }
-    ]
-  };
-
-  // Optional config
-  const options3 = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.parsed.y || 0;
-            return `${label}: ${value.toLocaleString()}`;
-          }
-        }
-      }
-    }
-  };
-
-  const months4 = Object.keys(dispensedMilk).filter((key) => key !== 'total');
-  const inpatientData2 = months4.map((month) => dispensedMilk[month].inpatient);
-  const outpatientData2 = months4.map((month) => dispensedMilk[month].outpatient);
-  const data4 = {
-    labels: months,
-    datasets: [
-      {
-        label: 'Inpatient',
-        data: inpatientData2,
-        backgroundColor: '#336699'
-      },
-      {
-        label: 'Outpatient',
-        data: outpatientData2,
-        backgroundColor: '#F06395'
-      }
-    ]
-  };
-
-  // Optional config
-  const options4 = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.parsed.y || 0;
-            return `${label}: ${value.toLocaleString()} ml`;
-          }
-        }
-      }
-    }
-  };
-
+  const {data: statsData, options: statsOptions} = milkCollectedChartData(stats);
+  const {data: donorData, options: donorOptions} = monthlyDonorsChartData(monthlyDonors);
+  const {data: patientData, options: patientOptions} = monthlyPatientsChartData(monthlyPatients);
+  const {data: dispensedData, options: dispensedOptions} = monthlyDispensedMilkChartData(dispensedMilk);
+  const {data: volumeLocationData, options: volumeLocationOptions} = milkDonatedPerBarangay(volumePerLocation);
   const [open, setOpen] = useState(0);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -283,13 +141,19 @@ const Dashboard = () => {
                   <CardHeader shadow={false} floated={false}>
                     <Typography variant="h5" color="blue-gray">Milk Collected Per Month {stats && stats.total ? `(${formatNumber(stats.total.total)} ml)` : '(0 ml)'}</Typography>
                   </CardHeader>
-                  <Bar data={data} options={options} />
+                  <Bar data={statsData} options={statsOptions} />
                 </Card>
                 <Card className="p-4 border shadow-lg">
                   <CardHeader shadow={false} floated={false}>
                     <Typography variant="h5" color="blue-gray">Dispensed Milk Per Month {dispensedMilk && dispensedMilk.total ? `(${formatNumber(dispensedMilk.total.total)} ml)` : '(0 ml)'}</Typography>
                   </CardHeader>
-                  <Bar data={data4} options={options4} />
+                  <Bar data={dispensedData} options={dispensedOptions} />
+                </Card>
+                 <Card className="p-4 border shadow-lg">
+                  <CardHeader shadow={false} floated={false}>
+                    <Typography variant="h5" color="blue-gray">Collected Milk Per Barangay {volumePerLocation && volumePerLocation.total ? `(${formatNumber(volumePerLocation.total)} ml)` : '(0 ml)'}</Typography>
+                  </CardHeader>
+                  <Pie data={volumeLocationData} options={volumeLocationOptions}/>
                 </Card>
               </div>
             </AccordionBody>
@@ -303,7 +167,7 @@ const Dashboard = () => {
                   <CardHeader shadow={false} floated={false}>
                     <Typography variant="h5" color="blue-gray">Donors Per Month {monthlyDonors && monthlyDonors.total ? `(${formatNumber(monthlyDonors.total?.total)})` : '(0)'}</Typography>
                   </CardHeader>
-                  <Bar data={data2} options={options2} />
+                  <Bar data={donorData} options={donorOptions} />
                 </Card>
               </div>
             </AccordionBody>
@@ -316,7 +180,7 @@ const Dashboard = () => {
                   <CardHeader shadow={false} floated={false}>
                     <Typography variant="h5" color="blue-gray">Patients Per Month {monthlyPatients && monthlyPatients.total ? `(${formatNumber(monthlyPatients.total.total)})` : '(0)'}</Typography>
                   </CardHeader>
-                  <Bar data={data3} options={options3} />
+                  <Bar data={patientData} options={patientOptions} />
                 </Card>
               </div>
             </AccordionBody>
