@@ -53,6 +53,8 @@ import RequestCardComponent from "./Pages/Admin/Inventory/requests/RequestCardCo
 import SingleRequest from "./Pages/Admin/Inventory/requests/SingleRequest";
 import StaffRequest from "./Pages/Staff/Requests/StaffRequest";
 import StaffRequestView from "./Pages/Staff/Requests/StaffRequestView";
+import Submissions from "./Pages/Admin/Eligibility/Submissions";
+
 
 
 
@@ -67,7 +69,7 @@ function RoutesComponent() {
       <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
       <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
       <Route path="/redirect" element={<Redirect />} />
-
+      
       {/* Superadmin routes */}
 
       <Route path="/dashboard" element={<ProtectedRoute isAuthorized={true}><DashboardLayout /></ProtectedRoute>}>
@@ -101,6 +103,7 @@ function RoutesComponent() {
         <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable /></ProtectedRoute>} />
         <Route path="request/:id" element={<ProtectedRoute isAuthorized={true}><SingleRequest/></ProtectedRoute>}/>
         <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView/></ProtectedRoute>}/>
+        <Route path="submissions" element={<ProtectedRoute isAdmin={true}><Submissions/></ProtectedRoute>}/>
       </Route>
     </Routes>
   )

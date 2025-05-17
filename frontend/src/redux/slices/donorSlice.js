@@ -1,22 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getDonors, getSingleDonor, updateDonor } from '../actions/donorActions';
+import { checkEligibility, getDonors, getSingleDonor, getSubmissions, updateDonor } from '../actions/donorActions';
 export const donorSlice = createSlice({
   name: 'donor',
   initialState: {
     donors: [],
-    loading: false, 
-    error: null, 
+    loading: false,
+    error: null,
     pageSize: 0,
     totalDonors: 0,
     totalPages: 0,
     isUpdated: false,
     donorDetails: {},
+    isEligible: false,
+    submissions: [],
   },
   reducers: {
+    resetUpdate: (state) => {
+      state.isUpdated = false;
+    },
+    resetDelete: (state) => {
+      state.isDeleted = false;
+    }
   },
   extraReducers: (builder) => {
     builder
-      
+
       .addCase(getDonors.pending, (state, action) => {
         state.loading = true;
       })
@@ -29,7 +37,7 @@ export const donorSlice = createSlice({
       })
       .addCase(getDonors.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       })
 
       .addCase(updateDonor.pending, (state, action) => {
@@ -43,19 +51,41 @@ export const donorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getSingleDonor.pending, (state,action)=>{
+      .addCase(getSingleDonor.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(getSingleDonor.fulfilled, (state, action)=>{
+      .addCase(getSingleDonor.fulfilled, (state, action) => {
         state.loading = false;
         state.donorDetails = action.payload.donor;
       })
-      .addCase(getSingleDonor.rejected, (state, action)=>{
+      .addCase(getSingleDonor.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      
+      .addCase(checkEligibility.pending, (state, action) => {
+        state.loading = true;
+        state.isEligible = false;
+      })
+      .addCase(checkEligibility.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isEligible = action.payload.success;
+      })
+      .addCase(checkEligibility.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getSubmissions.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getSubmissions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.submissions = action.payload.donors;
+      })
+      .addCase(getSubmissions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
-
+export const { resetUpdate, resetDelete } = donorSlice.actions;
 export default donorSlice.reducer;

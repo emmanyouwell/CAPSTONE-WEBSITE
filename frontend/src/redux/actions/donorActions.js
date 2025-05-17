@@ -5,7 +5,7 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 // const VITE_APP_URL = 'http://localhost:4000';
 export const getDonors = createAsyncThunk(
     'donor/getDonors',
-    async ({ search="", page = 1, pageSize = 12, brgy="", type="" }, thunkAPI) => {
+    async ({ search = "", page = 1, pageSize = 12, brgy = "", type = "" }, thunkAPI) => {
         const token = await getToken();
         console.log('Token Retrieved:', token);
 
@@ -26,10 +26,10 @@ export const getDonors = createAsyncThunk(
             if (search) {
                 urlString += `&search=${encodeURIComponent(search)}`;
             }
-            if (brgy){
+            if (brgy) {
                 urlString += `&brgy=${encodeURIComponent(brgy)}`;
             }
-            if (type){
+            if (type) {
                 urlString += `&type=${encodeURIComponent(type)}`;
             }
 
@@ -60,7 +60,7 @@ export const updateDonor = createAsyncThunk(
             },
             withCredentials: true
         }
-        
+
         try {
             const response = await axios.put(`${VITE_APP_URL}/api/v1/donor/${req.id}`, req, config)
 
@@ -89,7 +89,7 @@ export const getSingleDonor = createAsyncThunk(
             },
             withCredentials: true
         }
-        
+
         try {
             const response = await axios.get(`${VITE_APP_URL}/api/v1/donor/${req}`, config)
 
@@ -101,3 +101,64 @@ export const getSingleDonor = createAsyncThunk(
         }
     }
 )
+
+
+export const checkEligibility = createAsyncThunk(
+    'donor/checkEligibility',
+    async (req, thunkAPI) => {
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+
+        try {
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/check-eligibility/${req}`, config)
+
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
+
+export const getSubmissions = createAsyncThunk(
+    'donor/getSubmissions',
+    async (req, thunkAPI) => {
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+
+        try {
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/donor/submissions`, config)
+
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
