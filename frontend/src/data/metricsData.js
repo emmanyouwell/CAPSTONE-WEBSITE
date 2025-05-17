@@ -229,3 +229,119 @@ export function milkDonatedPerBarangay(volumePerLocation) {
     return { data, options }
 
 }
+
+
+export function donorsPerBarangay(donorLocation) {
+    const entries = Object.entries(donorLocation).filter(([key]) => key !== 'total');
+
+    const labels = entries.map(([location]) => location);
+    const dataValues = entries.map(([, volume]) => volume);
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Volume',
+                data: dataValues,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                    '#9966FF', '#FF9F40', '#FF6384', '#36A2EB',
+                    '#C9CBCF', '#7FCDCD', '#DE6B6B',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+            },
+            datalabels: {
+                color: '#fff',
+                font: {
+                    weight: 'semibold',
+                    size: 14,
+                },
+                anchor: 'end',
+                align: 'start',
+                clamp: true,
+                formatter: (value, context) => {
+                    let label = context.chart.data.labels[context.dataIndex] || '';
+                    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+                    return `${label}\n${value}`;
+                },
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        const value = tooltipItem.raw || 0;
+                        return `Donors: ${value.toLocaleString()}`;
+                    },
+                },
+            },
+        },
+    };
+
+    return { data, options }
+
+}
+
+
+export function patientPerHospital(patientHospital) {
+    const entries = Object.entries(patientHospital).filter(([key]) => key !== 'total');
+
+    const labels = entries.map(([location]) => location);
+    const dataValues = entries.map(([, volume]) => volume);
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Volume',
+                data: dataValues,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                    '#9966FF', '#FF9F40', '#FF6384', '#36A2EB',
+                    '#C9CBCF', '#7FCDCD', '#DE6B6B',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+            },
+            datalabels: {
+                color: '#fff',
+                font: {
+                    weight: 'semibold',
+                    size: 14,
+                },
+                anchor: 'end',
+                align: 'start',
+                clamp: true,
+                formatter: (value, context) => {
+                    let label = context.chart.data.labels[context.dataIndex] || '';
+                    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+                    return `${label}\n${value}`;
+                },
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        const value = tooltipItem.raw || 0;
+                        return `Patients: ${value.toLocaleString()}`;
+                    },
+                },
+            },
+        },
+    };
+
+    return { data, options }
+
+}

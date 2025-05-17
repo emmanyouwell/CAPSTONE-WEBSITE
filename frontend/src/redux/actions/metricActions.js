@@ -243,3 +243,64 @@ export const getVolumePerLocation = createAsyncThunk(
         }
     }
 )
+
+export const getDonorLocation = createAsyncThunk(
+    'donorsPerMonth/getDonorLocation',
+    async (thunkAPI) => {
+
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        
+        try {
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/donorLocation`, config)
+            
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
+
+export const getPatientHospital = createAsyncThunk(
+    'donorsPerMonth/getPatientHospital',
+    async (thunkAPI) => {
+
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        
+        try {
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/patientHospital`, config)
+            
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)

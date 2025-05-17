@@ -46,10 +46,7 @@ function ProfileMenu() {
       icon: UserIcon,
       onPress: goToProfile
     },
-    {
-      label: "Inbox",
-      icon: InboxArrowDownIcon,
-    },
+   
     {
       label: "Logout",
       icon: ArrowLeftStartOnRectangleIcon,
