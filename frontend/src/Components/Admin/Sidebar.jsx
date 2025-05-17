@@ -11,7 +11,8 @@ export default function Sidebar({ children, userDetails }) {
             <nav className="h-full flex flex-col bg-white border-r shadow-sm">
                 <div className="p-4 pb-2 flex justify-between items-center">
                     <img src={logo} alt="TCHMB Logo" className={`overflow-hidden transition-all ${expanded ? "w-10" : "w-0"}`} />
-                    <span className={`font-parkinsans font-semibold text-secondary text-xl overflow-hidden transition-all whitespace-nowrap ${expanded ? "w-100" : "w-0"}`}>TCHMB Portal</span>
+                    <Link to="/">
+                        <span className={`font-parkinsans font-semibold text-secondary text-xl overflow-hidden transition-all whitespace-nowrap ${expanded ? "w-100" : "w-0"}`}>TCHMB Portal</span></Link>
                     <button onClick={() => setExpanded(curr => !curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
                         {expanded ? <ChevronFirst /> : <ChevronLast />}
                     </button>
@@ -27,7 +28,7 @@ export default function Sidebar({ children, userDetails }) {
                             <h4 className='font-semibold'>{userDetails.name}</h4>
                             <span className="text-sx text-gray-600">{userDetails.email}</span>
                         </div>
-                        
+
                     </div>
                 </div>
             </nav>

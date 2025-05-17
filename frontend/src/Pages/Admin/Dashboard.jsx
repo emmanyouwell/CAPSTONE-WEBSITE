@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMilkPerMonth,getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk } from '../../redux/actions/metricActions'
+import { getMilkPerMonth,getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk, getDonorLocation, getPatientHospital } from '../../redux/actions/metricActions'
 import { LifebuoyIcon, UserIcon } from '@heroicons/react/24/solid'
 
 import {
@@ -16,7 +16,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar, Pie } from 'react-chartjs-2';
 import { Accordion, AccordionHeader, AccordionBody, Card, CardHeader, Typography } from '@material-tailwind/react';
 import { formatNumber } from '../../utils/helper'
-import { milkCollectedChartData, milkDonatedPerBarangay, monthlyDispensedMilkChartData, monthlyDonorsChartData, monthlyPatientsChartData } from '../../data/metricsData';
+import { donorsPerBarangay, milkCollectedChartData, milkDonatedPerBarangay, monthlyDispensedMilkChartData, monthlyDonorsChartData, monthlyPatientsChartData, patientPerHospital } from '../../data/metricsData';
 
 // Register required components
 ChartJS.register(BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
@@ -38,7 +38,7 @@ function Icon({ id, open }) {
 }
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { stats, available, monthlyDonors, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
+  const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
 
   useEffect(() => {
     dispatch(getMilkPerMonth());
@@ -49,6 +49,8 @@ const Dashboard = () => {
     dispatch(getAvailableMilk());
     dispatch(getExpiringMilk());
     dispatch(getVolumePerLocation());
+    dispatch(getDonorLocation());
+    dispatch(getPatientHospital());
   }, [dispatch])
 
   const {data: statsData, options: statsOptions} = milkCollectedChartData(stats);
@@ -56,11 +58,17 @@ const Dashboard = () => {
   const {data: patientData, options: patientOptions} = monthlyPatientsChartData(monthlyPatients);
   const {data: dispensedData, options: dispensedOptions} = monthlyDispensedMilkChartData(dispensedMilk);
   const {data: volumeLocationData, options: volumeLocationOptions} = milkDonatedPerBarangay(volumePerLocation);
+  const {data: donorLocationData, options: donorLocationOptions} = donorsPerBarangay(donorLocation);
+  const {data: patientHospitalData, options: patientHospitalOptions} = patientPerHospital(patientHospital);
   const [open, setOpen] = useState(0);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
-
+  useEffect(()=>{
+    if (donorLocation){
+      console.log(donorLocation)
+    }
+  },[donorLocation])
   return (
     <>
       <div className="h-[calc(100vh-4rem)] overflow-y-auto w-full">
@@ -169,6 +177,12 @@ const Dashboard = () => {
                   </CardHeader>
                   <Bar data={donorData} options={donorOptions} />
                 </Card>
+                <Card className="p-4 border shadow-lg">
+                  <CardHeader shadow={false} floated={false}>
+                    <Typography variant="h5" color="blue-gray">Donors Per Barangay {donorLocation && donorLocation.total ? `(${formatNumber(donorLocation.total)})` : '(0)'}</Typography>
+                  </CardHeader>
+                  <Pie data={donorLocationData} options={donorLocationOptions}/>
+                </Card>
               </div>
             </AccordionBody>
           </Accordion>
@@ -181,6 +195,12 @@ const Dashboard = () => {
                     <Typography variant="h5" color="blue-gray">Patients Per Month {monthlyPatients && monthlyPatients.total ? `(${formatNumber(monthlyPatients.total.total)})` : '(0)'}</Typography>
                   </CardHeader>
                   <Bar data={patientData} options={patientOptions} />
+                </Card>
+                 <Card className="p-4 border shadow-lg">
+                  <CardHeader shadow={false} floated={false}>
+                    <Typography variant="h5" color="blue-gray">Patients Per Hospital {patientHospital && patientHospital.total ? `(${formatNumber(patientHospital.total)})` : '(0)'}</Typography>
+                  </CardHeader>
+                  <Pie data={patientHospitalData} options={patientHospitalOptions}/>
                 </Card>
               </div>
             </AccordionBody>

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth } from '../actions/metricActions';
+import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth, getDonorLocation, getPatientHospital } from '../actions/metricActions';
 import { getAvailableMilk } from '../actions/metricActions';
 import { getExpiringMilk } from '../actions/metricActions';
 export const metricSlice = createSlice({
@@ -11,10 +11,12 @@ export const metricSlice = createSlice({
         available: 0,
         expiring: 0,
         volumePerLocation: {},
+        donorLocation: {},
         monthlyDonors: {},
         dispensedMilk: {},
         monthlyPatients: {},
         monthlyRequests: {},
+        patientHospital: {},
     },
     reducers: {
     },
@@ -114,7 +116,31 @@ export const metricSlice = createSlice({
             .addCase(getVolumePerLocation.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+
+            .addCase(getDonorLocation.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(getDonorLocation.fulfilled, (state, action) => {
+                state.loading = false;
+                state.donorLocation = action.payload.donors;
+            })
+            .addCase(getDonorLocation.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            .addCase(getPatientHospital.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(getPatientHospital.fulfilled, (state, action) => {
+                state.loading = false;
+                state.patientHospital = action.payload.hospitals;
+            })
+            .addCase(getPatientHospital.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
     },
 });
 

@@ -45,10 +45,7 @@ function ProfileMenu() {
     if (userDetails) {
       if (userDetails.role === "User") {
         setProfileMenuItems([
-          {
-            label: "Inbox",
-            icon: InboxArrowDownIcon,
-          },
+         
           {
             label: "Logout",
             icon: ArrowLeftStartOnRectangleIcon,
@@ -63,10 +60,7 @@ function ProfileMenu() {
             icon: PresentationChartBarIcon,
             onPress: goToDashboard
           },
-          {
-            label: "Inbox",
-            icon: InboxArrowDownIcon,
-          },
+         
           {
             label: "Logout",
             icon: ArrowLeftStartOnRectangleIcon,
