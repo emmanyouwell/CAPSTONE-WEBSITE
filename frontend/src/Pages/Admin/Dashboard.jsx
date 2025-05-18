@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMilkPerMonth,getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk, getDonorLocation, getPatientHospital } from '../../redux/actions/metricActions'
+import { getMilkPerMonth, getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk, getDonorLocation, getPatientHospital } from '../../redux/actions/metricActions'
 import { LifebuoyIcon, UserIcon } from '@heroicons/react/24/solid'
 
 import {
@@ -53,31 +53,41 @@ const Dashboard = () => {
     dispatch(getPatientHospital());
   }, [dispatch])
 
-  const {data: statsData, options: statsOptions} = milkCollectedChartData(stats);
-  const {data: donorData, options: donorOptions} = monthlyDonorsChartData(monthlyDonors);
-  const {data: patientData, options: patientOptions} = monthlyPatientsChartData(monthlyPatients);
-  const {data: dispensedData, options: dispensedOptions} = monthlyDispensedMilkChartData(dispensedMilk);
-  const {data: volumeLocationData, options: volumeLocationOptions} = milkDonatedPerBarangay(volumePerLocation);
-  const {data: donorLocationData, options: donorLocationOptions} = donorsPerBarangay(donorLocation);
-  const {data: patientHospitalData, options: patientHospitalOptions} = patientPerHospital(patientHospital);
+  const { data: statsData, options: statsOptions } = milkCollectedChartData(stats);
+  const { data: donorData, options: donorOptions } = monthlyDonorsChartData(monthlyDonors);
+  const { data: patientData, options: patientOptions } = monthlyPatientsChartData(monthlyPatients);
+  const { data: dispensedData, options: dispensedOptions } = monthlyDispensedMilkChartData(dispensedMilk);
+  const { data: volumeLocationData, options: volumeLocationOptions } = milkDonatedPerBarangay(volumePerLocation);
+  const { data: donorLocationData, options: donorLocationOptions } = donorsPerBarangay(donorLocation);
+  const { data: patientHospitalData, options: patientHospitalOptions } = patientPerHospital(patientHospital);
   const [open, setOpen] = useState(0);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
-  useEffect(()=>{
-    if (donorLocation){
+  useEffect(() => {
+    if (donorLocation) {
       console.log(donorLocation)
     }
-  },[donorLocation])
+  }, [donorLocation])
   return (
     <>
       <div className="h-[calc(100vh-4rem)] overflow-y-auto w-full">
         <div className="min-h-fit grid grid-cols-2 gap-4 w-full p-4">
-          <div className="col-span-2 flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span className="text-2xl font-parkinsans font-medium text-gray-900">Available Pasteurized Milk</span>
             <div>
               <span className="text-5xl font-parkinsans font-bold text-gray-900">{available ? available.toLocaleString() : '0'}</span>
               <span className="text-lg font-semibold text-secondary"> ml </span>
+            </div>
+          </div>
+          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+            <span className="text-2xl font-parkinsans font-medium text-gray-900">Pending Requests</span>
+            <div className="flex items-center gap-2">
+
+              <span className="text-5xl font-parkinsans font-bold text-gray-900"> {monthlyRequests?.pending ? monthlyRequests?.pending.toLocaleString() : '0'} </span>
+
+              <span className="text-lg text-gray-500"><LifebuoyIcon className="text-secondary w-8 h-8" /> </span>
+
             </div>
           </div>
           <div className="col-span-2 flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
@@ -157,11 +167,11 @@ const Dashboard = () => {
                   </CardHeader>
                   <Bar data={dispensedData} options={dispensedOptions} />
                 </Card>
-                 <Card className="p-4 border shadow-lg">
+                <Card className="p-4 border shadow-lg">
                   <CardHeader shadow={false} floated={false}>
                     <Typography variant="h5" color="blue-gray">Collected Milk Per Barangay {volumePerLocation && volumePerLocation.total ? `(${formatNumber(volumePerLocation.total)} ml)` : '(0 ml)'}</Typography>
                   </CardHeader>
-                  <Pie data={volumeLocationData} options={volumeLocationOptions}/>
+                  <Pie data={volumeLocationData} options={volumeLocationOptions} />
                 </Card>
               </div>
             </AccordionBody>
@@ -181,7 +191,7 @@ const Dashboard = () => {
                   <CardHeader shadow={false} floated={false}>
                     <Typography variant="h5" color="blue-gray">Donors Per Barangay {donorLocation && donorLocation.total ? `(${formatNumber(donorLocation.total)})` : '(0)'}</Typography>
                   </CardHeader>
-                  <Pie data={donorLocationData} options={donorLocationOptions}/>
+                  <Pie data={donorLocationData} options={donorLocationOptions} />
                 </Card>
               </div>
             </AccordionBody>
@@ -196,11 +206,11 @@ const Dashboard = () => {
                   </CardHeader>
                   <Bar data={patientData} options={patientOptions} />
                 </Card>
-                 <Card className="p-4 border shadow-lg">
+                <Card className="p-4 border shadow-lg">
                   <CardHeader shadow={false} floated={false}>
                     <Typography variant="h5" color="blue-gray">Patients Per Hospital {patientHospital && patientHospital.total ? `(${formatNumber(patientHospital.total)})` : '(0)'}</Typography>
                   </CardHeader>
-                  <Pie data={patientHospitalData} options={patientHospitalOptions}/>
+                  <Pie data={patientHospitalData} options={patientHospitalOptions} />
                 </Card>
               </div>
             </AccordionBody>

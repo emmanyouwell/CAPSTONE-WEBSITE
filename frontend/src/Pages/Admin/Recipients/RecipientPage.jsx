@@ -6,6 +6,7 @@ import DonorCards from '../../../Components/Admin/Donors/DonorCards'
 import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Select, Option } from '@material-tailwind/react'
 import RecipientCards from '../../../Components/Admin/Recipients/RecipientCards'
+import { getUser } from '../../../utils/helper'
 const RecipientPage = () => {
     const dispatch = useDispatch();
     const { recipients, pageSize, totalRecipients, totalPages, loading, error } = useSelector((state) => state.recipients);
@@ -108,6 +109,12 @@ const RecipientPage = () => {
             document.body.removeChild(script);
         };
     }, [])
+    const handleOpenTallyForm = () => {
+        const staff = getUser()._id // replace with your actual variable
+        const url = `https://tally.so/r/mOrazY?staffId=${encodeURIComponent(staff)}`;
+        window.open(url, "_blank"); // or open in an iframe/modal if needed
+    };
+
     return (
         <div className="p-4 flex flex-col h-[calc(100vh-2rem)] gap-4">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
@@ -150,7 +157,7 @@ const RecipientPage = () => {
                 </div>
 
                 <div>
-                    <Button color="pink" data-tally-open="mOrazY" data-tally-emoji-text="👋" data-tally-emoji-animation="wave">Add New Patient</Button>
+                    <Button color="pink" onClick={handleOpenTallyForm}>Add New Patient</Button>
                 </div>
             </div>
 
