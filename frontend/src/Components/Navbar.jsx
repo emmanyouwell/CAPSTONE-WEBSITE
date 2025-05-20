@@ -45,7 +45,7 @@ function ProfileMenu() {
     if (userDetails) {
       if (userDetails.role === "User") {
         setProfileMenuItems([
-         
+
           {
             label: "Logout",
             icon: ArrowLeftStartOnRectangleIcon,
@@ -60,7 +60,7 @@ function ProfileMenu() {
             icon: PresentationChartBarIcon,
             onPress: goToDashboard
           },
-         
+
           {
             label: "Logout",
             icon: ArrowLeftStartOnRectangleIcon,
@@ -137,8 +137,11 @@ const StickyNavbar = () => {
     );
   }, []);
   useEffect(() => {
-    dispatch(getUser())
-  }, [])
+    if (sessionStorage.getItem("user")) {
+      dispatch(getUser())
+    }
+
+  }, [sessionStorage])
 
 
   const navList = (

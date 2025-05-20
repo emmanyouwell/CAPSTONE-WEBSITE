@@ -272,6 +272,7 @@ const SingleRequest = () => {
             inv.status !== "Unavailable"
     );
     const addEbm = () => {
+       
         if (!selectedInventory) {
             setFormError((prev) => ({
                 ...prev,
@@ -288,7 +289,7 @@ const SingleRequest = () => {
                 start: data.start,
                 end: data.end
             },
-            volDischarge: Number(selectedVolume),
+            volDischarge: Number(volume),
         }
         setEbm((prev) => [...prev, ebmDetails])
         setSelectedInventory('')
@@ -302,11 +303,7 @@ const SingleRequest = () => {
         setInventoryDetails({})
         setSelectedInventory('');
     }
-    // useEffect(() => {
-    //     if (filteredInventories?.length > 0) {
-    //         // console.log("filtered: ", filteredInventories)
-    //     }
-    // }, [filteredInventories])
+   
 
     return (
         <div className="p-8">
@@ -364,7 +361,7 @@ const SingleRequest = () => {
                                     </div>
                                 </CardBody>
                                 <CardFooter>
-                                    {getUser()?.role === "Admin" || getUser?.role === "SuperAdmin" && requestDetails.status === 'Pending' ? <div className="w-full flex items-center justify-end gap-4">
+                                    {getUser()?.role === "Admin" || getUser()?.role === "SuperAdmin" && requestDetails.status === 'Pending' ? <div className="w-full flex items-center justify-end gap-4">
                                         <Button onClick={handleUpdateVolume} color="deep-orange">Adjust Volume</Button>
                                         <Button color="green" onClick={handleOpenFridge}>Approve</Button>
                                     </div> : null}

@@ -14,6 +14,7 @@ import bagReducer from './slices/bagSlice';
 import requestReducer from './slices/requestSlice';
 import notifReducer from './slices/notifSlice';
 import metricReducer from './slices/metricSlice';
+import announcementReducer from './slices/announcementSlice';
 const store = configureStore({
   reducer: {
     users: userReducer,// Add your reducers here
@@ -30,6 +31,7 @@ const store = configureStore({
     requests: requestReducer,
     devices: notifReducer,
     metrics: metricReducer,
+    announcements: announcementReducer,
   },
 });
 

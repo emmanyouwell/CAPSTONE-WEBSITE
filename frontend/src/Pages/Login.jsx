@@ -44,15 +44,11 @@ const Login = () => {
       navigate('/');
     }
     if (error) {
-      toast.error("Invalid Employee ID or Password", { position: "top-right" });
+      toast.error(`Error: ${error}`, { position: "top-right" });
       dispatch(resetError());
     }
-  }, [isLoggedIn, userDetails, error])
-  useEffect(() => {
-    if (userDetails) {
-      console.log("user: ", userDetails);
-    }
-  }, [userDetails])
+  }, [isLoggedIn, error])
+ 
   return (
     <>
       <StickyNavbar />

@@ -6,15 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
 import ArticleList from '../../../Components/Articles/ArticleList';
 import { resetDelete } from '../../../redux/slices/articleSlice';
+import { deleteAnnouncement, getAnnouncement } from '../../../redux/actions/announcementActions';
 const Announcement = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
-    const { articles, isDeleted, loading, error } = useSelector((state) => state.articles);
+    const {announcements,isDeleted, loading, error} = useSelector((state)=> state.announcements)
     const [search, setSearch] = useState('');
 
 
     const handleDelete = (id) => {
-        dispatch(deleteArticle(id));
+        dispatch(deleteAnnouncement(id));
     }
     const handleReset = () => {
         setSearch('');
@@ -39,14 +40,14 @@ const Announcement = () => {
     }, [])
 
     useEffect(() => {
-        dispatch(getArticles());
+        dispatch(getAnnouncement());
     }, [dispatch])
 
     useEffect(() => {
         if (isDeleted) {
             console.log("deleted");
             dispatch(resetDelete());
-            dispatch(getArticles());
+            dispatch(getAnnouncement());
         }
     }, [isDeleted, dispatch])
     return (
@@ -89,9 +90,9 @@ const Announcement = () => {
                             <div className="w-max">
                                 <Button onClick={handleReset} className='bg-secondary w-max' size="sm">Delete filters</Button>
                             </div>
-                            <Link to="/admin/resources/create" className="w-max">
+                            <Link to="/dashboard/announcement/create" className="w-max">
                                 <Button className="bg-secondary" size="sm">
-                                    Create New Article
+                                    Create New Announcement
                                 </Button>
                             </Link>
                         </div>
@@ -102,7 +103,7 @@ const Announcement = () => {
 
                 </div>
                 <div className="grid grid-cols-auto md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    <ArticleList articles={articles} isLargeScreen={IsLargeScreen} handleDelete={handleDelete} />
+                    <ArticleList articles={announcements} isLargeScreen={IsLargeScreen} handleDelete={handleDelete} />
 
                 </div>
             </section>
