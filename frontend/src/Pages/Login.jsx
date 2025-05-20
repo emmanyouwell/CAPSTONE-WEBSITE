@@ -11,6 +11,7 @@ import { Typography, Input, Button } from '@material-tailwind/react'
 import logo from '../assets/image/TCHMB-logo.png'
 
 import { DefaultGallery } from '../Components/Gallery'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const navigate = useNavigate()
