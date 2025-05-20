@@ -11,6 +11,8 @@ import { Typography, Input, Button } from '@material-tailwind/react'
 import logo from '../assets/image/TCHMB-logo.png'
 
 import { DefaultGallery } from '../Components/Gallery'
+import { toast } from 'react-toastify'
+import { resetError } from '../redux/slices/userSlice'
 
 const EmployeeLogin = () => {
     const navigate = useNavigate()
@@ -53,7 +55,11 @@ const EmployeeLogin = () => {
             navigate('/');
         }
 
-    }, [isLoggedIn, userDetails])
+        if (error){
+            toast.error("Invalid Employee ID or Password", {position: "top-right"});
+            dispatch(resetError());
+        }
+    }, [isLoggedIn, userDetails, error])
     useEffect(() => {
         if (userDetails) {
             console.log("user: ", userDetails);

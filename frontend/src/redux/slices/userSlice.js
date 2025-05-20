@@ -17,6 +17,9 @@ export const userSlice = createSlice({
   reducers: {
     resetRegister: (state) => {
       state.isRegistered = false;
+    },
+    resetError: (state) => {
+      state.error = false;
     }
   },
   extraReducers: (builder) => {
@@ -104,5 +107,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const {resetRegister} = userSlice.actions;
+export const {resetRegister, resetError} = userSlice.actions;
 export default userSlice.reducer;

@@ -38,11 +38,14 @@ const Login = () => {
   });
   useEffect(() => {
 
-     if (isLoggedIn) {
+    if (isLoggedIn) {
       navigate('/');
     }
-
-  }, [isLoggedIn, userDetails])
+    if (error) {
+      toast.error("Invalid Employee ID or Password", { position: "top-right" });
+      dispatch(resetError());
+    }
+  }, [isLoggedIn, userDetails, error])
   useEffect(() => {
     if (userDetails) {
       console.log("user: ", userDetails);
@@ -52,9 +55,9 @@ const Login = () => {
     <>
       <StickyNavbar />
 
-      <section 
-        
-      className="bg-white hero flex w-full h-screen items-center justify-center p-4">
+      <section
+
+        className="bg-white hero flex w-full h-screen items-center justify-center p-4">
 
         <div className="flex flex-col w-full items-center justify-start  h-full">
           <div className="p-4 flex flex-col items-center justify-center ">
@@ -96,7 +99,7 @@ const Login = () => {
                   <p className="text-red-500 text-sm mb-2">{formik.errors.password}</p>
                 )}
 
-                
+
 
                 {/* Signup Link */}
                 <p className="text-gray-900 mt-4">
