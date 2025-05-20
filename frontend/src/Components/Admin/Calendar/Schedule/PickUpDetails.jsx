@@ -180,6 +180,10 @@ const PickUpDetails = () => {
                                 <span className="font-parkinsans text-lg">Pick Up Address</span>
                                 <span className="font-parkinsans text-lg">{schedule && schedule.address}</span>
                             </div>
+                             <div className="flex items-center justify-between">
+                                <span className="font-parkinsans text-lg">Contact Number</span>
+                                <span className="font-parkinsans text-lg">{schedule && schedule.donorDetails && schedule.donorDetails.donorId && schedule.donorDetails.donorId.user.phone}</span>
+                            </div>
                             <div className="flex items-center justify-between">
                                 <span className="font-parkinsans text-lg">Pick Up Status</span>
                                 <span className="font-parkinsans text-lg">{schedule && schedule.status}</span>
@@ -192,7 +196,7 @@ const PickUpDetails = () => {
                     </CardBody>
 
                     <CardFooter>
-                        {from === "RedirectDetails" ? <div className="w-full flex items-start justify-end gap-4">
+                        {from === "RedirectDetails" && (schedule && schedule.status) && (schedule.status !== "Completed" && schedule.status !== "Approved") ? <div className="w-full flex items-start justify-end gap-4">
                             <Button color="green" onClick={handleOpenFridge}>Confirm</Button>
                         </div> : schedule && schedule.status === 'Pending' ?
                             <div className="w-full flex items-start justify-end gap-4">

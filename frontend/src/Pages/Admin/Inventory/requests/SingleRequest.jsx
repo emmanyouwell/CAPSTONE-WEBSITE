@@ -340,7 +340,7 @@ const SingleRequest = () => {
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <span className="font-parkinsans text-lg font-bold">Doctor</span>
-                                            <span className="font-parkinsans text-lg">Dr. {requestDetails.doctor}</span>
+                                            <span className="font-parkinsans text-lg">{requestDetails.doctor}</span>
                                         </div>
                                         <div className="flex items-center justify-between">
                                             <span className="font-parkinsans text-lg font-bold">Requested by</span>
