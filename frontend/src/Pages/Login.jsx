@@ -12,6 +12,7 @@ import logo from '../assets/image/TCHMB-logo.png'
 
 import { DefaultGallery } from '../Components/Gallery'
 import { toast } from 'react-toastify'
+import { resetError } from '../redux/slices/userSlice'
 
 const Login = () => {
   const navigate = useNavigate()
