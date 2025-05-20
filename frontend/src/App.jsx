@@ -54,6 +54,7 @@ import SingleRequest from "./Pages/Admin/Inventory/requests/SingleRequest";
 import StaffRequest from "./Pages/Staff/Requests/StaffRequest";
 import StaffRequestView from "./Pages/Staff/Requests/StaffRequestView";
 import Submissions from "./Pages/Admin/Eligibility/Submissions";
+import CreateAnnouncement from "./Pages/Admin/Announcement/CreateAnnouncement";
 
 
 
@@ -86,6 +87,7 @@ function RoutesComponent() {
         <Route path="account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
         <Route path="resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
         <Route path="announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
+        <Route path="announcement/create" element={<ProtectedRoute isAdmin={true}><CreateAnnouncement/></ProtectedRoute>} />
         <Route path="resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
         <Route path="edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
         <Route path="inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
