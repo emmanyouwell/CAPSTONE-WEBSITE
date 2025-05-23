@@ -20,7 +20,7 @@ const PickUpDetails = () => {
     const location = useLocation();
     const { id } = useParams();
     const from = location.state?.from;
-
+    const status = location.state?.status;
     const { fridges } = useSelector((state) => state.fridges);
     const { schedule, loading, success, error } = useSelector(state => state.schedules);
     const { users, userDetails } = useSelector(state => state.users);
@@ -180,7 +180,7 @@ const PickUpDetails = () => {
                                 <span className="font-parkinsans text-lg">Pick Up Address</span>
                                 <span className="font-parkinsans text-lg">{schedule && schedule.address}</span>
                             </div>
-                             <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between">
                                 <span className="font-parkinsans text-lg">Contact Number</span>
                                 <span className="font-parkinsans text-lg">{schedule && schedule.donorDetails && schedule.donorDetails.donorId && schedule.donorDetails.donorId.user.phone}</span>
                             </div>
@@ -196,7 +196,7 @@ const PickUpDetails = () => {
                     </CardBody>
 
                     <CardFooter>
-                        {from === "RedirectDetails" && (schedule && schedule.status) && (schedule.status !== "Completed" && schedule.status !== "Approved") ? <div className="w-full flex items-start justify-end gap-4">
+                        {from === "RedirectDetails" && status === "Collected" && (schedule && schedule.status) && (schedule.status !== "Approved") ? <div className="w-full flex items-start justify-end gap-4">
                             <Button color="green" onClick={handleOpenFridge}>Confirm</Button>
                         </div> : schedule && schedule.status === 'Pending' ?
                             <div className="w-full flex items-start justify-end gap-4">
@@ -205,10 +205,12 @@ const PickUpDetails = () => {
                             </div> : schedule && schedule.status === 'Approved' ?
                                 <div className="w-full flex items-start justify-end gap-4">
                                     <Button color="green" disabled={schedule && (new Date(schedule.dates).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0))} onClick={handleCompleteOpen}>Complete</Button>
+                                </div> : from === "RedirectDetails" && status === "Stored" ? <div className="w-full flex items-start justify-end gap-4">
+                                    <Button disabled color="blue-gray">Stored</Button>
                                 </div> :
-                                <div className="w-full flex items-start justify-end gap-4">
-                                    <Button disabled color="blue-gray">Picked Up</Button>
-                                </div>}
+                                    <div className="w-full flex items-start justify-end gap-4">
+                                        <Button disabled color="blue-gray">Picked Up</Button>
+                                    </div>}
 
                         <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
                             <form onSubmit={formik.handleSubmit}>

@@ -74,9 +74,9 @@ const BagDetails = ({ bag, from, scheduleId }) => {
                         <MenuHandler>
                             <EllipsisVerticalIcon className="h-6 w-6 hover:cursor-pointer text-black hover:bg-gray-600/30 rounded-full" />
                         </MenuHandler>
-                        <MenuList className="shadow-lg bg-secondary-light text-white min-w-max">
+                        <MenuList className="shadow-lg bg-white text-black border border-gray-400 min-w-max">
                             <MenuItem onClick={() => handleEdit(bag)}>Edit</MenuItem>
-                            <MenuItem onClick={() => handleDelete(bag._id)}>Delete</MenuItem>
+                            
                         </MenuList>
                     </Menu>
                 </div>}
