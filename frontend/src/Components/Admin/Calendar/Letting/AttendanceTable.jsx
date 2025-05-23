@@ -97,6 +97,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
     }
     return (
         <div className="w-full h-full">
+            
             <Card className="h-full w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">
                     <thead>
@@ -104,7 +105,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
                             <th className="border-b p-4">No.</th>
                             <th className="border-b p-4">Name</th>
                             <th className="border-b p-4">Last Breast Milk Donation / New Donor</th>
-                            <th className="border-b p-4">Total Volume of Breast Milk</th>
+                            <th className="border-b p-4">Expressed Breast Milk</th>
                             <th className="border-b p-4">Additional bags</th>
 
                             <th className="border-b p-4">Complete Address</th>

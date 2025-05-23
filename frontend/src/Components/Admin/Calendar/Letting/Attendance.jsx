@@ -44,7 +44,7 @@ const Attendance = () => {
     dispatch(getLettingDetails(id));
     dispatch(getUserDetails());
     dispatch(getFridges());
-    
+
   }, [dispatch, id])
   const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
   const handleSubmit = () => {
@@ -98,64 +98,67 @@ const Attendance = () => {
       return;
     }
     console.log('selected option: ', selectedOption)
-    const data ={
+    const data = {
       fridgeId: selectedOption,
-      unpasteurizedDetails: {collectionId},
+      unpasteurizedDetails: { collectionId },
       userId: userDetails._id
     }
-    dispatch(addInventory(data)).then(()=>{
+    dispatch(addInventory(data)).then(() => {
       toast.success("Collection stored successfully", { position: "bottom-right" });
       setOpen(false);
-    }).catch((error)=>{
+    }).catch((error) => {
       toast.error("Failed to store collection. Please try again.", { position: "bottom-right" });
       console.error(error);
       setOpen(false)
     })
-    
+
   }
 
-  useEffect(()=>{
-     // Load the Tally embed script
-     const script = document.createElement("script");
-     script.src = "https://tally.so/widgets/embed.js";
-     script.async = true;
-     document.body.appendChild(script);
+  useEffect(() => {
+    // Load the Tally embed script
+    const script = document.createElement("script");
+    script.src = "https://tally.so/widgets/embed.js";
+    script.async = true;
+    document.body.appendChild(script);
 
-     // Cleanup the script when the component is unmounted
-     return () => {
-       document.body.removeChild(script);
-     };
-  },[])
-  useEffect(()=>{
+    // Cleanup the script when the component is unmounted
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [])
+  useEffect(() => {
     if (from) {
       console.log("from: ", from);
     }
     if (status) {
       console.log("status: ", status);
     }
-  },[from, status])
+  }, [from, status])
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full gap-4 p-4 mt-4 h-full">
+      <div className="flex flex-col items-center justify-center w-full gap-4 p-4 h-full">
         <div className="flex w-full items-center justify-between gap-4">
-          {lettingDetails && lettingDetails.status !== 'Done' ? (<>
-            <div className='flex gap-4'>
-              <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
-                Create New Donor
-              </Button>
-              <Link to={`/dashboard/events/attendance/donations/${id}`}>
-                <Button className="bg-secondary" size="sm">
-                  Create New Attendance
+
+          {lettingDetails && lettingDetails.status !== 'Done' ? (<div className="flex flex-col w-full">
+
+            <div className="flex items-center gap-4 justify-between w-full">
+              <Typography variant="h2">Total Volume: {lettingDetails.totalVolume} ml</Typography>
+              <div className='flex gap-4'>
+                <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
+                  Create New Donor
                 </Button>
-              </Link>
+                <Link to={`/dashboard/events/attendance/donations/${id}`}>
+                  <Button className="bg-secondary" size="sm">
+                    Create New Attendance
+                  </Button>
+                </Link>
+                <Button size="sm" color="green" onClick={handleSubmit}>
+                  Finalize Attendance
+                </Button>
+              </div>
             </div>
 
-            <div>
-              <Button size="sm" color="green" onClick={handleSubmit}>
-                Finalize Attendance
-              </Button>
-            </div>
-          </>) : <> {from === "RedirectDetails" ? <Link to={`/dashboard/collections`}>
+          </div>) : <> {from === "RedirectDetails" ? <Link to={`/dashboard/collections`}>
             <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
               <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
             </div>
@@ -230,6 +233,7 @@ const Attendance = () => {
           </>}
 
         </div>
+
         {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} lettingId={lettingDetails._id} />}
 
       </div>
