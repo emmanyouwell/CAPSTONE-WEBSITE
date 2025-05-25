@@ -155,7 +155,7 @@ const StaffRequestView = () => {
     const handleOpen = () => setOpen((cur) => !cur);
     return (
         <>
-            <div className="p-8">
+            <div className="p-4">
                 <div className="flex items-center justify-end mb-4">
                     <Button color="green" onClick={handleOpen}>
                         Add Request
@@ -171,9 +171,8 @@ const StaffRequestView = () => {
                             Outpatient
                         </Tab>
                     </TabsHeader>
-                    <TabsBody className="h-[calc(100vh-8rem)]" animate={{ initial: { opacity: 1 }, mount: { opacity: 1 }, unmount: { opacity: 1 } }}>
+                    <TabsBody className="h-[calc(100vh-8rem)]" animate={{ initial: { opacity: 1 }, mount: { opacity: 1 }, unmount: { opacity: 0 } }}>
                         <TabPanel value="Inpatient" className="h-full">
-
                             <StaffRequest requests={inpatient} />
                         </TabPanel>
                         <TabPanel value="Outpatient" className="h-full">
@@ -316,22 +315,10 @@ const StaffRequestView = () => {
                                             accept=".jpg, .jpeg, .png"
                                         />
                                     </div>
-
                                 </div>
-
-
-
                             </CardBody>
                         </Card>
-
                     </div>
-
-
-
-
-
-
-
                 </DialogBody>
                 <DialogFooter>
                     <Button color="green" onClick={handleSubmit} className="mr-1">
