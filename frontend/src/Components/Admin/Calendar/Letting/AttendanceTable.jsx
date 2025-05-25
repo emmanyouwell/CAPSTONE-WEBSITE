@@ -17,6 +17,9 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { updateAttendance } from '../../../../redux/actions/lettingActions';
+import { createColumnHelper } from '@tanstack/react-table';
+import DataTable from '../../../DataTables/tanstack/DataTable';
+import { formatDate } from '../../../../utils/helper';
 const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => {
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
@@ -53,7 +56,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
             .then(() => {
                 location.reload();
                 toast.success("Attendance updated", { position: "bottom-right" });
-                
+
             })
             .catch((error) => {
                 toast.error("Failed to update attendance", { position: "bottom-right" });
@@ -95,10 +98,65 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
             expressDate: "",
         });
     }
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.display({
+            id: 'index',
+            header: 'No.',
+            cell: ({ row }) => row.index + 1, // starts from 1 instead of 0
+        }),
+        columnHelper.accessor(row => `${row.donor.user.name.first} ${row.donor.user.name.last}`, {
+            id: 'name',
+            header: 'Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.lastDonation ? `${formatDate(row.lastDonation)}` : 'New Donor', {
+            id: 'lastDonation',
+            header: 'Last Breast Milk Donation / New Donor',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => getTotalVolume(row.bags), {
+            id: 'expressedMilk',
+            header: 'Expressed Breast Milk',
+            cell: info => `${info.getValue()} ml`
+        }),
+        columnHelper.accessor(row => row.additionalBags ? getTotalVolume(row.additionalBags) : 0, {
+            id: 'additionalBags',
+            header: 'Additional bags',
+            cell: info => `${info.getValue()} ml`
+        }),
+        columnHelper.accessor(row => `${row.donor.home_address.street}, ${row.donor.home_address.brgy} ${row.donor.home_address.city}`, {
+            id: 'address',
+            header: 'Address',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.donor.user.phone, {
+            id: 'phone',
+            header: 'Phone',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const attendees = row.original;
+                const name = `${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`
+
+                return (
+                    <div className="flex gap-2">
+                        <Button size="sm" color="blue" className="text-white" onClick={() => handleOpen(attendees.donor._id, name)}>
+                            Add bags
+                        </Button>
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <div className="w-full h-full">
-            
-            <Card className="h-full w-full overflow-scroll">
+            <DataTable data={attendance} columns={columns} pageSize={10} />
+            {/* <Card className="h-full w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">
                     <thead>
                         <tr>
@@ -143,7 +201,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
                         })}
                     </tbody>
                 </table>
-            </Card>
+            </Card> */}
             <Dialog
                 size="xs"
                 open={open}
@@ -161,7 +219,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
                             variant="paragraph"
                             color="gray"
                         >
-                           Donor: {name}
+                            Donor: {name}
                         </Typography>
                         <div className="w-full">
                             <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
@@ -225,34 +283,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
 
                 </Card>
             </Dialog>
-            {/* Pagination Controls */}
-            <div className="flex justify-center space-x-2 mt-4">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Prev
-                </button>
 
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
         </div>
     )
 }
