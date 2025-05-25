@@ -13,11 +13,15 @@ import logo from '../assets/image/TCHMB-logo.png'
 import { DefaultGallery } from '../Components/Gallery'
 import { toast } from 'react-toastify'
 import { resetError } from '../redux/slices/userSlice'
+import Loader from '../Components/Loader/Loader'
+import { Eye, EyeOff } from 'lucide-react'
 
 const EmployeeLogin = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { isLoggedIn, userDetails, loading, error } = useSelector(state => state.users)
+    const [load, setLoad] = useState(true)
+    const [showPassword, setShowPassword] = useState(false);
     const formik = useFormik({
         initialValues: {
             employeeID: "", // Changed from email to employeeID
@@ -48,23 +52,27 @@ const EmployeeLogin = () => {
             navigate('/dashboard');
 
         }
-        else if (isLoggedIn && userDetails.role === 'Staff'){
+        else if (isLoggedIn && userDetails.role === 'Staff') {
             navigate('/dashboard/recipients');
         }
         else if (isLoggedIn) {
             navigate('/');
         }
 
-        if (error){
-            toast.error("Invalid Employee ID or Password", {position: "top-right"});
+        if (error) {
+            toast.error("Invalid Employee ID or Password", { position: "top-right" });
             dispatch(resetError());
         }
     }, [isLoggedIn, userDetails, error])
     useEffect(() => {
-        if (userDetails) {
-            console.log("user: ", userDetails);
-        }
-    }, [userDetails])
+        // Simulate a delay (e.g. 500ms)
+        const timer = setTimeout(() => {
+            setLoad(false);
+        }, 1000);
+
+        // Cleanup timer on unmount
+        return () => clearTimeout(timer);
+    }, []);
     return (
         <>
             <StickyNavbar />
@@ -80,8 +88,10 @@ const EmployeeLogin = () => {
                     </div>
 
 
-                    <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-                        <div className="w-full">
+                    <div className="w-full max-w-md min-h-72 bg-white rounded-lg shadow-md p-6">
+                        {load ? (<div className="flex items-center justify-center h-[100%]">
+                            <Loader />
+                        </div>) : <div className="w-full">
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">Employee Login</h2>
                             {/* Formik Form */}
                             <form className="flex flex-col" onSubmit={formik.handleSubmit}>
@@ -100,19 +110,29 @@ const EmployeeLogin = () => {
                                 )}
 
 
-                                {/* Password Input */}
-                                <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-secondary transition ease-in-out duration-150"
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.password}
-                                />
-                                {formik.touched.password && formik.errors.password && (
-                                    <p className="text-red-500 text-sm mb-2">{formik.errors.password}</p>
-                                )}
+                                <div className="relative">
+                                    {/* Password Input */}
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        placeholder="Password"
+                                        className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-2 w-full pr-10 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-secondary transition ease-in-out duration-150"
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values.password}
+                                    />
+                                    {/* Toggle Button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(prev => !prev)}
+                                        className="absolute right-2 top-2 text-sm text-gray-600 focus:outline-none hover:text-secondary"
+                                    >
+                                        {showPassword ? <EyeOff /> : <Eye />}
+                                    </button>
+                                    {formik.touched.password && formik.errors.password && (
+                                        <p className="text-red-500 text-sm mb-2">{formik.errors.password}</p>
+                                    )}
+                                </div>
 
 
 
@@ -132,7 +152,7 @@ const EmployeeLogin = () => {
                                     Login
                                 </button>
                             </form>
-                        </div>
+                        </div>}
                     </div>
 
 
