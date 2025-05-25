@@ -7,6 +7,9 @@ import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@her
 import { Select, Option } from '@material-tailwind/react'
 import RecipientCards from '../../../Components/Admin/Recipients/RecipientCards'
 import { getUser } from '../../../utils/helper'
+import { createColumnHelper } from '@tanstack/react-table'
+import DataTable from '../../../Components/DataTables/tanstack/DataTable'
+import { Link } from 'react-router-dom'
 const RecipientPage = () => {
     const dispatch = useDispatch();
     const { recipients, pageSize, totalRecipients, totalPages, loading, error } = useSelector((state) => state.recipients);
@@ -80,16 +83,51 @@ const RecipientPage = () => {
         setCurrentPage(0);
         dispatch(getRecipients({ search: search }));
     }
-    const nextPageHandler = () => {
-        if (currentPage < totalPages - 1) {
-            setCurrentPage((prevPage) => prevPage + 1);
-        }
-    }
-    const prevPageHandler = () => {
-        if (currentPage > 0) {
-            setCurrentPage((prevPage) => prevPage - 1);
-        }
-    }
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => row.name, {
+            id: 'name',
+            header: 'Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => `${row.home_address.street}, ${row.home_address.brgy}, ${row.home_address.city}`, {
+            id: 'address',
+            header: 'Address',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.motherName, {
+            id: 'motherName',
+            header: 'Parent/Guardian Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.phone, {
+            id: 'phone',
+            header: 'Phone',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.patientType, {
+            id: 'patientType',
+            header: 'Patient Type',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const id = row.original._id
+                return (
+                    <div className="flex gap-2">
+                        <Link to={`/dashboard/recipient/${id}`}>
+                            <button className="text-blue-500 hover:underline">
+                                View
+                            </button>
+                        </Link>
+                    </div>
+                );
+            },
+        }),
+    ];
     useEffect(() => {
         dispatch(getRecipients({ search: search, brgy: brgy, type: type, page: currentPage + 1, pageSize: pageSize }))
             .unwrap()
@@ -120,6 +158,7 @@ const RecipientPage = () => {
             <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
                 <div className="flex flex-col lg:flex-row justify-start items-center gap-4">
                     <div className="flex items-center gap-4 mt-4">
+                        {/* Search */}
                         <div className="relative flex w-full gap-2 md:w-max">
                             <Input
                                 type="search"
@@ -134,10 +173,12 @@ const RecipientPage = () => {
                             <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
 
                         </div>
+                        {/* Delete Filter */}
                         <div className="w-full">
                             <Button color="pink" onClick={handleReset} className='w-max'>Delete filters</Button>
                         </div>
                     </div>
+                    {/* Filters */}
                     <div className="flex items-center gap-4 justify-center flex-wrap">
                         <div className="w-max">
                             <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
@@ -160,37 +201,7 @@ const RecipientPage = () => {
                     <Button color="pink" onClick={handleOpenTallyForm}>Add New Patient</Button>
                 </div>
             </div>
-
-
-
-            {totalPages > 1 && <div className="w-full grid grid-cols-2 gap-4">
-                {currentPage > 0 ? <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer " onClick={prevPageHandler}>
-                    <ArrowLongLeftIcon className="h-14 w-14" /> <span className="font-semibold text-2xl">Previous Page</span>
-                </div> : <div></div>}
-                {currentPage < totalPages - 1 ?
-                    <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-end items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer" onClick={nextPageHandler}>
-                        <span className="font-semibold text-2xl">Next Page</span><ArrowLongRightIcon className="h-14 w-14" />
-                    </div> : <div></div>}
-            </div>}
-
-            <div className="grid lg:grid-cols-4 gap-4 min-w-max place-items-center">
-                {recipients.map((recipient, index) => (
-                    <div className="" key={index}>
-                        <RecipientCards recipients={recipient} />
-                    </div>
-                ))}
-            </div>
-
-            {totalPages > 1 && <div className="w-full grid grid-cols-2 gap-4">
-                {currentPage > 0 ? <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer " onClick={prevPageHandler}>
-                    <ArrowLongLeftIcon className="h-14 w-14" /> <span className="font-semibold text-2xl">Previous Page</span>
-                </div> : <div></div>}
-                {currentPage < totalPages - 1 ?
-                    <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-end items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer" onClick={nextPageHandler}>
-                        <span className="font-semibold text-2xl">Next Page</span><ArrowLongRightIcon className="h-14 w-14" />
-                    </div> : <div></div>}
-            </div>}
-
+            <DataTable data={recipients} columns={columns} pageSize={10} />
         </div>
     )
 }
