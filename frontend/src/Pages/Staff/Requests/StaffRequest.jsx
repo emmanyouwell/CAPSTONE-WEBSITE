@@ -8,50 +8,67 @@ import { EyeIcon, CheckCheck } from 'lucide-react'
 import { formatDate, getUser } from '../../../utils/helper'
 import { inpatientDispense, outpatientDispense } from '../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
+import { createColumnHelper } from '@tanstack/react-table'
+import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 const StaffRequest = ({ requests }) => {
+    const columnHelper = createColumnHelper();
 
+    const columns = [
+        columnHelper.accessor(row => formatDate(row.date), {
+            id: 'date',
+            header: 'Date',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.patient.name, {
+            id: 'name',
+            header: 'Patient Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.patient.patientType, {
+            id: 'type',
+            header: 'Patient Type',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.volumeRequested.volume, {
+            id: 'volumeRequested',
+            header: 'Requested Volume',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.volumeRequested.days, {
+            id: 'days',
+            header: 'Days',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.doctor, {
+            id: 'prescribedBy',
+            header: 'Prescribed By',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.status, {
+            id: 'status',
+            header: 'Status',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const request = row.original
+                return (
+                    <div className="flex gap-2">
+                        <Link to={`/dashboard/request/${request._id}`}>
+                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                        </Link>
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <>
-           
+
             <div className="w-full h-full">
-                <Card className="h-full w-full overflow-scroll">
-                    <table className="w-full min-w-max table-auto text-left">
-                        <thead className="bg-secondary text-white">
-                            <tr>
-                                <th className="border-b p-4">Date</th>
-                                <th className="border-b p-4">Patient Name</th>
-                                <th className="border-b p-4">Patient Type</th>
-                                <th className="border-b p-4">Requested Volume</th>
-                                <th className="border-b p-4">Days</th>
-                                <th className="border-b p-4">Prescribed by</th>
-                                <th className="border-b p-4">Status</th>
-                                <th className="border-b p-4">View Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {requests.map((request, index) => (
-                                <tr key={index}>
-                                    <td className="p-4">
-                                        {formatDate(request.date)}
-                                    </td>
-                                    <td className="p-4">{request.patient?.name}</td>
-                                    <td className="p-4">{request.patient?.patientType}</td>
-                                    <td className="p-4">{request.volumeRequested.volume} ml</td>
-                                    <td className="p-4">{request.volumeRequested.days}</td>
-                                    <td className="p-4">{request.doctor}</td>
-                                    <td className="p-4">{request.status}</td>
-                                    <td className="p-4 flex items-center gap-2">
-                                        <Link to={`/dashboard/request/${request._id}`}>
-                                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-                                        </Link>
-                                    </td>
-
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </Card>
-
+                <DataTable data={requests} columns={columns} pageSize={10} />
             </div>
         </>
     )
