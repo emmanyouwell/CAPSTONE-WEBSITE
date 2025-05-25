@@ -1,72 +1,64 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Typography } from "@material-tailwind/react";
+import { createColumnHelper } from '@tanstack/react-table';
+import DataTable from '../../DataTables/tanstack/DataTable';
 
 
 const AccountTable = ({ users, currentPage, totalPages }) => {
+    const columnHelper = createColumnHelper();
 
+    const columns = [
+        columnHelper.accessor(row => row.employeeID, {
+            id: 'employeeID',
+            header: 'Employee ID',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.name.first, {
+            id: 'firstName',
+            header: 'First Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.name.last, {
+            id: 'lastName',
+            header: 'Last Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.name.middle, {
+            id: 'middleName',
+            header: 'Middle Name',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.phone, {
+            id: 'phone',
+            header: 'Phone',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.email, {
+            id: 'email',
+            header: 'Email',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.role, {
+            id: 'role',
+            header: 'Role',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const id = row.original._id
+                return (
+                    <div className="flex gap-2">
+                        <a href="#" className="text-blue-500">Edit</a>
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <div className="w-full h-full p-8">
-            <Card className="h-full w-full overflow-scroll">
-                <table className="w-full table-auto text-left">
-                    <thead>
-                        <tr>
-                            <th className="border-b p-4">Employee ID</th>
-                            <th className="border-b p-4">First Name</th>
-                            <th className="border-b p-4">Last Name</th>
-                            <th className="border-b p-4">Middle Name</th>
-                            <th className="border-b p-4">Phone</th>
-                            <th className="border-b p-4">Email</th>
-                            <th className="border-b p-4">Role</th>
-                            <th className="border-b p-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map(({ employeeID,name, phone, email, role }, index) => (
-                            <tr key={employeeID}>
-                                <td className="p-4">{employeeID}</td>
-                                <td className="p-4">{name && name.first}</td>
-                                <td className="p-4">{name && name.last}</td>
-                                <td className="p-4">{name && name.middle ? name.middle : "--"}</td>
-                                <td className="p-4">{phone}</td>
-                                <td className="p-4">{email}</td>
-                                <td className="p-4">{role}</td>
-                                <td className="p-4">
-                                    <a href="#" className="text-blue-500">Edit</a>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Card>
-
-            {/* Pagination Controls */}
-            <div className="flex justify-center space-x-2 mt-4">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Prev
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
+            <DataTable data={users} columns={columns} pageSize={10} />
         </div>
     )
 }
