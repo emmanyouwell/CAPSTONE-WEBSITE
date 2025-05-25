@@ -21,6 +21,8 @@ import { getUserDetails } from "../../../redux/actions/userActions";
 import { toast } from "react-toastify";
 import { updateBag } from "../../../redux/actions/bagActions";
 import { addInventory } from "../../../redux/actions/inventoryActions";
+import { createColumnHelper } from "@tanstack/react-table";
+import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 function Icon({ id, open }) {
     return (
         <svg
@@ -289,6 +291,42 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
         dispatch(getFridges())
         dispatch(getUserDetails());
     }, [dispatch])
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => `${row.donor.user.name.first} ${row.donor.user.name.last}`, {
+            id: 'donorName',
+            header: 'Donor Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => `${formatDate(row.expressDate, "full")}`, {
+            id: 'expressDate',
+            header: 'Express Date',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.volume, {
+            id: 'totalVolume',
+            header: 'Total Volume (ml)',
+            cell: info => info.getValue(),
+        }),
+
+        columnHelper.display({
+            id: 'actions',
+            header: 'Select Milk',
+            cell: ({ row }) => {
+                const id = row.original._id
+                return (
+                    <div className="flex gap-2">
+                        <input
+                            type="checkbox"
+                            checked={selectedRows.some((item) => item === id)}
+                            onChange={() => handleCheckboxChange(row.original)}
+                        />
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <div className="w-full h-[calc(100vh-2rem)] overflow-y-scroll p-8" >
             <div className="flex justify-between items-center mb-4">
@@ -494,8 +532,8 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                 </Dialog>
 
             </div>
-
-            <Card className="h-[calc(100vh-2rem)] w-full overflow-scroll">
+            <DataTable data={allBags} columns={columns} pageSize={10} />
+            {/* <Card className="h-[calc(100vh-2rem)] w-full overflow-scroll">
                 <table className="w-full min-w-max table-auto text-left">
                     <thead>
                         <tr>
@@ -522,36 +560,9 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                         ))}
                     </tbody>
                 </table>
-            </Card>
+            </Card> */}
 
-            {/* Pagination Controls */}
-            <div className="flex justify-center space-x-2 mt-4">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Prev
-                </button>
 
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
         </div >
     )
 }

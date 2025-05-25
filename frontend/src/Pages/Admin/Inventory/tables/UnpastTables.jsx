@@ -5,69 +5,47 @@ import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { EyeIcon } from 'lucide-react'
+import { createColumnHelper } from '@tanstack/react-table'
+import { FooterWithLogo } from '../../../../Components/Footer'
+import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 const UnpastTables = ({ currentPage, totalPages, unpasteurizedFridges }) => {
 
+    const columnHelper = createColumnHelper();
 
+    const columns = [
+        columnHelper.accessor(row => row.name, {
+            id: 'fridgeName',
+            header: 'Fridge Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.fridgeType, {
+            id: 'fridgeType',
+            header: 'Fridge Type',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.totalVolume, {
+            id: 'totalVolume',
+            header: 'Total Volume',
+            cell: info => `${info.getValue()} ml`,
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const _id = row.original._id
+                return (
+                    <div className="flex gap-2">
+                        <Link to={`/dashboard/inventory/fridge/unpasteurized/${_id}`}>
+                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                        </Link>
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <div className="w-full h-full">
-            <Card className="h-full w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
-                    <thead className="bg-secondary text-white">
-                        <tr>
-                            <th className="border-b p-4">Fridge Name</th>
-                            <th className="border-b p-4">Fridge Type</th>
-                            <th className="border-b p-4">Total Volume</th>
-                            <th className="border-b p-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {unpasteurizedFridges.map(({ _id, name, fridgeType, totalVolume }, index) => (
-                            <tr key={index}>
-                                <td className="p-4">
-                                    {name}
-                                </td>
-                                <td className="p-4">{fridgeType}</td>
-                                <td className="p-4">{totalVolume || 0} ml</td>
-                                <td className="p-4 flex items-center gap-2">
-                                    <Link to={`/dashboard/inventory/fridge/unpasteurized/${_id}`}>
-                                        <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-                                    </Link>
-                                </td>
-
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Card>
-
-            {/* Pagination Controls */}
-            <div className="flex justify-center space-x-2 mt-4">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Prev
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
+            <DataTable data={unpasteurizedFridges} columns={columns} pageSize={10} />
         </div>
     )
 }
