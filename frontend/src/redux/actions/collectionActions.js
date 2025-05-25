@@ -69,7 +69,7 @@ export const recordPrivateRecord = createAsyncThunk(
 // Mark Attendance of donors
 export const getAllCollections = createAsyncThunk(
     'collection/getAllCollections',
-    async (req, thunkAPI) => {
+    async ({ search = "", type="",}, thunkAPI) => {
 
         const token = await getToken();
 
@@ -85,9 +85,16 @@ export const getAllCollections = createAsyncThunk(
             withCredentials: true
         }
         try {
-
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/collections`, config)
+            let urlString = `${VITE_APP_URL}/api/v1/collections/?`;
+            if (search) {
+                urlString += `&search=${encodeURIComponent(search)}`;
+            }
+            if (type) {
+                urlString += `&type=${encodeURIComponent(type)}`;
+            }
             
+            const response = await axios.get(urlString, config)
+
             return response.data;
 
         } catch (error) {

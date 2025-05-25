@@ -156,52 +156,6 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
     return (
         <div className="w-full h-full">
             <DataTable data={attendance} columns={columns} pageSize={10} />
-            {/* <Card className="h-full w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
-                    <thead>
-                        <tr>
-                            <th className="border-b p-4">No.</th>
-                            <th className="border-b p-4">Name</th>
-                            <th className="border-b p-4">Last Breast Milk Donation / New Donor</th>
-                            <th className="border-b p-4">Expressed Breast Milk</th>
-                            <th className="border-b p-4">Additional bags</th>
-
-                            <th className="border-b p-4">Complete Address</th>
-                            <th className="border-b p-4">Phone</th>
-                            <th className="border-b p-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {attendance && attendance.map((attendees, index) => {
-                            const name = `${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`
-
-                            return (
-                                <tr key={attendees._id}>
-                                    <td className="p-4">{index + 1}</td>
-                                    <td className="p-4">{name}</td>
-                                    <td className="p-4">{attendees.lastDonation ? new Date(attendees.lastDonation).toLocaleString("en-US", {
-                                        weekday: "short",
-                                        year: "numeric",
-                                        month: "short",
-                                        day: "numeric",
-                                        hour12: true, // Ensures AM/PM format
-                                    }) : "New Donor"}</td>
-                                    <td className="p-4">{getTotalVolume(attendees.bags)} ml</td>
-                                    <td className="p-4">{attendees.additionalBags ? getTotalVolume(attendees.additionalBags) : 0} ml</td>
-
-                                    <td className="p-4">{`${attendees.donor.home_address.street} ${attendees.donor.home_address.brgy} ${attendees.donor.home_address.city}`}</td>
-                                    <td className="p-4">{attendees.donor.user.phone}</td>
-                                    <td className="p-4">
-                                        <Button size="sm" color="blue" className="text-white" onClick={() => handleOpen(attendees.donor._id, name)}>
-                                            Add bags
-                                        </Button>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-            </Card> */}
             <Dialog
                 size="xs"
                 open={open}

@@ -1,89 +1,124 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Card } from '@material-tailwind/react'
+import { Button, Card, Input, Select, Option } from '@material-tailwind/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
-import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon, PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { getAllCollections } from '../../../../redux/actions/collectionActions'
 import { EyeIcon } from 'lucide-react'
-const CollectionsTable = ({ currentPage, totalPages }) => {
+import { createColumnHelper } from '@tanstack/react-table'
+import { formatDate } from '../../../../utils/helper'
+import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
+const CollectionsTable = () => {
     const dispatch = useDispatch()
     const { collections, loading, error } = useSelector(state => state.collections)
+
+    const [search, setSearch] = useState('');
+    const [type, setType] = useState('');
+
+    const handleType = (value) => {
+        setType(value);
+    }
+    const handleReset = () => {
+        setSearch('');
+        setType('');
+    }
+
+    const collectionTypes = [
+        "Public",
+        "Private",
+    ]
+
+
+    const handleTextChange = (e) => {
+        setSearch(e.target.value);
+    }
+    const handleSubmit = () => {
+
+        dispatch(getAllCollections({ search: search }));
+    }
+
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => row.pubDetails?.activity || `${row.privDetails?.donorDetails.donorId.user.name.first} ${row.privDetails?.donorDetails.donorId.user.name.last}`, {
+            id: 'activity',
+            header: 'Activity Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => `${formatDate(row.collectionDate)}`, {
+            id: 'collectionDate',
+            header: 'Collection Date',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.collectionType, {
+            id: 'collectionType',
+            header: 'Collection Type',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.status, {
+            id: 'status',
+            header: 'Status',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const { _id, collectionType, status, pubDetails, privDetails } = row.original;
+                return (
+                    <div className="flex gap-2">
+                        <Link to={`/dashboard/collections/details/${pubDetails?._id || privDetails?._id}`} state={{ type: collectionType, collectionId: _id, status: status }} className="text-blue-500">
+
+                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+
+
+                        </Link>
+                    </div>
+                );
+            },
+        }),
+    ];
     useEffect(() => {
-        dispatch(getAllCollections())
-    }, [dispatch])
-
+        dispatch(getAllCollections({ search: search, type: type }))
+    }, [dispatch, search, type])
     return (
-        <div className="w-full h-full p-8">
-            <Card className="h-full w-full overflow-scroll">
-                <table className="w-full table-auto text-left">
-                    <thead className="bg-secondary text-white">
-                        <tr>
-                            <th className="border-b p-4">Event Name</th>
-                            <th className="border-b p-4">Collection Date</th>
-                            <th className="border-b p-4">Collection Type</th>
-                            <th className="border-b p-4">Status</th>
-                            <th className="border-b p-4">Details</th>
+        <div className="p-4 flex flex-col gap-4">
+            <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">
+                <div className="flex gap-4 items-center justify-center">
+                    {/* Search */}
+                    <div className="relative flex w-full gap-2 md:w-max">
+                        <Input
+                            type="search"
+                            color="gray"
+                            label="Search for collections..."
+                            className="pr-10"
+                            onChange={handleTextChange}
+                            containerProps={{
+                                className: "min-w-[288px]",
+                            }}
+                        />
+                        <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {collections && collections.map(({ _id, collectionDate, status, collectionType, privDetails, pubDetails }, index) => (
-                            <tr key={_id}>
-                                <td className="p-4">{pubDetails?.activity || `${privDetails?.donorDetails.donorId.user.name.first} ${privDetails?.donorDetails.donorId.user.name.last}`}</td>
-                                <td className="p-4">{new Date(collectionDate).toLocaleString("en-US", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                    hour: "numeric",
-                                    minute: "numeric",
-                                })}</td>
-                                <td className="p-4">{collectionType}</td>
-                                <td className="p-4">{status}</td>
-                                <td className="p-4">
-                                    <Link to={`/dashboard/collections/details/${pubDetails?._id || privDetails?._id}`} state={{ type: collectionType, collectionId: _id, status: status }} className="text-blue-500">
-
-                                        <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-
-
-                                    </Link>
-                                </td>
-
-
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Card>
-
-            {/* Pagination Controls */}
-            <div className="flex justify-center space-x-2 mt-4">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Prev
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
+                    </div>
+                    {/* Delete Filter */}
+                    <div className="w-full flex justify-center items-center gap-4">
+                        <Button color="pink" onClick={handleReset} className='w-max'>Delete filters</Button>
+                    </div>
+                </div>
+                {/* Filter */}
+                <div className="flex gap-4 items-center justify-center flex-wrap">
+                    <div className="w-max">
+                        <Select label="Filter by Collection Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
+                            {collectionTypes.map((collectionType, index) => (
+                                <Option key={index} value={collectionType}>{collectionType}</Option>
+                            ))}
+                        </Select>
+                    </div>
+                </div>
             </div>
+
+            <DataTable data={collections} columns={columns} pageSize={10} />
         </div>
     )
 }
