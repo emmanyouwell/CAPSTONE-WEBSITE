@@ -30,7 +30,7 @@ const Refrigerator = () => {
                         Pasteurized
                     </Tab>
                 </TabsHeader>
-                <TabsBody className="h-[calc(100vh-8rem)]" animate={{initial: {opacity: 1}, mount: {opacity: 1}, unmount: {opacity: 1}}}>
+                <TabsBody className="h-[calc(100vh-8rem)]" animate={{initial: {opacity: 1}, mount: {opacity: 1}, unmount: {opacity: 0}}}>
                     <TabPanel value="Unpasteurized" className="h-full">
                         <UnpastTables unpasteurizedFridges={unpasteurizedFridges} />
                     </TabPanel>

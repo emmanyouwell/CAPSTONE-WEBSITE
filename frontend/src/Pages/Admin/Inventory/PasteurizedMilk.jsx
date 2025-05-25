@@ -23,6 +23,8 @@ import { updateBag } from "../../../redux/actions/bagActions";
 import { addInventory } from "../../../redux/actions/inventoryActions";
 import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 import { formatDate } from "../../../utils/helper";
+import { createColumnHelper } from "@tanstack/react-table";
+import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 function Icon({ id, open }) {
     return (
         <svg
@@ -75,7 +77,7 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
     }
 
     const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
-    
+
 
     const resetStates = () => {
         setBatchDetails(() => ({
@@ -105,6 +107,56 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
         dispatch(getFridges())
         dispatch(getUserDetails());
     }, [dispatch])
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => formatDate(row.pasteurizedDetails.pasteurizationDate), {
+            id: 'pasteurizationDate',
+            header: 'Pasteurization Date',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.pasteurizedDetails.batch, {
+            id: 'batch',
+            header: 'Batch Number',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.pasteurizedDetails.pool, {
+            id: 'pool',
+            header: 'Pool Number',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.pasteurizedDetails.batchVolume, {
+            id: 'volume',
+            header: 'Batch Volume (ml)',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'available',
+            header: 'Available Volume (ml)',
+            cell: ({ row }) => {
+                const id = row.original._id
+                const availableVolume = row.original.pasteurizedDetails.bottles.map(b => b.status).filter(b => b === "Available").length * row.original.pasteurizedDetails.bottleType;
+                return (
+                    <div className="flex gap-2">
+                        <p>{availableVolume} ml</p>
+                    </div>
+                );
+            },
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const id = row.original._id
+                return (
+                    <div className="bg-secondary w-max p-3 rounded-lg hover:cursor-pointer" onClick={() => handleOpen(row.original)}> 
+                        <EyeIcon className="h-5 w-5 text-white " />
+                    </div>
+                );
+            },
+        }),
+    ];
+    const items = fridgeContent.filter((f) => f.status === "Available");
     return (
         <div className="w-full h-[calc(100vh-2rem)] overflow-y-scroll p-8" >
             <div className="flex justify-between items-center mb-4">
@@ -163,7 +215,7 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
                                     Available bottles
                                 </Typography>
                                 <Typography className="mt-1 font-normal text-gray-600">
-                                    {inventory?.pasteurizedDetails?.bottles.map(b=>b.status).filter(b=>b === "Available").length}
+                                    {inventory?.pasteurizedDetails?.bottles.map(b => b.status).filter(b => b === "Available").length}
                                 </Typography>
 
                             </div>
@@ -224,71 +276,10 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
                 </Dialog>
 
             </div>
+            <DataTable data={items} columns={columns} pageSize={10} />
+            
 
-            <Card className="h-[calc(100vh-2rem)] w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
-                    <thead>
-                        <tr>
-                            <th className="border-b p-4">Pasteurization Date</th>
-                            <th className="border-b p-4">Batch Number</th>
-                            <th className="border-b p-4">Pool Number</th>
-                            <th className="border-b p-4">Batch Volume (ml)</th>
-                            <th className="border-b p-4">Available Volume (ml)</th>
-                            <th className="border-b p-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {fridgeContent.filter((f)=>f.status === "Available")?.map((inv, index) => {
-                            console.log(inv)
-                            const item = inv.pasteurizedDetails;
-                            const availableVolume = item.bottles.map(b => b.status).filter(b => b === "Available").length * item.bottleType;
-                            return (
-                                <tr key={index}>
-                                    <td className="p-4">{formatDate(item.pasteurizationDate, "full")}</td>
-                                    <td className="p-4">{item.batch}</td>
-                                    <td className="p-4">{item.pool}</td>
-                                    <td className="p-4">{item.batchVolume} ml</td>
-                                    <td className="p-4">{availableVolume} ml</td>
-                                    <td className="p-4">
-                                        <div className="bg-secondary w-max p-3 rounded-lg">
-                                            <EyeIcon className="h-5 w-5 text-white hover:cursor-pointer" onClick={() => handleOpen(inv)} />
-                                        </div>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-            </Card>
 
-            {/* Pagination Controls */}
-            <div className="flex justify-center space-x-2 mt-4">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Prev
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
         </div >
     )
 }
