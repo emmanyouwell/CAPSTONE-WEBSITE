@@ -85,7 +85,7 @@ const Accounts = () => {
         dispatch(getUserDetails())
     }, [dispatch, search, currentPage, sortBy, sortOrder, roleType])
     return (
-        <div className="flex flex-col items-center justify-center w-full gap-4 p-4 mt-4 h-[calc(100vh-2rem)]">
+        <div className="flex flex-col items-center justify-center w-full gap-4 p-4  h-[calc(100vh-2rem)]">
             <div className="flex w-full items-center justify-start gap-4">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full">
                     <div className="flex items-center gap-4">
