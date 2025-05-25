@@ -3,11 +3,11 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button, Input, Textarea } from "@material-tailwind/react"; // Import Textarea component
 import { useDispatch, useSelector } from "react-redux";
-import { addHTMLArticles } from "../../../redux/actions/articleActions";
+
 import Loader from "../../../Components/Loader/Loader";
-import { useNavigate } from "react-router-dom";
-import { resetSuccess } from "../../../redux/slices/articleSlice";
-import { addHTMLAnnouncements } from "../../../redux/actions/announcementActions";
+import { useNavigate, useParams } from "react-router-dom";
+import { resetUpdate } from "../../../redux/slices/announcementSlice";
+import { getAnnouncementDetails, updateHTMLAnnouncement } from "../../../redux/actions/announcementActions";
 const modules = {
     toolbar: {
         container: [
@@ -32,10 +32,11 @@ const formats = [
     "image",
 ];
 
-const CreateAnnouncement = () => {
+const EditAnnouncement = () => {
+    const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, success } = useSelector((state) => state.announcements);
+    const { loading, error, isUpdated, announcementDetails } = useSelector((state) => state.announcements);
 
     const [title, setTitle] = useState(""); // 🔥 Title state
     const [description, setDescription] = useState(""); // 🔥 Description state
@@ -48,22 +49,34 @@ const CreateAnnouncement = () => {
             title: title,
             description: description,
             content: content,
+            id: id,
         };
-        dispatch(addHTMLAnnouncements(req));
+        dispatch(updateHTMLAnnouncement(req));
     };
 
-    useEffect(()=>{
-        if (success){
-            console.log("Success");
+    useEffect(() => {
+        if (isUpdated) {
+            dispatch(resetUpdate());
             navigate('/dashboard/announcement');
-            dispatch(resetSuccess());
         }
-    },[success, navigate, dispatch])
+    }, [isUpdated, navigate, dispatch])
 
+    useEffect(() => {
+        dispatch(getAnnouncementDetails(id));
+    }, [dispatch])
+
+    useEffect(() => {
+        if (announcementDetails) {
+            console.log("Article Details: ", announcementDetails);
+            setTitle(announcementDetails.title);
+            setDescription(announcementDetails.description);
+            setContent(announcementDetails.content);
+        }
+    }, [announcementDetails])
     return (
         <div className="p-4 space-y-4">
 
-            <h1 className="text-2xl font-bold">Create New Announcement</h1>
+            <h1 className="text-2xl font-bold">Edit Announcement</h1>
 
             {/* Title Input */}
             <Input
@@ -89,7 +102,7 @@ const CreateAnnouncement = () => {
             {loading ? (
                 <Loader />
             ) : <Button className="bg-secondary mt-4" size="sm" onClick={onSave}>
-                Publish Announcement
+                Save Announcement
             </Button>}
 
 
@@ -99,4 +112,4 @@ const CreateAnnouncement = () => {
     );
 };
 
-export default CreateAnnouncement;
+export default EditAnnouncement;
