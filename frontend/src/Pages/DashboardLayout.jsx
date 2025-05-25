@@ -26,7 +26,7 @@ const DashboardLayout = () => {
                     <SidebarComponent userDetails={userDetails} />
                     <div className="flex flex-1 items-stretch basis-[100%] flex-col p-0">
                         <ComplexNavbar setIsNavOpen={setIsNavOpen} />
-                        <div className="flex flex-1 flex-col items-stretch justify-between ">
+                        <div className="flex     flex-col h-[calc(100vh-3.5rem)] items-stretch justify-between overflow-y-auto">
                             <Outlet />
                         </div>
                     </div>

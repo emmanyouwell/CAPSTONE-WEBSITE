@@ -5,6 +5,9 @@ import { Input, Button } from '@material-tailwind/react'
 import DonorCards from '../../../Components/Admin/Donors/DonorCards'
 import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Select, Option } from '@material-tailwind/react'
+import { createColumnHelper } from '@tanstack/react-table'
+import DataTable from '../../../Components/DataTables/tanstack/DataTable'
+import { Link } from 'react-router-dom'
 const DonorsPage = () => {
     const dispatch = useDispatch();
     const { donors, pageSize, totalDonors, totalPages, loading, error } = useSelector((state) => state.donors);
@@ -90,6 +93,47 @@ const DonorsPage = () => {
             setCurrentPage((prevPage) => prevPage - 1);
         }
     }
+
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => `${row.user.name.first} ${row.user.name.last}`, {
+            id: 'name',
+            header: 'Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.user.email, {
+            id: 'email',
+            header: 'Email',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => `${row.home_address.street}, ${row.home_address.brgy}, ${row.home_address.city}`, {
+            id: 'address',
+            header: 'Address',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.user.phone, {
+            id: 'phone',
+            header: 'Phone',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const id = row.original._id
+                return (
+                    <div className="flex gap-2">
+                        <Link to={`/dashboard/donors/${id}`}>
+                            <button className="text-blue-500 hover:underline">
+                                View
+                            </button>
+                        </Link>
+                    </div>
+                );
+            },
+        }),
+    ];
     useEffect(() => {
         dispatch(getDonors({ search: search, brgy: brgy, type: type, page: currentPage + 1, pageSize: pageSize }))
             .unwrap()
@@ -97,7 +141,7 @@ const DonorsPage = () => {
             .catch((err) => console.error('Error fetching donors:', err));
     }, [dispatch, search, currentPage, brgy, type])
     return (
-        <div className="p-4 flex flex-col  h-[calc(100vh-2rem)] overflow-auto gap-4">
+        <div className="p-4 flex flex-col gap-4">
             <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">
 
                 <div className="flex gap-4 items-center justify-center">
@@ -134,42 +178,9 @@ const DonorsPage = () => {
                             ))}
                         </Select>
                     </div>
-
                 </div>
-
-
-
-
-
-
             </div>
-            {totalPages > 1 && <div className="w-full grid grid-cols-2 gap-4">
-                {currentPage > 0 ? <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer " onClick={prevPageHandler}>
-                    <ArrowLongLeftIcon className="h-14 w-14" /> <span className="font-semibold text-2xl">Previous Page</span>
-                </div> : <div></div>}
-                {currentPage < totalPages - 1 ?
-                    <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-end items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer" onClick={nextPageHandler}>
-                        <span className="font-semibold text-2xl">Next Page</span><ArrowLongRightIcon className="h-14 w-14" />
-                    </div> : <div></div>}
-            </div>}
-
-            <div className="grid lg:grid-cols-4 gap-4 min-w-max place-items-center">
-                {donors.map((donor, index) => (
-                    <div className="" key={index}>
-                        <DonorCards donor={donor} />
-                    </div>
-                ))}
-            </div>
-            {totalPages > 1 && <div className="w-full grid grid-cols-2 gap-4">
-                {currentPage > 0 ? <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer " onClick={prevPageHandler}>
-                    <ArrowLongLeftIcon className="h-14 w-14" /> <span className="font-semibold text-2xl">Previous Page</span>
-                </div> : <div></div>}
-                {currentPage < totalPages - 1 ?
-                    <div className="h-20 w-full bg-gray-200 rounded-lg p-4 flex justify-end items-center text-gray-700/50 hover:text-secondary transition-all hover:cursor-pointer" onClick={nextPageHandler}>
-                        <span className="font-semibold text-2xl">Next Page</span><ArrowLongRightIcon className="h-14 w-14" />
-                    </div> : <div></div>}
-            </div>}
-
+            <DataTable data={donors} columns={columns} pageSize={10} />
         </div>
     )
 }
