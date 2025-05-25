@@ -4,6 +4,7 @@ import { Badge, Chip } from '@material-tailwind/react'
 import ArticleList from '../../Articles/ArticleList'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteAnnouncement, getAnnouncement } from '../../../redux/actions/announcementActions'
+
 const Announcements = () => {
     const dispatch = useDispatch();
     const { announcements, loading, error } = useSelector((state) => state.announcements);
@@ -11,11 +12,11 @@ const Announcements = () => {
         dispatch(getAnnouncement());
 
     }, [dispatch])
-    useEffect(()=>{
-        if (announcements){
-            console.log("Announcements: ",announcements);
+    useEffect(() => {
+        if (announcements) {
+            console.log("Announcements: ", announcements);
         }
-    },[announcements])
+    }, [announcements])
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const handleDelete = (id) => {
         dispatch(deleteAnnouncement(id));
@@ -32,6 +33,7 @@ const Announcements = () => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, [])
+    
     return (
         <>
             <span className="flex items-center w-full mb-4">

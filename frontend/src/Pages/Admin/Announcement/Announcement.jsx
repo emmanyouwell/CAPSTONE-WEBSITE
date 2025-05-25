@@ -7,10 +7,13 @@ import { deleteArticle, getArticles } from '../../../redux/actions/articleAction
 import ArticleList from '../../../Components/Articles/ArticleList';
 import { resetDelete } from '../../../redux/slices/articleSlice';
 import { deleteAnnouncement, getAnnouncement } from '../../../redux/actions/announcementActions';
+import { createColumnHelper } from '@tanstack/react-table';
+import DataTable from '../../../Components/DataTables/tanstack/DataTable';
+import { formatDate } from '../../../utils/helper';
 const Announcement = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
-    const {announcements,isDeleted, loading, error} = useSelector((state)=> state.announcements)
+    const { announcements, isDeleted, loading, error } = useSelector((state) => state.announcements)
     const [search, setSearch] = useState('');
 
 
@@ -50,6 +53,42 @@ const Announcement = () => {
             dispatch(getAnnouncement());
         }
     }, [isDeleted, dispatch])
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => row.title, {
+            id: 'title',
+            header: 'Title',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.description, {
+            id: 'description',
+            header: 'Description',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => formatDate(row.createdAt), {
+            id: 'createdAt',
+            header: 'Date Published',
+            cell: info => info.getValue(),
+        }),
+
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const id = row.original._id
+                return (
+                    <div className="flex gap-2">
+                        <Link to={`/dashboard/donors/${id}`}>
+                            <button className="text-blue-500 hover:underline">
+                                View
+                            </button>
+                        </Link>
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <>
             <section className="p-4">
@@ -70,21 +109,6 @@ const Announcement = () => {
                                 <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
 
                             </div>
-                            {/* <div className="w-max">
-                                <Select label="Sort by" color="pink" variant="standard" value={sort} onChange={(value) => handleSort(value)}>
-                                    {sortTypes.map((types, index) => (
-                                        <Option key={index} value={types}>{types}</Option>
-                                    ))}
-                                </Select>
-                            </div>
-                            <div className="w-max">
-                                <Select label="Role" color="pink" variant="standard" value={role} onChange={(value) => handleRole(value)}>
-                                    {roleTypes.map((types, index) => (
-                                        <Option key={index} value={types}>{types}</Option>
-                                    ))}
-                                </Select>
-                            </div> */}
-
                         </div>
                         <div className="flex items-center justify-center gap-4">
                             <div className="w-max">
@@ -96,16 +120,9 @@ const Announcement = () => {
                                 </Button>
                             </Link>
                         </div>
-
-
                     </div>
-
-
                 </div>
-                <div className="grid grid-cols-auto md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    <ArticleList articles={announcements} isLargeScreen={IsLargeScreen} handleDelete={handleDelete} />
-
-                </div>
+                <DataTable data={announcements} columns={columns} pageSize={10} />
             </section>
         </>
     )
