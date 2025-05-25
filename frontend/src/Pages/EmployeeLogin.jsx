@@ -43,27 +43,30 @@ const EmployeeLogin = () => {
             formData.set('employeeID', values.employeeID); // Changed from email to employeeID
             formData.set('password', values.password);
             formData.set('isEmp', true);
-            dispatch(loginUser(formData));
+            dispatch(loginUser(formData))
         },
     });
     useEffect(() => {
 
         if (isLoggedIn && (userDetails.role === 'Admin' || userDetails.role === 'SuperAdmin')) {
             navigate('/dashboard');
+            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
 
         }
         else if (isLoggedIn && userDetails.role === 'Staff') {
             navigate('/dashboard/recipients');
+            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
         }
         else if (isLoggedIn) {
             navigate('/');
+            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
         }
 
         if (error) {
             toast.error("Invalid Employee ID or Password", { position: "top-right" });
             dispatch(resetError());
         }
-    }, [isLoggedIn, userDetails, error])
+    }, [isLoggedIn, error])
     useEffect(() => {
         // Simulate a delay (e.g. 500ms)
         const timer = setTimeout(() => {
