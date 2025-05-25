@@ -56,7 +56,7 @@ import StaffRequestView from "./Pages/Staff/Requests/StaffRequestView";
 import Submissions from "./Pages/Admin/Eligibility/Submissions";
 import CreateAnnouncement from "./Pages/Admin/Announcement/CreateAnnouncement";
 
-
+import DataTable from './Components/DataTables/tanstack/DataTable';
 
 
 function RoutesComponent() {
@@ -106,6 +106,9 @@ function RoutesComponent() {
         <Route path="request/:id" element={<ProtectedRoute isAuthorized={true}><SingleRequest/></ProtectedRoute>}/>
         <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView/></ProtectedRoute>}/>
         <Route path="submissions" element={<ProtectedRoute isAdmin={true}><Submissions/></ProtectedRoute>}/>
+        <Route path="datatable" element={(<div className="p-4">
+          <DataTable/>
+        </div>)} />
       </Route>
     </Routes>
   )
