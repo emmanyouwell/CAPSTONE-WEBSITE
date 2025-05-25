@@ -8,6 +8,8 @@ import { formatDate } from '../../../utils/helper';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
 import { resetUpdate } from '../../../redux/slices/donorSlice';
+import { createColumnHelper } from '@tanstack/react-table';
+import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 
 
 const Submissions = () => {
@@ -15,7 +17,7 @@ const Submissions = () => {
     const { submissions, isUpdated, loading } = useSelector((state) => state.donors);
     useEffect(() => {
         dispatch(getSubmissions());
-        if (isUpdated){
+        if (isUpdated) {
             dispatch(resetUpdate())
         }
     }, [dispatch, isUpdated])
@@ -44,42 +46,50 @@ const Submissions = () => {
         });
 
     }
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => `${row.user.name.first} ${row.user.name.last}`, {
+            id: 'name',
+            header: 'Donor Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.eligibility, {
+            id: 'eligibility',
+            header: 'Eligibility',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => `${formatDate(row.lastSubmissionDate)}`, {
+            id: 'lastSubmissionDate',
+            header: 'Submission Date',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.submissionID, {
+            id: 'submissionID',
+            header: 'Submission ID',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const submissionID = row.original.submissionID;
+                const _id = row.original._id;
+                return (
+                    <div className="flex gap-2">
+                        <a target="_blank" href={`https://script.google.com/macros/s/AKfycbzoZwYmUu_dJK-JLOTGgHEhc0p_V-Sh2hPpv0ud4eybG6xER9IVDNbFEtuWH7a9KzyS/exec?submissionId=${submissionID}`}>
+                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                        </a>
+
+                        <Button className="bg-success" onClick={() => handleOpen(_id)}><CheckCheck className="h-5 w-5" /></Button>
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <div className="w-full h-full p-4">
-            <Card className="h-full w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
-                    <thead className="bg-secondary text-white">
-                        <tr>
-                            <th className="border-b p-4">Donor Name</th>
-                            <th className="border-b p-4">Eligibility</th>
-                            <th className="border-b p-4">Submission Date</th>
-                            <th className="border-b p-4">Submission ID</th>
-                            <th className="border-b p-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {submissions && submissions.map(({ _id, user, lastSubmissionDate, submissionID, eligibility }, index) => (
-                            <tr key={index}>
-                                <td className="p-4">
-                                    {`${user.name.first} ${user.name.last}`}
-                                </td>
-                                <td className="p-4">{eligibility}</td>
-                                <td className="p-4">{formatDate(lastSubmissionDate)}</td>
-                                <td className="p-4">{submissionID}</td>
-                                <td className="p-4 flex items-center gap-2">
-                                    {/* Filtered View */}
-                                    <a target="_blank" href={`https://script.google.com/macros/s/AKfycbzoZwYmUu_dJK-JLOTGgHEhc0p_V-Sh2hPpv0ud4eybG6xER9IVDNbFEtuWH7a9KzyS/exec?submissionId=${submissionID}`}>
-                                        <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-                                    </a>
-
-                                    <Button className="bg-success" onClick={() => handleOpen(_id)}><CheckCheck className="h-5 w-5" /></Button>
-                                </td>
-
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Card>
+            <DataTable data={submissions} columns={columns} pageSize={10}/>
             <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
                 <DialogHeader className="relative m-0 block">
                     <Typography variant="h4" color="blue-gray">

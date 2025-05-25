@@ -46,18 +46,29 @@ export default function DataTable({ data = [], columns = [], pageSize = 5 }) {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map(row => (
-              <tr key={row.id} className="hover:bg-gray-50">
-                {row.getVisibleCells().map(cell => (
-                  <td
-                    key={cell.id}
-                    className="px-4 py-2 border-b border-blue-gray-50 text-md text-blue-gray-900"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map(row => (
+                <tr key={row.id} className="hover:bg-gray-50">
+                  {row.getVisibleCells().map(cell => (
+                    <td
+                      key={cell.id}
+                      className="px-4 py-2 border-b border-blue-gray-50 text-md text-blue-gray-900"
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="text-center py-6 text-gray-500"
+                >
+                  No records found.
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 
