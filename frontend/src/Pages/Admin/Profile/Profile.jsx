@@ -17,14 +17,14 @@ const Profile = () => {
         <section className="w-full p-4">
 
             <div className=" w-full h-full p-4">
-                <Link to="/dashboard">
+                {/* <Link to="/dashboard">
                     <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                         <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                     </div>
-                </Link>
+                </Link> */}
                 <div className="flex flex-col h-max gap-10">
                     <div className="w-full flex flex-col gap-4">
-                        <Typography color="black" variant="h1">{userDetails && <div className='flex items-center gap-4'>{userDetails.firstName} {userDetails.lastName} <Chip color="blue-gray" value={userDetails.role}/></div>}</Typography>
+                        <Typography color="black" variant="h1">{userDetails && <div className='flex items-center gap-4'>{userDetails.name.first} {userDetails.name.last} <Chip color="blue-gray" value={userDetails.role}/></div>}</Typography>
                         <div className="flow-root">
                             <dl className="-my-3 divide-y divide-gray-100 text-sm">
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
