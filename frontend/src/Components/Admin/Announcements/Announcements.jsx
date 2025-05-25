@@ -4,6 +4,7 @@ import { Badge, Chip } from '@material-tailwind/react'
 import ArticleList from '../../Articles/ArticleList'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteAnnouncement, getAnnouncement } from '../../../redux/actions/announcementActions'
+import AnnouncementList from '../../../Pages/Admin/Announcement/AnnouncementList'
 
 const Announcements = () => {
     const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const Announcements = () => {
                 <span className="h-px flex-1 bg-black"></span>
             </span>
             <div className="flex items-stretch gap-4 w-full overflow-x-auto whitespace-nowrap p-4">
-                {announcements && announcements.length > 0 ? <ArticleList articles={announcements} IsLargeScreen={IsLargeScreen} handleDelete={handleDelete} /> : <span className="text-gray-500">No Announcements</span>}
+                {announcements && announcements.length > 0 ? <AnnouncementList announcements={announcements} IsLargeScreen={IsLargeScreen} handleDelete={handleDelete} /> : <span className="text-gray-500">No Announcements</span>}
             </div>
 
         </>

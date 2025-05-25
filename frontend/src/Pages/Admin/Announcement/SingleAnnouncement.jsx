@@ -7,6 +7,7 @@ import Announcement from '../../../Components/Announcements'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnnouncementDetails, getAnnouncement } from '../../../redux/actions/announcementActions'
 import ArticleList from '../../../Components/Articles/ArticleList'
+import AnnouncementList from './AnnouncementList'
 const SingleAnnouncement = () => {
     const dispatch = useDispatch();
     const { announcements, announcementDetails, loading, error } = useSelector((state) => state.announcements);
@@ -59,9 +60,9 @@ const SingleAnnouncement = () => {
                 </div>
                 <div className="mt-20 ">
 
-                    <Typography variant="h2" className="text-center font-parkinsans">Other Articles</Typography>
+                    <Typography variant="h2" className="text-center font-parkinsans">Other Announcements</Typography>
                     <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                        <ArticleList articles={announcements} isLargeScreen={IsLargeScreen} />
+                        <AnnouncementList announcements={announcements} isLargeScreen={IsLargeScreen} />
                     </div>
                 </div>
 
