@@ -102,9 +102,7 @@ const Accounts = () => {
                                     }}
                                 />
                                 <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
-
                             </div>
-
                             <div className="flex items-center justify-center gap-4">
                                 <div className="w-max">
                                     <Select label="Sort by" color="pink" variant="standard" value={sort} onChange={(value) => handleSort(value)}>
@@ -123,11 +121,7 @@ const Accounts = () => {
                                     </div>
                                 }
                             </div>
-
                         </div>
-
-
-
                     </div>
                     <div className='flex items-center gap-4 justify-center'>
                         <div className="w-max">
@@ -139,11 +133,7 @@ const Accounts = () => {
                             </Button>
                         </Link>
                     </div>
-
-
                 </div>
-
-
             </div>
             {users && <AccountTable users={users} currentPage={currentPage} totalPages={totalPages} />}
 

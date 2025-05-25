@@ -35,7 +35,7 @@ const formats = [
 const CreateAnnouncement = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, success } = useSelector((state) => state.articles);
+    const { loading, error, success } = useSelector((state) => state.announcements);
 
     const [title, setTitle] = useState(""); // 🔥 Title state
     const [description, setDescription] = useState(""); // 🔥 Description state

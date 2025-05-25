@@ -57,7 +57,7 @@ const AccountTable = ({ users, currentPage, totalPages }) => {
         }),
     ];
     return (
-        <div className="w-full h-full p-8">
+        <div className="w-full h-full">
             <DataTable data={users} columns={columns} pageSize={10} />
         </div>
     )
