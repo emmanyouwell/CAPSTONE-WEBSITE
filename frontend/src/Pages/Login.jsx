@@ -13,7 +13,7 @@ import Loader from '../Components/Loader/Loader'
 import { DefaultGallery } from '../Components/Gallery'
 import { toast } from 'react-toastify'
 import { resetError } from '../redux/slices/userSlice'
-import {Eye, EyeOff} from 'lucide-react'
+import { Eye, EyeOff } from 'lucide-react'
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -44,6 +44,7 @@ const Login = () => {
 
     if (isLoggedIn) {
       navigate('/');
+      toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
     }
     if (error) {
       toast.error(`Error: ${error}`, { position: "top-right" });
@@ -109,7 +110,7 @@ const Login = () => {
                     onClick={() => setShowPassword(prev => !prev)}
                     className="absolute right-2 top-2 text-sm text-gray-600 focus:outline-none hover:text-secondary"
                   >
-                    {showPassword ? <EyeOff/> : <Eye/>}
+                    {showPassword ? <EyeOff /> : <Eye />}
                   </button>
                   {formik.touched.password && formik.errors.password && (
                     <p className="text-red-500 text-sm mb-2">{formik.errors.password}</p>

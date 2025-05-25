@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser, getUser } from '../redux/actions/userActions';
 import { useNavigate } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 
 function ProfileMenu() {
   const dispatch = useDispatch();
@@ -80,10 +81,10 @@ function ProfileMenu() {
       <MenuHandler>
         <Button
           variant="text"
-          color="blue-gray"
-          className="flex items-center gap-1 border rounded-full py-0.5 pr-2 pl-2 lg:ml-auto"
+          color="white"
+          className="flex items-center gap-1 py-0.5 p-3 pr-2 pl-2 lg:ml-auto"
         >
-          <Bars3Icon className="h-6 w-6 p-0.5" strokeWidth={2.5} color="white" />
+          Welcome, {userDetails ? (userDetails.name.first + " " + userDetails.name.last) : "Guest"} <ChevronDown />
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
