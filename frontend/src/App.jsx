@@ -57,6 +57,8 @@ import Submissions from "./Pages/Admin/Eligibility/Submissions";
 import CreateAnnouncement from "./Pages/Admin/Announcement/CreateAnnouncement";
 
 import DataTable from './Components/DataTables/tanstack/DataTable';
+import SingleAnnouncement from "./Pages/Admin/Announcement/SingleAnnouncement";
+import EditAnnouncement from "./Pages/Admin/Announcement/EditAnnouncement";
 
 
 function RoutesComponent() {
@@ -70,7 +72,7 @@ function RoutesComponent() {
       <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
       <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
       <Route path="/redirect" element={<Redirect />} />
-      
+      <Route path="announcements/:id" element={<ProtectedRoute isAuthorized={true}><SingleAnnouncement /></ProtectedRoute>} />
       {/* Superadmin routes */}
 
       <Route path="/dashboard" element={<ProtectedRoute isAuthorized={true}><DashboardLayout /></ProtectedRoute>}>
@@ -87,7 +89,7 @@ function RoutesComponent() {
         <Route path="account/create-admin" element={<ProtectedRoute isAdmin={true}><CreateAdmin /></ProtectedRoute>} />
         <Route path="resources" element={<ProtectedRoute isAdmin={true}><Resources /></ProtectedRoute>} />
         <Route path="announcement" element={<ProtectedRoute isAdmin={true}><Announcement /></ProtectedRoute>} />
-        <Route path="announcement/create" element={<ProtectedRoute isAdmin={true}><CreateAnnouncement/></ProtectedRoute>} />
+        <Route path="announcement/create" element={<ProtectedRoute isAdmin={true}><CreateAnnouncement /></ProtectedRoute>} />
         <Route path="resources/create" element={<ProtectedRoute isAdmin={true}><CreateResources /></ProtectedRoute>} />
         <Route path="edit-article/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
         <Route path="inventory/refrigerator" element={<ProtectedRoute isAdmin={true}><Refrigerator /></ProtectedRoute>} />
@@ -103,12 +105,10 @@ function RoutesComponent() {
         <Route path="staff" element={<ProtectedRoute isStaff={true}><StaffDashboard /></ProtectedRoute>} />
         <Route path="create-requests" element={<ProtectedRoute isAuthorized={true}><CreateRequest /></ProtectedRoute>} />
         <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable /></ProtectedRoute>} />
-        <Route path="request/:id" element={<ProtectedRoute isAuthorized={true}><SingleRequest/></ProtectedRoute>}/>
-        <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView/></ProtectedRoute>}/>
-        <Route path="submissions" element={<ProtectedRoute isAdmin={true}><Submissions/></ProtectedRoute>}/>
-        <Route path="datatable" element={(<div className="p-4">
-          <DataTable/>
-        </div>)} />
+        <Route path="request/:id" element={<ProtectedRoute isAuthorized={true}><SingleRequest /></ProtectedRoute>} />
+        <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView /></ProtectedRoute>} />
+        <Route path="submissions" element={<ProtectedRoute isAdmin={true}><Submissions /></ProtectedRoute>} />
+        <Route path="edit-announcement/:id" element={<ProtectedRoute isAdmin={true}><EditAnnouncement /></ProtectedRoute>} />
       </Route>
     </Routes>
   )

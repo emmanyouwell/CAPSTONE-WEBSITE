@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Input } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
 import ArticleList from '../../../Components/Articles/ArticleList';
 import { resetDelete } from '../../../redux/slices/articleSlice';
+import { createColumnHelper } from '@tanstack/react-table';
+import DataTable from '../../../Components/DataTables/tanstack/DataTable';
+import { formatDate } from '../../../utils/helper';
+import { EyeIcon, Pencil, SquarePenIcon, Trash } from 'lucide-react';
 const Resources = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
@@ -49,6 +53,40 @@ const Resources = () => {
             dispatch(getArticles());
         }
     }, [isDeleted, dispatch])
+    const columnHelper = createColumnHelper();
+
+    const columns = [
+        columnHelper.accessor(row => row.title, {
+            id: 'title',
+            header: 'Title',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.description, {
+            id: 'description',
+            header: 'Description',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => formatDate(row.createdAt), {
+            id: 'createdAt',
+            header: 'Date Published',
+            cell: info => info.getValue(),
+        }),
+
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => {
+                const article = row.original
+                return (
+                    <div className="flex items-center gap-2">
+                        <Link to={`/article/${article._id}`} className="flex items-center gap-2 text-secondary"><EyeIcon size={30} /></Link>
+                        <Link to={`/dashboard/edit-article/${article._id}`}><SquarePenIcon size={25} className="text-secondary" /></Link>
+                        <Trash size={25} className="text-secondary cursor-pointer" onClick={() => handleDelete(article._id)} />
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <>
             <section className="p-4">
@@ -67,23 +105,7 @@ const Resources = () => {
                                     }}
                                 />
                                 <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
-
                             </div>
-                            {/* <div className="w-max">
-                                <Select label="Sort by" color="pink" variant="standard" value={sort} onChange={(value) => handleSort(value)}>
-                                    {sortTypes.map((types, index) => (
-                                        <Option key={index} value={types}>{types}</Option>
-                                    ))}
-                                </Select>
-                            </div>
-                            <div className="w-max">
-                                <Select label="Role" color="pink" variant="standard" value={role} onChange={(value) => handleRole(value)}>
-                                    {roleTypes.map((types, index) => (
-                                        <Option key={index} value={types}>{types}</Option>
-                                    ))}
-                                </Select>
-                            </div> */}
-
                         </div>
                         <div className="flex items-center justify-center gap-4">
                             <div className="w-max">
@@ -95,16 +117,9 @@ const Resources = () => {
                                 </Button>
                             </Link>
                         </div>
-
-
                     </div>
-
-
                 </div>
-                <div className="grid grid-cols-auto md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    <ArticleList articles={articles} isLargeScreen={IsLargeScreen} handleDelete={handleDelete} />
-
-                </div>
+                <DataTable data={articles} columns={columns} pageSize={10} />
             </section>
         </>
     )

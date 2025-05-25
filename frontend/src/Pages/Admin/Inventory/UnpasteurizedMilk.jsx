@@ -533,36 +533,6 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
 
             </div>
             <DataTable data={allBags} columns={columns} pageSize={10} />
-            {/* <Card className="h-[calc(100vh-2rem)] w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
-                    <thead>
-                        <tr>
-                            <th className="border-b p-4">Donor name</th>
-                            <th className="border-b p-4">Express Date</th>
-                            <th className="border-b p-4">Volume (ml)</th>
-                            <th className="border-b p-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {allBags?.map((bags, index) => (
-                            <tr key={index}>
-                                <td className="p-4">{`${bags.donor.user.name.first} ${bags.donor.user.name.last}`}</td>
-                                <td className="p-4">{formatDate(bags.expressDate, "full")}</td>
-                                <td className="p-4">{bags.volume}</td>
-                                <td className="p-4">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedRows.some((item) => item === bags._id)}
-                                        onChange={() => handleCheckboxChange(bags)}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Card> */}
-
-
         </div >
     )
 }
