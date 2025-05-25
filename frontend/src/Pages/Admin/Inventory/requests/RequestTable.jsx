@@ -8,6 +8,8 @@ import { EyeIcon, CheckCheck } from 'lucide-react'
 import { formatDate, getUser } from '../../../../utils/helper'
 import { inpatientDispense, outpatientDispense } from '../../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
+import { createColumnHelper } from '@tanstack/react-table'
+import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 const RequestTable = ({ currentPage, totalPages, requests }) => {
     const dispatch = useDispatch();
     const [items, setItems] = useState([
@@ -94,53 +96,109 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
         setFilteredRequest(filteredRequest);
         setReservedRequest(reservedRequest);
     }, [requests])
+    const columnHelper = createColumnHelper();
 
+    const columns = [
+        columnHelper.accessor(row => formatDate(row.date), {
+            id: 'date',
+            header: 'Date',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.patient.name, {
+            id: 'name',
+            header: 'Patient Name',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.patient.patientType, {
+            id: 'type',
+            header: 'Patient Type',
+            cell: info => info.getValue(),
+        }),
+        columnHelper.accessor(row => row.volumeRequested.volume, {
+            id: 'volume',
+            header: 'Requested Volume',
+            cell: info => `${info.getValue()} ml`
+        }),
+        columnHelper.accessor(row => row.volumeRequested.days, {
+            id: 'days',
+            header: 'Days',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.doctor, {
+            id: 'prescribedBy',
+            header: 'Prescribed By',
+            cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.status, {
+            id: 'status',
+            header: 'Status',
+            cell: info => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: () => (<th>  {reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length ? <Button color="green" onClick={dispenseInpatient}>
+                <CheckCheck className="h-5 w-5" />
+            </Button> : 'View Details'}</th>),
+            cell: ({ row }) => {
+                const request = row.original
+                return (
+                    <div className="flex gap-2">
+                        {request.status === "Reserved" && request.patient.patientType === "Outpatient" ?
+                            <Button className="bg-secondary" onClick={() => handleTransport(request)}><CheckCheck className="h-5 w-5" /></Button>
+                            : <Link to={`/dashboard/request/${request._id}`}>
+                                <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                            </Link>}
+                    </div>
+                );
+            },
+        }),
+    ];
     return (
         <div className="w-full h-full">
 
+            <DataTable data={requests} columns={columns} pageSize={10} />
+            {/* <Card className="h-full w-full overflow-scroll">
+            <table className="w-full min-w-max table-auto text-left">
+                <thead className="bg-secondary text-white">
+                    <tr>
+                        <th className="border-b p-4">Date</th>
+                        <th className="border-b p-4">Patient Name</th>
+                        <th className="border-b p-4">Patient Type</th>
+                        <th className="border-b p-4">Requested Volume</th>
+                        <th className="border-b p-4">Days</th>
+                        <th className="border-b p-4">Prescribed by</th>
+                        <th className="border-b p-4">Status</th>
+                        <th className="border-b p-4">  {reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length ? <Button color="green" onClick={dispenseInpatient}>
+                            <CheckCheck className="h-5 w-5" />
+                        </Button> : 'View Details'}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {requests.map((request, index) => (
+                        <tr key={index}>
+                            <td className="p-4">
+                                {formatDate(request.date)}
+                            </td>
+                            <td className="p-4">{request.patient?.name}</td>
+                            <td className="p-4">{request.patient?.patientType}</td>
+                            <td className="p-4">{request.volumeRequested.volume} ml</td>
+                            <td className="p-4">{request.volumeRequested.days}</td>
+                            <td className="p-4">{request.doctor}</td>
+                            <td className="p-4">{request.status}</td>
+                            <td className="p-4 flex items-center gap-2">
+                                {request.status === "Reserved" && request.patient.patientType === "Outpatient" ?
+                                    <Button className="bg-secondary" onClick={() => handleTransport(request)}><CheckCheck className="h-5 w-5" /></Button>
+                                    : <Link to={`/dashboard/request/${request._id}`}>
+                                        <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                                    </Link>}
 
-            <Card className="h-full w-full overflow-scroll">
-                <table className="w-full min-w-max table-auto text-left">
-                    <thead className="bg-secondary text-white">
-                        <tr>
-                            <th className="border-b p-4">Date</th>
-                            <th className="border-b p-4">Patient Name</th>
-                            <th className="border-b p-4">Patient Type</th>
-                            <th className="border-b p-4">Requested Volume</th>
-                            <th className="border-b p-4">Days</th>
-                            <th className="border-b p-4">Prescribed by</th>
-                            <th className="border-b p-4">Status</th>
-                            <th className="border-b p-4">  {reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length ? <Button color="green" onClick={dispenseInpatient}>
-                                <CheckCheck className="h-5 w-5" />
-                            </Button> : 'View Details'}</th>
+                            </td>
+
                         </tr>
-                    </thead>
-                    <tbody>
-                        {requests.map((request, index) => (
-                            <tr key={index}>
-                                <td className="p-4">
-                                    {formatDate(request.date)}
-                                </td>
-                                <td className="p-4">{request.patient?.name}</td>
-                                <td className="p-4">{request.patient?.patientType}</td>
-                                <td className="p-4">{request.volumeRequested.volume} ml</td>
-                                <td className="p-4">{request.volumeRequested.days}</td>
-                                <td className="p-4">{request.doctor}</td>
-                                <td className="p-4">{request.status}</td>
-                                <td className="p-4 flex items-center gap-2">
-                                    {request.status === "Reserved" && request.patient.patientType === "Outpatient" ?
-                                        <Button className="bg-secondary" onClick={() => handleTransport(request)}><CheckCheck className="h-5 w-5" /></Button>
-                                        : <Link to={`/dashboard/request/${request._id}`}>
-                                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-                                        </Link>}
-
-                                </td>
-
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Card>
+                    ))}
+                </tbody>
+            </table>
+        </Card> */}
             <Dialog size="sm" open={openTransport} handler={handleTransport} className="p-4">
                 <DialogHeader className="relative m-0 block">
                     <Typography variant="h4" color="blue-gray">
@@ -199,34 +257,7 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
                     </DialogFooter>
                 </DialogBody>
             </Dialog>
-            {/* Pagination Controls */}
-            <div className="flex justify-center space-x-2 mt-4">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Prev
-                </button>
 
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
         </div>
     )
 }
