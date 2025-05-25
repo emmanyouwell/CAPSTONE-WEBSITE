@@ -83,16 +83,6 @@ const DonorsPage = () => {
         setCurrentPage(0);
         dispatch(getDonors({ search: search }));
     }
-    const nextPageHandler = () => {
-        if (currentPage < totalPages - 1) {
-            setCurrentPage((prevPage) => prevPage + 1);
-        }
-    }
-    const prevPageHandler = () => {
-        if (currentPage > 0) {
-            setCurrentPage((prevPage) => prevPage - 1);
-        }
-    }
 
     const columnHelper = createColumnHelper();
 
@@ -143,8 +133,8 @@ const DonorsPage = () => {
     return (
         <div className="p-4 flex flex-col gap-4">
             <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">
-
                 <div className="flex gap-4 items-center justify-center">
+                    {/* Search */}
                     <div className="relative flex w-full gap-2 md:w-max">
                         <Input
                             type="search"
@@ -159,10 +149,12 @@ const DonorsPage = () => {
                         <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
 
                     </div>
+                    {/* Delete Filter */}
                     <div className="w-full flex justify-center items-center gap-4">
                         <Button color="pink" onClick={handleReset} className='w-max'>Delete filters</Button>
                     </div>
                 </div>
+                {/* Filter */}
                 <div className="flex gap-4 items-center justify-center flex-wrap">
                     <div className="w-max">
                         <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
