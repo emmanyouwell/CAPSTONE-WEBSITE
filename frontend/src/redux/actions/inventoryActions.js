@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { authenticate, getToken, logout } from '../../utils/helper';
+import api from '../../api/axiosInstance'
 
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 
@@ -9,17 +9,12 @@ export const getInventories = createAsyncThunk(
     'inventory/getInventory',
     async (query, thunkAPI) => {
         
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
@@ -31,7 +26,7 @@ export const getInventories = createAsyncThunk(
             else {
                 urlString = `${VITE_APP_URL}/api/v1/inventories`
             }
-            const response = await axios.get(urlString, config);
+            const response = await api.get(urlString, config);
             return response.data;
 
         } catch (error) {
@@ -45,22 +40,18 @@ export const addInventory = createAsyncThunk(
     'inventory/addInventory',
     async (req, thunkAPI) => {
 
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
 
-            const response = await axios.post(`${VITE_APP_URL}/api/v1/inventories`, req, config)
+            const response = await api.post(`${VITE_APP_URL}/api/v1/inventories`, req, config)
 
             return response.data;
 
@@ -76,21 +67,17 @@ export const updateInventory = createAsyncThunk(
     'inventory/updateInventory',
     async (req, thunkAPI) => {
 
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
-            const response = await axios.put(`${VITE_APP_URL}/api/v1/inventory/${req.id}`, req, config)
+            const response = await api.put(`${VITE_APP_URL}/api/v1/inventory/${req.id}`, req, config)
             console.log("Updated Inventory: ", req.id)
             return response.data;
 
@@ -106,22 +93,17 @@ export const deleteInventory = createAsyncThunk(
     'inventory/deleteInventory',
     async (id, thunkAPI) => {
 
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
-            const response = await axios.delete(`${VITE_APP_URL}/api/v1/inventory/${id}`, config)
+            const response = await api.delete(`${VITE_APP_URL}/api/v1/inventory/${id}`, config)
 
             return response.data;
 
@@ -137,23 +119,18 @@ export const getInventoryDetails = createAsyncThunk(
     'inventory/getInventoryDetails',
     async (id, thunkAPI) => {
 
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
 
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/inventory/${id}`, config)
+            const response = await api.get(`${VITE_APP_URL}/api/v1/inventory/${id}`, config)
             console.log("Response: ", response.data)
             return response.data;
 
@@ -170,21 +147,17 @@ export const reserveInventory = createAsyncThunk(
     'inventory/reserveInventory',
     async (req, thunkAPI) => {
 
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
-            const response = await axios.put(`${VITE_APP_URL}/api/v1/reserved-bottle/${req.id}`, req, config)
+            const response = await api.put(`${VITE_APP_URL}/api/v1/reserved-bottle/${req.id}`, req, config)
 
             return response.data;
 

@@ -60,10 +60,10 @@ const SingleRequest = () => {
             }
             dispatch(updateVolumeRequested(data)).then(() => {
                 handleUpdateVolume();
-                toast.success("Volume Updated")
+                toast.success("Volume Updated", {position: "bottom-right"})
             }).catch((err) => {
                 console.log("error: ", err)
-                toast.error("Error updating volume")
+                toast.error("Error updating volume", {position: "bottom-right"})
             })
 
 

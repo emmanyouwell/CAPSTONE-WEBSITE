@@ -50,7 +50,7 @@ const StaffRequestView = () => {
         ) {
             setOpen(false);
             toast.error("Please fill in all fields", {
-                position: "top-right",
+                position: "bottom-right",
             });
             return;
         }
@@ -97,7 +97,7 @@ const StaffRequestView = () => {
                         }
                     }
                 }
-                toast.success("Request added successfully!", { position: "top-right" });
+                toast.success("Request added successfully!", { position: "bottom-right" });
                 setOpen(false);
                 setFormData({
                     patient: '',
@@ -114,7 +114,7 @@ const StaffRequestView = () => {
             })
             .catch((error) => {
                 console.error("Error adding request:", error);
-                toast.error("Error", "Failed to add request.");
+                toast.error("Error", "Failed to add request.", {position: "bottom-right"});
                 setOpen(false);
             });
     };

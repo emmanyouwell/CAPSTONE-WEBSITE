@@ -1,28 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { getToken } from '../../utils/helper';
+import api from '../../api/axiosInstance'
 
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 export const getMilkPerMonth = createAsyncThunk(
     'milkPerMonth/getMilkPerMonth',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/milkPerMonth`, config)
+            const response = await api.get(`${VITE_APP_URL}/api/v1/milkPerMonth`, config)
 
             return response.data;
 
@@ -37,23 +29,17 @@ export const getDonorsPerMonth = createAsyncThunk(
     'donorsPerMonth/getDonorsPerMonth',
     async (thunkAPI) => {
 
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
+       
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/donorsPerMonth`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/donorsPerMonth`, config)
+
             return response.data;
 
         } catch (error) {
@@ -66,24 +52,16 @@ export const getDonorsPerMonth = createAsyncThunk(
 export const getDispensedMilkPerMonth = createAsyncThunk(
     'donorsPerMonth/getDispensedMilkPerMonth',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/dispensePerMonth`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/dispensePerMonth`, config)
+
             return response.data;
 
         } catch (error) {
@@ -96,24 +74,16 @@ export const getDispensedMilkPerMonth = createAsyncThunk(
 export const getPatientsPerMonth = createAsyncThunk(
     'donorsPerMonth/getPatientsPerMonth',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/patientsPerMonth`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/patientsPerMonth`, config)
+
             return response.data;
 
         } catch (error) {
@@ -126,24 +96,16 @@ export const getPatientsPerMonth = createAsyncThunk(
 export const getRequestsPerMonth = createAsyncThunk(
     'donorsPerMonth/getRequestsPerMonth',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/requestsPerMonth`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/requestsPerMonth`, config)
+
             return response.data;
 
         } catch (error) {
@@ -156,24 +118,16 @@ export const getRequestsPerMonth = createAsyncThunk(
 export const getAvailableMilk = createAsyncThunk(
     'donorsPerMonth/getAvailableMilk',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/availableMilk`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/availableMilk`, config)
+
             return response.data;
 
         } catch (error) {
@@ -186,24 +140,16 @@ export const getAvailableMilk = createAsyncThunk(
 export const getExpiringMilk = createAsyncThunk(
     'donorsPerMonth/getExpiringMilk',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/expiringMilk`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/expiringMilk`, config)
+
             return response.data;
 
         } catch (error) {
@@ -217,24 +163,16 @@ export const getExpiringMilk = createAsyncThunk(
 export const getVolumePerLocation = createAsyncThunk(
     'donorsPerMonth/getVolumePerLocation',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/donationLocation`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/donationLocation`, config)
+
             return response.data;
 
         } catch (error) {
@@ -247,24 +185,16 @@ export const getVolumePerLocation = createAsyncThunk(
 export const getDonorLocation = createAsyncThunk(
     'donorsPerMonth/getDonorLocation',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/donorLocation`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/donorLocation`, config)
+
             return response.data;
 
         } catch (error) {
@@ -278,24 +208,16 @@ export const getDonorLocation = createAsyncThunk(
 export const getPatientHospital = createAsyncThunk(
     'donorsPerMonth/getPatientHospital',
     async (thunkAPI) => {
-
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
-        
+
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/patientHospital`, config)
-            
+            const response = await api.get(`${VITE_APP_URL}/api/v1/patientHospital`, config)
+
             return response.data;
 
         } catch (error) {

@@ -50,20 +50,20 @@ const EmployeeLogin = () => {
 
         if (isLoggedIn && (userDetails.role === 'Admin' || userDetails.role === 'SuperAdmin')) {
             navigate('/dashboard');
-            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
+            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "bottom-right" });
 
         }
         else if (isLoggedIn && userDetails.role === 'Staff') {
             navigate('/dashboard/recipients');
-            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
+            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "bottom-right" });
         }
         else if (isLoggedIn) {
             navigate('/');
-            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
+            toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "bottom-right" });
         }
 
         if (error) {
-            toast.error("Invalid Employee ID or Password", { position: "top-right" });
+            toast.error("Invalid Employee ID or Password", { position: "bottom-right" });
             dispatch(resetError());
         }
     }, [isLoggedIn, error])
@@ -71,7 +71,7 @@ const EmployeeLogin = () => {
         // Simulate a delay (e.g. 500ms)
         const timer = setTimeout(() => {
             setLoad(false);
-        }, 1000);
+        }, 500);
 
         // Cleanup timer on unmount
         return () => clearTimeout(timer);

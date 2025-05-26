@@ -44,10 +44,10 @@ const Login = () => {
 
     if (isLoggedIn) {
       navigate('/');
-      toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "top-right" });
+      toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "bottom-right" });
     }
     if (error) {
-      toast.error(`Error: ${error}`, { position: "top-right" });
+      toast.error(`Error: ${error}`, { position: "bottom-right" });
       dispatch(resetError());
     }
   }, [isLoggedIn, error])
@@ -55,13 +55,26 @@ const Login = () => {
     // Simulate a delay (e.g. 500ms)
     const timer = setTimeout(() => {
       setLoad(false);
-    }, 1000);
+    }, 500);
 
     // Cleanup timer on unmount
     return () => clearTimeout(timer);
   }, []);
 
-
+  useEffect(()=>{
+    const reason = sessionStorage.getItem('reason')
+    if (reason === 'inactivity'){
+      toast.info("You've been logged out due to inactivity. Please log in again.", {position: "bottom-center"});
+      sessionStorage.removeItem('reason')
+    }
+    else if (reason === 'logged out'){
+      toast.info("Logged out successfully", {position: "bottom-center"})
+      sessionStorage.removeItem('reason');
+    }
+    else if (reason === 'session expired'){
+      toast.info("Session expired. Please log in again.", {position: "bottom-center"})
+    }
+  },[])
 
   return (
     <>

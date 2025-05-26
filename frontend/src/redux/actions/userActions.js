@@ -1,19 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { authenticate, getToken, logout } from '../../utils/helper';
-
-// import {server as VITE_APP_URL} from '../store';
-// import {VITE_APP_URL} from '../store';
+import { authenticate, logout } from '../../utils/helper';
+import api from '../../api/axiosInstance'
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (credentials, thunkAPI) => {
-    
+
     const config = {
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
-      withCredentials: true
+      skipAuthInterceptor: true
     };
     try {
       console.log(credentials.get('isEmp'));
@@ -21,9 +19,9 @@ export const loginUser = createAsyncThunk(
       if (credentials.get('isEmp')) {
         url = `${VITE_APP_URL}/api/v1/login/?emp=true`
       }
-      
+
       // console.log(credentials);
-      const response = await axios.post(url, credentials, config);
+      const response = await api.post(url, credentials, config);
 
       await authenticate(response.data, () => { });
       return response.data;
@@ -37,20 +35,20 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
-  async (_, thunkAPI) => {
+  async (msg, thunkAPI) => {
     try {
       console.log("Logging out");
-      const response = await axios.get(
+      const response = await api.get(
         `${VITE_APP_URL}/api/v1/logout`,
-        {},
         {
           headers: {
             "Content-Type": "application/json",
           },
           withCredentials: true,
+          skipAuthInterceptor: true,
         }
       );
-      await logout();
+      await logout(msg);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -62,23 +60,17 @@ export const getUserDetails = createAsyncThunk(
   'user/getUserDetails',
   async (_, thunkAPI) => {
 
-    const token = await getToken();
-    console.log('Token Retrieved:', token);
-
-    if (!token) {
-      throw new Error('No token available');
-    }
-
+    
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        
       },
       withCredentials: true
     }
     try {
       console.log("Getting user details");
-      const response = await axios.get(
+      const response = await api.get(
         `${VITE_APP_URL}/api/v1/me`,
         config
       );
@@ -105,7 +97,7 @@ export const registerUser = createAsyncThunk(
     };
     try {
 
-      const response = await axios.post(`${VITE_APP_URL}/api/v1/register`, userData, config);
+      const response = await api.post(`${VITE_APP_URL}/api/v1/register`, userData, config);
 
       return response.data;
 
@@ -138,19 +130,13 @@ export const getUser = createAsyncThunk(
 
 export const getAllUsers = createAsyncThunk(
   'user/getAllUsers',
-  async ({ search = "", sortBy = "", order = "", role = "", page=1, pageSize=12 }, thunkAPI) => {
+  async ({ search = "", sortBy = "", order = "", role = "", page = 1, pageSize = 12 }, thunkAPI) => {
 
-    const token = await getToken();
-    console.log('Token Retrieved:', token);
-
-    if (!token) {
-      throw new Error('No token available');
-    }
-
+    
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        
       },
       withCredentials: true
     }
@@ -168,7 +154,7 @@ export const getAllUsers = createAsyncThunk(
       if (role) {
         urlString += `&role=${encodeURIComponent(role)}`;
       }
-      const response = await axios.get(urlString, config);
+      const response = await api.get(urlString, config);
 
 
       return response.data;
