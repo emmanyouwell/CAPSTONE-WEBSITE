@@ -1,19 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { authenticate, getToken, logout } from '../../utils/helper';
+import { authenticate,logout } from '../../utils/helper';
+import api from '../../api/axiosInstance'
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 
 export const getArticles = createAsyncThunk(
     'article/getArticles',
     async(query, thunkAPI) => {
-        const token = await getToken();
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
@@ -25,7 +23,7 @@ export const getArticles = createAsyncThunk(
             else {
                 urlString = `${VITE_APP_URL}/api/v1/articles`
             }
-            const response = await axios.get(urlString, config);
+            const response = await api.get(urlString, config);
             return response.data;
         }catch (error){
             return thunkAPI.rejectWithValue(error.message);
@@ -37,21 +35,18 @@ export const addArticles = createAsyncThunk(
     'article/addArticles',
     async(req, thunkAPI) => {
         
-        const token = await getToken();
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
         const config = {
             headers: {
                 
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
             console.log("sending request");
             console.log(`${VITE_APP_URL}/api/v1/articles`)
-            const response = await axios.post(`${VITE_APP_URL}/api/v1/articles`, req, config);
+            const response = await api.post(`${VITE_APP_URL}/api/v1/articles`, req, config);
             console.log("response: ", response);
             return response.data;
         }catch (error){
@@ -65,20 +60,17 @@ export const addHTMLArticles = createAsyncThunk(
     'article/addHTMLArticles',
     async(req, thunkAPI) => {
         
-        const token = await getToken();
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
         const config = {
             headers: {
                 
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
            
-            const response = await axios.post(`${VITE_APP_URL}/api/v1/html-article`, req, config);
+            const response = await api.post(`${VITE_APP_URL}/api/v1/html-article`, req, config);
             console.log("response: ", response.data);
             return response.data;
         }catch (error){
@@ -90,19 +82,16 @@ export const addHTMLArticles = createAsyncThunk(
 export const updateHTMLArticle = createAsyncThunk(
     'article/updateHTMLArticle',
     async(req, thunkAPI) => {
-        const token = await getToken();
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
-            const response = await axios.put(`${VITE_APP_URL}/api/v1/html-article/${req.id}`, req, config);
+            const response = await api.put(`${VITE_APP_URL}/api/v1/html-article/${req.id}`, req, config);
             return response.data;
         }catch (error){
             return thunkAPI.rejectWithValue(error.message);
@@ -113,19 +102,16 @@ export const updateHTMLArticle = createAsyncThunk(
 export const updateArticle = createAsyncThunk(
     'article/updateArticle',
     async(req, thunkAPI) => {
-        const token = await getToken();
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
-            const response = await axios.put(`${VITE_APP_URL}/api/v1/articles/${req.id}`, req, config);
+            const response = await api.put(`${VITE_APP_URL}/api/v1/articles/${req.id}`, req, config);
             return response.data;
         }catch (error){
             return thunkAPI.rejectWithValue(error.message);
@@ -136,19 +122,16 @@ export const updateArticle = createAsyncThunk(
 export const deleteArticle = createAsyncThunk(
     'article/deleteArticle',
     async(id, thunkAPI) => {
-        const token = await getToken();
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
-            const response = await axios.delete(`${VITE_APP_URL}/api/v1/article/${id}`, config);
+            const response = await api.delete(`${VITE_APP_URL}/api/v1/article/${id}`, config);
             return response.data;
         }catch (error){
             return thunkAPI.rejectWithValue(error.message);
@@ -159,19 +142,16 @@ export const deleteArticle = createAsyncThunk(
 export const getArticleDetails = createAsyncThunk(
     'article/getArticleDetails',
     async(id, thunkAPI) => {
-        const token = await getToken();
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         }
         try {
-            const response = await axios.get(`${VITE_APP_URL}/api/v1/article/${id}`, config);
+            const response = await api.get(`${VITE_APP_URL}/api/v1/article/${id}`, config);
             return response.data;
         }catch (error){
             return thunkAPI.rejectWithValue(error.message);

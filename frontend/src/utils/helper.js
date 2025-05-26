@@ -2,26 +2,15 @@ import { toast } from 'react-toastify';
 
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {
-        // console.log('authenticate', response)
-        sessionStorage.setItem('token', JSON.stringify(data.token));
+
         sessionStorage.setItem('user', JSON.stringify(data.user));
     }
     next();
 };
 
-export const getToken = () => {
-    if (window !== 'undefined') {
-        if (sessionStorage.getItem('token')) {
-            return JSON.parse(sessionStorage.getItem('token'));
-        } else {
-            return false;
-        }
-    }
-};
-
 // access user name from session storage
 export const getUser = () => {
-    if (window !== 'undefined') {
+    if (typeof window !== 'undefined') {
         if (sessionStorage.getItem('user')) {
             return JSON.parse(sessionStorage.getItem('user'));
         } else {
@@ -31,22 +20,23 @@ export const getUser = () => {
 };
 
 // remove token from session storage
-export const logout = () => {
-    if (window !== 'undefined') {
-        sessionStorage.removeItem('token');
+export const logout = (reason) => {
+    if (typeof window !== 'undefined') {
         sessionStorage.removeItem('user');
+        sessionStorage.setItem('reason', reason)
+        window.location.href = '/login';
     }
 };
 
 export const errMsg = (message = '') => toast.error(message, {
-    position: toast.POSITION.BOTTOM_CENTER
+    position: "bottom-right"
 });
 export const successMsg = (message = '') => toast.success(message, {
-    position: toast.POSITION.BOTTOM_CENTER
+    position: "bottom-right"
 });
 
 
-export const formatDate = (date, type="full") => {
+export const formatDate = (date, type = "full") => {
     if (type === "full") {
         return new Date(date).toLocaleString("en-US", {
             year: "numeric",
@@ -96,11 +86,11 @@ export const formatDateRange = (startDate, endDate) => {
 };
 
 export const formatNumber = (num) => {
-  if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-  } else if (num >= 1_000) {
-    return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
-  } else {
-    return num.toString();
-  }
+    if (num >= 1_000_000) {
+        return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+    } else if (num >= 1_000) {
+        return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+    } else {
+        return num.toString();
+    }
 }

@@ -59,6 +59,7 @@ import CreateAnnouncement from "./Pages/Admin/Announcement/CreateAnnouncement";
 import DataTable from './Components/DataTables/tanstack/DataTable';
 import SingleAnnouncement from "./Pages/Admin/Announcement/SingleAnnouncement";
 import EditAnnouncement from "./Pages/Admin/Announcement/EditAnnouncement";
+import InactivityHandler from "./InactivityHandler";
 
 
 function RoutesComponent() {
@@ -219,11 +220,14 @@ function MainContent() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <MainContent />
+    <>
+      <BrowserRouter>
+        <InactivityHandler />
+        <MainContent />
 
-      {/* <FooterWithLogo /> */}
-    </BrowserRouter>
+        {/* <FooterWithLogo /> */}
+      </BrowserRouter>
+    </>
   );
 }
 

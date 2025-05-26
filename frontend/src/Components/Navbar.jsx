@@ -31,7 +31,7 @@ function ProfileMenu() {
 
   const logoutHandler = () => {
 
-    dispatch(logoutUser());
+    dispatch(logoutUser('logged out'));
     setIsMenuOpen(false);
   }
   const goToDashboard = () => {
@@ -126,8 +126,8 @@ const StickyNavbar = () => {
   const navigate = useNavigate();
   const logoutHandler = () => {
 
-    dispatch(logoutUser());
-    navigate('/');
+    dispatch(logoutUser('logged out'));
+    
 
   }
 

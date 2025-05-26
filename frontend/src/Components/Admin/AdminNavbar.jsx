@@ -33,8 +33,8 @@ function ProfileMenu() {
   const { isLoggedIn, userDetails } = useSelector(state => state.users);
   const closeMenu = () => setIsMenuOpen(false);
   const logoutHandler = () => {
-    dispatch(logoutUser());
-    navigate('/');
+    dispatch(logoutUser('logged out'));
+    
     setIsMenuOpen(false);
   }
   const goToProfile = () => {

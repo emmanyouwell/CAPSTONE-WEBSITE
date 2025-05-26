@@ -1,23 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { authenticate, getToken, logout } from '../../utils/helper';
-
+import { authenticate, logout } from '../../utils/helper';
+import api from '../../api/axiosInstance'
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 
 export const createBag = createAsyncThunk(
     'bag/createBag',
     async (req, thunkAPI) => {
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         };
@@ -26,7 +21,7 @@ export const createBag = createAsyncThunk(
             let urlString = `${VITE_APP_URL}/api/v1/bag`;
            
 
-            const response = await axios.post(urlString, req, config);
+            const response = await api.post(urlString, req, config);
 
             return response.data;
         } catch (error) {
@@ -37,17 +32,12 @@ export const createBag = createAsyncThunk(
 export const getBags = createAsyncThunk(
     'bag/getBags',
     async (req, thunkAPI) => {
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         };
@@ -56,7 +46,7 @@ export const getBags = createAsyncThunk(
             let urlString = `${VITE_APP_URL}/api/v1/bag/donor/${req}`;
            
 
-            const response = await axios.get(urlString, config);
+            const response = await api.get(urlString, config);
 
             return response.data;
         } catch (error) {
@@ -67,17 +57,12 @@ export const getBags = createAsyncThunk(
 export const getSingleBag = createAsyncThunk(
     'bag/getSingleBag',
     async (req, thunkAPI) => {
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         };
@@ -86,7 +71,7 @@ export const getSingleBag = createAsyncThunk(
             let urlString = `${VITE_APP_URL}/api/v1/bag/${req}`;
            
 
-            const response = await axios.get(urlString, config);
+            const response = await api.get(urlString, config);
 
             return response.data;
         } catch (error) {
@@ -98,17 +83,12 @@ export const getSingleBag = createAsyncThunk(
 export const updateBag = createAsyncThunk(
     'bag/updateBag',
     async (req, thunkAPI) => {
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         };
@@ -117,7 +97,7 @@ export const updateBag = createAsyncThunk(
             let urlString = `${VITE_APP_URL}/api/v1/bag/${req.id}`;
            
 
-            const response = await axios.put(urlString, req, config);
+            const response = await api.put(urlString, req, config);
 
             return response.data;
         } catch (error) {
@@ -129,17 +109,12 @@ export const updateBag = createAsyncThunk(
 export const deleteBag = createAsyncThunk(
     'bag/deleteBag',
     async (req, thunkAPI) => {
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         };
@@ -148,7 +123,7 @@ export const deleteBag = createAsyncThunk(
             let urlString = `${VITE_APP_URL}/api/v1/bag/${req}`;
            
 
-            const response = await axios.delete(urlString, config);
+            const response = await api.delete(urlString, config);
 
             return response.data;
         } catch (error) {
@@ -161,17 +136,12 @@ export const deleteBag = createAsyncThunk(
 export const getAllBags = createAsyncThunk(
     'bag/getAllBags',
     async (req, thunkAPI) => {
-        const token = await getToken();
-        console.log('Token Retrieved:', token);
-
-        if (!token) {
-            throw new Error('No token available');
-        }
+        
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                
             },
             withCredentials: true
         };
@@ -179,7 +149,7 @@ export const getAllBags = createAsyncThunk(
         try {
             const urlString = `${VITE_APP_URL}/api/v1/bags`;
 
-            const response = await axios.get(urlString, config);
+            const response = await api.get(urlString, config);
 
             return response.data;
         } catch (error) {
