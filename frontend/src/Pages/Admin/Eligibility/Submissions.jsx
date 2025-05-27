@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSubmissions, updateDonor } from '../../../redux/actions/donorActions';
-import { Button, Card, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Typography } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
-import { CheckCheck, EyeIcon } from 'lucide-react';
+import { Button, Card, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
+import { EyeIcon, PencilLine } from 'lucide-react';
 import { formatDate } from '../../../utils/helper';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -81,7 +80,7 @@ const Submissions = () => {
                             <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
                         </a>
 
-                        <Button className="bg-success" onClick={() => handleOpen(_id)}><CheckCheck className="h-5 w-5" /></Button>
+                        <Button className="bg-success" onClick={() => handleOpen(_id)}><PencilLine className="h-5 w-5" /></Button>
                     </div>
                 );
             },
