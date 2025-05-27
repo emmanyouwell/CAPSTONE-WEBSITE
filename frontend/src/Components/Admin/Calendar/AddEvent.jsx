@@ -170,7 +170,7 @@ export function AddEvent() {
                                 >
                                     <Option value="Not-Due">Not-Due</Option>
                                     <Option value="On-Going">On-Going</Option>
-                                    <Option value="Done">Done</Option>
+                                    
                                 </Select>
                                 {formik.touched.status && formik.errors.status && (
                                     <Typography color="red" variant="small">
