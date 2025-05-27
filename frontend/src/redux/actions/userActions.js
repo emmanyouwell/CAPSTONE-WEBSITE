@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { authenticate, logout } from '../../utils/helper';
 import api from '../../api/axiosInstance'
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
+import axios from 'axios';
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (credentials, thunkAPI) => {
@@ -21,7 +22,7 @@ export const loginUser = createAsyncThunk(
       }
 
       // console.log(credentials);
-      const response = await api.post(url, credentials, config);
+      const response = await axios.post(url, credentials, config);
 
       await authenticate(response.data, () => { });
       return response.data;
@@ -38,7 +39,7 @@ export const logoutUser = createAsyncThunk(
   async (msg, thunkAPI) => {
     try {
       console.log("Logging out");
-      const response = await api.get(
+      const response = await axios.get(
         `${VITE_APP_URL}/api/v1/logout`,
         {
           headers: {
@@ -97,7 +98,7 @@ export const registerUser = createAsyncThunk(
     };
     try {
 
-      const response = await api.post(`${VITE_APP_URL}/api/v1/register`, userData, config);
+      const response = await axios.post(`${VITE_APP_URL}/api/v1/register`, userData, config);
 
       return response.data;
 
