@@ -23,7 +23,7 @@ const History = () => {
                 </div>
             </Link>
             <div className="font-parkinsans text-2xl text-center">Event History</div>
-            {loading ? <div>Loading...</div> : <div className="w-1/2 h-[calc(100vh-2rem)] overflow-y-auto mx-auto flex flex-col items-center gap-4">
+            {loading ? <div>Loading...</div> : <div className="w-[calc(100wh-20rem)] h-[calc(100vh-20rem)] overflow-y-auto mx-auto flex flex-col items-center gap-4">
 
                 {filteredLettings.length > 0 && filteredLettings.map((lets, index) => (
                     <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4 flex justify-between items-center flex-row'>
