@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { getEventDetails } from '../../../redux/actions/eventActions';
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import { toast } from 'react-toastify';
 // Custom agenda component
 const CustomAgenda = ({ event }) => (
     <>
@@ -56,11 +57,16 @@ const ScheduleComponent = ({ events, type }) => {
     const [open, setOpen] = useState(false);
     const [event, setEvent] = useState('');
     const handleOpen = async (event, type) => {
+        console.log("Event: ", event);
+        if (event.status === "Done") {
+            navigate(`/dashboard/events/attendance/${event._id}`);
+            
+        }
         if (type === "events") {
             console.log("events: ", event);
             setEvent(event);
             setOpen(!open);
-            // navigate(`/admin/events/${event.id}`);
+
         }
         else if (type === "pickup") {
             navigate(`/dashboard/schedules/${event.id}`);
@@ -68,7 +74,7 @@ const ScheduleComponent = ({ events, type }) => {
     };
     useEffect(() => {
         if (type === "events") {
-            const result = events.map((event) => { return { title: event.activity, description: event.description, start: new Date(event.actDetails.start), end: new Date(event.actDetails.end), id: event._id, status: event.status, venue: event.venue, attendance: event.attendance} });
+            const result = events.map((event) => { return { title: event.activity, description: event.description, start: new Date(event.actDetails.start), end: new Date(event.actDetails.end), id: event._id, status: event.status, venue: event.venue, attendance: event.attendance } });
             setItems(result);
         }
         else if (type === "pickup") {
@@ -152,66 +158,61 @@ const ScheduleComponent = ({ events, type }) => {
                             <div className="space-y-4">
                                 <div>
                                     <input
-                                        type="radio"
+                                        type="button"
                                         id="edit"
                                         name="edit"
-                                        
                                         value="edit"
                                         className="peer hidden"
                                         required
-                                        checked={selectedOption === "edit"}
-                                        onChange={handleChange}
+                                        
+                                        onClick={() => navigate(`/dashboard/events/${event.id}`)}
                                     />
                                     <label
                                         htmlFor="edit"
-                                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                        className="block w-full cursor-pointer rounded-lg border border-gray-400 p-4 text-gray-900 hover:border-secondary-light hover:bg-secondary hover:text-white group"
                                     >
                                         <div className="block">
                                             <Typography className="font-semibold">
                                                 Edit Event
                                             </Typography>
-                                            <Typography className="font-normal text-gray-600">
+                                            <Typography className="font-normal text-gray-600 group-hover:text-white">
                                                 Edit the title, description, venue, dates, and status.
 
                                             </Typography>
                                         </div>
                                     </label>
                                 </div>
-                            
+
                                 <div>
                                     <input
-                                        type="radio"
+                                        type="button"
                                         disabled={event && event.status !== "On-Going"}
                                         id="host"
                                         name="host"
                                         value="host"
                                         className="peer hidden"
                                         required
-                                        checked={selectedOption === "host"}
-                                        onChange={handleChange}
+                                       
+                                        onClick={() => navigate(`/dashboard/events/attendance/${event.id}`)}
                                     />
                                     <label
                                         htmlFor="host"
-                                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                        className="block w-full cursor-pointer rounded-lg border border-gray-400 p-4 text-gray-900 hover:border-secondary-light hover:bg-secondary hover:text-white group"
                                     >
                                         <div className="block">
                                             <Typography className="font-semibold">
-                                                Host Event {event && event.status !== "On-Going" && <span className="text-sm text-neutral-dark">(Event must be On-Going)</span>}
+                                                Host Event {event && event.status !== "On-Going" && <span className=" text-sm text-neutral-dark">(Event must be On-Going)</span>}
                                             </Typography>
-                                            <Typography className="font-normal text-gray-600">
+                                            <Typography className="font-normal text-gray-600 group-hover:text-white">
                                                 List the attendance of donors and track their donated milk bags.
                                             </Typography>
                                         </div>
                                     </label>
                                 </div>
-                                
+
                             </div>
                         </DialogBody>
-                        <DialogFooter>
-                            <Button className="ml-auto" onClick={handleChooseAction}>
-                                choose action
-                            </Button>
-                        </DialogFooter>
+                        
                     </Dialog>
                 </Dialog>
             </div>
