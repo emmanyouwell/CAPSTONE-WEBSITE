@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { getUserDetails } from '../../../../redux/actions/userActions';
 import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { addInventory } from '../../../../redux/actions/inventoryActions';
+import { SquareCheck } from 'lucide-react';
 
 const Attendance = () => {
   const dispatch = useDispatch();
@@ -170,7 +171,7 @@ const Attendance = () => {
 
             <div className="flex justify-center items-center gap-4">
               <Typography variant="h2">Total volume: {lettingDetails.totalVolume} ml</Typography>
-              {from && status && from === "RedirectDetails" && status !== "Stored" && <HandThumbUpIcon onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />}
+              {from && status && from === "RedirectDetails" && status !== "Stored" && <SquareCheck onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />}
             </div>
             <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
               <DialogHeader className="relative m-0 block">
@@ -196,7 +197,7 @@ const Attendance = () => {
                     <div key={index}>
                       <input
                         type="radio"
-                        id={fridge.name}
+                        id={`${fridge.name}_${fridge._id}`}
                         name={fridge.name}
                         value={fridge._id}
                         className="peer hidden"
@@ -205,7 +206,7 @@ const Attendance = () => {
                         onChange={handleChange}
                       />
                       <label
-                        htmlFor={fridge.name}
+                        htmlFor={`${fridge.name}_${fridge._id}`}
                         className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
                       >
                         <div className="block">
@@ -234,7 +235,7 @@ const Attendance = () => {
 
         </div>
 
-        {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} lettingId={lettingDetails._id} />}
+        {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} status={status} lettingId={lettingDetails._id} />}
 
       </div>
 

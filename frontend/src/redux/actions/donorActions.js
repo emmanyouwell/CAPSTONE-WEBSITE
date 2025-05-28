@@ -4,7 +4,7 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 import api from '../../api/axiosInstance'
 export const getDonors = createAsyncThunk(
     'donor/getDonors',
-    async ({ search = "", page = 1, pageSize = 12, brgy = "", type = "" }, thunkAPI) => {
+    async ({ search = "", brgy = "", type = "" }, thunkAPI) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -14,14 +14,14 @@ export const getDonors = createAsyncThunk(
         };
 
         try {
-            let urlString = `${VITE_APP_URL}/api/v1/donors?page=${page}&pageSize=${pageSize}`;
-            if (search) {
+            let urlString = `${VITE_APP_URL}/api/v1/donors?`;
+            if (search !== "") {
                 urlString += `&search=${encodeURIComponent(search)}`;
             }
-            if (brgy) {
+            if (brgy !== "") {
                 urlString += `&brgy=${encodeURIComponent(brgy)}`;
             }
-            if (type) {
+            if (type !== "") {
                 urlString += `&type=${encodeURIComponent(type)}`;
             }
 

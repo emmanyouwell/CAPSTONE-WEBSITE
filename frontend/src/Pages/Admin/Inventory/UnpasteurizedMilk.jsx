@@ -9,6 +9,7 @@ import {
     DialogBody,
     DialogFooter,
     DialogHeader,
+    Drawer,
     IconButton,
     Input,
     Typography,
@@ -23,6 +24,7 @@ import { updateBag } from "../../../redux/actions/bagActions";
 import { addInventory } from "../../../redux/actions/inventoryActions";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
+import DatePicker from "react-datepicker";
 function Icon({ id, open }) {
     return (
         <svg
@@ -100,10 +102,14 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
             qty: newValue > 20 ? 20 : newValue // Ensure the value does not exceed 20
         }));
     }
-    const handleDateChange = (e) => {
+    const handleDateChange = (date) => {
+        setFormError((prev) => ({
+            ...prev,
+            date: false
+        }))
         setBatchDetails({
             ...batchDetails,
-            pasteurizationDate: e.target.value
+            pasteurizationDate: date
         })
     }
     const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
@@ -134,27 +140,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
         }
 
     }
-    const formatDateRange = (startDate, endDate) => {
-        const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
-        const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
-        const optionsShortDate = { month: 'short', day: 'numeric', year: 'numeric' };
 
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        const formattedStartDate = start.toLocaleDateString('en-US', optionsDate);
-        const formattedEndDate = end.toLocaleDateString('en-US', optionsDate);
-        const formattedStartTime = start.toLocaleTimeString('en-US', optionsTime);
-        const formattedEndTime = end.toLocaleTimeString('en-US', optionsTime);
-        const formattedShortStartDate = start.toLocaleDateString('en-US', optionsShortDate);
-        const formattedShortEndDate = end.toLocaleDateString('en-US', optionsShortDate);
-
-        if (formattedStartDate === formattedEndDate) {
-            return `${formattedStartDate} at ${formattedStartTime} - ${formattedEndTime}`;
-        } else {
-            return `${formattedShortStartDate} at ${formattedStartTime} - ${formattedShortEndDate} at ${formattedEndTime}`;
-        }
-    };
     const handleCheckboxChange = (bag) => {
 
         setSelectedRows((prevSelected) => {
@@ -340,27 +326,15 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                     {selectedRows.length > 0 && (<SquareCheck onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />)}
 
                 </div>}
-
-                <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
-                    <DialogHeader className="relative m-0 block">
+                <Drawer open={open} onClose={handleOpen} size={500} className="p-4">
+                    <div className="overflow-y-auto h-[calc(100vh-5rem)] pr-2 space-y-4">
                         <Typography variant="h4" color="blue-gray">
                             Choose Refrigerator
                         </Typography>
                         <Typography className="mt-1 font-normal text-gray-600">
                             Please select the fridge you would like to store the milk in.
                         </Typography>
-                        <IconButton
-                            size="sm"
-                            variant="text"
-                            className="!absolute right-3.5 top-3.5"
-                            onClick={handleOpen}
-                        >
-                            <XMarkIcon className="h-4 w-4 stroke-2" />
-                        </IconButton>
-                    </DialogHeader>
-                    <DialogBody>
                         <div className="space-y-4">
-
                             {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge, index) => (
                                 <div key={index}>
                                     <input
@@ -407,12 +381,24 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                                 <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                                     Express date
                                 </Typography>
-                                <Input
-                                    type="datetime-local"
-                                    name="pasteurizationDate"
-                                    onChange={handleDateChange}
-                                    value={batchDetails.pasteurizationDate || ""}
-                                />
+                                <div className="add-event w-full">
+                                    <DatePicker
+                                        selected={batchDetails.pasteurizationDate}
+                                        onChange={(date) => handleDateChange(date)}
+
+                                        dateFormat="MMMM d, yyyy h:mm aa"
+                                        showTimeSelect
+                                        className={`w-full p-2 border ${formError.date
+                                            ? "border-red-500"
+                                            : "border-gray-300"
+                                            } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
+                                        placeholderText="Select a date and time"
+                                        shouldCloseOnSelect={true}
+                                        popperPlacement="left-end"
+                                        timeIntervals={10}
+                                    />
+                                </div>
+
                                 {formError.date && <span className="text-sm text-red-500">Please enter pasteurization date</span>}
                             </div>
                             <div className="w-full">
@@ -522,17 +508,15 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
 
                             </div>
                         </div>
-
-                    </DialogBody>
-                    <DialogFooter>
+                    </div>
+                    <div className="py-4">
                         <Button className="ml-auto" onClick={pasteurize}>
                             Pasteurize
                         </Button>
-                    </DialogFooter>
-                </Dialog>
-
+                    </div>
+                </Drawer>
             </div>
-            <DataTable data={allBags} columns={columns} pageSize={10} />
+            <DataTable data={allBags} columns={columns} pageSize={15} />
         </div >
     )
 }

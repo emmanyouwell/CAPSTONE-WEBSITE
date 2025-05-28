@@ -23,7 +23,7 @@ import DataTable from '../../../DataTables/tanstack/DataTable';
 import { formatDate } from '../../../../utils/helper';
 import DatePicker from 'react-datepicker';
 import { Trash2, X, XSquare } from 'lucide-react';
-const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => {
+const AttendanceTable = ({ attendance, status, lettingId }) => {
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
     const [name, setName] = useState('')
@@ -156,7 +156,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
 
                 return (
                     <div className="flex gap-2">
-                        <Button size="sm" color="blue" className="text-white" onClick={() => handleOpen(attendees.donor._id, name)}>
+                        <Button size="sm" color="blue" disabled={status === "Stored" ? true : false} className="text-white" onClick={() => handleOpen(attendees.donor._id, name)}>
                             Add bags
                         </Button>
                     </div>
