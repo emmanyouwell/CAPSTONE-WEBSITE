@@ -126,7 +126,7 @@ const AdminSideNav = ({ isNavOpen, setIsNavOpen }) => {
                                                         Pick-up Schedules
                                                     </ListItem>
                                                 </Link>
-                                                <Link to="/admin/event/schedules">
+                                                <Link to="/admin/events">
                                                     <ListItem>
                                                         <ListItemPrefix>
                                                             <Squares2X2Icon strokeWidth={3} className="h-3 w-5" />

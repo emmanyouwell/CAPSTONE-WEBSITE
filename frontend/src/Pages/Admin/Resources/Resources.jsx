@@ -80,7 +80,7 @@ const Resources = () => {
                 return (
                     <div className="flex items-center gap-2">
                         <Link to={`/article/${article._id}`} className="flex items-center gap-2 text-secondary"><EyeIcon size={30} /></Link>
-                        <Link to={`/dashboard/edit-article/${article._id}`}><SquarePenIcon size={25} className="text-secondary" /></Link>
+                        <Link to={`/dashboard/resources/edit/${article._id}`}><SquarePenIcon size={25} className="text-secondary" /></Link>
                         <Trash size={25} className="text-secondary cursor-pointer" onClick={() => handleDelete(article._id)} />
                     </div>
                 );

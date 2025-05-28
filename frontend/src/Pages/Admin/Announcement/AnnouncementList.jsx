@@ -49,7 +49,7 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
                             </Link>
                             {isAdminLocation && (
                                 <>
-                                    <Link to={`/dashboard/edit-announcement/${announcement._id}`}>
+                                    <Link to={`/dashboard/announcement/edit/${announcement._id}`}>
                                         <Pencil size={30} className="text-secondary" />
                                     </Link>
                                     <Trash size={30} className="text-secondary cursor-pointer" onClick={() => handleDelete(announcement._id)} />

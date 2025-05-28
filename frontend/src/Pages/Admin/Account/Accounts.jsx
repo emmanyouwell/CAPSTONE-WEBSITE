@@ -127,7 +127,7 @@ const Accounts = () => {
                         <div className="w-max">
                             <Button onClick={handleReset} className='bg-secondary w-max' size="sm">Delete filters</Button>
                         </div>
-                        <Link to="/dashboard/account/create-admin" className="w-max">
+                        <Link to="/dashboard/account/create" className="w-max">
                             <Button className="bg-secondary" size="sm">
                                 Create New Account
                             </Button>

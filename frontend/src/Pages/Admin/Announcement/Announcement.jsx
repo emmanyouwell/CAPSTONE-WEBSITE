@@ -81,7 +81,7 @@ const Announcement = () => {
                 return (
                     <div className="flex gap-2">
                         <Link to={`/announcements/${announcement._id}`} className="flex items-center gap-2 text-secondary"><EyeIcon size={30} /></Link>
-                        <Link to={`/dashboard/edit-announcement/${announcement._id}`}><SquarePenIcon size={25} className="text-secondary" /></Link>
+                        <Link to={`/dashboard/announcement/edit/${announcement._id}`}><SquarePenIcon size={25} className="text-secondary" /></Link>
                         <Trash size={25} className="text-secondary cursor-pointer" onClick={() => handleDelete(announcement._id)} />
                     </div>
                 );

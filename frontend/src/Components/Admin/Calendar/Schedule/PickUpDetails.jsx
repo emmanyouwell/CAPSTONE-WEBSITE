@@ -104,7 +104,7 @@ const PickUpDetails = () => {
     useEffect(() => {
         if (success) {
             dispatch(resetSuccess());
-            navigate('/dashboard/pickup/schedules')
+            navigate('/dashboard/schedules')
         }
     }, [dispatch, navigate, success])
     const submitFridge = () => {
@@ -135,7 +135,7 @@ const PickUpDetails = () => {
                 <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>
-            </Link> : <Link to={`/dashboard/pickup/schedules`}>
+            </Link> : <Link to={`/dashboard/schedules`}>
                 <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>
@@ -337,7 +337,7 @@ const PickUpDetails = () => {
                 <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
                     {schedule?.donorDetails?.bags?.map((bag, index) => (
                         <div key={index} className="min-w-max">
-                            <BagDetails bag={bag} from={from} scheduleId={id} />
+                            <BagDetails bag={bag} status={status} from={from} scheduleId={id} />
                         </div>
                     ))}
                 </div>

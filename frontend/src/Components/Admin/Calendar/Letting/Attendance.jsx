@@ -63,7 +63,7 @@ const Attendance = () => {
         .then(() => {
           dispatch(recordPublicRecord({ lettingId: id })).then(() => {
             toast.success(`Milk Letting event has been finalized`, { position: "bottom-right" });
-            navigate("/dashboard/event/schedules");
+            navigate("/dashboard/events");
           });
         })
         .catch((error) => {

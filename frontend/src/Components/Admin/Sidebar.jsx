@@ -3,6 +3,7 @@ import { ChevronFirst, ChevronLast, MoreVertical } from 'lucide-react'
 import React, { createContext, useContext, useState } from 'react'
 import logo from '../../assets/image/TCHMB-logo.png'
 import { Link, useLocation } from 'react-router-dom'
+import { useIsActive } from '../../utils/helper'
 const SidebarContext = createContext()
 export default function Sidebar({ children, userDetails }) {
     const [expanded, setExpanded] = useState(true)
@@ -21,17 +22,18 @@ export default function Sidebar({ children, userDetails }) {
                 <SidebarContext.Provider value={{ expanded }}>
                     <ul className="flex-1 px-3">{children}</ul>
                 </SidebarContext.Provider>
-                
+
             </nav>
         </aside>
     )
 }
 
-export function SidebarItem({ icon, text, path, alert }) {
+export function SidebarItem({ icon, text, path, prefix, alert }) {
     const { expanded } = useContext(SidebarContext)
     const location = useLocation();  // Get current URL
+    const isActive = useIsActive(prefix)
 
-    const isActive = location.pathname === path; // Check if item is active
+
     return (
         <Link to={path}>
             <li className={`

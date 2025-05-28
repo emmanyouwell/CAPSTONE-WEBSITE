@@ -16,7 +16,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { updateBag } from '../../../../redux/actions/bagActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-const BagDetails = ({ bag, from, scheduleId }) => {
+const BagDetails = ({ bag, from, status, scheduleId }) => {
     const [bagDetails, setBagDetails] = useState(() => ({
         volume: "",
         expressDate: null
@@ -69,7 +69,7 @@ const BagDetails = ({ bag, from, scheduleId }) => {
     return (
         <>
             <div className="relative w-96 p-4 bg-white rounded-lg shadow-md border flex flex-col h-full">
-                {from === "RedirectDetails" && <div className="pr-4" style={{ position: 'absolute', right: '0' }}>
+                {from === "RedirectDetails" && status !== "Stored" && <div className="pr-4" style={{ position: 'absolute', right: '0' }}>
                     <Menu>
                         <MenuHandler>
                             <EllipsisVerticalIcon className="h-6 w-6 hover:cursor-pointer text-black hover:bg-gray-600/30 rounded-full" />
