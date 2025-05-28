@@ -44,7 +44,7 @@ const superAdminItems = [
 
 const staffItems = [
     { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon size={20} />, category: "Records" },
-    { title: "Request", route: "/dashboard/staff/requests", path: 'request', icon: <LifeBuoy size={20} />, category: "Records" },
+    { title: "Request", route: "/dashboard/staff/requests", path: 'staff', icon: <LifeBuoy size={20} />, category: "Records" },
 ]
 const SidebarComponent = ({ userDetails }) => {
 

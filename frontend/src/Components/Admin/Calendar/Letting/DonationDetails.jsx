@@ -19,25 +19,27 @@ import {
 } from "@material-tailwind/react";
 import DonorCards from '../../../../Components/Admin/Donors/DonorCards'
 import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import { Select, Option } from '@material-tailwind/react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { markAttendance } from '../../../../redux/actions/lettingActions';
 import { resetSuccess } from '../../../../redux/slices/lettingSlice';
+import Select from 'react-select';
+import { object } from 'yup';
+import { Check, SquarePen, Trash, X } from 'lucide-react';
+import DatePicker from 'react-datepicker';
 const DonationDetails = () => {
     const dispatch = useDispatch();
-    const { donors, pageSize, totalDonors, totalPages, loading, error } = useSelector((state) => state.donors);
+    const { donors, loading, error } = useSelector((state) => state.donors);
     const { loading: submitLoading, success } = useSelector((state) => state.lettings);
     const [search, setSearch] = useState('');
-    const [currentPage, setCurrentPage] = useState(0);
-    const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate()
     const [bagDetails, setBagDetails] = useState(() => ({
         volume: "",
         quantity: ""
     }))
-    
+
     const [selectedDonor, setSelectedDonor] = useState(null); // State to store selected donor
+
     const { id } = useParams();
     const [bags, setBags] = useState([]);
     const resetStates = () => {
@@ -51,25 +53,16 @@ const DonationDetails = () => {
         setBags([]);
         setSearch("");
     }
-    const handleSelect = (donor) => {
-        setSelectedDonor(donor); // Update state with selected donor
-        setMenuOpen(false); // Close the menu
-    };
+
     const [donorType, setDonorType] = useState("");
     const [lastDonation, setLastDonation] = useState(null);
-    const handleDateChange = (e) => {
-        setLastDonation(new Date(e.target.value));
-    }
+    const [editingIndex, setEditingIndex] = useState(null); // track which row is being edited
+    const [editedBag, setEditedBag] = useState({ volume: "", quantity: "" });
+
     const handleChange = (e) => {
         setDonorType(e.target.value)
     }
-    const handleTextChange = (e) => {
-        setSearch(e.target.value);
-    }
 
-    const searchDonor = () => {
-        dispatch(getDonors({ search: search }))
-    }
     const addBag = () => {
         const { volume, quantity } = bagDetails;
 
@@ -90,6 +83,27 @@ const DonationDetails = () => {
             quantity: "",
         });
     }
+
+    const handleDelete = (index) => {
+        const updatedBags = bags.filter((_, i) => i !== index);
+        setBags(updatedBags);
+    };
+
+    const handleEdit = (index) => {
+        setEditingIndex(index);
+        setEditedBag(bags[index]);
+    };
+
+    const handleSave = () => {
+        const updatedBags = [...bags];
+        updatedBags[editingIndex] = editedBag;
+        setBags(updatedBags);
+        setEditingIndex(null);
+    };
+
+    const handleCancel = () => {
+        setEditingIndex(null);
+    };
     const submitAttendance = async () => {
         if (!donorType || !selectedDonor) {
             toast.error("Please choose a Donor.", { position: "bottom-right" });
@@ -126,20 +140,28 @@ const DonationDetails = () => {
         dispatch(markAttendance(newData))
             .then((res) => {
                 toast.success("Attendance recorded.", { position: "bottom-right" });
-               
+
             })
             .catch((error) => {
                 console.error("Error adding inventory:", error);
                 toast.error("Failed to add attendance.", { position: "bottom-right" });
             });
     };
-    useEffect(()=>{
-        if (success){
+    useEffect(() => {
+        if (success) {
             dispatch(resetSuccess());
             navigate(`/dashboard/events/attendance/${id}`);
             resetStates();
         }
-    },[dispatch, success])
+    }, [dispatch, success])
+    useEffect(() => {
+        dispatch(getDonors({ search: search }))
+    }, [dispatch])
+    const options = [
+        ...donors.map((donor) => ({
+            value: donor, label: `${donor.user.name.first} ${donor.user.name.last} | ${donor.user.phone}`, donor
+        }))
+    ];
     return (
         <div className="p-8 h-[calc(100vh-2rem)] overflow-y-auto">
             <Link to={`/dashboard/events/attendance/${id}`}>
@@ -147,170 +169,226 @@ const DonationDetails = () => {
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>
             </Link>
-            <div className="w-1/2 mx-auto flex flex-col justify-center items-center gap-4">
-
-
-                <div className="font-parkinsans text-2xl text-center">Search Donors</div>
-                <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4'>
-                    <div className="flex items-center justify-between">
-                        <List className="w-full">
-                            <div className="relative flex w-full gap-2">
-                                <Input
-                                    label="Search"
-                                    containerProps={{
-                                        className: "mb-4",
-                                    }}
-                                    onChange={handleTextChange}
-                                    className="sticky top-0"
-                                    onKeyDown={(e) => e.key === 'Enter' && searchDonor()}
-                                />
-                                <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={searchDonor} />
-                            </div>
-
-                            {loading ? <p>Loading...</p> : donors && donors.map((donor, index) => (
-                                <ListItem key={index}
-                                    className="border-b-2"
-                                    onClick={() => handleSelect(donor)} >{`${donor.user.name.first} ${donor.user.name.middle} ${donor.user.name.last} | ${donor.user.phone} | (${donor.home_address.street}, ${donor.home_address.brgy}, ${donor.home_address.city})`}</ListItem>
-                            ))}
-                        </List>
-                    </div>
-                </Card>
-                {selectedDonor &&
-                    (<>
-                        <div className="font-parkinsans text-2xl text-center">Select Donor Type</div>
-                        <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4 gap-4'>
-
-                            <div className="space-y-4">
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="new"
-                                        name="new"
-                                        value="New Donor"
-                                        className="peer hidden"
-                                        required
-                                        checked={donorType === "New Donor"}
-                                        onChange={handleChange}
+            <div className="flex h-[calc(100vh-15rem)] items-start justify-center gap-4">
+                <Card className='flex flex-col justify-start items-center w-full h-full gap-2 border-l-8 border-secondary p-4'>
+                    <CardBody className="w-full h-full p-0">
+                        <div className="w-full">
+                            <div className="mb-4">
+                                <div className="font-parkinsans text-xl font-bold mb-2 text-primary">Search Donors</div>
+                                <div className="flex items-center justify-between">
+                                    <Select
+                                        className="w-full select-border-black"
+                                        value={selectedDonor ? options.find(opt => opt.value._id === selectedDonor._id) : null}
+                                        onChange={(selected) => setSelectedDonor(selected.value)}
+                                        options={options}
+                                        isSearchable
+                                        formatOptionLabel={(option) =>
+                                        (
+                                            <div className="flex flex-col text-lg">
+                                                <span className="font-semibold">
+                                                    {option.value.user.name.first} {option.value.user.name.last} | {option.value.user.phone}
+                                                </span>
+                                                <span className="text-md">
+                                                    {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
+                                                </span>
+                                            </div>
+                                        )
+                                        }
                                     />
-                                    <label
-                                        htmlFor="new"
-                                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary"
-                                    >
-                                        <div className="block">
-                                            <Typography className="font-semibold">
-                                                New Donor
-                                            </Typography>
-                                            <Typography className="font-normal text-gray-600 ">
-                                                This is the first time I'm donating breast milk.
 
-                                            </Typography>
-                                        </div>
-                                    </label>
                                 </div>
-
-                                <div>
-                                    <input
-                                        type="radio"
-
-                                        id="old"
-                                        name="old"
-                                        value="Old Donor"
-                                        className="peer hidden"
-                                        required
-                                        checked={donorType === "Old Donor"}
-                                        onChange={handleChange}
-                                    />
-                                    <label
-                                        htmlFor="old"
-                                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary"
-                                    >
-                                        <div className="block">
-                                            <Typography className="font-semibold">
-                                                Old donor
-                                            </Typography>
-                                            <Typography className="font-normal text-gray-600">
-                                                I've donated breast milk in the past.
-                                            </Typography>
-                                        </div>
-                                    </label>
-                                </div>
-
                             </div>
-                        </Card>
-                    </>)}
-                {donorType && donorType === "Old Donor" && (
-                    <>
-                        <div className="font-parkinsans text-2xl text-center">Last Breast Milk Donation</div>
-                        <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4'>
-                            <div className="flex items-center justify-between">
-                                <List className="w-full">
-                                    <div className="relative flex w-full gap-2">
-                                        <Input
-                                            type="date"
-                                            label="Date"
-                                            containerProps={{
-                                                className: "mb-4",
-                                            }}
-                                            onChange={handleDateChange}
-                                            className="sticky top-0"
+                            <div className="mb-4">
+                                {selectedDonor ? (<>
+                                    <div className="font-parkinsans text-xl font-bold text-primary mb-2">Select Donor Type</div>
+                                    <div className="space-y-4 w-full">
+                                        <div>
+                                            <input
+                                                type="radio"
+                                                id="new"
+                                                name="new"
+                                                value="New Donor"
+                                                className="peer hidden"
+                                                required
+                                                checked={donorType === "New Donor"}
+                                                onChange={handleChange}
+                                            />
+                                            <label
+                                                htmlFor="new"
+                                                className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary"
+                                            >
+                                                <div className="block">
+                                                    <Typography className="font-semibold">
+                                                        New Donor
+                                                    </Typography>
+                                                    <Typography className="font-normal text-gray-600 ">
+                                                        This is the first time I'm donating breast milk.
 
-                                        />
+                                                    </Typography>
+                                                </div>
+                                            </label>
+                                        </div>
 
+                                        <div>
+                                            <input
+                                                type="radio"
+
+                                                id="old"
+                                                name="old"
+                                                value="Old Donor"
+                                                className="peer hidden"
+                                                required
+                                                checked={donorType === "Old Donor"}
+                                                onChange={handleChange}
+                                            />
+                                            <label
+                                                htmlFor="old"
+                                                className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary"
+                                            >
+                                                <div className="block">
+                                                    <Typography className="font-semibold">
+                                                        Old donor
+                                                    </Typography>
+                                                    <Typography className="font-normal text-gray-600">
+                                                        I've donated breast milk in the past.
+                                                    </Typography>
+                                                </div>
+                                            </label>
+                                        </div>
                                     </div>
-
-                                </List>
+                                </>) : (<div className="h-full">Select donor to continue</div>)}
                             </div>
-                        </Card>
-                    </>
-                )}
-                <div className="font-parkinsans text-2xl text-center">Bag details</div>
-                <Card className='w-full border-l-8 border-secondary p-4 mx-auto'>
+                            <div className="">
+                                {donorType && donorType === "Old Donor" && (
+                                    <>
+                                        <div className="font-parkinsans text-xl text-primary font-bold mb-2">Last Breast Milk Donation</div>
+                                        <div className="flex items-center justify-between">
+                                            <List className="w-full p-0 mb-4">
+                                                <DatePicker
+                                                    selected={lastDonation}
+                                                    onChange={(date) => setLastDonation(date)}
 
-                    {/* Display selected donor info */}
-                    <div>
-                        {selectedDonor && (
-                            <>
-                                <p className="font-parkinsans text-primary text-2xl text-center font-semibold">{`${selectedDonor.user.name.first} ${selectedDonor.user.name.middle} ${selectedDonor.user.name.last}`}</p>
-                                <p className="font-parkinsans text-primary text-center text-md">{selectedDonor.user.phone}</p>
-                                <p className="font-parkinsans text-primary text-center text-md">{`${selectedDonor.home_address.street}, ${selectedDonor.home_address.brgy}, ${selectedDonor.home_address.city}`}</p>
-                            </>
-                        )}
-                    </div>
-                    <CardBody>
-                        <div className="font-bold my-4">Add bag details</div>
-                        <Input
-                            label="Volume"
-                            containerProps={{
-                                className: "mb-4",
-                            }}
-                            onChange={(e) => setBagDetails({ ...bagDetails, volume: Number(e.target.value) })}
-                            className="sticky top-0"
-                        />
-                        <Input
-                            label="Quantity"
-                            containerProps={{
-                                className: "mb-4",
-                            }}
-                            onChange={(e) => setBagDetails({ ...bagDetails, quantity: Number(e.target.value) })}
-                            className="sticky top-0"
-                        />
-                        <Button className="bg-secondary" onClick={addBag}>Add bag</Button>
+                                                    dateFormat="MMMM d, yyyy"
+
+                                                    className={`w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800`}
+                                                    placeholderText="Select a date and time"
+                                                    shouldCloseOnSelect={true}
+                                                    popperPlacement="bottom-start"
+                                                />
+                                            </List>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            {selectedDonor && (
+                                <>
+                                    <div className="font-parkinsans text-xl font-bold mb-2 text-primary">Add Bag Details</div>
+                                    <div className="flex items-center justify-center gap-4 mb-4">
+                                        <Input
+                                            label="Volume"
+                                            containerProps={{
+                                                className: "w-full",
+                                            }}
+                                            onChange={(e) => setBagDetails({ ...bagDetails, volume: Number(e.target.value) })}
+                                            value={bagDetails.volume}
+                                            className="sticky top-0"
+                                        />
+                                        <Input
+                                            label="Quantity"
+                                            containerProps={{
+                                                className: "w-full",
+                                            }}
+                                            onChange={(e) => setBagDetails({ ...bagDetails, quantity: Number(e.target.value) })}
+                                            value={bagDetails.quantity}
+                                            className="sticky top-0"
+                                        />
+                                        <Button className="bg-secondary" onClick={addBag} fullWidth>Add bag</Button>
+                                    </div>
+                                </>
+                            )}
+
+                        </div>
                     </CardBody>
-                    <CardFooter className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
-                        {bags && bags.length > 0 && bags.map((bag, index) => (
-                            <div className="border-4 border-secondary w-max rounded-md my-4 p-4 flex justify-center items-center flex-col">
-                                <p className="text-2xl text-secondary font-bold font-parkinsans">{bag.volume} ml</p>
-                                <p className="font-parkinsans">{bag.quantity}pc(s)</p>
-                            </div>
-                        ))
-                        }
+                    <CardFooter className="w-full p-0">
+                        <Button disabled={submitLoading} className="bg-success" onClick={submitAttendance} fullWidth>Save Attendance</Button>
                     </CardFooter>
                 </Card>
-                <div className="flex justify-end w-full my-4">
-                    <Button disabled={submitLoading} className="bg-success" onClick={submitAttendance}>Save Attendance</Button>
-                </div>
+                <Card className='w-full h-full gap-4 border-l-8 border-secondary p-4 mb-4'>
+                    <div className="w-full h-[calc(100%-5rem)]">
 
+                        <div>
+                            <Typography variant="h3" className="font-parkinsans text-primary font-bold mb-4">Donor Bags</Typography>
+                        </div>
+                        <Card className="h-full w-full overflow-y-scroll shadow-none">
+                            <table className="w-full min-w-max table-auto text-left">
+                                <thead>
+
+                                    <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                        <Typography variant="paragraph" color="white" className="font-normal leading-none">
+                                            Volume
+                                        </Typography>
+                                    </th>
+                                    <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                        <Typography variant="paragraph" color="white" className="font-normal leading-none">
+                                            Quantity
+                                        </Typography>
+                                    </th>
+                                    <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                        <Typography variant="paragraph" color="white" className="font-normal leading-none">
+                                            Action
+                                        </Typography>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    {bags.map((bag, index) => (
+                                        <tr key={index}>
+                                            {editingIndex === index ? (
+                                                <>
+                                                    <td className="p-4 border-b border-blue-gray-50">
+                                                        <Input
+                                                            type="number"
+                                                            min={1}
+                                                            value={editedBag.volume}
+                                                            onChange={(e) => setEditedBag({ ...editedBag, volume: Number(e.target.value < 1 ? 1 : e.target.value) })}
+                                                            className="w-full border px-2 py-1"
+                                                        />
+                                                    </td>
+                                                    <td className="p-4 border-b border-blue-gray-50">
+                                                        <Input
+                                                            type="number"
+                                                            min={1}
+                                                            value={editedBag.quantity}
+                                                            onChange={(e) => setEditedBag({ ...editedBag, quantity: Number(e.target.value < 1 ? 1 : e.target.value) })}
+                                                            className="w-full border px-2 py-1"
+                                                        />
+                                                    </td>
+                                                    <td className="flex gap-2 p-4 border-b border-blue-gray-50">
+                                                        <Check className="text-green-600 cursor-pointer" onClick={handleSave} />
+                                                        <X className="text-red-500 cursor-pointer" onClick={handleCancel} />
+                                                    </td>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <td className="p-4 border-b border-blue-gray-50 font-parkinsans">{bag.volume} ml</td>
+                                                    <td className="p-4 border-b border-blue-gray-50 font-parkinsans">{bag.quantity} pc(s)</td>
+                                                    <td className="flex gap-4 p-4 border-b border-blue-gray-50 font-parkinsans">
+                                                        <SquarePen size={20} className="text-primary cursor-pointer" onClick={() => handleEdit(index)} />
+                                                        <Trash size={20} className="text-danger cursor-pointer" onClick={() => handleDelete(index)} />
+                                                    </td>
+                                                </>
+                                            )}
+                                        </tr>
+                                    ))}
+
+                                </tbody>
+                            </table>
+                        </Card>
+                    </div>
+                </Card>
             </div>
+
         </div>
     )
 }

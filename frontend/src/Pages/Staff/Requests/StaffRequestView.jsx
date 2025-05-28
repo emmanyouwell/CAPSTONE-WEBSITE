@@ -30,14 +30,7 @@ const StaffRequestView = () => {
     const options = [
         { value: 'All', label: 'All' },
         ...recipients.map((patient) => ({
-            value: patient._id, label: (
-                <div className="flex flex-col text-sm">
-                    <span className="font-semibold">{patient.name} | {patient.phone}</span>
-                    <span className="text-xs">
-                        {patient.home_address.street}, {patient.home_address.brgy}, {patient.home_address.city}
-                    </span>
-                </div>
-            )
+            value: patient, label: `${patient.name} | ${patient.phone} | ${patient.home_address.street}, ${patient.home_address.brgy}, ${patient.home_address.city}`, patient
         }))
     ];
     const inpatient = request ? request.filter((r) => r.patient?.patientType === 'Inpatient' && r.status !== "Done") : [];
@@ -173,7 +166,7 @@ const StaffRequestView = () => {
     return (
         <>
             <div className="p-4">
-                <div className="flex items-center justify-end mb-4">
+                <div className="flex items-center justify-start mb-4">
                     <Button color="green" onClick={handleOpen}>
                         Add Request
                     </Button>
@@ -223,7 +216,18 @@ const StaffRequestView = () => {
                                                 onChange={(selected) => setSelectedOption(selected.value)}
                                                 options={options}
                                                 isSearchable
-
+                                                formatOptionLabel={(option) =>
+                                                    option.value === 'All' ? ('All') : (
+                                                        (
+                                                            <div className="flex flex-col text-sm">
+                                                                <span className="font-semibold">{option.value.name} | {option.value.phone}</span>
+                                                                <span className="text-xs">
+                                                                    {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
+                                                                </span>
+                                                            </div>
+                                                        )
+                                                    )
+                                                }
                                             />
                                         </div>
                                     </div>

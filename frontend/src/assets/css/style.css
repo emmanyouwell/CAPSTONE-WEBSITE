@@ -291,5 +291,5 @@ input[id^="react-select-"] {
 }
 
 .select-border-black:has(input:focus) > div:first-of-type {
-  box-shadow: 0 0 0 2px rgb(31, 31, 31) !important;
+  box-shadow: 0 0 0 1px rgb(31, 31, 31) !important;
 }
