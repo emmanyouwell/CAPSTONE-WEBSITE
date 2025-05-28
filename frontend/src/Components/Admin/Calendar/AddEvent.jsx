@@ -198,7 +198,7 @@ export function AddEvent() {
                                             showTimeSelect
                                             className={`w-full p-2 border ${formik.touched.start && formik.errors.start
                                                 ? "border-red-500"
-                                                : "border-gray-300"
+                                                : "border-gray-400"
                                                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
                                             placeholderText="Select a date and time"
                                             shouldCloseOnSelect={true}
@@ -227,7 +227,7 @@ export function AddEvent() {
                                             showTimeSelect
                                             className={`w-full p-2 border ${formik.touched.end && formik.errors.end
                                                 ? "border-red-500"
-                                                : "border-gray-800"
+                                                : "border-gray-400"
                                                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800`}
                                             placeholderText="Select a date and time"
                                             shouldCloseOnSelect={true}
