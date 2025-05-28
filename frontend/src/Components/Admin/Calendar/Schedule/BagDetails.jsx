@@ -48,6 +48,7 @@ const BagDetails = ({ bag, from, status, scheduleId }) => {
         })
     }
     const submitUpdate = () => {
+      
         const data = {
             volume: bagDetails.volume,
             expressDate: bagDetails.expressDate,
