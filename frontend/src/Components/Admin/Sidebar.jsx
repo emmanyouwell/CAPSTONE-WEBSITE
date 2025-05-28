@@ -7,7 +7,7 @@ const SidebarContext = createContext()
 export default function Sidebar({ children, userDetails }) {
     const [expanded, setExpanded] = useState(true)
     return (
-        <aside className="h-screen">
+        <aside className="h-[100vh]">
             <nav className="h-full flex flex-col bg-white border-r shadow-sm">
                 <div className="p-4 pb-2 flex justify-between items-center">
                     <img src={logo} alt="TCHMB Logo" className={`overflow-hidden transition-all ${expanded ? "w-10" : "w-0"}`} />
@@ -21,16 +21,7 @@ export default function Sidebar({ children, userDetails }) {
                 <SidebarContext.Provider value={{ expanded }}>
                     <ul className="flex-1 px-3">{children}</ul>
                 </SidebarContext.Provider>
-                <div className="border-t flex p-3">
-                    <img src={logo} alt="" className="w-10 h-10 rounded-md" />
-                    <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
-                        <div className="leading-4">
-                            <h4 className='font-semibold'>{userDetails.name}</h4>
-                            <span className="text-sx text-gray-600">{userDetails.email}</span>
-                        </div>
-
-                    </div>
-                </div>
+                
             </nav>
         </aside>
     )
