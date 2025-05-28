@@ -40,7 +40,7 @@ const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
                             <Link to={`/article/${article._id}`} className="flex items-center gap-2 text-secondary"><EyeIcon size={30} className="text-secondary btn btn-outline"/>{!isAdminLocation && <span className="font-varela font-bold">View</span>}</Link>
                             {isAdminLocation &&
                                 (<>
-                                    <Link to={`/dashboard/edit-article/${article._id}`} className=""><Pencil size={30} className="text-secondary"/></Link>
+                                    <Link to={`/dashboard/resources/edit/${article._id}`} className=""><Pencil size={30} className="text-secondary"/></Link>
                                     <Trash size={30} className="text-secondary cursor-pointer" onClick={() => handleDelete(article._id)} />
                                 </>)}
                         </div>

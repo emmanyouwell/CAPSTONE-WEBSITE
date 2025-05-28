@@ -24,27 +24,27 @@ import {
 import { useLocation } from 'react-router-dom';
 
 const superAdminItems = [
-    { title: "Donor Records", route: "/dashboard/donors", icon: <HeartIcon size={20} />, category: "Records" },
-    { title: "Recipient Records", route: "/dashboard/recipients", icon: <UserCircleIcon size={20} />, category: "Records" },
-    { title: "Interview Form Submissions", route: "/dashboard/submissions", icon: <BadgeCheck size={20} />, category: "Records" },
-    { title: "Event Schedules", route: "/dashboard/event/schedules", icon: <CalendarIcon size={20} />, category: "Schedules" },
-    { title: "Pick-up Schedules", route: "/dashboard/pickup/schedules", icon: <ClockIcon size={20} />, category: "Schedules" },
+    { title: "Donor Records", route: "/dashboard/donors", path: 'donor', icon: <HeartIcon size={20} />, category: "Records" },
+    { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon size={20} />, category: "Records" },
+    { title: "Interview Form Submissions", route: "/dashboard/submissions", path: 'submission', icon: <BadgeCheck size={20} />, category: "Records" },
+    { title: "Event Schedules", route: "/dashboard/events", path: 'event', icon: <CalendarIcon size={20} />, category: "Schedules" },
+    { title: "Pick-up Schedules", route: "/dashboard/schedules", path: 'schedule', icon: <ClockIcon size={20} />, category: "Schedules" },
 
-    { title: "Collections", route: "/dashboard/collections", icon: <Boxes size={20} />, category: "Inventory" },
-    { title: "Refrigerators", route: "/dashboard/inventory/refrigerator", icon: <Box size={20} />, category: "Inventory" },
+    { title: "Collections", route: "/dashboard/collections", path: 'collection', icon: <Boxes size={20} />, category: "Inventory" },
+    { title: "Refrigerators", route: "/dashboard/inventory/refrigerator", path: 'inventory', icon: <Box size={20} />, category: "Inventory" },
 
-    { title: "Requests", route: "/dashboard/requests", icon: <PackageOpenIcon size={20} />, category: "Inventory" },
+    { title: "Requests", route: "/dashboard/requests", path: 'request', icon: <PackageOpenIcon size={20} />, category: "Inventory" },
 
-    { title: "Account Management", route: "/dashboard/account", icon: <UsersIcon size={20} />, category: "Management" },
-    { title: "Announcement Creation", route: "/dashboard/announcement", icon: <MegaphoneIcon size={20} />, category: "Management" },
-    { title: "Resources Management", route: "/dashboard/resources", icon: <NewspaperIcon size={20} />, category: "Management" },
+    { title: "Account Management", route: "/dashboard/account", path: 'account', icon: <UsersIcon size={20} />, category: "Management" },
+    { title: "Announcement Creation", route: "/dashboard/announcement", path: 'announcement', icon: <MegaphoneIcon size={20} />, category: "Management" },
+    { title: "Resources Management", route: "/dashboard/resources", path: 'resources', icon: <NewspaperIcon size={20} />, category: "Management" },
 
 
 ];
 
 const staffItems = [
-    { title: "Recipient Records", route: "/dashboard/recipients", icon: <UserCircleIcon size={20} />, category: "Records" },
-    { title: "Request", route: "/dashboard/staff/requests", icon: <LifeBuoy size={20} />, category: "Records" },
+    { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon size={20} />, category: "Records" },
+    { title: "Request", route: "/dashboard/staff/requests", path: 'request', icon: <LifeBuoy size={20} />, category: "Records" },
 ]
 const SidebarComponent = ({ userDetails }) => {
 
@@ -71,6 +71,7 @@ const SidebarComponent = ({ userDetails }) => {
                         icon={<LayoutDashboard size={20} />}
                         text="Dashboard"
                         path="/dashboard"
+                        prefix="dashboard"
                         alert
                     />
                 }
@@ -89,16 +90,11 @@ const SidebarComponent = ({ userDetails }) => {
                                 icon={item.icon}
                                 text={item.title}
                                 path={item.route}
+                                prefix={item.path}
                             />
                         ))}
                     </div>
                 ))}
-
-                {/* <span className="flex items-center">
-
-                    <span className="h-px flex-1 bg-gray-400"></span>
-
-                </span> */}
 
             </Sidebar>
         </main>

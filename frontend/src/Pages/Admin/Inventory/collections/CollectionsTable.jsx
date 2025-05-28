@@ -41,7 +41,7 @@ const CollectionsTable = () => {
     const columnHelper = createColumnHelper();
 
     const columns = [
-        columnHelper.accessor(row => row.pubDetails?.activity || `${row.privDetails?.donorDetails.donorId.user.name.first} ${row.privDetails?.donorDetails.donorId.user.name.last}`, {
+        columnHelper.accessor(row => row.pubDetails?.activity || `${row.privDetails?.donorDetails.donor.user.name.first} ${row.privDetails?.donorDetails.donor.user.name.last}`, {
             id: 'activity',
             header: 'Activity Name',
             cell: info => info.getValue(),

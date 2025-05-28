@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-
+import { useLocation } from "react-router-dom";
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {
 
@@ -93,4 +93,23 @@ export const formatNumber = (num) => {
     } else {
         return num.toString();
     }
+}
+
+
+
+export const useIsActive = (path) => {
+    const location = useLocation();
+    const pathname = location.pathname.toLowerCase();
+
+    const subPath = pathname.replace(/^\/dashboard\/?/, '').split('/')[0] || '';
+
+    const base = path.toLowerCase().replace(/^\//, '');
+
+    if (pathname === '/dashboard' && path === 'dashboard') return true;
+
+    return (
+        subPath === base ||
+        subPath === base + 's' ||
+        subPath === base.slice(0, -1)
+    );
 }

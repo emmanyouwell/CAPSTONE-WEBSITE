@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap&family=Concert+One&family=DynaPuff:wght@400..700&family=Pangolin&family=Playpen+Sans:wght@100..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Short+Stack&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Holtwood+One+SC&family=Parkinsans:wght@300..800&display=swap");
+
 /* section {
     background-color: #fdf0d5;
 } */
@@ -23,6 +24,7 @@
 .custom-shape-divider-top-1736524383 .shape-fill {
   fill: #ffffff;
 }
+
 .custom-shape-divider-top-1741406764 {
   position: absolute;
   top: 0;
@@ -43,18 +45,22 @@
 .custom-shape-divider-top-1741406764 .shape-fill {
   fill: #f5f5dc;
 }
+
 .article-content {
   margin: 0 200px 0 200px;
   padding: 20px 30px;
 }
+
 .article-content p {
   font-size: 1rem;
   margin-bottom: 10px;
   line-height: 1.5;
   font-family: "Parkinsans", "serif";
 }
+
 .article-content h1 {
-  font-size: 2em; /* Adjust size */
+  font-size: 2em;
+  /* Adjust size */
   margin-bottom: 10px;
   font-family: "DM Serif Text", "serif";
 }
@@ -65,19 +71,22 @@
 }
 
 .article-content ul {
-  list-style-type: disc; /* Default bullet points */
+  list-style-type: disc;
+  /* Default bullet points */
   margin-left: 20px;
   padding-left: 20px;
 }
 
 .article-content ol {
-  list-style-type: decimal; /* Numbered list */
+  list-style-type: decimal;
+  /* Numbered list */
   margin-left: 20px;
   padding-left: 20px;
 }
 
 .article-content li {
-  margin-bottom: 5px; /* Space between items */
+  margin-bottom: 5px;
+  /* Space between items */
   font-size: 1rem;
 }
 
@@ -96,10 +105,14 @@
 
 .ql-container {
   background-color: gray;
-  max-height: 400px; /* Ensure the container matches the editor height */
-  overflow-y: auto; /* Enable vertical scrolling when content overflows */
-  padding: 10px; /* Optional: To add spacing inside the editor */
-  box-sizing: border-box; /* Ensures padding is included in the height */
+  max-height: 400px;
+  /* Ensure the container matches the editor height */
+  overflow-y: auto;
+  /* Enable vertical scrolling when content overflows */
+  padding: 10px;
+  /* Optional: To add spacing inside the editor */
+  box-sizing: border-box;
+  /* Ensures padding is included in the height */
 }
 
 .ql-editor img {
@@ -109,7 +122,8 @@
 }
 
 .ql-editor h1 {
-  font-size: 2em; /* Adjust size */
+  font-size: 2em;
+  /* Adjust size */
   margin-bottom: 10px;
 }
 
@@ -189,7 +203,8 @@
 
 
 div.card-datatable {
-  padding-block-end:1rem}
+  padding-block-end: 1rem
+}
 
 div.card-datatable div.dt-info {
   color: var(--bs-body-color)
@@ -261,10 +276,20 @@ div.table-responsive>div.dt-container>div.row>div[class^=col-]:last-child {
   padding-block: 1.115rem;
 }
 
-.list-wrapper{
+.list-wrapper {
   min-height: 0;
-  max-height: calc(50vh - 12rem);
+  max-height: calc(50vh - 5rem);
   inline-size: 100%;
   overflow-x: auto;
   overflow-y: auto
+}
+
+input[id^="react-select-"] {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.select-border-black:has(input:focus) > div:first-of-type {
+  box-shadow: 0 0 0 2px rgb(31, 31, 31) !important;
 }
