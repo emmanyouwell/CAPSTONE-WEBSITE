@@ -50,6 +50,10 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
     }
     const [bags, setBags] = useState([]);
     const submitUpdate = () => {
+        if (bags.length === 0) {
+            toast.error("No bags added.")
+            return;
+        }
         const data = {
             lettingId,
             donorId: id,
@@ -88,7 +92,7 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
             toast.error("Please fill out volume and express date", { position: "bottom-right" })
             return;
         }
-        if (isNaN(volume)){
+        if (isNaN(volume)) {
             toast.error("Volume must be a number")
             return;
         }
@@ -204,11 +208,9 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
                             name="volume"
                             onChange={handleVolumeChange}
                             value={bagDetails.volume}
-
                         />
-
                     </div>
-                    <Card className="h-96 w-full overflow-scroll">
+                    <Card className="h-96 w-full overflow-y-scroll">
                         <table className="w-full min-w-max table-auto text-left">
                             <thead>
                                 <th className="border-b border-blue-gray-100 bg-secondary-light p-4">

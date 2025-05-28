@@ -43,24 +43,14 @@ const ScheduleComponent = ({ events, type }) => {
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
     };
-    const handleChooseAction = () => {
-        if (selectedOption === "edit") {
-            navigate(`/dashboard/events/${event.id}`);
-        }
-        else if (selectedOption === "host") {
-            navigate(`/dashboard/events/attendance/${event.id}`);
-        }
-        setOpen(!open);
-        // Perform an action based on selectedOption
-    };
+   
     const [items, setItems] = useState([]);
     const [open, setOpen] = useState(false);
     const [event, setEvent] = useState('');
     const handleOpen = async (event, type) => {
-        console.log("Event: ", event);
+        
         if (event.status === "Done") {
-            navigate(`/dashboard/events/attendance/${event._id}`);
-            
+            navigate(`/dashboard/events/attendance/${event.id}`);
         }
         if (type === "events") {
             console.log("events: ", event);
@@ -84,9 +74,9 @@ const ScheduleComponent = ({ events, type }) => {
 
     }, [events, type])
 
-    useEffect(() => {
-        console.log(items);
-    }, [items]);
+    // useEffect(() => {
+    //     console.log(items);
+    // }, [items]);
 
 
     return (
@@ -109,8 +99,6 @@ const ScheduleComponent = ({ events, type }) => {
                     }
                     onSelectEvent={event => { handleOpen(event, type) }}
                     eventPropGetter={(event) => {
-                        console.log("Event Data:", event); // Debugging: Check event properties
-
                         let backgroundColor = 'blue'; // Default color
 
                         // Ensure event has a status property
