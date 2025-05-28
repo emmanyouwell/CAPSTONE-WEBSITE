@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { resetDelete, resetUpdate } from '../../../redux/slices/lettingSlice';
 import { Link } from 'react-router-dom';
 import { deleteLetting, getLettingDetails, updateLetting } from '../../../redux/actions/lettingActions';
+import DatePicker from 'react-datepicker';
 const EditEvent = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -211,14 +212,24 @@ const EditEvent = () => {
                                     <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                                         Start Date
                                     </Typography>
-                                    <Input
-                                        type="datetime-local"
-                                        name="start"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.start}
-                                        error={formik.touched.start && Boolean(formik.errors.start)}
-                                    />
+                                    <div className="add-event w-full">
+                                        <DatePicker
+                                            selected={formik.values.start}
+                                            onChange={(date) => formik.setFieldValue("start", date)}
+                                            onBlur={formik.handleBlur}
+                                            onCalendarClose={() => console.log("Calendar closed")} // Optional hook
+                                            dateFormat="MMMM d, yyyy h:mm aa"
+                                            showTimeSelect
+                                            className={`w-full p-2 border ${formik.touched.start && formik.errors.start
+                                                ? "border-red-500"
+                                                : "border-gray-400"
+                                                } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
+                                            placeholderText="Select a date and time"
+                                            shouldCloseOnSelect={true}
+                                            popperPlacement="left-end"
+                                            timeIntervals={10}
+                                        />
+                                    </div>
                                     {formik.touched.start && formik.errors.start && (
                                         <Typography color="red" variant="small">
                                             {formik.errors.start}
@@ -231,14 +242,24 @@ const EditEvent = () => {
                                     <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                                         End Date
                                     </Typography>
-                                    <Input
-                                        type="datetime-local"
-                                        name="end"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.end}
-                                        error={formik.touched.end && Boolean(formik.errors.end)}
-                                    />
+                                    <div className="add-event w-full">
+                                        <DatePicker
+                                            selected={formik.values.end}
+                                            onChange={(date) => formik.setFieldValue("end", date)}
+                                            onBlur={formik.handleBlur}
+                                            onCalendarClose={() => console.log("Calendar closed")} // Optional hook
+                                            dateFormat="MMMM d, yyyy h:mm aa"
+                                            showTimeSelect
+                                            className={`w-full p-2 border ${formik.touched.end && formik.errors.end
+                                                ? "border-red-500"
+                                                : "border-gray-400"
+                                                } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
+                                            placeholderText="Select a date and time"
+                                            shouldCloseOnSelect={true}
+                                            popperPlacement="left-end"
+                                            timeIntervals={10}
+                                        />
+                                    </div>
                                     {formik.touched.end && formik.errors.end && (
                                         <Typography color="red" variant="small">
                                             {formik.errors.end}

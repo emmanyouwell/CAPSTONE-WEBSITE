@@ -13,11 +13,12 @@ import {
     DialogFooter,
     Drawer,
 } from "@material-tailwind/react";
+import DatePicker from 'react-datepicker';
+
 import { XMarkIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux'
-import { addEvents, getEvents } from "../../../redux/actions/eventActions";
 import { getUser } from "../../../utils/helper";
 import { resetSuccess } from "../../../redux/slices/eventSlice";
 import { createLetting, getLettings } from "../../../redux/actions/lettingActions";
@@ -29,7 +30,7 @@ export function AddEvent() {
     const validationSchema = Yup.object({
         title: Yup.string().required("Title is required"),
         description: Yup.string(),
-        venue: Yup.string(),
+        venue: Yup.string().required("Venue is required"),
         status: Yup.string().required("Status is required"),
 
         start: Yup.date().required("Start date is required"),
@@ -93,7 +94,7 @@ export function AddEvent() {
             </Button>
             <Drawer open={open} onClose={handleOpen} className="p-4" size={500}>
                 <form onSubmit={formik.handleSubmit}>
-                    <div className="overflow-y-auto flex-1 pr-2 space-y-4">
+                    <div className="overflow-y-auto h-[calc(100vh-5rem)] pr-2 space-y-4">
                         <div className="relative m-0 block">
                             <Typography variant="h4" color="blue-gray">
                                 Add a new event
@@ -182,19 +183,29 @@ export function AddEvent() {
                                     )}
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-4 w-full">
                                 <div className="w-full">
                                     <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                                         Start Date
                                     </Typography>
-                                    <Input
-                                        type="datetime-local"
-                                        name="start"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.start}
-                                        error={formik.touched.start && Boolean(formik.errors.start)}
-                                    />
+                                    <div className="add-event w-full">
+                                        <DatePicker
+                                            selected={formik.values.start}
+                                            onChange={(date) => formik.setFieldValue("start", date)}
+                                            onBlur={formik.handleBlur}
+                                            onCalendarClose={() => console.log("Calendar closed")} // Optional hook
+                                            dateFormat="MMMM d, yyyy h:mm aa"
+                                            showTimeSelect
+                                            className={`w-full p-2 border ${formik.touched.start && formik.errors.start
+                                                ? "border-red-500"
+                                                : "border-gray-300"
+                                                } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
+                                            placeholderText="Select a date and time"
+                                            shouldCloseOnSelect={true}
+                                            popperPlacement="left-end"
+                                            timeIntervals={10}
+                                        />
+                                    </div>
                                     {formik.touched.start && formik.errors.start && (
                                         <Typography color="red" variant="small">
                                             {formik.errors.start}
@@ -206,14 +217,24 @@ export function AddEvent() {
                                     <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                                         End Date
                                     </Typography>
-                                    <Input
-                                        type="datetime-local"
-                                        name="end"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.end}
-                                        error={formik.touched.end && Boolean(formik.errors.end)}
-                                    />
+                                    <div className="add-event w-full">
+                                        <DatePicker
+                                            selected={formik.values.end}
+                                            onChange={(date) => formik.setFieldValue("end", date)}
+                                            onBlur={formik.handleBlur}
+                                            onCalendarClose={() => console.log("Calendar closed")} // Optional hook
+                                            dateFormat="MMMM d, yyyy h:mm aa"
+                                            showTimeSelect
+                                            className={`w-full p-2 border ${formik.touched.end && formik.errors.end
+                                                ? "border-red-500"
+                                                : "border-gray-800"
+                                                } rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800`}
+                                            placeholderText="Select a date and time"
+                                            shouldCloseOnSelect={true}
+                                            popperPlacement="left-end"
+                                            timeIntervals={10}
+                                        />
+                                    </div>
                                     {formik.touched.end && formik.errors.end && (
                                         <Typography color="red" variant="small">
                                             {formik.errors.end}
@@ -230,14 +251,6 @@ export function AddEvent() {
                     </div>
                 </form>
             </Drawer>
-
-
-
-
-
-
-
-
         </>
     );
 }

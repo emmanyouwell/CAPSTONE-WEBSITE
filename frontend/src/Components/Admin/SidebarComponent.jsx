@@ -94,11 +94,11 @@ const SidebarComponent = ({ userDetails }) => {
                     </div>
                 ))}
 
-                <span className="flex items-center">
+                {/* <span className="flex items-center">
 
                     <span className="h-px flex-1 bg-gray-400"></span>
 
-                </span>
+                </span> */}
 
             </Sidebar>
         </main>
