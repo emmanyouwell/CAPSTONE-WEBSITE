@@ -163,7 +163,7 @@ const RecipientPage = () => {
                             <Input
                                 type="search"
                                 color="gray"
-                                label="Search for donors..."
+                                label="Search for patients..."
                                 className="pr-10"
                                 onChange={handleTextChange}
                                 containerProps={{
