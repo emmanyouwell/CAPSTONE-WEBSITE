@@ -194,7 +194,7 @@ const EditEvent = () => {
                                     >
                                         <Option value="Not-Due">Not-Due</Option>
                                         <Option value="On-Going">On-Going</Option>
-                                        <Option value="Done">Done</Option>
+                                        
                                     </Select>
                                     {formik.touched.status && formik.errors.status && (
                                         <Typography color="red" variant="small">
@@ -271,7 +271,7 @@ const EditEvent = () => {
 
                         {/* Card Footer */}
                         <CardFooter className="pt-4 flex justify-end gap-4">
-                            <Button type="submit">
+                            <Button type="submit" color="pink">
                                 Update
                             </Button>
                         </CardFooter>

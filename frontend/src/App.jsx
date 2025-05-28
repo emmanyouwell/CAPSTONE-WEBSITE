@@ -213,7 +213,7 @@ function MainContent() {
         </div> : <RoutesComponent />}
 
 
-      <ToastContainer />
+      <ToastContainer position="bottom-right"/>
     </div>
   )
 }
