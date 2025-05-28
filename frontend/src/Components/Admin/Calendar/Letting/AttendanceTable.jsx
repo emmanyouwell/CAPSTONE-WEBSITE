@@ -11,6 +11,7 @@ import {
     Typography,
     Input,
     Checkbox,
+    Drawer,
 } from "@material-tailwind/react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -20,6 +21,8 @@ import { updateAttendance } from '../../../../redux/actions/lettingActions';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../DataTables/tanstack/DataTable';
 import { formatDate } from '../../../../utils/helper';
+import DatePicker from 'react-datepicker';
+import { Trash2, X, XSquare } from 'lucide-react';
 const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => {
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
@@ -83,6 +86,10 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
 
         if (!volume || !expressDate) {
             toast.error("Please fill out volume and express date", { position: "bottom-right" })
+            return;
+        }
+        if (isNaN(volume)){
+            toast.error("Volume must be a number")
             return;
         }
 
@@ -156,89 +163,122 @@ const AttendanceTable = ({ attendance, currentPage, totalPages, lettingId }) => 
     return (
         <div className="w-full h-full">
             <DataTable data={attendance} columns={columns} pageSize={10} />
-            <Dialog
-                size="xs"
-                open={open}
-                handler={handleOpen}
-                className="bg-transparent shadow-none"
-            >
-                <Card className="mx-auto w-full max-w-[24rem]">
-
-                    <CardBody className="flex flex-col gap-4">
-                        <Typography variant="h4" color="blue-gray">
-                            Add more bags
+            <Drawer open={open} onClose={handleOpen} size={500} className="p-4">
+                <div className="overflow-y-auto h-[calc(100vh-5rem)] pr-2 space-y-4">
+                    <Typography variant="h4" color="blue-gray">
+                        Add more bags
+                    </Typography>
+                    <Typography
+                        className="mb-3 font-normal"
+                        variant="paragraph"
+                        color="gray"
+                    >
+                        Donor: {name}
+                    </Typography>
+                    <div className="w-full">
+                        <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                            Express date
                         </Typography>
-                        <Typography
-                            className="mb-3 font-normal"
-                            variant="paragraph"
-                            color="gray"
-                        >
-                            Donor: {name}
+                        <div className="add-event w-full">
+                            <DatePicker
+                                selected={bagDetails.expressDate}
+                                onChange={(date) => { setBagDetails({ ...bagDetails, expressDate: date }) }}
+                                onCalendarClose={() => console.log("Calendar closed")} // Optional hook
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                showTimeSelect
+                                className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
+                                placeholderText="Select a date and time"
+                                shouldCloseOnSelect={true}
+                                popperPlacement="left-end"
+                                timeIntervals={10}
+                            />
+                        </div>
+
+                    </div>
+                    <div className="w-full">
+                        <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                            Volume
                         </Typography>
-                        <div className="w-full">
-                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                Express date
-                            </Typography>
-                            <Input
-                                type="datetime-local"
-                                name="expressDate"
-                                onChange={handleDateChange}
-                                value={bagDetails.expressDate || ""}
-                            />
+                        <Input
+                            type="text"
+                            name="volume"
+                            onChange={handleVolumeChange}
+                            value={bagDetails.volume}
 
-                        </div>
-                        <div className="w-full">
-                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                Volume
-                            </Typography>
-                            <Input
-                                type="text"
-                                name="volume"
-                                onChange={handleVolumeChange}
-                                value={bagDetails.volume}
+                        />
 
-                            />
-
-                        </div>
-
-
-                        <div className="w-full p-2 h-24 overflow-y-auto border-2 border-gray-500">
-                            {bags.length > 0 && bags.map((bag, index) => (
-                                <div key={index} className="flex justify-between items-center">
-                                    <Typography variant="small" color="blue-gray">
-                                        Bag {index + 1}
+                    </div>
+                    <Card className="h-96 w-full overflow-scroll">
+                        <table className="w-full min-w-max table-auto text-left">
+                            <thead>
+                                <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                    <Typography variant="small" color="white" className="font-normal leading-none opacity-70">
+                                        No.
                                     </Typography>
-                                    <Typography variant="small" color="blue-gray">
-                                        {bag.volume} ml
+                                </th>
+                                <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                    <Typography variant="small" color="white" className="font-normal leading-none opacity-70">
+                                        Volume
                                     </Typography>
-                                    <Typography variant="small" color="blue-gray">
-                                        {new Date(bag.expressDate).toLocaleString("en-US", {
-                                            weekday: "short",
-                                            year: "numeric",
-                                            month: "short",
-                                            day: "numeric",
-                                            hour: "numeric",
-                                            minute: "numeric",
-                                        })}
+                                </th>
+                                <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                    <Typography variant="small" color="white" className="font-normal leading-none opacity-70">
+                                        Date
                                     </Typography>
-                                    <XMarkIcon className="h-5 w-5 text-red-500 hover:cursor-pointer" onClick={() => setBags(bags.filter((_, i) => i !== index))} />
-                                </div>
-                            ))}
-                        </div>
-                    </CardBody>
-                    <CardFooter className="pt-0 flex items-center justify-between gap-4">
-                        <Button variant="gradient" onClick={addBag} fullWidth>
-                            Add bags
-                        </Button>
-                        <Button variant="gradient" color="deep-orange" onClick={submitUpdate} fullWidth>
-                            Update
-                        </Button>
-                    </CardFooter>
+                                </th>
+                                <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                    <Typography variant="small" color="white" className="font-normal leading-none opacity-70">
+                                        Action
+                                    </Typography>
+                                </th>
+                            </thead>
+                            <tbody>
+                                {bags.length > 0 && bags.map((bag, index) => (
+                                    <tr key={index} >
+                                        <td className="p-4 border-b border-blue-gray-50">
+                                            <Typography variant="small" color="blue-gray" className="font-normal">
+                                                {index + 1}
+                                            </Typography>
+                                        </td>
+                                        <td className="p-4 border-b border-blue-gray-50">
+                                            <Typography variant="small" color="blue-gray" className="font-normal">
+                                                {bag.volume} ml
+                                            </Typography>
+                                        </td>
+                                        <td className="p-4 border-b border-blue-gray-50">
+                                            <Typography variant="small" color="blue-gray" className="font-normal">
+                                                {new Date(bag.expressDate).toLocaleString("en-US", {
+                                                    weekday: "short",
+                                                    year: "numeric",
+                                                    month: "short",
+                                                    day: "numeric",
+                                                    hour: "numeric",
+                                                    minute: "numeric",
+                                                })}
+                                            </Typography>
 
-                </Card>
-            </Dialog>
+                                        </td>
+                                        <td className="p-4 border-b border-blue-gray-50">
+                                            <Trash2 className="h-5 w-5 text-red-500 hover:cursor-pointer" onClick={() => setBags(bags.filter((_, i) => i !== index))} />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
 
-        </div>
+                    </Card>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                    <Button variant="gradient" color="green" onClick={addBag} fullWidth>
+                        Add bags
+                    </Button>
+                    <Button variant="gradient" color="pink" onClick={submitUpdate} fullWidth>
+                        Update
+                    </Button>
+                </div>
+
+            </Drawer >
+        </div >
     )
 }
 
