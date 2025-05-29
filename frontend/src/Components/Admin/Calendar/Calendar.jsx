@@ -181,7 +181,7 @@ const ScheduleComponent = ({ events, type }) => {
                                         className="peer hidden"
                                         required
                                        
-                                        onClick={() => navigate(`/dashboard/events/attendance/${event.id}`)}
+                                        onClick={() => navigate(`/dashboard/events/attendance/${event.id}`, {state: {from: "host"}})}
                                     />
                                     <label
                                         htmlFor="host"

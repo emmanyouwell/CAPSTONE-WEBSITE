@@ -1,5 +1,7 @@
 import { toast } from 'react-toastify';
 import { useLocation } from "react-router-dom";
+import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react';
+import React from 'react';
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {
 
@@ -112,4 +114,13 @@ export const useIsActive = (path) => {
         subPath === base + 's' ||
         subPath === base.slice(0, -1)
     );
+}
+
+export const getPerformance = (current, average) => {
+    let message = '';
+    const diff = current - average;
+    const percent = (diff / average) * 100;
+
+
+    return percent.toFixed(2)
 }

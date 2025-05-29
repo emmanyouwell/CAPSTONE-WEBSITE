@@ -3,6 +3,7 @@ import {
   createLetting,
   deleteLetting,
   finalizeSession,
+  getAverageLettingVolume,
   getLettingDetails,
   getLettings,
   getUpcomingLettings,
@@ -18,6 +19,7 @@ export const lettingSlice = createSlice({
     lettings: [],
     message: "",
     newDonor: {},
+    average: 0,
     lettingDetails: {},
     loading: false,
     error: null,
@@ -162,7 +164,18 @@ export const lettingSlice = createSlice({
       .addCase(updateAttendance.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(getAverageLettingVolume.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getAverageLettingVolume.fulfilled, (state, action) => {
+        state.loading = false;
+        state.average = action.payload.averageVolume;
+      })
+      .addCase(getAverageLettingVolume.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload
+      })
   },
 });
 export const { resetSuccess, resetError, resetDelete, resetUpdate } = lettingSlice.actions;

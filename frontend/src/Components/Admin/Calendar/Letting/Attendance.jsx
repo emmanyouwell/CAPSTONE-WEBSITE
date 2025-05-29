@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { finalizeSession, getLettingDetails } from '../../../../redux/actions/lettingActions';
+import { finalizeSession, getAverageLettingVolume, getLettingDetails } from '../../../../redux/actions/lettingActions';
 import AttendanceTable from './AttendanceTable';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getUser } from '../../../../utils/helper';
+import { getPerformance, getUser } from '../../../../utils/helper';
 import { Alert, Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, select, Select, Textarea, Typography } from '@material-tailwind/react';
 import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon } from '@heroicons/react/24/solid';
@@ -15,82 +15,62 @@ import { toast } from 'react-toastify';
 import { getUserDetails } from '../../../../redux/actions/userActions';
 import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { addInventory } from '../../../../redux/actions/inventoryActions';
-import { SquareCheck } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, SquareCheck } from 'lucide-react';
 
 const Attendance = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const { lettingDetails, loading, error, success } = useSelector((state) => state.lettings);
+  const { lettingDetails, loading, error, success, average } = useSelector((state) => state.lettings);
   const { fridges } = useSelector((state) => state.fridges);
   const { userDetails } = useSelector((state) => state.users);
   const from = location.state?.from;
   const collectionId = location.state?.collectionId;
-  const status = location.state?.status;
+  const status = location.state?.status
+
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
+  const [openSubmit, setOpenSubmit] = useState(false)
+  const [percent, setPercent] = useState(0);
   const handleOpen = () => setOpen(!open);
+  const handleOpenSubmit = () => setOpenSubmit(!openSubmit);
   const handleChange = (e) => {
     setSelectedOption(e.target.value)
   }
-  const openForm = () => {
-    localStorage.setItem('redirectUrl', window.location.href);
-    navigate('/new-donor-form')
-  }
-
 
   useEffect(() => {
     console.log('dispatching getlettingdetails')
     dispatch(getLettingDetails(id));
     dispatch(getUserDetails());
     dispatch(getFridges());
-
+    dispatch(getAverageLettingVolume());
   }, [dispatch, id])
   const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
   const handleSubmit = () => {
-    const submit = () => {
-      if (!userDetails || !id) {
-        toast.error("Error: Missing required fields", { position: "bottom-right" });
-        return;
-      }
+    if (!userDetails || !id) {
+      toast.error("Error: Missing required fields", { position: "bottom-right" });
+      return;
+    }
 
-      const finalizeData = {
-        adminId: userDetails._id,
-        lettingId: id,
-      };
-
-      dispatch(finalizeSession(finalizeData))
-        .then(() => {
-          dispatch(recordPublicRecord({ lettingId: id })).then(() => {
-            toast.success(`Milk Letting event has been finalized`, { position: "bottom-right" });
-            navigate("/dashboard/events");
-          });
-        })
-        .catch((error) => {
-          toast.error("Failed to add fridge. Please try again.", { position: "bottom-right" });
-          console.error(error);
-        });
+    const finalizeData = {
+      adminId: userDetails._id,
+      lettingId: id,
+      percent
     };
-    toast(
-      <div>
-        <span>Are you sure?</span>
-        <Button
-          className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
-          onClick={() => submit()}
-          size="md"
-        >
-          Confirm
-        </Button>
-      </div>,
-      {
 
-        style: { borderLeft: "4px solid #3498db" },
-        position: "top-right",
-        autoClose: false,
-        closeOnClick: true,
-      }
-    );
+    dispatch(finalizeSession(finalizeData))
+      .then(() => {
+        dispatch(recordPublicRecord({ lettingId: id })).then(() => {
+          toast.success(`Milk Letting event has been finalized`, { position: "bottom-right" });
+          navigate("/dashboard/events");
+        });
+      })
+      .catch((error) => {
+        toast.error("Failed to add fridge. Please try again.", { position: "bottom-right" });
+        console.error(error);
+      });
+    handleOpenSubmit();
   };
   const submitFridge = () => {
     if (!selectedOption) {
@@ -128,13 +108,11 @@ const Attendance = () => {
     };
   }, [])
   useEffect(() => {
-    if (from) {
-      console.log("from: ", from);
+    if (lettingDetails && average) {
+      setPercent(getPerformance(lettingDetails.totalVolume, average))
     }
-    if (status) {
-      console.log("status: ", status);
-    }
-  }, [from, status])
+  }, [lettingDetails, average])
+
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full gap-4 p-4 h-full">
@@ -143,7 +121,7 @@ const Attendance = () => {
           {lettingDetails && lettingDetails.status !== 'Done' ? (<div className="flex flex-col w-full">
 
             <div className="flex items-center gap-4 justify-between w-full">
-              <Typography variant="h2">Total Volume: {lettingDetails.totalVolume} ml</Typography>
+              <Typography variant="h2" className="w-max flex items-baseline gap-2">Total Volume: {lettingDetails.totalVolume} ml {percent > 0 ? <span className="text-green-600 text-[16px] flex items-center"><ArrowUpIcon className="h-4 w-4 text-green-600" />{Math.abs(percent).toFixed(2)}%</span> : <span className="text-red-600 flex items-center text-[16px] flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}%</span>}</Typography>
               <div className='flex gap-4'>
                 <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
                   Create New Donor
@@ -153,18 +131,18 @@ const Attendance = () => {
                     Create New Attendance
                   </Button>
                 </Link>
-                <Button size="sm" color="green" onClick={handleSubmit}>
+                <Button size="sm" color="green" onClick={handleOpenSubmit}>
                   Finalize Attendance
                 </Button>
               </div>
             </div>
 
           </div>) : <> {from === "RedirectDetails" ? <Link to={`/dashboard/collections`}>
-            <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
+            <div className="h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
               <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
             </div>
           </Link> : <Link to={`/dashboard/event/history`}>
-            <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
+            <div className="h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
               <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
             </div>
           </Link>}
@@ -173,72 +151,99 @@ const Attendance = () => {
               <Typography variant="h2">Total volume: {lettingDetails.totalVolume} ml</Typography>
               {from && status && from === "RedirectDetails" && status !== "Stored" && <SquareCheck onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />}
             </div>
-            <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
-              <DialogHeader className="relative m-0 block">
-                <Typography variant="h4" color="blue-gray">
-                  Choose Refrigerator
-                </Typography>
-                <Typography className="mt-1 font-normal text-gray-600">
-                  Please select the fridge you would like to store the milk in.
-                </Typography>
-                <IconButton
-                  size="sm"
-                  variant="text"
-                  className="!absolute right-3.5 top-3.5"
-                  onClick={handleOpen}
-                >
-                  <XMarkIcon className="h-4 w-4 stroke-2" />
-                </IconButton>
-              </DialogHeader>
-              <DialogBody>
-                <div className="space-y-4">
-
-                  {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge, index) => (
-                    <div key={index}>
-                      <input
-                        type="radio"
-                        id={`${fridge.name}_${fridge._id}`}
-                        name={fridge.name}
-                        value={fridge._id}
-                        className="peer hidden"
-                        required
-                        checked={selectedOption === fridge._id}
-                        onChange={handleChange}
-                      />
-                      <label
-                        htmlFor={`${fridge.name}_${fridge._id}`}
-                        className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
-                      >
-                        <div className="block">
-                          <Typography className="font-semibold">
-                            {fridge.name}
-                          </Typography>
-                          <Typography className="font-normal text-gray-600">
-                            {fridge.fridgeType}
-                          </Typography>
-                        </div>
-                      </label>
-                    </div>
-                  ))}
-
-
-                </div>
-              </DialogBody>
-              <DialogFooter>
-                <Button className="ml-auto" onClick={submitFridge}>
-                  Select
-                </Button>
-              </DialogFooter>
-            </Dialog>
-
           </>}
 
         </div>
 
-        {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} status={status} lettingId={lettingDetails._id} />}
+        {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} from={from} status={status} lettingId={lettingDetails._id} />}
 
       </div>
+      <Dialog size="sm" open={open} handler={handleOpen} className="p-4" dismiss={{ outsidePress: false }}>
+        <DialogHeader className="relative m-0 block">
+          <Typography variant="h4" color="blue-gray">
+            Choose Refrigerator
+          </Typography>
+          <Typography className="mt-1 font-normal text-gray-600">
+            Please select the fridge you would like to store the milk in.
+          </Typography>
+          <IconButton
+            size="sm"
+            variant="text"
+            className="!absolute right-3.5 top-3.5"
+            onClick={handleOpen}
+          >
+            <XMarkIcon className="h-4 w-4 stroke-2" />
+          </IconButton>
+        </DialogHeader>
+        <DialogBody>
+          <div className="space-y-4">
 
+            {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge, index) => (
+              <div key={index}>
+                <input
+                  type="radio"
+                  id={`${fridge.name}_${fridge._id}`}
+                  name={fridge.name}
+                  value={fridge._id}
+                  className="peer hidden"
+                  required
+                  checked={selectedOption === fridge._id}
+                  onChange={handleChange}
+                />
+                <label
+                  htmlFor={`${fridge.name}_${fridge._id}`}
+                  className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                >
+                  <div className="block">
+                    <Typography className="font-semibold">
+                      {fridge.name}
+                    </Typography>
+                    <Typography className="font-normal text-gray-600">
+                      {fridge.fridgeType}
+                    </Typography>
+                  </div>
+                </label>
+              </div>
+            ))}
+
+
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button className="ml-auto" onClick={submitFridge}>
+            Select
+          </Button>
+        </DialogFooter>
+      </Dialog>
+      <Dialog size="sm" open={openSubmit} handler={handleOpenSubmit} className="p-4">
+        <DialogHeader>
+          <Typography variant="h5" color="blue-gray" className="text-center w-full">
+            Finalize Milk Letting Attendance?
+          </Typography>
+        </DialogHeader>
+        <DialogBody divider className="grid place-items-center gap-2">
+          <Typography variant="h5" color="blue-gray">Total Collected Volume:</Typography>
+          <Typography color="pink" className="font-parkinsans" variant="h2">
+            {lettingDetails.totalVolume} ml
+          </Typography>
+          <Typography className="text-center font-normal">
+            {percent > 0 ? (<span className="flex items-center gap-1 text-gray-700">
+
+              This event collected <span className="text-green-600 flex items-center"><ArrowUpIcon className="h-4 w-4 text-green-600" />{Math.abs(percent).toFixed(2)}% more milk</span> than previous events!
+            </span>) : percent < 0 ? (<span className="flex items-center gap-1 text-gray-700">
+
+              This event collected <span className="text-red-600 flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}% less milk</span> than previous events.
+            </span>) : <span className="text-gray-700">
+              This event collected the same amount of milk as previous events.
+            </span>}
+          </Typography>
+        </DialogBody>
+        <DialogFooter className="space-x-2">
+          <Button variant="gradient" color="pink" onClick={handleSubmit}>
+            Finalize
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </>
   )
 }

@@ -8,12 +8,12 @@ export const createLetting = createAsyncThunk(
     'letting/createLetting',
     async (req, thunkAPI) => {
 
-        
+
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
@@ -35,12 +35,12 @@ export const newPublicDonor = createAsyncThunk(
     'letting/newPublicDonor',
     async (req, thunkAPI) => {
 
-        
+
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
@@ -60,13 +60,9 @@ export const newPublicDonor = createAsyncThunk(
 export const markAttendance = createAsyncThunk(
     'letting/markAttendance',
     async (req, thunkAPI) => {
-
-        
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
             },
             withCredentials: true
         }
@@ -87,13 +83,10 @@ export const markAttendance = createAsyncThunk(
 export const finalizeSession = createAsyncThunk(
     'letting/finalizeSession',
     async (req, thunkAPI) => {
-
-        
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
@@ -115,11 +108,11 @@ export const getLettings = createAsyncThunk(
     'letting/getLettings',
     async (query, thunkAPI) => {
 
-        
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
@@ -148,17 +141,17 @@ export const getUpcomingLettings = createAsyncThunk(
     'letting/getUpcomingLettings',
     async (query, thunkAPI) => {
 
-       
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
         console.log("Config: ", config)
         try {
-            
+
             const response = await api.get(`${VITE_APP_URL}/api/v1/upcoming/lettings`, config);
             return response.data;
 
@@ -174,12 +167,12 @@ export const getLettingDetails = createAsyncThunk(
     'letting/getLettingDetails',
     async (id, thunkAPI) => {
 
-        
+
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
@@ -200,12 +193,12 @@ export const deleteLetting = createAsyncThunk(
     'letting/deleteLetting',
     async (id, thunkAPI) => {
 
-        
+
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
@@ -226,19 +219,19 @@ export const updateLetting = createAsyncThunk(
     'letting/updateLetting',
     async (req, thunkAPI) => {
 
-        
+
         console.log("Update Lettings: ", req)
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
         try {
             const response = await api.put(`${VITE_APP_URL}/api/v1/letting/${req.id}`, req, config)
-            
+
             return response.data;
 
         } catch (error) {
@@ -250,26 +243,52 @@ export const updateLetting = createAsyncThunk(
 
 export const updateAttendance = createAsyncThunk(
     'letting/updateAttendance',
-    async (req, thunkAPI) =>{
-        
-        
+    async (req, thunkAPI) => {
+
+
         console.log("Update Lettings: ", req)
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-               
+
             },
             withCredentials: true
         }
         try {
             const response = await api.put(`${VITE_APP_URL}/api/v1/additional-bags/${req.lettingId}`, req, config)
-            
+
             return response.data;
 
         } catch (error) {
 
             return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
+// Get all Milk Letting Event
+export const getAverageLettingVolume = createAsyncThunk(
+    'letting/getAverageLettingVolume',
+    async (query, thunkAPI) => {
+
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            withCredentials: true
+        }
+        console.log("Config: ", config)
+        try {
+            
+            const response = await api.get(`/api/v1/lettings/average`, config);
+            return response.data;
+
+        } catch (error) {
+            console.log("Error: ", error)
+            return thunkAPI.rejectWithValue(error.response.data.error);
         }
     }
 )
