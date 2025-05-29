@@ -615,7 +615,7 @@ const SingleRequest = () => {
                 </Drawer>
 
                 <Dialog size="xl" open={open} handler={() => setOpen(false)}>
-                    <DialogBody>
+                    <DialogBody className="h-[calc(100vh-8rem)] overflow-y-auto">   
                         {selectedImage ? (
                             <img src={selectedImage} alt="prescription" className="w-full h-[48rem] object-contain" />
                         ) : <img src={placeholder} alt="prescription" className="w-full h-[48rem] object-contain" />}
