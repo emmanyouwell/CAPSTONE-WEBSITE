@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { getRequestDetails, updateVolumeRequested } from '../../../../redux/actions/requestActions';
 import { Button, Card, CardBody, CardFooter, CardHeader, Carousel, Dialog, DialogBody, DialogFooter, DialogHeader, Drawer, IconButton, Input, Option, Select, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from '@material-tailwind/react'
@@ -308,6 +308,14 @@ const SingleRequest = () => {
     return (
         <div className="p-8">
             <div className="flex flex-col gap-4 justify-between items-center">
+                <div className="w-full">
+                    <Link to={`/dashboard/requests`}>
+                        <div className="h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
+                            <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
+                        </div>
+                    </Link>
+                </div>
+
                 <div className="font-parkinsans text-2xl text-center">{requestDetails.patient?.patientType} Request Details</div>
                 <Tabs value="requestDetails" className="w-full">
                     <TabsHeader>
@@ -372,12 +380,12 @@ const SingleRequest = () => {
 
                         </TabPanel>
                         <TabPanel value="attachments" className="h-full">
-                            <div className="font-parkinsans text-2xl text-center">Attachments</div>
-                            <div className="grid grid-cols-auto md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            
+                            <div className="flex items-center justify-center md:justify-start flex-wrap gap-4">
                                 {requestDetails.images?.map((image, index) => (
                                     <Card
                                         key={index}
-                                        className="mt-4 w-max mx-auto cursor-pointer overflow-hidden transition-opacity hover:opacity-90"
+                                        className="w-max cursor-pointer overflow-hidden transition-opacity hover:opacity-90"
                                         onClick={() => handleOpen(image.url)}
                                     >
                                         <img src={image.url} alt="prescription" className="w-72 h-52 object-cover" />
@@ -527,7 +535,7 @@ const SingleRequest = () => {
                             }) : selectedOption ? <Typography color="red" variant="small">Fridge is empty. Choose another one.</Typography> : <Typography color="blue-gray" variant="small">No fridge selected</Typography>}
 
                         </div>
- 
+
                         {formError?.inventory?.status && <Typography color="red" variant="small">
                             {formError?.inventory?.message}
                         </Typography>}
