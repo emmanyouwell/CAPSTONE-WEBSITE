@@ -36,7 +36,7 @@ const superAdminItems = [
     { title: "Requests", route: "/dashboard/requests", path: 'request', icon: <PackageOpenIcon size={20} />, category: "Inventory" },
 
     { title: "Account Management", route: "/dashboard/account", path: 'account', icon: <UsersIcon size={20} />, category: "Management" },
-    { title: "Announcement Creation", route: "/dashboard/announcement", path: 'announcement', icon: <MegaphoneIcon size={20} />, category: "Management" },
+    { title: "Announcement Management", route: "/dashboard/announcement", path: 'announcement', icon: <MegaphoneIcon size={20} />, category: "Management" },
     { title: "Resources Management", route: "/dashboard/resources", path: 'resources', icon: <NewspaperIcon size={20} />, category: "Management" },
 
 

@@ -43,20 +43,15 @@ import CollectionsTable from "./Pages/Admin/Inventory/collections/CollectionsTab
 import RedirectDetails from "./Pages/Admin/Inventory/collections/RedirectDetails";
 import SidebarComponent from "./Components/Admin/SidebarComponent";
 import PasteurizedMilk from "./Pages/Admin/Inventory/PasteurizedMilk";
-import StaffDashboard from "./Pages/Staff/StaffDashboard";
 import RequestView from "./Pages/Admin/Inventory/requests/RequestView";
-import CreateRequest from "./Pages/Staff/Requests/CreateRequest";
 import DashboardLayout from "./Pages/DashboardLayout";
 import { useSelector } from "react-redux";
 import RequestDataTable from "./Components/DataTables/RequestDataTable";
-import RequestCardComponent from "./Pages/Admin/Inventory/requests/RequestCardComponent";
 import SingleRequest from "./Pages/Admin/Inventory/requests/SingleRequest";
 import StaffRequest from "./Pages/Staff/Requests/StaffRequest";
 import StaffRequestView from "./Pages/Staff/Requests/StaffRequestView";
 import Submissions from "./Pages/Admin/Eligibility/Submissions";
 import CreateAnnouncement from "./Pages/Admin/Announcement/CreateAnnouncement";
-
-import DataTable from './Components/DataTables/tanstack/DataTable';
 import SingleAnnouncement from "./Pages/Admin/Announcement/SingleAnnouncement";
 import EditAnnouncement from "./Pages/Admin/Announcement/EditAnnouncement";
 import InactivityHandler from "./InactivityHandler";
@@ -130,7 +125,7 @@ function RoutesComponent() {
         <Route path="resources/edit/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
 
         {/* Staff Dashboard */}
-        <Route path="staff" element={<ProtectedRoute isStaff={true}><StaffDashboard /></ProtectedRoute>} />
+        
         <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView /></ProtectedRoute>} />
 
         {/* Others */}
