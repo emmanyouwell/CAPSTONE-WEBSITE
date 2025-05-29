@@ -323,7 +323,8 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                 </Link>
                 {totalVolume > 0 && <div className="flex justify-center items-center gap-4">
                     <Typography variant="h2">Selected milk: {totalVolume && totalVolume} ml</Typography>
-                    {selectedRows.length > 0 && (<SquareCheck onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />)}
+                    {selectedRows.length > 0 && (
+                        <Button variant="outlined" color="pink" onClick={handleOpen} size="sm">Choose fridge</Button>)}
 
                 </div>}
                 <Drawer open={open} onClose={handleOpen} size={500} className="p-4">
