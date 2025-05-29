@@ -82,8 +82,8 @@ const EditEvent = () => {
                 venue: lettingDetails.venue,
                 status: lettingDetails.status,
 
-                start: new Date(start.getTime() - start.getTimezoneOffset() * 60000).toISOString().slice(0, 16), // Format for datetime-local
-                end: new Date(end.getTime() - end.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+                start: start,
+                end: end
             });
         }
     }, [lettingDetails]); // Run when `eventDetails` updates
