@@ -150,7 +150,7 @@ const DonationDetails = () => {
     useEffect(() => {
         if (success) {
             dispatch(resetSuccess());
-            navigate(`/dashboard/events/attendance/${id}`);
+            navigate(`/dashboard/events/attendance/${id}`, {state: {from: 'host'}});
             resetStates();
         }
     }, [dispatch, success])
@@ -164,11 +164,13 @@ const DonationDetails = () => {
     ];
     return (
         <div className="p-8 h-[calc(100vh-2rem)] overflow-y-auto">
-            <Link to={`/dashboard/events/attendance/${id}`}>
+            <div className="flex w-full items-center justify-between gap-4">
+            <Link to={`/dashboard/events/attendance/${id}`} state={{from: 'host'}}>
                 <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>
             </Link>
+            </div>
             <div className="flex h-[calc(100vh-15rem)] items-start justify-center gap-4">
                 <Card className='flex flex-col justify-start items-center w-full h-full gap-2 border-l-8 border-secondary p-4'>
                     <CardBody className="w-full h-full p-0">

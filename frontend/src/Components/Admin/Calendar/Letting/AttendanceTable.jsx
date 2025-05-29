@@ -23,7 +23,7 @@ import DataTable from '../../../DataTables/tanstack/DataTable';
 import { formatDate } from '../../../../utils/helper';
 import DatePicker from 'react-datepicker';
 import { Trash2, X, XSquare } from 'lucide-react';
-const AttendanceTable = ({ attendance, status, lettingId }) => {
+const AttendanceTable = ({ attendance, status, from, lettingId }) => {
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
     const [name, setName] = useState('')
@@ -153,10 +153,21 @@ const AttendanceTable = ({ attendance, status, lettingId }) => {
             cell: ({ row }) => {
                 const attendees = row.original;
                 const name = `${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`
-
+                let isDisabled
+                if (from === "RedirectDetails"){
+                    if (status === "Stored"){
+                        isDisabled = true;
+                    }
+                }
+                else if (from === "host"){
+                    isDisabled = false;
+                }
+                else {
+                    isDisabled = true;
+                }
                 return (
                     <div className="flex gap-2">
-                        <Button size="sm" color="blue" disabled={status === "Stored" ? true : false} className="text-white" onClick={() => handleOpen(attendees.donor._id, name)}>
+                        <Button size="sm" color="blue" disabled={isDisabled} className="text-white" onClick={() => handleOpen(attendees.donor._id, name)}>
                             Add bags
                         </Button>
                     </div>
@@ -164,6 +175,7 @@ const AttendanceTable = ({ attendance, status, lettingId }) => {
             },
         }),
     ];
+
     return (
         <div className="w-full h-full">
             <DataTable data={attendance} columns={columns} pageSize={10} />

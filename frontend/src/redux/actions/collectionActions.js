@@ -7,13 +7,9 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 export const recordPublicRecord = createAsyncThunk(
     'collection/recordPublicRecord',
     async (req, thunkAPI) => {
-
-        
-
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                
             },
             withCredentials: true
         }
@@ -35,12 +31,12 @@ export const recordPrivateRecord = createAsyncThunk(
     'collection/recordPrivateRecord',
     async (req, thunkAPI) => {
 
-        
+
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                
+
             },
             withCredentials: true
         }
@@ -61,14 +57,14 @@ export const recordPrivateRecord = createAsyncThunk(
 // Mark Attendance of donors
 export const getAllCollections = createAsyncThunk(
     'collection/getAllCollections',
-    async ({ search = "", type="",}, thunkAPI) => {
+    async ({ search = "", type = "", }, thunkAPI) => {
 
-        
+
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                
+
             },
             withCredentials: true
         }
@@ -80,7 +76,7 @@ export const getAllCollections = createAsyncThunk(
             if (type) {
                 urlString += `&type=${encodeURIComponent(type)}`;
             }
-            
+
             const response = await api.get(urlString, config)
 
             return response.data;
