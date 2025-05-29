@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
     Button,
     Dialog,
@@ -12,21 +12,42 @@ import {
     Input,
     Checkbox,
     Drawer,
+    Menu,
+    MenuHandler,
+    MenuList,
+    MenuItem,
+    IconButton
 } from "@material-tailwind/react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import { updateAttendance } from '../../../../redux/actions/lettingActions';
+import { deleteAttendance, updateAttendance } from '../../../../redux/actions/lettingActions';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../DataTables/tanstack/DataTable';
 import { formatDate } from '../../../../utils/helper';
 import DatePicker from 'react-datepicker';
-import { Trash2, X, XSquare } from 'lucide-react';
+import { EllipsisVertical, Trash2, X, XSquare } from 'lucide-react';
+import { resetSuccess } from '../../../../redux/slices/lettingSlice';
 const AttendanceTable = ({ attendance, status, from, lettingId }) => {
+    const dispatch = useDispatch();
+    const { success } = useSelector((state) => state.lettings);
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
-    const [name, setName] = useState('')
+    const [name, setName] = useState('');
+    const [bags, setBags] = useState([]);
+    const [bagDetails, setBagDetails] = useState(() => ({
+        volume: "",
+        expressDate: null
+    }))
+    const navigate = useNavigate()
+    const handleDelete = (attendanceId, lettingId) => {
+        dispatch(deleteAttendance({ lettingId, attendanceId })).then(() => {
+            toast.success("Successfully deleted")
+            window.location.reload()
+        })
+    }
+
     const handleOpen = (id, name) => {
         setId(id);
         setName(name);
@@ -35,11 +56,7 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
     const getTotalVolume = (bags) => {
         return bags.reduce((acc, bag) => acc + bag.volume, 0)
     }
-    const dispatch = useDispatch();
-    const [bagDetails, setBagDetails] = useState(() => ({
-        volume: "",
-        expressDate: null
-    }))
+
     const resetStates = () => {
         setBagDetails({
             volume: "",
@@ -48,7 +65,7 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
         setBags([]);
 
     }
-    const [bags, setBags] = useState([]);
+
     const submitUpdate = () => {
         if (bags.length === 0) {
             toast.error("No bags added.")
@@ -63,7 +80,6 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
             .then(() => {
                 location.reload();
                 toast.success("Attendance updated", { position: "bottom-right" });
-
             })
             .catch((error) => {
                 toast.error("Failed to update attendance", { position: "bottom-right" });
@@ -120,12 +136,12 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
         columnHelper.accessor(row => `${row.donor.user.name.first} ${row.donor.user.name.last}`, {
             id: 'name',
             header: 'Name',
-            cell: info => info.getValue(),
+            cell: info => info.getValue()
         }),
         columnHelper.accessor(row => row.lastDonation ? `${formatDate(row.lastDonation)}` : 'New Donor', {
             id: 'lastDonation',
             header: 'Last Breast Milk Donation / New Donor',
-            cell: info => info.getValue(),
+            cell: info => info.getValue()
         }),
         columnHelper.accessor(row => getTotalVolume(row.bags), {
             id: 'expressedMilk',
@@ -152,24 +168,34 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
             header: 'Actions',
             cell: ({ row }) => {
                 const attendees = row.original;
+                const attendanceId = row.original._id
                 const name = `${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`
                 let isDisabled
-                if (from === "RedirectDetails"){
-                    if (status === "Stored"){
+                if (from === "RedirectDetails") {
+                    if (status === "Stored") {
                         isDisabled = true;
                     }
                 }
-                else if (from === "host"){
+                else if (from === "host") {
                     isDisabled = false;
                 }
                 else {
                     isDisabled = true;
                 }
                 return (
-                    <div className="flex gap-2">
-                        <Button size="sm" color="blue" disabled={isDisabled} className="text-white" onClick={() => handleOpen(attendees.donor._id, name)}>
-                            Add bags
-                        </Button>
+                    <div className="flex justify-center items-center gap-2">
+                        <Menu>
+                            <MenuHandler>
+                                <IconButton disabled={isDisabled} className="rounded-full" variant='text'>
+                                    <EllipsisVertical size={20} />
+                                </IconButton>
+                            </MenuHandler>
+                            <MenuList>
+                                <MenuItem onClick={()=>handleOpen(attendees.donor._id, name)}>Add bags</MenuItem>
+                                <MenuItem onClick={() => handleDelete(attendanceId, lettingId)}>Delete</MenuItem>
+                            </MenuList>
+                        </Menu>
+
                     </div>
                 );
             },
