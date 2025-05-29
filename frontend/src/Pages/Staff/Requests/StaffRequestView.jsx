@@ -12,6 +12,7 @@ import { getUser } from '../../../utils/helper';
 import { toast } from 'react-toastify';
 import { getDevices, sendNotification } from '../../../redux/actions/notifActions';
 import Select from 'react-select'
+import Loader from '../../../Components/Loader/Loader';
 const StaffRequestView = () => {
     const dispatch = useDispatch();
     const { request, loading, error } = useSelector(state => state.requests)
@@ -29,7 +30,7 @@ const StaffRequestView = () => {
     }, [dispatch])
     const options = [
         ...recipients.map((patient) => ({
-            value: patient, label: `${patient.name} | ${patient.phone} | ${patient.home_address.street}, ${patient.home_address.brgy}, ${patient.home_address.city}`, patient
+            value: patient, label: `${patient.name} | ${patient.patientType} | ${patient.phone} | ${patient.home_address.street}, ${patient.home_address.brgy}, ${patient.home_address.city}`, patient
         }))
     ];
     const inpatient = request ? request.filter((r) => r.patient?.patientType === 'Inpatient' && r.status !== "Done") : [];
@@ -63,7 +64,14 @@ const StaffRequestView = () => {
             });
             return;
         }
-
+        if (isNaN(volume)) {
+            toast.error("Invalid Volume")
+            return;
+        }
+        if (isNaN(days)) {
+            toast.error("Invalid Days")
+            return;
+        }
         const requestedBy = getUser()?._id;
         const requestData = {
             date: new Date().toISOString().split('T')[0],
@@ -146,21 +154,6 @@ const StaffRequestView = () => {
             images: [...prevFormData.images, ...base64Files],
         }));
     }
-    const handleSelect = (patient) => {
-        setSelectedPatient(patient); // Update state with selected donor
-        setFormData({ ...formData, patient: patient });
-
-    };
-    const handleTextChange = (e) => {
-        setSearch(e.target.value);
-        setSelectedPatient(null)
-        dispatch(getRecipients({ search: e.target.value, page: 1, pageSize: 100 }))
-    }
-
-    const searchPatient = () => {
-        dispatch(getRecipients({ search: search, page: 1, pageSize: 100 }))
-    }
-
     const handleOpen = () => setOpen((cur) => !cur);
     return (
         <>
@@ -211,16 +204,16 @@ const StaffRequestView = () => {
                                         <div className="relative flex w-full gap-2">
                                             <Select
                                                 className="w-full select-border-black"
-                                                value={options.find(opt => opt.value === selectedOption)}
-                                                onChange={(selected) => setSelectedOption(selected.value)}
+                                                value={options.find(opt => opt.value === selectedPatient)}
+                                                onChange={(selected) => { setFormData({ ...formData, patient: selected.value._id }); setSelectedPatient(selected.value) }}
                                                 options={options}
                                                 isSearchable
                                                 formatOptionLabel={(option) =>
                                                 ((
                                                     <div className="flex flex-col text-sm">
-                                                        <span className="font-semibold">{option.value.name} | {option.value.phone}</span>
+                                                        <span className="font-semibold">{option.value.name} ({option.value.patientType})</span>
                                                         <span className="text-xs">
-                                                            {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
+                                                            {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city} | {option.value.phone}
                                                         </span>
                                                     </div>
                                                 ))
@@ -326,13 +319,15 @@ const StaffRequestView = () => {
                         </CardBody>
                     </Card>
                 </div>
-                <div className="flex items-center justify-content w-full gap-4">
-                    <Button color="pink" onClick={handleSubmit} fullWidth>
-                        Submit
-                    </Button>
-                    <Button color="black" onClick={handleOpen} fullWidth>
-                        Close
-                    </Button>
+                <div className="flex items-center justify-center w-full gap-4">
+                    {loading ? <Loader /> : <>
+                        <Button color="pink" onClick={handleSubmit} fullWidth>
+                            Submit
+                        </Button>
+                        <Button color="black" onClick={handleOpen} fullWidth>
+                            Close
+                        </Button>
+                    </>}
                 </div>
 
             </Drawer>
