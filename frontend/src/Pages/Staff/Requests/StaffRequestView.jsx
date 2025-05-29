@@ -28,7 +28,6 @@ const StaffRequestView = () => {
         dispatch(getRecipients({ search: search, page: 1, pageSize: 100 }))
     }, [dispatch])
     const options = [
-        { value: 'All', label: 'All' },
         ...recipients.map((patient) => ({
             value: patient, label: `${patient.name} | ${patient.phone} | ${patient.home_address.street}, ${patient.home_address.brgy}, ${patient.home_address.city}`, patient
         }))
@@ -58,7 +57,7 @@ const StaffRequestView = () => {
             !volume ||
             !days
         ) {
-            setOpen(false);
+            // setOpen(false);
             toast.error("Please fill in all fields", {
                 position: "bottom-right",
             });
@@ -166,15 +165,15 @@ const StaffRequestView = () => {
     return (
         <>
             <div className="p-4">
-                <div className="flex items-center justify-start mb-4">
-                    <Button color="green" onClick={handleOpen}>
-                        Add Request
-                    </Button>
-                </div>
+
 
                 <Tabs value="Inpatient">
+                    <Button color="pink" size="sm" className="mb-2" variant="outlined" onClick={handleOpen}>
+                        Add Request
+                    </Button>
                     <TabsHeader>
-                        <Tab value="Inpatient" className=" text-secondary">
+
+                        <Tab value="Inpatient" className="text-secondary">
                             Inpatient
                         </Tab>
                         <Tab value="Outpatient" className=" text-secondary">
@@ -217,16 +216,14 @@ const StaffRequestView = () => {
                                                 options={options}
                                                 isSearchable
                                                 formatOptionLabel={(option) =>
-                                                    option.value === 'All' ? ('All') : (
-                                                        (
-                                                            <div className="flex flex-col text-sm">
-                                                                <span className="font-semibold">{option.value.name} | {option.value.phone}</span>
-                                                                <span className="text-xs">
-                                                                    {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
-                                                                </span>
-                                                            </div>
-                                                        )
-                                                    )
+                                                ((
+                                                    <div className="flex flex-col text-sm">
+                                                        <span className="font-semibold">{option.value.name} | {option.value.phone}</span>
+                                                        <span className="text-xs">
+                                                            {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
+                                                        </span>
+                                                    </div>
+                                                ))
                                                 }
                                             />
                                         </div>
