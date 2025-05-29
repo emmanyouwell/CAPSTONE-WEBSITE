@@ -197,9 +197,9 @@ const RecipientPage = () => {
                     </div>
                 </div>
 
-                {getUser().role === "Staff" && (<div>
+                <div>
                     <Button color="pink" onClick={handleOpenTallyForm}>Add New Patient</Button>
-                </div>)}
+                </div>
             </div>
             <DataTable data={recipients} columns={columns} pageSize={15} />
         </div>

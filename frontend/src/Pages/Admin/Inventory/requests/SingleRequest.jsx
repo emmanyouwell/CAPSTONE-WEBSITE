@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { getRequestDetails, updateVolumeRequested } from '../../../../redux/actions/requestActions';
-import { Button, Card, CardBody, CardFooter, CardHeader, Carousel, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Option, Select, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Carousel, Dialog, DialogBody, DialogFooter, DialogHeader, Drawer, IconButton, Input, Option, Select, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom'
@@ -60,10 +60,10 @@ const SingleRequest = () => {
             }
             dispatch(updateVolumeRequested(data)).then(() => {
                 handleUpdateVolume();
-                toast.success("Volume Updated", {position: "bottom-right"})
+                toast.success("Volume Updated", { position: "bottom-right" })
             }).catch((err) => {
                 console.log("error: ", err)
-                toast.error("Error updating volume", {position: "bottom-right"})
+                toast.error("Error updating volume", { position: "bottom-right" })
             })
 
 
@@ -272,7 +272,7 @@ const SingleRequest = () => {
             inv.status !== "Unavailable"
     );
     const addEbm = () => {
-       
+
         if (!selectedInventory) {
             setFormError((prev) => ({
                 ...prev,
@@ -303,7 +303,7 @@ const SingleRequest = () => {
         setInventoryDetails({})
         setSelectedInventory('');
     }
-   
+
 
     return (
         <div className="p-8">
@@ -318,7 +318,7 @@ const SingleRequest = () => {
                             Attachments
                         </Tab>
                     </TabsHeader>
-                    <TabsBody className="h-[calc(100vh-8rem)]" animate={{ initial: { visibility: 'visible' }, mount: { visibility: 'visible' }, unmount: { visibility: 'hidden' } }}>
+                    <TabsBody animate={{ initial: { visibility: 'visible' }, mount: { visibility: 'visible' }, unmount: { visibility: 'hidden' } }}>
                         <TabPanel value="requestDetails" className="h-full">
                             <Card className='w-full border-l-8 border-accent-green' style={{ boderLeftWidth: '8px', borderColor: requestDetails && requestDetails.status === 'Pending' ? 'rgb(255 193 7)' : requestDetails && requestDetails.status === 'Approved' ? 'rgb(229 55 119)' : 'rgb(76 175 80)' }}>
                                 <CardBody>
@@ -388,11 +388,10 @@ const SingleRequest = () => {
                     </TabsBody>
                 </Tabs>
 
-
-                <Dialog size="sm" open={openUpdateVolume} handler={handleUpdateVolume} className="p-4">
-                    <form onSubmit={formik.handleSubmit}>
+                <Dialog open={openUpdateVolume} handler={handleUpdateVolume} size="sm" className="p-4">
+                    <form onSubmit={formik.handleSubmit} className="space-y-4">
                         <div className="w-full">
-                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                            <Typography variant="h4" color="blue-gray" className="font-sofia mb-2 font-medium">
                                 Enter New Volume
                             </Typography>
                             <Input
@@ -411,7 +410,7 @@ const SingleRequest = () => {
                             )}
                         </div>
                         <div className="w-full">
-                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                            <Typography variant="h4" color="blue-gray" className="font-sofia mb-2 font-medium">
                                 Enter New Days
                             </Typography>
                             <Input
@@ -430,15 +429,15 @@ const SingleRequest = () => {
                             )}
                         </div>
                         <div className="flex items-start justify-end pt-4">
-                            <Button type="submit" color="deep-orange">
+                            <Button type="submit" color="pink">
                                 Update
                             </Button>
                         </div>
 
                     </form>
                 </Dialog>
-                <Dialog size="sm" open={openFridge} handler={handleOpenFridge} className="p-4">
-                    <DialogHeader className="relative m-0 block">
+                <Drawer open={openFridge} onClose={handleOpenFridge} dismiss={{ outsidePress: false }} size={500} className="p-4">
+                    <div className="mb-4">
                         <Typography variant="h4" color="blue-gray">
                             Choose Refrigerator
                         </Typography>
@@ -453,17 +452,15 @@ const SingleRequest = () => {
                         >
                             <XMarkIcon className="h-4 w-4 stroke-2" />
                         </IconButton>
-                    </DialogHeader>
-                    <DialogBody>
-
-                        <div className="space-y-4">
-
+                    </div>
+                    <div className="overflow-y-auto h-[calc(100vh-15rem)] pr-2">
+                        <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
                             {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge, index) => (
-                                <div key={index}>
+                                <div key={index} className="w-full">
                                     <input
                                         type="radio"
-                                        id={fridge.name}
-                                        name={fridge.name}
+                                        id={`${fridge._id}_${fridge.name}`}
+                                        name={`${fridge._id}_${fridge.name}`}
                                         value={fridge._id}
                                         className="peer hidden"
                                         required
@@ -471,7 +468,7 @@ const SingleRequest = () => {
                                         onChange={handleChange}
                                     />
                                     <label
-                                        htmlFor={fridge.name}
+                                        htmlFor={`${fridge._id}_${fridge.name}`}
                                         className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
                                     >
                                         <div className="block">
@@ -527,10 +524,10 @@ const SingleRequest = () => {
                                             </div>
                                         </label>
                                     </div>)
-                            }) : <p>No fridge selected</p>}
+                            }) : selectedOption ? <Typography color="red" variant="small">Fridge is empty. Choose another one.</Typography> : <Typography color="blue-gray" variant="small">No fridge selected</Typography>}
 
                         </div>
-
+ 
                         {formError?.inventory?.status && <Typography color="red" variant="small">
                             {formError?.inventory?.message}
                         </Typography>}
@@ -570,33 +567,45 @@ const SingleRequest = () => {
                                 )}
                             </div>
                         </div>
-                        <div className="flex items-center justify-end gap-4 pt-4">
+                        <div className="flex items-center justify-start gap-4 pt-4 mb-4">
+                            <Button color="pink" variant="gradient" size="sm" onClick={addEbm} disabled={volume + selectedVolume >= (requestDetails?.volumeRequested?.volume * requestDetails?.volumeRequested?.days)}>
+                                Select More
+                            </Button>
                             {formError.addEbm?.status && (
                                 <Typography color="red" variant="small">
                                     {formError.addEbm?.message}
                                 </Typography>
                             )}
-                            <Button color="deep-orange" onClick={addEbm} disabled={volume + selectedVolume >= (requestDetails?.volumeRequested?.volume * requestDetails?.volumeRequested?.days)}>
-                                Select More
-                            </Button>
-
                         </div>
 
-                        <Typography variant="h4" color="blue-gray" className="my-8 font-medium">
-                            Requested Volume: {requestDetails?.volumeRequested?.volume} ml / {requestDetails?.volumeRequested?.days} days ({requestDetails?.volumeRequested?.volume * requestDetails?.volumeRequested?.days} ml)
-                        </Typography>
-                        <Typography variant="h4" color="blue-gray" className="font-medium">
-                            Selected Volume: <span className={selectedVolume + volume >= (requestDetails?.volumeRequested?.volume * requestDetails?.volumeRequested?.days) ? "text-success" : ""} >{selectedVolume + volume} ml </span>
-                        </Typography>
-                    </DialogBody>
-                    <DialogFooter>
-                        <div className="flex items-start justify-end pt-4">
-                            <Button color="deep-orange" onClick={handleSubmit}>
-                                Reserve
-                            </Button>
+
+                    </div>
+                    <div className="flex flex-col items-start justify-between pt-4">
+                        <div className="flex gap-8 w-full mb-4">
+                            <div>
+                                <Typography variant="paragraph" color="blue-gray" className="font-sofia font-medium">
+                                    Requested Volume:
+                                </Typography>
+                                <Typography variant="h5" color="pink" className="font-sofia font-medium">
+                                    {requestDetails?.volumeRequested?.volume} ml / {requestDetails?.volumeRequested?.days} days ({requestDetails?.volumeRequested?.volume * requestDetails?.volumeRequested?.days} ml)
+                                </Typography>
+                            </div>
+                            <div>
+                                <Typography variant="paragraph" color="blue-gray" className="font-sofia font-medium">
+                                    Selected Volume:
+                                </Typography>
+                                <Typography variant="h5" color="pink" className="font-sofia font-medium">
+                                    <span className={selectedVolume + volume >= (requestDetails?.volumeRequested?.volume * requestDetails?.volumeRequested?.days) ? "text-success" : ""} >{selectedVolume + volume} ml </span>
+                                </Typography>
+                            </div>
+
                         </div>
-                    </DialogFooter>
-                </Dialog>
+                        <Button color="pink" size="md" fullWidth onClick={handleSubmit}>
+                            Reserve
+                        </Button>
+                    </div>
+                </Drawer>
+
                 <Dialog size="xl" open={open} handler={() => setOpen(false)}>
                     <DialogBody>
                         {selectedImage ? (

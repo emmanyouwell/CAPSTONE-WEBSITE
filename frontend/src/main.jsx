@@ -8,6 +8,8 @@ import { setupAxiosInterceptors } from './api/setupInterceptor';
 setupAxiosInterceptors();
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <App />
+    <div className="font-sofia">
+      <App />
+    </div>
   </Provider>
 )
