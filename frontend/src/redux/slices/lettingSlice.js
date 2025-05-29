@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createLetting,
+  deleteAttendance,
   deleteLetting,
   finalizeSession,
   getAverageLettingVolume,
@@ -175,6 +176,17 @@ export const lettingSlice = createSlice({
       .addCase(getAverageLettingVolume.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload
+      })
+      .addCase(deleteAttendance.pending, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteAttendance.fulfilled, (state, action) => {
+        state.success = true,
+        state.loading = false;
+      })
+      .addCase(deleteAttendance.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
   },
 });

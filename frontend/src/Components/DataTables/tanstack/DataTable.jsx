@@ -13,7 +13,7 @@ import {
     CardFooter,
 } from '@material-tailwind/react';
 
-export default function DataTable({ data = [], columns = [], pageSize = 5 }) {
+export default function DataTable({ data = [], columns = [], pageSize = 5, editingRowId, setEditingRowId, editedData, setEditedData }) {
     const table = useReactTable({
         data,
         columns,

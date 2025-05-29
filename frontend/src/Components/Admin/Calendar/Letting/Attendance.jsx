@@ -16,13 +16,14 @@ import { getUserDetails } from '../../../../redux/actions/userActions';
 import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { addInventory } from '../../../../redux/actions/inventoryActions';
 import { ArrowDownIcon, ArrowUpIcon, SquareCheck } from 'lucide-react';
+import { resetError, resetSuccess } from '../../../../redux/slices/lettingSlice';
 
 const Attendance = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const { lettingDetails, loading, error, success, average } = useSelector((state) => state.lettings);
+  const { lettingDetails, loading, error, success, isUpdated, average } = useSelector((state) => state.lettings);
   const { fridges } = useSelector((state) => state.fridges);
   const { userDetails } = useSelector((state) => state.users);
   const from = location.state?.from;
@@ -46,6 +47,7 @@ const Attendance = () => {
     dispatch(getFridges());
     dispatch(getAverageLettingVolume());
   }, [dispatch, id])
+  
   const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
   const handleSubmit = () => {
     if (!userDetails || !id) {
@@ -215,7 +217,7 @@ const Attendance = () => {
           </Button>
         </DialogFooter>
       </Dialog>
-      <Dialog size="sm" open={openSubmit} handler={handleOpenSubmit} className="p-4">
+      <Dialog size="md" open={openSubmit} handler={handleOpenSubmit} className="p-4">
         <DialogHeader>
           <Typography variant="h5" color="blue-gray" className="text-center w-full">
             Finalize Milk Letting Attendance?
@@ -227,10 +229,10 @@ const Attendance = () => {
             {lettingDetails.totalVolume} ml
           </Typography>
           <Typography className="text-center font-normal">
-            {percent > 0 ? (<span className="flex items-center gap-1 text-gray-700">
+            {percent > 0 ? (<span className="w-full flex items-center gap-1 text-gray-700">
 
               This event collected <span className="text-green-600 flex items-center"><ArrowUpIcon className="h-4 w-4 text-green-600" />{Math.abs(percent).toFixed(2)}% more milk</span> than previous events!
-            </span>) : percent < 0 ? (<span className="flex items-center gap-1 text-gray-700">
+            </span>) : percent < 0 ? (<span className="w-full flex items-center gap-1 text-gray-700">
 
               This event collected <span className="text-red-600 flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}% less milk</span> than previous events.
             </span>) : <span className="text-gray-700">

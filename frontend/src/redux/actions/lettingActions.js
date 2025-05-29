@@ -292,3 +292,27 @@ export const getAverageLettingVolume = createAsyncThunk(
         }
     }
 )
+
+
+// Get all Milk Letting Event
+export const deleteAttendance = createAsyncThunk(
+    'letting/deleteAttendance',
+    async ({lettingId, attendanceId}, thunkAPI) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true
+        }
+        console.log("Config: ", config)
+        try {
+            
+            const response = await api.delete(`/api/v1/lettings/${lettingId}/attendance/${attendanceId}`, config);
+            return response.data;
+
+        } catch (error) {
+            console.log("Error: ", error)
+            return thunkAPI.rejectWithValue(error.response.data.error);
+        }
+    }
+)
