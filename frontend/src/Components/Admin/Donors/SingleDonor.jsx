@@ -32,7 +32,7 @@ const SingleDonor = () => {
                     <div className="w-full flex flex-col gap-4">
                         <Typography color="black" variant="h1">{donorDetails && donorDetails.user && donorDetails.user.name && `${donorDetails.user.name.first} ${donorDetails.user.name.middle} ${donorDetails.user.name.last}`}</Typography>
                         <div className="flow-root">
-                            <dl className="-my-3 divide-y divide-gray-100 text-sm">
+                            <dl className="-my-3 divide-y divide-gray-100 text-lg">
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                                     <dt className="font-medium text-gray-900">Donor Type</dt>
                                     <dd className="text-gray-700 sm:col-span-2">{donorDetails && donorDetails.donorType}</dd>
