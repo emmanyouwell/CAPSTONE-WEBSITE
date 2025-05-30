@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { logoutUser } from './redux/actions/userActions'; // your thunk
 import { useLocation } from 'react-router-dom';
 
-const INACTIVITY_LIMIT = 10 * 60 * 1000; // 10 minutes
+const INACTIVITY_LIMIT = 60 * 60 * 1000; // 10 minutes
 
 export default function InactivityHandler() {
   const dispatch = useDispatch();
