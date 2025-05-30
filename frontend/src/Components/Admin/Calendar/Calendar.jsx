@@ -27,22 +27,10 @@ const CustomAgenda = ({ event }) => (
 
     </>
 );
-const CustomEvent = ({ event }) => {
-    return (
-        <div className="bg-secondary border-lg">
 
-            <p>{event.title}</p>
-        </div>
-    )
-}
 const ScheduleComponent = ({ events, type }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [selectedOption, setSelectedOption] = useState("edit"); // Default to "standard"
-
-    const handleChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
    
     const [items, setItems] = useState([]);
     const [open, setOpen] = useState(false);
@@ -64,7 +52,7 @@ const ScheduleComponent = ({ events, type }) => {
     };
     useEffect(() => {
         if (type === "events") {
-            const result = events.map((event) => { return { title: event.activity, description: event.description, start: new Date(event.actDetails.start), end: new Date(event.actDetails.end), id: event._id, status: event.status, venue: event.venue, attendance: event.attendance } });
+            const result = events.map((event) => { return { title: event.activity, description: event.description, start: new Date(event.actDetails.date), end: new Date(event.actDetails.date), id: event._id, status: event.status, venue: event.venue, attendance: event.attendance } });
             setItems(result);
         }
         else if (type === "pickup") {

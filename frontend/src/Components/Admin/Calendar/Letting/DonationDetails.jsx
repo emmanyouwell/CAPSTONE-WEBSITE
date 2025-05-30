@@ -150,7 +150,7 @@ const DonationDetails = () => {
     useEffect(() => {
         if (success) {
             dispatch(resetSuccess());
-            navigate(`/dashboard/events/attendance/${id}`, {state: {from: 'host'}});
+            navigate(`/dashboard/events/attendance/${id}`, { state: { from: 'host' } });
             resetStates();
         }
     }, [dispatch, success])
@@ -165,14 +165,14 @@ const DonationDetails = () => {
     return (
         <div className="p-8 h-[calc(100vh-2rem)] overflow-y-auto">
             <div className="flex w-full items-center justify-between gap-4">
-            <Link to={`/dashboard/events/attendance/${id}`} state={{from: 'host'}}>
-                <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
-                    <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
-                </div>
-            </Link>
+                <Link to={`/dashboard/events/attendance/${id}`} state={{ from: 'host' }}>
+                    <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
+                        <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
+                    </div>
+                </Link>
             </div>
             <div className="flex h-[calc(100vh-15rem)] items-start justify-center gap-4">
-                <Card className='flex flex-col justify-start items-center w-full h-full gap-2 border-l-8 border-secondary p-4'>
+                <Card className='flex flex-col justify-start items-center w-full gap-2 border-l-8 border-secondary p-4'>
                     <CardBody className="w-full h-full p-0">
                         <div className="w-full">
                             <div className="mb-4">
@@ -317,77 +317,78 @@ const DonationDetails = () => {
                         <Button disabled={submitLoading} className="bg-success" onClick={submitAttendance} fullWidth>Save Attendance</Button>
                     </CardFooter>
                 </Card>
-                <Card className='w-full h-full gap-4 border-l-8 border-secondary p-4 mb-4'>
-                    <div className="w-full h-[calc(100%-5rem)]">
+                <Card className='w-full min-h-[210px] gap-4 border-l-8 border-secondary p-4 mb-4'>
+                    <div>
+                        <div className="font-parkinsans text-xl font-bold mb-2 text-primary">Donor Bags</div>
+                    </div>
+                    <Card className="h-full w-full overflow-y-scroll shadow-none">
+                        <table className="w-full table-fixed text-left">
+                            <thead>
 
-                        <div>
-                            <Typography variant="h3" className="font-parkinsans text-primary font-bold mb-4">Donor Bags</Typography>
-                        </div>
-                        <Card className="h-full w-full overflow-y-scroll shadow-none">
-                            <table className="w-full min-w-max table-auto text-left">
-                                <thead>
+                                <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                    <Typography variant="paragraph" color="white" className="font-normal leading-none">
+                                        Volume
+                                    </Typography>
+                                </th>
+                                <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                    <Typography variant="paragraph" color="white" className="font-normal leading-none">
+                                        Quantity
+                                    </Typography>
+                                </th>
+                                <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
+                                    <Typography variant="paragraph" color="white" className="font-normal leading-none">
+                                        Action
+                                    </Typography>
+                                </th>
+                            </thead>
+                            <tbody>
+                                {bags.map((bag, index) => (
+                                    <tr key={index} className="border-b border-blue-gray-50">
+                                        {editingIndex === index ? (
+                                            <>
+                                                <td className="px-4 py-2 text-md text-blue-gray-900">
+                                                    <input
+                                                        type="number"
+                                                        min={1}
+                                                        value={editedBag.volume}
+                                                        onChange={(e) => setEditedBag({ ...editedBag, volume: Number(e.target.value < 1 ? 1 : e.target.value) })}
+                                                        className="rounded-lg h-10"
 
-                                    <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
-                                        <Typography variant="paragraph" color="white" className="font-normal leading-none">
-                                            Volume
-                                        </Typography>
-                                    </th>
-                                    <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
-                                        <Typography variant="paragraph" color="white" className="font-normal leading-none">
-                                            Quantity
-                                        </Typography>
-                                    </th>
-                                    <th className="border-b border-blue-gray-100 bg-secondary-light p-4">
-                                        <Typography variant="paragraph" color="white" className="font-normal leading-none">
-                                            Action
-                                        </Typography>
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    {bags.map((bag, index) => (
-                                        <tr key={index}>
-                                            {editingIndex === index ? (
-                                                <>
-                                                    <td className="p-4 border-b border-blue-gray-50">
-                                                        <Input
-                                                            type="number"
-                                                            min={1}
-                                                            value={editedBag.volume}
-                                                            onChange={(e) => setEditedBag({ ...editedBag, volume: Number(e.target.value < 1 ? 1 : e.target.value) })}
-                                                            className="w-full border px-2 py-1"
-                                                        />
-                                                    </td>
-                                                    <td className="p-4 border-b border-blue-gray-50">
-                                                        <Input
-                                                            type="number"
-                                                            min={1}
-                                                            value={editedBag.quantity}
-                                                            onChange={(e) => setEditedBag({ ...editedBag, quantity: Number(e.target.value < 1 ? 1 : e.target.value) })}
-                                                            className="w-full border px-2 py-1"
-                                                        />
-                                                    </td>
-                                                    <td className="flex gap-2 p-4 border-b border-blue-gray-50">
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-2 text-md text-blue-gray-900">
+                                                    <input
+                                                        type="number"
+                                                        min={1}
+                                                        value={editedBag.quantity}
+                                                        onChange={(e) => setEditedBag({ ...editedBag, quantity: Number(e.target.value < 1 ? 1 : e.target.value) })}
+                                                        className="rounded-lg h-10"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-2 text-md text-blue-gray-900">
+                                                    <div className="flex items-center gap-2">
                                                         <Check className="text-green-600 cursor-pointer" onClick={handleSave} />
                                                         <X className="text-red-500 cursor-pointer" onClick={handleCancel} />
-                                                    </td>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <td className="p-4 border-b border-blue-gray-50 font-parkinsans">{bag.volume} ml</td>
-                                                    <td className="p-4 border-b border-blue-gray-50 font-parkinsans">{bag.quantity} pc(s)</td>
-                                                    <td className="flex gap-4 p-4 border-b border-blue-gray-50 font-parkinsans">
-                                                        <SquarePen size={20} className="text-primary cursor-pointer" onClick={() => handleEdit(index)} />
-                                                        <Trash size={20} className="text-danger cursor-pointer" onClick={() => handleDelete(index)} />
-                                                    </td>
-                                                </>
-                                            )}
-                                        </tr>
-                                    ))}
+                                                    </div>
 
-                                </tbody>
-                            </table>
-                        </Card>
-                    </div>
+                                                </td>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <td className="px-4 py-2 text-md text-blue-gray-900">{bag.volume} ml</td>
+                                                <td className="px-4 py-2 text-md text-blue-gray-900">{bag.quantity} pc(s)</td>
+                                                <td className="flex items-center gap-4 p-4">
+                                                    <SquarePen size={20} className="text-primary cursor-pointer" onClick={() => handleEdit(index)} />
+                                                    <Trash size={20} className="text-danger cursor-pointer" onClick={() => handleDelete(index)} />
+                                                </td>
+                                            </>
+                                        )}
+                                    </tr>
+                                ))}
+
+                            </tbody>
+                        </table>
+                    </Card>
                 </Card>
             </div>
 

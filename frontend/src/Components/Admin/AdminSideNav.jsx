@@ -50,7 +50,7 @@ const AdminSideNav = ({ isNavOpen, setIsNavOpen }) => {
                     <div className="flex flex-col items-center">
                         <Link to="/" className="flex flex-col justify-center items-center" onClick={() => setPageTitle('Dashboard')}>
                             <img src={logo} alt="logo" className="h-24 w-24" />
-                            <Typography variant="h2" className="mb-2 text-primary font-parkinsans">TCHMB PORTAL</Typography></Link>
+                            <Typography variant="h2" className="mb-2 text-primary">TCHMB PORTAL</Typography></Link>
                         <List className="w-full">
                             {data.map((items) => (
                                 <>{items.title === 'Inventory' ? <Accordion

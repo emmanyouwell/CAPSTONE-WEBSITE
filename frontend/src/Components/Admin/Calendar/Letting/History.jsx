@@ -22,31 +22,22 @@ const History = () => {
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>
             </Link>
-            <div className="font-parkinsans text-2xl text-center">Event History</div>
+            <div className="text-2xl text-center">Event History</div>
             {loading ? <div>Loading...</div> : <div className="w-[calc(100wh-20rem)] h-[calc(100vh-20rem)] overflow-y-auto mx-auto flex flex-col items-center gap-4">
 
                 {filteredLettings.length > 0 && filteredLettings.map((lets, index) => (
                     <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4 flex justify-between items-center flex-row'>
                         <div>
-                            <div className="font-parkinsans text-2xl font-bold text-secondary">{lets.activity}</div>
-                            <div className="font-parkinsans text-md">Venue: {lets.venue}</div>
-                            <div className="font-parkinsans text-md">Status: {lets.status}</div>
-                            <div className="font-parkinsans text-md">{` Date: ${new Date(lets.actDetails.start).toLocaleString("en-US", {
+                            <div className="text-2xl font-bold text-secondary">{lets.activity}</div>
+                            <div className="text-md">Venue: {lets.venue}</div>
+                            <div className="text-md">Status: {lets.status}</div>
+                            <div className="text-md">{` Date: ${new Date(lets.actDetails.date).toLocaleString("en-US", {
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
                             })}`}</div>
-                            <div className="font-parkinsans text-md">{`Time: ${new Date(lets.actDetails.start).toLocaleString("en-US", {
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true, // Ensures AM/PM format
-                            })} - ${new Date(lets.actDetails.end).toLocaleString("en-US", {
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true, // Ensures AM/PM format
-                            })}`}</div>
-
-                            <div className="font-parkinsans text-md">Donors: {lets.attendance.length}</div>
+                            <div className="text-md">Donors: {lets.attendance.length}</div>
+                            <div className="text-md">Total collected volume: {lets.totalVolume} ml</div>
                         </div>
                         <Link to={`/dashboard/events/attendance/${lets._id}`}>
                             <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
