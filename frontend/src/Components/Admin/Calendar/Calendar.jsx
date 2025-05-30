@@ -31,12 +31,12 @@ const CustomAgenda = ({ event }) => (
 const ScheduleComponent = ({ events, type }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-   
+
     const [items, setItems] = useState([]);
     const [open, setOpen] = useState(false);
     const [event, setEvent] = useState('');
     const handleOpen = async (event, type) => {
-        
+
         if (event.status === "Done") {
             navigate(`/dashboard/events/attendance/${event.id}`);
         }
@@ -140,7 +140,7 @@ const ScheduleComponent = ({ events, type }) => {
                                         value="edit"
                                         className="peer hidden"
                                         required
-                                        
+
                                         onClick={() => navigate(`/dashboard/events/${event.id}`)}
                                     />
                                     <label
@@ -168,12 +168,12 @@ const ScheduleComponent = ({ events, type }) => {
                                         value="host"
                                         className="peer hidden"
                                         required
-                                       
-                                        onClick={() => navigate(`/dashboard/events/attendance/${event.id}`, {state: {from: "host"}})}
+
+                                        onClick={() => navigate(`/dashboard/events/attendance/${event.id}`, { state: { from: "host" } })}
                                     />
                                     <label
                                         htmlFor="host"
-                                        className="block w-full cursor-pointer rounded-lg border border-gray-400 p-4 text-gray-900 hover:border-secondary-light hover:bg-secondary hover:text-white group"
+                                        className={`block w-full rounded-lg border border-gray-400 p-4 text-gray-900 ${event && event.status === "On-Going" ? 'hover:cursor-pointer hover:border-secondary-light hover:bg-secondary hover:text-white group' : ''}`}
                                     >
                                         <div className="block">
                                             <Typography className="font-semibold">
@@ -188,7 +188,7 @@ const ScheduleComponent = ({ events, type }) => {
 
                             </div>
                         </DialogBody>
-                        
+
                     </Dialog>
                 </Dialog>
             </div>

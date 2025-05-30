@@ -31,18 +31,18 @@ const Schedule = () => {
             </div>
 
             {lettings && <ScheduleComponent events={lettings} type="events" />}
-            <div className="flex flex-col">
-                <Typography variant="h2">Legend</Typography>
+            <div className="flex items-center gap-4">
+                
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-neutral-dark"></div>
+                    <div className="w-3 h-3 bg-neutral-dark rounded-full"></div>
                     <Typography className="ml-2" variant="lead">Not-Due</Typography>
                 </div>
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-secondary"></div>
+                    <div className="w-3 h-3 bg-secondary rounded-full"></div>
                     <Typography className="ml-2" variant="lead">On-Going</Typography>
                 </div>
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-success"></div>
+                    <div className="w-3 h-3 bg-success rounded-full"></div>
                     <Typography className="ml-2" variant="lead">Done</Typography>
                 </div>
 
