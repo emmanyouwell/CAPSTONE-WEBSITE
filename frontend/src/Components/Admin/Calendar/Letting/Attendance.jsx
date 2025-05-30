@@ -39,7 +39,7 @@ const Attendance = () => {
   const handleChange = (e) => {
     setSelectedOption(e.target.value)
   }
-
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     console.log('dispatching getlettingdetails')
     dispatch(getLettingDetails(id));
@@ -96,7 +96,12 @@ const Attendance = () => {
     })
 
   }
-
+  useEffect(()=>{
+    if (refresh){
+      dispatch(getLettingDetails(id))
+      setRefresh(false);
+    }
+  },[refresh])
   useEffect(() => {
     // Load the Tally embed script
     const script = document.createElement("script");
@@ -155,7 +160,7 @@ const Attendance = () => {
 
         </div>
 
-        {lettingDetails && <AttendanceTable attendance={lettingDetails.attendance} from={from} status={status} lettingId={lettingDetails._id} />}
+        {lettingDetails && <AttendanceTable setRefresh={setRefresh} attendance={lettingDetails.attendance} from={from} status={status} lettingId={lettingDetails._id} />}
 
       </div>
       <Dialog size="sm" open={open} handler={handleOpen} className="p-4" dismiss={{ outsidePress: false }}>

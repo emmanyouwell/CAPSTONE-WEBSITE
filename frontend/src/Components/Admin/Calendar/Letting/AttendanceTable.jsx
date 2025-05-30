@@ -22,16 +22,16 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import { deleteAttendance, updateAttendance } from '../../../../redux/actions/lettingActions';
+import { deleteAttendance, getLettingDetails, updateAttendance } from '../../../../redux/actions/lettingActions';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../DataTables/tanstack/DataTable';
 import { formatDate } from '../../../../utils/helper';
 import DatePicker from 'react-datepicker';
 import { EllipsisVertical, Trash2, X, XSquare } from 'lucide-react';
 import { resetSuccess } from '../../../../redux/slices/lettingSlice';
-const AttendanceTable = ({ attendance, status, from, lettingId }) => {
+const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) => {
     const dispatch = useDispatch();
-    const { success } = useSelector((state) => state.lettings);
+    const { success, isUpdated } = useSelector((state) => state.lettings);
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
     const [name, setName] = useState('');
@@ -44,7 +44,6 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
     const handleDelete = (attendanceId, lettingId) => {
         dispatch(deleteAttendance({ lettingId, attendanceId })).then(() => {
             toast.success("Successfully deleted")
-            window.location.reload()
         })
     }
 
@@ -78,7 +77,7 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
         }
         dispatch(updateAttendance(data))
             .then(() => {
-                location.reload();
+
                 toast.success("Attendance updated", { position: "bottom-right" });
             })
             .catch((error) => {
@@ -87,12 +86,6 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
             });
         resetStates();
         setOpen(false);
-    }
-    const handleDateChange = (e) => {
-        setBagDetails({
-            ...bagDetails,
-            expressDate: e.target.value
-        })
     }
     const handleVolumeChange = (e) => {
         setBagDetails({
@@ -191,7 +184,7 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
                                 </IconButton>
                             </MenuHandler>
                             <MenuList>
-                                <MenuItem onClick={()=>handleOpen(attendees.donor._id, name)}>Add bags</MenuItem>
+                                <MenuItem onClick={() => handleOpen(attendees.donor._id, name)}>Add bags</MenuItem>
                                 <MenuItem onClick={() => handleDelete(attendanceId, lettingId)}>Delete</MenuItem>
                             </MenuList>
                         </Menu>
@@ -201,7 +194,13 @@ const AttendanceTable = ({ attendance, status, from, lettingId }) => {
             },
         }),
     ];
-
+    useEffect(() => {
+        
+        if (success) {
+            setRefresh(true)
+            dispatch(resetSuccess());
+        }
+    }, [success])
     return (
         <div className="w-full h-full">
             <DataTable data={attendance} columns={columns} pageSize={10} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Input } from '@material-tailwind/react'
+import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
@@ -79,9 +79,10 @@ const Resources = () => {
                 const article = row.original
                 return (
                     <div className="flex items-center gap-2">
-                        <Link to={`/article/${article._id}`} className="flex items-center gap-2 text-secondary"><EyeIcon size={30} /></Link>
-                        <Link to={`/dashboard/resources/edit/${article._id}`}><SquarePenIcon size={25} className="text-secondary" /></Link>
-                        <Trash size={25} className="text-secondary cursor-pointer" onClick={() => handleDelete(article._id)} />
+                        <Link to={`/article/${article._id}`}><IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton></Link>
+                        <Link to={`/dashboard/resources/edit/${article._id}`}><IconButton variant="text" className="text-secondary rounded-full"><SquarePenIcon size={22} className="text-secondary" /></IconButton></Link>
+                        <IconButton variant="text" className="text-secondary rounded-full"><Trash size={22} className="text-secondary cursor-pointer" onClick={() => handleDelete(article._id)} /></IconButton>
+                        
                     </div>
                 );
             },

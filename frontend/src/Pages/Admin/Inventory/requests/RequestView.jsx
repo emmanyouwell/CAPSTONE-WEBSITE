@@ -157,7 +157,7 @@ const RequestView = () => {
         }));
     }
     return (
-        <div className="p-8">
+        <div className="p-4">
             <Tabs value="Inpatient">
                 <Button color="pink" size="sm" className="mb-2" variant="outlined" onClick={handleOpen}>
                     Add Request

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Card } from '@material-tailwind/react'
+import { Button, Card, IconButton } from '@material-tailwind/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
-import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
-import { EyeIcon } from 'lucide-react'
+
+import { DoorOpen, EyeIcon, SquarePenIcon } from 'lucide-react'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
-const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
+const PastTables = ({ currentPage, totalPages, pasteurizedFridges, handleEdit }) => {
     const columnHelper = createColumnHelper();
 
     const columns = [
@@ -34,8 +34,9 @@ const PastTables = ({ currentPage, totalPages, pasteurizedFridges }) => {
                 return (
                     <div className="flex gap-2">
                         <Link to={`/dashboard/inventory/fridge/pasteurized/${_id}`}>
-                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                            <IconButton className="text-secondary rounded-full" variant="text"><EyeIcon size={25} /></IconButton>
                         </Link>
+                        <IconButton className="text-secondary rounded-full" variant="text"><SquarePenIcon size={22} onClick={()=>handleEdit(_id)}/></IconButton>
                     </div>
                 );
             },

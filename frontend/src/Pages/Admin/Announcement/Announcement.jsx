@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Input } from '@material-tailwind/react'
+import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
@@ -80,9 +80,9 @@ const Announcement = () => {
                 const announcement = row.original
                 return (
                     <div className="flex gap-2">
-                        <Link to={`/announcements/${announcement._id}`} className="flex items-center gap-2 text-secondary"><EyeIcon size={30} /></Link>
-                        <Link to={`/dashboard/announcement/edit/${announcement._id}`}><SquarePenIcon size={25} className="text-secondary" /></Link>
-                        <Trash size={25} className="text-secondary cursor-pointer" onClick={() => handleDelete(announcement._id)} />
+                        <Link to={`/announcements/${announcement._id}`}><IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25}/></IconButton></Link>
+                        <Link to={`/dashboard/announcement/edit/${announcement._id}`}><IconButton variant="text" className="text-secondary rounded-full"><SquarePenIcon size={22} className="text-secondary" /></IconButton></Link>
+                        <IconButton variant="text" className="text-secondary rounded-full"><Trash size={22} className="text-secondary cursor-pointer" onClick={() => handleDelete(announcement._id)} /></IconButton>
                     </div>
                 );
             },
