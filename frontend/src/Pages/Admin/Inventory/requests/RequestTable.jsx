@@ -157,48 +157,6 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
         <div className="w-full h-full">
 
             <DataTable data={requests} columns={columns} pageSize={10} />
-            {/* <Card className="h-full w-full overflow-scroll">
-            <table className="w-full min-w-max table-auto text-left">
-                <thead className="bg-secondary text-white">
-                    <tr>
-                        <th className="border-b p-4">Date</th>
-                        <th className="border-b p-4">Patient Name</th>
-                        <th className="border-b p-4">Patient Type</th>
-                        <th className="border-b p-4">Requested Volume</th>
-                        <th className="border-b p-4">Days</th>
-                        <th className="border-b p-4">Prescribed by</th>
-                        <th className="border-b p-4">Status</th>
-                        <th className="border-b p-4">  {reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length ? <Button color="green" onClick={dispenseInpatient}>
-                            <CheckCheck className="h-5 w-5" />
-                        </Button> : 'View Details'}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {requests.map((request, index) => (
-                        <tr key={index}>
-                            <td className="p-4">
-                                {formatDate(request.date)}
-                            </td>
-                            <td className="p-4">{request.patient?.name}</td>
-                            <td className="p-4">{request.patient?.patientType}</td>
-                            <td className="p-4">{request.volumeRequested.volume} ml</td>
-                            <td className="p-4">{request.volumeRequested.days}</td>
-                            <td className="p-4">{request.doctor}</td>
-                            <td className="p-4">{request.status}</td>
-                            <td className="p-4 flex items-center gap-2">
-                                {request.status === "Reserved" && request.patient.patientType === "Outpatient" ?
-                                    <Button className="bg-secondary" onClick={() => handleTransport(request)}><CheckCheck className="h-5 w-5" /></Button>
-                                    : <Link to={`/dashboard/request/${request._id}`}>
-                                        <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-                                    </Link>}
-
-                            </td>
-
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </Card> */}
             <Dialog size="sm" open={openTransport} handler={handleTransport} className="p-4">
                 <DialogHeader className="relative m-0 block">
                     <Typography variant="h4" color="blue-gray">

@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { 
-  addFridges, 
+import {
+  addFridges,
   deleteFridges,
-  getFridgeDetails, 
-  getFridges, 
-  openFridge, 
-  
+  getFridgeDetails,
+  getFridges,
+  openFridge,
+
   updateFridge
 } from '../actions/fridgeActions';
 
@@ -13,7 +13,7 @@ export const fridgeSlice = createSlice({
   name: 'fridge',
   initialState: {
     fridges: [],
-    
+
     loading: false, // Useful for async actions like login/signup
     error: null, // To handle errors
     fridgeDetails: {},
@@ -23,21 +23,22 @@ export const fridgeSlice = createSlice({
     isDeleted: false,
   },
   reducers: {
+    resetUpdate: (state) => { state.isUpdated = false }
   },
   extraReducers: (builder) => {
     builder
-      
+
       .addCase(getFridges.pending, (state, action) => {
         state.loading = true;
       })
       .addCase(getFridges.fulfilled, (state, action) => {
         state.loading = false;
         state.fridges = action.payload.fridges;
-        
+
       })
       .addCase(getFridges.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       })
 
       .addCase(addFridges.pending, (state, action) => {
@@ -52,7 +53,7 @@ export const fridgeSlice = createSlice({
         state.error = action.payload;
       })
 
-       .addCase(updateFridge.pending, (state, action) => {
+      .addCase(updateFridge.pending, (state, action) => {
         state.loading = true;
       })
       .addCase(updateFridge.fulfilled, (state, action) => {
@@ -99,9 +100,9 @@ export const fridgeSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
-      
+
+
   },
 });
-
+export const { resetUpdate } = fridgeSlice.actions
 export default fridgeSlice.reducer;
