@@ -42,8 +42,8 @@ const EventDetails = ({ event }) => {
 
                         {/* Start & End Date Chips */}
                         <div className="flex flex-wrap items-center gap-2 mt-2">
-                            <Chip value={`Start: ${formattedDate(event.actDetails.start)}`} className="w-full px-2 py-1 text-xs bg-secondary" />
-                            <Chip value={`End: ${formattedDate(event.actDetails.end)}`} className="w-full px-2 py-1 text-xs bg-primary" />
+                            <Chip value={`Date: ${formattedDate(event.actDetails.date)}`} className="w-full px-2 py-1 text-xs bg-secondary" />
+                            
                         </div>
                     </div>
                 </div>

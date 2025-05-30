@@ -24,10 +24,8 @@ const EditEvent = () => {
         venue: Yup.string(),
         status: Yup.string().required("Status is required"),
 
-        start: Yup.date().required("Start date is required"),
-        end: Yup.date()
-            .required("End date is required")
-            .min(Yup.ref("start"), "End date must be after start date"),
+        date: Yup.date().required("Start date is required"),
+
     });
 
     const formik = useFormik({
@@ -35,21 +33,19 @@ const EditEvent = () => {
             title: '',
             description: '',
             status: '',
-            start: '',
+            date: '',
             venue: '',
-
-            end: '',
+           
             user: getUser()._id
         },
         validationSchema,
         onSubmit: (values) => {
-            const localStart = new Date(values.start);
-            const localEnd = new Date(values.end);
+            const eventDate = new Date(values.date);
+
             const formData = {
                 activity: values.title,
                 venue: values.venue,
-                start: localStart,
-                end: localEnd,
+                date: eventDate,
                 status: values.status,
                 description: values.description,
                 admin: getUser()._id,
@@ -73,17 +69,15 @@ const EditEvent = () => {
 
     useEffect(() => {
         if (lettingDetails && lettingDetails.actDetails) {
-            const start = new Date(lettingDetails.actDetails.start)
-            const end = new Date(lettingDetails.actDetails.end)
+            const eventDate = new Date(lettingDetails.actDetails.date)
+            
 
             formik.setValues({
                 title: lettingDetails.activity,
                 description: lettingDetails.description,
                 venue: lettingDetails.venue,
                 status: lettingDetails.status,
-
-                start: start,
-                end: end
+                date: eventDate,
             });
         }
     }, [lettingDetails]); // Run when `eventDetails` updates
@@ -194,7 +188,7 @@ const EditEvent = () => {
                                     >
                                         <Option value="Not-Due">Not-Due</Option>
                                         <Option value="On-Going">On-Going</Option>
-                                        
+
                                     </Select>
                                     {formik.touched.status && formik.errors.status && (
                                         <Typography color="red" variant="small">
@@ -210,62 +204,34 @@ const EditEvent = () => {
                                 {/* Start Date */}
                                 <div className="w-full">
                                     <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                        Start Date
+                                        Event Date
                                     </Typography>
                                     <div className="add-event w-full">
                                         <DatePicker
-                                            selected={formik.values.start}
-                                            onChange={(date) => formik.setFieldValue("start", date)}
+                                            selected={formik.values.date}
+                                            onChange={(date) => formik.setFieldValue("date", date)}
                                             onBlur={formik.handleBlur}
                                             onCalendarClose={() => console.log("Calendar closed")} // Optional hook
                                             dateFormat="MMMM d, yyyy h:mm aa"
                                             showTimeSelect
-                                            className={`w-full p-2 border ${formik.touched.start && formik.errors.start
+                                            className={`w-full p-2 border ${formik.touched.date && formik.errors.date
                                                 ? "border-red-500"
                                                 : "border-gray-400"
                                                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
                                             placeholderText="Select a date and time"
                                             shouldCloseOnSelect={true}
-                                            popperPlacement="left-end"
+                                            popperPlacement="top-start"
                                             timeIntervals={10}
                                         />
                                     </div>
-                                    {formik.touched.start && formik.errors.start && (
+                                    {formik.touched.date && formik.errors.date && (
                                         <Typography color="red" variant="small">
-                                            {formik.errors.start}
+                                            {formik.errors.date}
                                         </Typography>
                                     )}
                                 </div>
 
-                                {/* End Date */}
-                                <div className="w-full">
-                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                        End Date
-                                    </Typography>
-                                    <div className="add-event w-full">
-                                        <DatePicker
-                                            selected={formik.values.end}
-                                            onChange={(date) => formik.setFieldValue("end", date)}
-                                            onBlur={formik.handleBlur}
-                                            onCalendarClose={() => console.log("Calendar closed")} // Optional hook
-                                            dateFormat="MMMM d, yyyy h:mm aa"
-                                            showTimeSelect
-                                            className={`w-full p-2 border ${formik.touched.end && formik.errors.end
-                                                ? "border-red-500"
-                                                : "border-gray-400"
-                                                } rounded-lg focus:outline-none focus:ring-2 focus:ring-primary`}
-                                            placeholderText="Select a date and time"
-                                            shouldCloseOnSelect={true}
-                                            popperPlacement="left-end"
-                                            timeIntervals={10}
-                                        />
-                                    </div>
-                                    {formik.touched.end && formik.errors.end && (
-                                        <Typography color="red" variant="small">
-                                            {formik.errors.end}
-                                        </Typography>
-                                    )}
-                                </div>
+                               
                             </div>
                         </CardBody>
 

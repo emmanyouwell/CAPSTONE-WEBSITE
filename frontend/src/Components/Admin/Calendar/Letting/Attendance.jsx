@@ -225,7 +225,7 @@ const Attendance = () => {
         </DialogHeader>
         <DialogBody divider className="grid place-items-center gap-2">
           <Typography variant="h5" color="blue-gray">Total Collected Volume:</Typography>
-          <Typography color="pink" className="font-parkinsans" variant="h2">
+          <Typography color="pink" className="font-sofia" variant="h2">
             {lettingDetails.totalVolume} ml
           </Typography>
           <Typography className="text-center font-normal">
