@@ -167,7 +167,7 @@ export function AddEvent() {
                                         value={formik.values.status}
                                         error={formik.touched.status && Boolean(formik.errors.status)}
                                     >
-                                        <Option value="Not-Due">Not-Due</Option>
+                                        <Option value="Not-Due">Schedule</Option>
                                         <Option value="On-Going">On-Going</Option>
 
                                     </Select>

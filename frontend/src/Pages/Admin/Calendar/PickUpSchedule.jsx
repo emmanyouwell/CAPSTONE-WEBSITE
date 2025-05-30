@@ -23,18 +23,17 @@ const PickUpSchedule = () => {
            
 
             {schedules && <ScheduleComponent events={schedules} type="pickup" />}
-            <div className="flex flex-col">
-                <Typography variant="h2">Legend</Typography>
+            <div className="flex items-center gap-4">
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-[#FFC107]"></div>
+                    <div className="w-3 h-3 bg-[#FFC107] rounded-full"></div>
                     <Typography className="ml-2" variant="lead">Pending</Typography>
                 </div>
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-[#E53777]"></div>
+                    <div className="w-3 h-3 bg-[#E53777] rounded-full"></div>
                     <Typography className="ml-2" variant="lead">Approved</Typography>
                 </div>
                 <div className="flex items-center">
-                    <div className="w-5 h-5 bg-[#4CAF50]"></div>
+                    <div className="w-3 h-3 bg-[#4CAF50] rounded-full"></div>
                     <Typography className="ml-2" variant="lead">Completed</Typography>
                 </div>
 

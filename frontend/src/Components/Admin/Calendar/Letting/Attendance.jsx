@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { finalizeSession, getAverageLettingVolume, getLettingDetails } from '../../../../redux/actions/lettingActions';
+import { finalizeSession, getLettingDetails } from '../../../../redux/actions/lettingActions';
 import AttendanceTable from './AttendanceTable';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getPerformance, getUser } from '../../../../utils/helper';
+import { getUser } from '../../../../utils/helper';
 import { Alert, Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, select, Select, Textarea, Typography } from '@material-tailwind/react';
 import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon } from '@heroicons/react/24/solid';
@@ -33,7 +33,7 @@ const Attendance = () => {
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
   const [openSubmit, setOpenSubmit] = useState(false)
-  const [percent, setPercent] = useState(0);
+
   const handleOpen = () => setOpen(!open);
   const handleOpenSubmit = () => setOpenSubmit(!openSubmit);
   const handleChange = (e) => {
@@ -45,7 +45,7 @@ const Attendance = () => {
     dispatch(getLettingDetails(id));
     dispatch(getUserDetails());
     dispatch(getFridges());
-    dispatch(getAverageLettingVolume());
+
   }, [dispatch, id])
 
   const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
@@ -96,12 +96,12 @@ const Attendance = () => {
     })
 
   }
-  useEffect(()=>{
-    if (refresh){
+  useEffect(() => {
+    if (refresh) {
       dispatch(getLettingDetails(id))
       setRefresh(false);
     }
-  },[refresh])
+  }, [refresh])
   useEffect(() => {
     // Load the Tally embed script
     const script = document.createElement("script");
@@ -114,9 +114,7 @@ const Attendance = () => {
       document.body.removeChild(script);
     };
   }, [])
-  useEffect(() => {
-    setPercent(getPerformance(lettingDetails.totalVolume, average))
-  }, [lettingDetails, average])
+
 
   return (
     <>
@@ -126,7 +124,7 @@ const Attendance = () => {
           {lettingDetails && lettingDetails.status !== 'Done' ? (<div className="flex flex-col w-full">
 
             <div className="flex items-center gap-4 justify-between w-full">
-              <Typography variant="h2" className="w-max flex items-baseline gap-2">Total Volume: {lettingDetails.totalVolume} ml {percent > 0 ? <span className="text-green-600 text-[16px] flex items-center"><ArrowUpIcon className="h-4 w-4 text-green-600" />{Math.abs(percent).toFixed(2)}%</span> : percent < 0 ? <span className="text-red-600 flex items-center text-[16px] flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}%</span> : ''}</Typography>
+              <Typography variant="h2" className="w-max flex items-baseline gap-2">Total Volume: {lettingDetails.totalVolume} ml </Typography>
               <div className='flex gap-4'>
                 <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
                   Create New Donor
@@ -231,17 +229,11 @@ const Attendance = () => {
           <Typography color="pink" className="font-sofia" variant="h2">
             {lettingDetails.totalVolume} ml
           </Typography>
-          <Typography className="text-center font-normal">
-            {percent > 0 ? (<span className="w-full flex items-center gap-1 text-gray-700">
-
-              This event collected <span className="text-green-600 flex items-center"><ArrowUpIcon className="h-4 w-4 text-green-600" />{Math.abs(percent).toFixed(2)}% more milk</span> than previous events!
-            </span>) : percent < 0 ? (<span className="w-full flex items-center gap-1 text-gray-700">
-
-              This event collected <span className="text-red-600 flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}% less milk</span> than previous events.
-            </span>) : <span className="text-gray-700">
-
-              This event collected the same amount of milk as previous events.
-            </span>}
+          <Typography className="text-center font-normal flex flex-col">
+            <span className="text-gray-700">
+              A total of <span className="text-secondary font-bold text-lg">{lettingDetails && lettingDetails.attendance?.length} attendance records</span> have been collected for this letting session.
+            </span>
+            <span className="text-gray-700">Please review the details before finalizing the attendance.</span>
           </Typography>
         </DialogBody>
         <DialogFooter className="space-x-2">

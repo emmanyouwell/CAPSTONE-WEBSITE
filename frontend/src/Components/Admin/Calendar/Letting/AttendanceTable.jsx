@@ -146,7 +146,7 @@ const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) =>
             header: 'Additional bags',
             cell: info => `${info.getValue()} ml`
         }),
-        columnHelper.accessor(row => `${row.donor.home_address.street}, ${row.donor.home_address.brgy} ${row.donor.home_address.city}`, {
+        columnHelper.accessor(row => `${row.donor.home_address.street}, ${row.donor.home_address.brgy}, ${row.donor.home_address.city}`, {
             id: 'address',
             header: 'Address',
             cell: info => info.getValue()
