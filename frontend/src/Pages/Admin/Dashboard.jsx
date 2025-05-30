@@ -152,7 +152,7 @@ const Dashboard = () => {
         </div>
         <div className="p-4">
           <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
-            <AccordionHeader onClick={() => handleOpen(1)}>Milk Metrics</AccordionHeader>
+            <AccordionHeader onClick={() => handleOpen(1)} className="font-sofia">Milk Metrics</AccordionHeader>
             <AccordionBody>
               <div className="grid grid-cols-2 gap-4 min-h-fit w-full p-4">
                 <Card className="p-4 border shadow-lg">
@@ -178,7 +178,7 @@ const Dashboard = () => {
           </Accordion>
 
           <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
-            <AccordionHeader onClick={() => handleOpen(2)}>Donor Metrics</AccordionHeader>
+            <AccordionHeader onClick={() => handleOpen(2)} className="font-sofia">Donor Metrics</AccordionHeader>
             <AccordionBody>
               <div className="grid grid-cols-2 gap-4 min-h-fit w-full p-4">
                 <Card className="p-4 border shadow-lg">
@@ -197,7 +197,7 @@ const Dashboard = () => {
             </AccordionBody>
           </Accordion>
           <Accordion open={open === 3} icon={<Icon id={3} open={open} />}>
-            <AccordionHeader onClick={() => handleOpen(3)}>Patient Metrics</AccordionHeader>
+            <AccordionHeader onClick={() => handleOpen(3)} className="font-sofia">Patient Metrics</AccordionHeader>
             <AccordionBody>
               <div className="grid grid-cols-2 gap-4 min-h-fit w-full p-4">
                 <Card className="p-4 border shadow-lg">
