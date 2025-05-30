@@ -47,7 +47,7 @@ const Attendance = () => {
     dispatch(getFridges());
     dispatch(getAverageLettingVolume());
   }, [dispatch, id])
-  
+
   const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
   const handleSubmit = () => {
     if (!userDetails || !id) {
@@ -110,9 +110,7 @@ const Attendance = () => {
     };
   }, [])
   useEffect(() => {
-    if (lettingDetails && average) {
-      setPercent(getPerformance(lettingDetails.totalVolume, average))
-    }
+    setPercent(getPerformance(lettingDetails.totalVolume, average))
   }, [lettingDetails, average])
 
   return (
@@ -123,7 +121,7 @@ const Attendance = () => {
           {lettingDetails && lettingDetails.status !== 'Done' ? (<div className="flex flex-col w-full">
 
             <div className="flex items-center gap-4 justify-between w-full">
-              <Typography variant="h2" className="w-max flex items-baseline gap-2">Total Volume: {lettingDetails.totalVolume} ml {percent > 0 ? <span className="text-green-600 text-[16px] flex items-center"><ArrowUpIcon className="h-4 w-4 text-green-600" />{Math.abs(percent).toFixed(2)}%</span> : <span className="text-red-600 flex items-center text-[16px] flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}%</span>}</Typography>
+              <Typography variant="h2" className="w-max flex items-baseline gap-2">Total Volume: {lettingDetails.totalVolume} ml {percent > 0 ? <span className="text-green-600 text-[16px] flex items-center"><ArrowUpIcon className="h-4 w-4 text-green-600" />{Math.abs(percent).toFixed(2)}%</span> : percent < 0 ? <span className="text-red-600 flex items-center text-[16px] flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}%</span> : ''}</Typography>
               <div className='flex gap-4'>
                 <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
                   Create New Donor
@@ -236,6 +234,7 @@ const Attendance = () => {
 
               This event collected <span className="text-red-600 flex items-center"><ArrowDownIcon className="h-4 w-4 text-red-600" />{Math.abs(percent).toFixed(2)}% less milk</span> than previous events.
             </span>) : <span className="text-gray-700">
+
               This event collected the same amount of milk as previous events.
             </span>}
           </Typography>

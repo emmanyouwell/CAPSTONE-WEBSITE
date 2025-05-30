@@ -117,10 +117,15 @@ export const useIsActive = (path) => {
 }
 
 export const getPerformance = (current, average) => {
-    let message = '';
-    const diff = current - average;
-    const percent = (diff / average) * 100;
+    let percent;
+    console.log("current: ", current)
+    if (average > 0) {
+        percent = ((current - average) / average) * 100;
+    } else if (current > 0) {
+        percent = 100; // or even 1000 or a capped value to emphasize big improvement
+    } else {
+        percent = 0; // both are 0, so no performance
+    }
 
-
-    return percent.toFixed(2)
-}
+    return percent.toFixed(2);
+};

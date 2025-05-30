@@ -18,7 +18,7 @@ const CreateAdmin = () => {
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { loading, error, isRegistered, userDetails, user } = useSelector((state) => state.users);
-
+  const phoneRegExp = /^(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\d{10,14}$/;
   const validationSchema = Yup.object({
     employeeID: Yup.string()
       .matches(/^\d+$/, "Employee ID must be a number") // Ensures only digits are allowed
@@ -27,7 +27,9 @@ const CreateAdmin = () => {
 
     lastName: Yup.string().required("Last Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    phoneNumber: Yup.string().required("Phone Number is required"),
+    phoneNumber: Yup.string()
+      .matches(phoneRegExp, "Phone number is not valid")
+      .required("Phone Number is required"),
     role: Yup.string().required("Role is required"),
   });
 
@@ -115,7 +117,7 @@ const CreateAdmin = () => {
               </div>
             </div>
 
-            <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
+            <div className="mb-6 flex flex-col justify-center items-center gap-4 md:flex-row">
               <div className="w-full">
                 <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                   First Name
@@ -164,8 +166,8 @@ const CreateAdmin = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.middleName}
                 />
-                {formik.touched.middleName && formik.errors.middleName && (
-                  <div className="text-red-500 text-sm">{formik.errors.middleName}</div>
+                {formik.touched.firstName && formik.errors.firstName && formik.errors.lastName && formik.touched.lastName && (
+                  <div className="text-red-500 text-sm h-5"></div>
                 )}
               </div>
             </div>
