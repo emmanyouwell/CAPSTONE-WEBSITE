@@ -54,7 +54,7 @@ const SingleDonor = () => {
 
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                                     <dt className="font-medium text-gray-900">Birthday</dt>
-                                    <dd className="text-gray-700 sm:col-span-2">{donorDetails && formatDate(donorDetails.birthday)}</dd>
+                                    <dd className="text-gray-700 sm:col-span-2">{donorDetails && formatDate(donorDetails.birthday, "short")}</dd>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
@@ -71,6 +71,10 @@ const SingleDonor = () => {
                                     <dt className="font-medium text-gray-900">Eligibility</dt>
                                     <dd className="text-gray-700 sm:col-span-2">{donorDetails ? donorDetails.eligibility : '--'}</dd>
                                 </div>
+                                <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
+                                    <dt className="font-medium text-gray-900">Last Interview Form Submission</dt>
+                                    <dd className="text-gray-700 sm:col-span-2">{donorDetails ? formatDate(donorDetails.lastSubmissionDate, "short") : '--'}</dd>
+                                </div>
 
                                 {/* <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                                     <dt className="font-medium text-gray-900">Date tested:</dt>
@@ -81,7 +85,7 @@ const SingleDonor = () => {
                             </dl>
                         </div>
                     </div>
-                    {donorDetails && donorDetails.donation && <DonationList donations={donorDetails.donation} />}
+                    {donorDetails && donorDetails.donations && <DonationList donations={donorDetails.donations} />}
 
                 </div>
 
