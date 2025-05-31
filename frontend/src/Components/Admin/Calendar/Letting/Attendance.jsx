@@ -58,7 +58,6 @@ const Attendance = () => {
     const finalizeData = {
       adminId: userDetails._id,
       lettingId: id,
-      percent
     };
 
     dispatch(finalizeSession(finalizeData))
