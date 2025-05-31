@@ -74,7 +74,7 @@ const PickUpDetails = () => {
                 admin: values.admin
             }
             dispatch(updateSchedule(data)).then(() => {
-                dispatch(recordPrivateRecord({ scheduleId: id, donorId: schedule.donorDetails.donorId._id }))
+                toast.success("Schedule completed successfully", { position: "bottom-right" });
             })
             handleCompleteOpen();
         },
@@ -120,6 +120,7 @@ const PickUpDetails = () => {
             userId: userDetails._id
         }
         dispatch(addInventory(data)).then(() => {
+            dispatch(recordPrivateRecord({ scheduleId: id, collectionId: collectionId, donorId: schedule.donorDetails.donorId._id }))
             toast.success("Collection stored successfully", { position: "bottom-right" });
             setOpenFridge(false);
         }).catch((error) => {
@@ -196,21 +197,26 @@ const PickUpDetails = () => {
                     </CardBody>
 
                     <CardFooter>
-                        {from === "RedirectDetails" && status === "Collected" && (schedule && schedule.status) && (schedule.status !== "Approved") ? <div className="w-full flex items-start justify-end gap-4">
-                            <Button color="green" onClick={handleOpenFridge}>Confirm</Button>
-                        </div> : schedule && schedule.status === 'Pending' ?
+                        {from === "RedirectDetails" && status === "Collected" && (schedule && schedule.status) && (schedule.status !== "Approved") ?
                             <div className="w-full flex items-start justify-end gap-4">
-                                <Button onClick={handleOpen} color="deep-orange">Change Date</Button>
-                                <Button color="pink" onClick={handleApprove}>Approve</Button>
-                            </div> : schedule && schedule.status === 'Approved' ?
+                                <Button color="green" onClick={handleOpenFridge}>Confirm</Button>
+                            </div> :
+                            from === "RedirectDetails" && status === "Stored" ?
                                 <div className="w-full flex items-start justify-end gap-4">
-                                    <Button color="green" disabled={schedule && (new Date(schedule.dates).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0))} onClick={handleCompleteOpen}>Complete</Button>
-                                </div> : from === "RedirectDetails" && status === "Stored" ? <div className="w-full flex items-start justify-end gap-4">
                                     <Button disabled color="blue-gray">Stored</Button>
                                 </div> :
+                                schedule && schedule.status === 'Approved' ?
                                     <div className="w-full flex items-start justify-end gap-4">
-                                        <Button disabled color="blue-gray">Picked Up</Button>
-                                    </div>}
+                                        <Button color="green" disabled={schedule && (new Date(schedule.dates).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0))} onClick={handleCompleteOpen}>Complete</Button>
+                                    </div> :
+                                    schedule && schedule.status === 'Pending' ?
+                                        <div className="w-full flex items-start justify-end gap-4">
+                                            <Button onClick={handleOpen} color="deep-orange">Change Date</Button>
+                                            <Button color="pink" onClick={handleApprove}>Approve</Button>
+                                        </div> :
+                                            <div className="w-full flex items-start justify-end gap-4">
+                                                <Button disabled color="blue-gray">Picked Up</Button>
+                                            </div>}
 
                         <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
                             <form onSubmit={formik.handleSubmit}>
