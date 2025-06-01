@@ -6,7 +6,7 @@ import AttendanceTable from './AttendanceTable';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { getUser } from '../../../../utils/helper';
-import { Alert, Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, select, Select, Textarea, Typography } from '@material-tailwind/react';
+import { Alert, Button, ButtonGroup, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, select, Select, Textarea, Typography } from '@material-tailwind/react';
 import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
@@ -125,17 +125,19 @@ const Attendance = () => {
             <div className="flex items-center gap-4 justify-between w-full">
               <Typography variant="h2" className="w-max flex items-baseline gap-2">Total Volume: {lettingDetails.totalVolume} ml </Typography>
               <div className='flex gap-4'>
-                <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
-                  Create New Donor
-                </Button>
-                <Link to={`/dashboard/events/attendance/donations/${id}`}>
-                  <Button className="bg-secondary" size="sm">
+
+                <ButtonGroup ripple={true}>
+                  <Button data-tally-open="wbv1XZ" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="bg-secondary" size="sm">
+                    Create New Donor
+                  </Button>
+                  <Button className="bg-secondary" size="sm" onClick={() => navigate(`/dashboard/events/attendance/donations/${id}`)}>
                     Create New Attendance
                   </Button>
-                </Link>
+                </ButtonGroup>
                 <Button size="sm" color="green" onClick={handleOpenSubmit}>
                   Finalize Attendance
                 </Button>
+
               </div>
             </div>
 

@@ -173,32 +173,6 @@ const EditEvent = () => {
                                 />
                             </div>
 
-                            {/* Status */}
-                            <div className="flex gap-4">
-                                <div className="w-full">
-                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                        Status
-                                    </Typography>
-                                    <Select
-                                        name="status"
-                                        onChange={(val) => formik.setFieldValue("status", val)}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.status}
-                                        error={formik.touched.status && Boolean(formik.errors.status)}
-                                    >
-                                        <Option value="Not-Due">Not-Due</Option>
-                                        <Option value="On-Going">On-Going</Option>
-
-                                    </Select>
-                                    {formik.touched.status && formik.errors.status && (
-                                        <Typography color="red" variant="small">
-                                            {formik.errors.status}
-                                        </Typography>
-                                    )}
-                                </div>
-
-                            </div>
-
                             {/* Date Fields */}
                             <div className="flex gap-4">
                                 {/* Start Date */}

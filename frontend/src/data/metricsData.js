@@ -345,3 +345,53 @@ export function patientPerHospital(patientHospital) {
     return { data, options }
 
 }
+
+export function donationHistory(volumeByDate) {
+    if (!volumeByDate || typeof volumeByDate !== 'object') {
+        return { data: null, options: null };
+    }
+
+    const labels = Object.keys(volumeByDate);
+    const dataPoints = Object.values(volumeByDate);
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Total Volume',
+                data: dataPoints,
+                borderColor: 'white',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                tension: 0.3,
+                fill: true,
+            },
+        ],
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: { color: 'white' },
+            },
+            title: {
+                display: true,
+                text: 'Milk Letting Volume by Date',
+                color: 'white',
+            },
+        },
+        scales: {
+            x: {
+                ticks: { color: 'white' },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+            },
+            y: {
+                ticks: { color: 'white' },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+            },
+        },
+    };
+
+    return { data, options };
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { formatDate } from '../../../utils/helper'
 import { Typography } from '@material-tailwind/react'
-const DonationList = ({ donations }) => {
+const DonationList = ({ donations}) => {
 
     return (
         <article className="rounded-xl w-full border border-gray-70 p-4">
@@ -11,7 +11,7 @@ const DonationList = ({ donations }) => {
 
             <ul className="mt-4 space-y-2">
                 {donations.map((donation, index) => (
-                    <>
+                    <div key={index}>
                         {donation.donationType === "Public" ? <li>
                             <p className="flex flex-col h-full rounded-lg border border-gray-500 p-4">
                                 <strong className="font-medium text-secondary">{donation.milkLettingEvent?.activity}</strong>
@@ -28,7 +28,7 @@ const DonationList = ({ donations }) => {
                                 </p>
                             </li>}
 
-                    </>
+                    </div>
                 ))}
 
 
