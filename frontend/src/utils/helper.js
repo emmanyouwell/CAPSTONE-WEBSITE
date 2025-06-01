@@ -129,3 +129,71 @@ export const getPerformance = (current, average) => {
 
     return percent.toFixed(2);
 };
+export const getDonationDate = (donation) => {
+    if (donation.donationType === "Public") {
+        return new Date(donation.milkLettingEvent?.actDetails?.date);
+    }
+    if (donation.donationType === "Private") {
+        return new Date(donation.schedule?.dates);
+    }
+    return null;
+}
+export const donationHistoryChart = (donations) => {
+    if (!Array.isArray(donations)) return [];
+
+    const parsedDonations = donations.map((donation) => {
+        const rawDate = getDonationDate(donation);
+        const totalVolume = donation.totalVolume || donation.schedule?.totalVolume || 0;
+
+        if (!rawDate) return null;
+
+        const dateObj = new Date(rawDate);
+        const formattedDate = dateObj.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        });
+
+        return { dateObj, formattedDate, totalVolume };
+    }).filter(Boolean); // Remove nulls
+
+    // Sort by actual date (ascending)
+    parsedDonations.sort((a, b) => a.dateObj - b.dateObj);
+
+    // Aggregate by formattedDate
+    const volumeMap = new Map();
+    parsedDonations.forEach(({ formattedDate, totalVolume }) => {
+        const currentVolume = volumeMap.get(formattedDate) || 0;
+        volumeMap.set(formattedDate, currentVolume + totalVolume);
+    });
+
+    // Convert to chart format
+    const chartData = Array.from(volumeMap, ([name, totalVolume]) => ({ name, totalVolume }));
+    return chartData;
+};
+
+export const sortDonation = (donations, order = "desc") => {
+    if (!Array.isArray(donations)) return [];
+    // Map each donation to an object with its parsed date and original donation
+    const donationsWithDate = donations
+        .map((donation) => {
+            const rawDate = getDonationDate(donation);
+            if (!rawDate) return null;
+
+            return {
+                dateObj: new Date(rawDate),
+                donation,
+            };
+        })
+        .filter(Boolean); // Remove entries without valid date
+
+    // Sort by dateObj
+    donationsWithDate.sort((a, b) => {
+        return order === "asc"
+            ? a.dateObj - b.dateObj
+            : b.dateObj - a.dateObj;
+    });
+
+    // Return the original donation objects, now sorted
+    return donationsWithDate.map((item) => item.donation);
+}

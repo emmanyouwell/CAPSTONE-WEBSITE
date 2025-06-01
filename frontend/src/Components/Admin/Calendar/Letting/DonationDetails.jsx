@@ -27,6 +27,8 @@ import Select from 'react-select';
 import { object } from 'yup';
 import { Check, SquarePen, Trash, X } from 'lucide-react';
 import DatePicker from 'react-datepicker';
+import { formatDate, getDonationDate } from '../../../../utils/helper';
+import { setDate } from 'date-fns';
 const DonationDetails = () => {
     const dispatch = useDispatch();
     const { donors, loading, error } = useSelector((state) => state.donors);
@@ -39,7 +41,7 @@ const DonationDetails = () => {
     }))
 
     const [selectedDonor, setSelectedDonor] = useState(null); // State to store selected donor
-
+    const [dateTested, setDateTested] = useState(null)
     const { id } = useParams();
     const [bags, setBags] = useState([]);
     const resetStates = () => {
@@ -58,7 +60,7 @@ const DonationDetails = () => {
     const [lastDonation, setLastDonation] = useState(null);
     const [editingIndex, setEditingIndex] = useState(null); // track which row is being edited
     const [editedBag, setEditedBag] = useState({ volume: "", quantity: "" });
-
+    const [lastDonationDate, setLastDonationDate] = useState(null);
     const handleChange = (e) => {
         setDonorType(e.target.value)
     }
@@ -124,7 +126,8 @@ const DonationDetails = () => {
                 donorId: selectedDonor,
                 donorType: donorType,
                 bags: bags,
-                lastDonation
+                lastDonationDate,
+                dateTested
             };
         }
         else {
@@ -133,6 +136,7 @@ const DonationDetails = () => {
                 donorId: selectedDonor,
                 donorType: donorType,
                 bags: bags,
+                dateTested
             }
         }
 
@@ -157,6 +161,40 @@ const DonationDetails = () => {
     useEffect(() => {
         dispatch(getDonors({ search: search }))
     }, [dispatch])
+    useEffect(() => {
+        if (selectedDonor) {
+            const donations = selectedDonor.donations || [];
+            let latestDonation;
+            if (donations.length === 0) {
+
+                console.log("No donations found");
+
+                latestDonation = null;
+                setDonorType("New Donor");
+                setDateTested(null);
+            } else {
+                latestDonation = donations.reduce((latest, current) => {
+                    const latestDate = getDonationDate(latest);
+                    const currentDate = getDonationDate(current);
+
+                    if (!latestDate) return current;
+                    if (!currentDate) return latest;
+
+                    return currentDate > latestDate ? current : latest;
+                }, donations[0]);
+                setDonorType("Old Donor");
+                setDateTested(selectedDonor.dateTested);
+                if (latestDonation.donationType === "Public") {
+                    setLastDonation(latestDonation.milkLettingEvent.actDetails.date);
+                }
+                else {
+                    setLastDonation(latestDonation.schedule.dates);
+                }
+            }
+            setLastDonation(latestDonation);
+            console.log("Latest Donation:", latestDonation);
+        }
+    }, [selectedDonor])
     const options = [
         ...donors.map((donor) => ({
             value: donor, label: `${donor.user.name.first} ${donor.user.name.last} | ${donor.user.phone}`, donor
@@ -181,7 +219,7 @@ const DonationDetails = () => {
                                     <Select
                                         className="w-full select-border-black"
                                         value={selectedDonor ? options.find(opt => opt.value._id === selectedDonor._id) : null}
-                                        onChange={(selected) => setSelectedDonor(selected.value)}
+                                        onChange={(selected) => {setSelectedDonor(selected.value)}}
                                         options={options}
                                         isSearchable
                                         formatOptionLabel={(option) =>
@@ -214,13 +252,14 @@ const DonationDetails = () => {
                                                 required
                                                 checked={donorType === "New Donor"}
                                                 onChange={handleChange}
+                                                disabled={lastDonation ? true : false}
                                             />
                                             <label
                                                 htmlFor="new"
-                                                className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary"
+                                                className={`block w-full ${lastDonation ? 'opacity-50' : 'cursor-pointer'} rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary`}
                                             >
                                                 <div className="block">
-                                                    <Typography className="font-semibold">
+                                                    <Typography className="font-semibold" >
                                                         New Donor
                                                     </Typography>
                                                     <Typography className="font-normal text-gray-600 ">
@@ -242,18 +281,21 @@ const DonationDetails = () => {
                                                 required
                                                 checked={donorType === "Old Donor"}
                                                 onChange={handleChange}
+                                                disabled={!lastDonation}
                                             />
                                             <label
                                                 htmlFor="old"
-                                                className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary"
+                                                className={`block w-full ${!lastDonation ? 'opacity-50' : 'cursor-pointer'} rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-secondary peer-checked:ring-secondary peer-checked:text-secondary`}
                                             >
                                                 <div className="block">
                                                     <Typography className="font-semibold">
                                                         Old donor
                                                     </Typography>
                                                     <Typography className="font-normal text-gray-600">
-                                                        I've donated breast milk in the past.
+                                                        Last Donation: {lastDonation ? lastDonation.donationType === "Public" ? formatDate(lastDonation.milkLettingEvent.actDetails.date, "short") : formatDate(lastDonation.schedule.dates) : "No previous donation found"}
                                                     </Typography>
+
+
                                                 </div>
                                             </label>
                                         </div>
@@ -261,14 +303,14 @@ const DonationDetails = () => {
                                 </>) : (<div className="h-full">Select donor to continue</div>)}
                             </div>
                             <div className="">
-                                {donorType && donorType === "Old Donor" && (
+                                {selectedDonor && (
                                     <>
-                                        <div className="font-parkinsans text-xl text-primary font-bold mb-2">Last Breast Milk Donation</div>
+                                        <div className="font-parkinsans text-xl text-primary font-bold mb-2">Last Date Tested</div>
                                         <div className="flex items-center justify-between">
                                             <List className="w-full p-0 mb-4">
                                                 <DatePicker
-                                                    selected={lastDonation}
-                                                    onChange={(date) => setLastDonation(date)}
+                                                    selected={dateTested}
+                                                    onChange={(date) => setDateTested(date)}
 
                                                     dateFormat="MMMM d, yyyy"
 

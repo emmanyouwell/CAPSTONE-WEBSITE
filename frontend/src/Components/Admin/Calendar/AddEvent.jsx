@@ -31,7 +31,7 @@ export function AddEvent() {
         title: Yup.string().required("Title is required"),
         description: Yup.string(),
         venue: Yup.string().required("Venue is required"),
-        status: Yup.string().required("Status is required"),
+        
 
         date: Yup.date().required("Event date is required"),
         
@@ -58,7 +58,7 @@ export function AddEvent() {
                 actDetails: {
                     date: eventDate,
                 },
-                status: values.status,
+                status: eventDate < new Date() ? "On-Going" : "Not-Due",
                 description: values.description,
                 admin: getUser()._id
             }
@@ -155,29 +155,7 @@ export function AddEvent() {
                                     value={formik.values.description}
                                 />
                             </div>
-                            <div className="flex gap-4">
-                                <div className="w-full">
-                                    <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                        Status
-                                    </Typography>
-                                    <Select
-                                        name="status"
-                                        onChange={(val) => formik.setFieldValue("status", val)}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.status}
-                                        error={formik.touched.status && Boolean(formik.errors.status)}
-                                    >
-                                        <Option value="Not-Due">Schedule</Option>
-                                        <Option value="On-Going">On-Going</Option>
-
-                                    </Select>
-                                    {formik.touched.status && formik.errors.status && (
-                                        <Typography color="red" variant="small">
-                                            {formik.errors.status}
-                                        </Typography>
-                                    )}
-                                </div>
-                            </div>
+                           
                             <div className="flex flex-col gap-4 w-full">
                                 <div className="w-full">
                                     <Typography variant="small" color="blue-gray" className="mb-2 font-medium">

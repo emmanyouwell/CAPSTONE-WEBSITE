@@ -13,7 +13,7 @@ import {
     CardFooter,
 } from '@material-tailwind/react';
 
-export default function DataTable({ data = [], columns = [], pageSize = 5, editingRowId, setEditingRowId, editedData, setEditedData }) {
+export default function DataTable({ height, data = [], columns = [], pageSize = 5, editingRowId, setEditingRowId, editedData, setEditedData }) {
     const table = useReactTable({
         data,
         columns,
@@ -27,7 +27,7 @@ export default function DataTable({ data = [], columns = [], pageSize = 5, editi
     });
 
     return (
-        <Card className="w-full h-[calc(100vh-10rem)]">
+        <Card className={`w-full ${height ? height : 'h-[calc(100vh-10rem)]'}`}>
             <CardBody className="p-0 overflow-auto flex flex-col justify-between h-full">
                 <table className="min-w-full text-left table-auto">
                     <thead className="bg-gray-100">

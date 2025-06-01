@@ -35,7 +35,7 @@ const Schedule = () => {
                 
                 <div className="flex items-center">
                     <div className="w-3 h-3 bg-neutral-dark rounded-full"></div>
-                    <Typography className="ml-2" variant="lead">Not-Due</Typography>
+                    <Typography className="ml-2" variant="lead">Upcoming</Typography>
                 </div>
                 <div className="flex items-center">
                     <div className="w-3 h-3 bg-secondary rounded-full"></div>
