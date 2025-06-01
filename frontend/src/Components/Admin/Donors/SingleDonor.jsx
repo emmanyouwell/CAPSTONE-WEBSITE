@@ -42,8 +42,8 @@ const SingleDonor = () => {
 
     const columns = [
         columnHelper.accessor(row => row.donationType === "Public" ? row.milkLettingEvent.activity : "Scheduled Pick-up", {
-            id: 'donationActivity',
-            header: 'Donation Activity',
+            id: 'activity',
+            header: 'Activity',
             cell: info => info.getValue(),
         }),
         columnHelper.accessor(row => row.donationType === "Public" ? formatDate(row.milkLettingEvent.actDetails.date, "short") : formatDate(row.schedule.dates, "short"), {
@@ -118,7 +118,7 @@ const SingleDonor = () => {
                 <div className="flex flex-col gap-8 p-4">
                     <div className="flex h-[calc(100vh-18rem)] items-start justify-center gap-4">
                         {/* Donor Information */}
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-4 border border-gray-600 rounded-lg">
+                        <div className="w-full h-full flex flex-col gap-4 p-4 border border-gray-600 rounded-lg overflow-y-auto">
                             <Typography color="black" variant="h1">{donorDetails && donorDetails.user && donorDetails.user.name && `${donorDetails.user.name.first} ${donorDetails.user.name.middle} ${donorDetails.user.name.last}`}</Typography>
                             <div className="flow-root">
                                 <dl className="-my-3 divide-y divide-gray-100 text-lg">
@@ -178,7 +178,7 @@ const SingleDonor = () => {
 
                         <div className="flex h-full flex-col w-full gap-4">
                             {/* Child information */}
-                            <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-4 border border-gray-600 rounded-lg">
+                            <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-4 border border-gray-600 rounded-lg ">
                                 <Typography color="black" variant="h1">Child Information</Typography>
                                 <div className="flow-root">
                                     <dl className="-my-3 divide-y divide-gray-100 text-lg">
