@@ -197,3 +197,29 @@ export const sortDonation = (donations, order = "desc") => {
     // Return the original donation objects, now sorted
     return donationsWithDate.map((item) => item.donation);
 }
+
+export const sortRequest = (requests, order="desc")=>{
+    if (!Array.isArray(requests)) return [];
+    // Map each request to an object with its parsed date and original request
+    const requestsWithDate = requests
+        .map((request) => {
+            const rawDate = new Date(request.date);
+            if (!rawDate) return null;
+
+            return {
+                dateObj: rawDate,
+                request,
+            };
+        })
+        .filter(Boolean); // Remove entries without valid date
+
+    // Sort by dateObj
+    requestsWithDate.sort((a, b) => {
+        return order === "asc"
+            ? a.dateObj - b.dateObj
+            : b.dateObj - a.dateObj;
+    });
+
+    // Return the original request objects, now sorted
+    return requestsWithDate.map((item) => item.request);
+}
