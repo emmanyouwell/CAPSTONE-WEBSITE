@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Typography, Button, Input } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import StickyNavbar from '../Components/Navbar'
-import {useDispatch , useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getArticles } from '../redux/actions/articleActions';
 import ArticleList from '../Components/Articles/ArticleList';
 const Article = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
-    const {articles, loading, error} = useSelector((state)=>state.articles);
+    const { articles, loading, error } = useSelector((state) => state.articles);
+    const [search, setSearch] = useState('')
     useEffect(() => {
         const handleResize = () => {
             setIsLargeScreen(window.innerWidth >= 768); // Tailwind's md breakpoint is 768px
@@ -20,15 +21,18 @@ const Article = () => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, [])
-    useEffect(()=>{
-        dispatch(getArticles());
-    },[dispatch])
+    useEffect(() => {
+        dispatch(getArticles(search));
+    }, [dispatch, search])
 
-    useEffect(()=>{
-        if (articles){
+    useEffect(() => {
+        if (articles) {
             console.log(articles);
         }
-    },[articles])
+    }, [articles])
+    const handleSearch = () => {
+        dispatch(getArticles(search));
+    }
     return (
         <>
             <StickyNavbar />
@@ -48,15 +52,17 @@ const Article = () => {
                             type="text"
                             className="bg-white"
                             label="Search for articles"
+                            onChange={(e) => setSearch(e.target.value)}
+                            value={search}
                         />
-                        <Button className="bg-secondary">Search</Button>
+                        <Button className="bg-secondary" onClick={handleSearch}>Search</Button>
                     </div>
                 </div>
 
             </section>
             <section className="p-4">
-                <div className="grid grid-cols-auto md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    <ArticleList articles={articles} isLargeScreen={IsLargeScreen}/>
+                <div className="flex flex-wrap gap-4">
+                    <ArticleList articles={articles} isLargeScreen={IsLargeScreen} />
 
                 </div>
             </section>

@@ -24,7 +24,7 @@ const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
                 const imageUrl = (article?.content) ? article.content.match(/<img[^>]+src="([^">]+)"/) ? article.content.match(/<img[^>]+src="([^">]+)"/)[1] : placeholder : null;
                 // const imageUrl = placeholder;
                 return (
-                    <div className=" bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between">
+                    <div className=" bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-96" key={article._id}>
                         <img src={imageUrl} alt="" className="h-40 object-cover" />
                         <Typography variant={IsLargeScreen ? "h3" : "h4"} className="mt-2 text-primary">
                             {article.title}

@@ -12,6 +12,7 @@ const SingleArticle = () => {
     const { articles, articleDetails, loading, error } = useSelector((state) => state.articles);
     const { id } = useParams();
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
+    const [combinedHTML, setCombinedHTML] = useState('');
     const formattedDate = new Date(articleDetails.createdAt).toLocaleDateString('en-US', {
         weekday: 'short', // "Mon"
         year: 'numeric', // "2025"
@@ -24,7 +25,12 @@ const SingleArticle = () => {
         dispatch(getArticles());
     }, [dispatch, id]);
 
-
+    useEffect(() => {
+        if (articleDetails) {
+            const extraHTML = `<small class="font-parkinsans text-primary italic">Published on ${formattedDate}</small>`;
+            setCombinedHTML(articleDetails.content + extraHTML);
+        }
+    }, [articleDetails])
     useEffect(() => {
         const handleResize = () => {
             setIsLargeScreen(window.innerWidth >= 768); // Tailwind's md breakpoint is 768px
@@ -40,32 +46,24 @@ const SingleArticle = () => {
         <>
             <StickyNavbar />
             <section
-                className="p-4 bg-lightbg"
+                className="p-4 bg-lightbg flex flex-col lg:flex-row justify-between"
             >
-                <div className="mt-4 p-4 border border-gray-200 rounded">
+                <div className="w-full">
+                   
+                    <div className="article-content" dangerouslySetInnerHTML={{ __html: combinedHTML }} />
 
-                    <div className="article-content" dangerouslySetInnerHTML={{ __html: articleDetails.content }} />
-                    <span className="article-content font-parkinsans text-primary italic">Published on {formattedDate}</span>
-                    
                 </div>
-
-            </section>
-
-            <section className="relative p-4">
-                <div className="custom-shape-divider-top-1741406764">
-                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z" class="shape-fill"></path>
-                    </svg>
-                </div>
-                <div className="mt-20 ">
+                <div className="h-full">
 
                     <Typography variant="h2" className="text-center font-parkinsans">Other Articles</Typography>
-                    <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                    <div className="flex flex-col gap-4 h-full overflow-y-auto">
                         <ArticleList articles={articles} isLargeScreen={IsLargeScreen} />
                     </div>
                 </div>
 
             </section>
+
+
         </>
     )
 }
