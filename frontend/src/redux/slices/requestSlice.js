@@ -12,6 +12,7 @@ export const requestSlice = createSlice({
     isUpdated: false,
     isDeleted: false,
     message: null,
+    success: false
   },
   reducers: {
     resetRequestDetails: (state) => {
@@ -21,6 +22,9 @@ export const requestSlice = createSlice({
       state.message = null;
       state.error = null;
     },
+    resetSuccess: (state) => {
+      state.success = false;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -138,5 +142,5 @@ export const requestSlice = createSlice({
       
   },
 });
-export const { resetRequestDetails, resetMessage } = requestSlice.actions;
+export const { resetRequestDetails, resetMessage, resetSuccess } = requestSlice.actions;
 export default requestSlice.reducer;

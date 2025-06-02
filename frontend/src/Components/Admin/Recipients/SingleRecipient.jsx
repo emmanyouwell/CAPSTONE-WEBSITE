@@ -20,7 +20,7 @@ const SingleRecipient = () => {
 
     useEffect(() => {
         if (patientDetails) {
-            console.log("patient: ", patientDetails);
+            console.log("patient: ", sortRequest(patientDetails.requested));
         }
     }, [patientDetails])
     /**
@@ -75,6 +75,11 @@ const SingleRecipient = () => {
             id: 'days',
             header: 'Days',
             cell: info => `${info.getValue()} ml`,
+        }),
+        columnHelper.accessor(row => row.hospital === "Taguig-Pateros District Hospital" ? 'TPDH' : row.hospital, {
+            id: 'hospital',
+            header: 'Hospital',
+            cell: info => info.getValue(),
         }),
         columnHelper.accessor(row => row.status, {
             id: 'status',

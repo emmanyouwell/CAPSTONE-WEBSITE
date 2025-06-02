@@ -11,20 +11,38 @@ import { toast } from 'react-toastify';
 import { getUser } from '../../../../utils/helper';
 import Select from 'react-select'
 import Loader from '../../../../Components/Loader/Loader';
+import { resetSuccess } from '../../../../redux/slices/requestSlice';
 const RequestView = () => {
     const dispatch = useDispatch();
-    const { request, loading, error } = useSelector(state => state.requests)
+    const { request, loading, error, success } = useSelector(state => state.requests)
     const { loading: loadingPatients, recipients } = useSelector(state => state.recipients)
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState('');
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedOption, setSelectedOption] = useState('All');
     const { devices } = useSelector(state => state.devices)
+    const [formData, setFormData] = useState(() => ({
+        patient: '',
+        location: '',
+        diagnosis: '',
+        reason: '',
+        doctor: '',
+        volume: '',
+        days: '',
+        images: []
+    }));
     useEffect(() => {
         dispatch(getDevices())
         dispatch(getRequests())
         dispatch(getRecipients({ search: search }));
     }, [dispatch])
+    useEffect(() => {
+        if (success) {
+            dispatch(getRequests());
+
+            dispatch(resetSuccess())
+        }
+    }, [success])
     const inpatient = request ? request.filter((r) => r.patient?.patientType === 'Inpatient' && r.status !== "Done") : [];
     const outpatient = request ? request.filter((r) => r.patient?.patientType === 'Outpatient' && r.status !== "Done") : [];
     const handleOpen = () => {
@@ -36,16 +54,7 @@ const RequestView = () => {
         }))
     ];
 
-    const [formData, setFormData] = useState(() => ({
-        patient: '',
-        location: '',
-        diagnosis: '',
-        reason: '',
-        doctor: '',
-        volume: '',
-        days: '',
-        images: []
-    }));
+
     const handleSubmit = () => {
         const { patient, location, diagnosis, reason, doctor, volume, days, images } =
             formData;
@@ -73,6 +82,34 @@ const RequestView = () => {
         if (isNaN(days)) {
             toast.error("Invalid Days")
             return;
+        }
+        if (selectedPatient?.patientType === "Inpatient") {
+            if (images.length < 4) {
+                toast.error("Please upload all required documents for Inpatients: Prescription, Clinical Abstract, Waiver, Recipient Record", {
+                    position: "bottom-right",
+                });
+                return;
+            }
+            else if (images.length > 4) {
+                toast.error("Please upload only the required documents for Inpatients: Prescription, Clinical Abstract, Waiver, Recipient Record", {
+                    position: "bottom-right",
+                });
+                return;
+            }
+        }
+        else {
+            if (images.length < 2) {
+                toast.error("Please upload all required documents for Outpatients: Prescription, Clinical Abstract", {
+                    position: "bottom-right",
+                });
+                return;
+            }
+            else if (images.length > 2) {
+                toast.error("Please upload only the required documents for Outpatients: Prescription, Clinical Abstract", {
+                    position: "bottom-right",
+                });
+                return;
+            }
         }
         const requestedBy = getUser()?._id;
         const requestData = {
@@ -120,13 +157,13 @@ const RequestView = () => {
                 setOpen(false);
                 setFormData({
                     patient: '',
-                    department: '',
+                    location: '',
                     diagnosis: '',
                     reason: '',
                     doctor: '',
                     volume: '',
                     days: '',
-                    images: [],
+                    images: []
                 });
                 setSelectedPatient(null);
                 setSearch('');
@@ -153,7 +190,7 @@ const RequestView = () => {
 
         setFormData((prevFormData) => ({
             ...prevFormData,
-            images: [...prevFormData.images, ...base64Files],
+            images: base64Files,
         }));
     }
     return (
@@ -296,21 +333,41 @@ const RequestView = () => {
                                             className: "before:content-none after:content-none",
                                         }}
                                     />
-                                    <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                        Attachments
-                                    </Typography>
-                                    <Input
-                                        type="file"
-                                        size="lg"
-                                        placeholder="Days"
-                                        onChange={handleImageChange}
-                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                        multiple
-                                        labelProps={{
-                                            className: "before:content-none after:content-none",
-                                        }}
-                                        accept=".jpg, .jpeg, .png"
-                                    />
+                                    <div className="space-y-4">
+                                        <Typography variant="h6" color="blue-gray" className="">
+                                            Attachments <small className="italic text-blue-gray-700 font-sofia font-bold">(.jpg, .jpeg, .png)</small>
+                                        </Typography>
+                                        {selectedPatient && selectedPatient.patientType === "Inpatient" ?
+                                            (<>
+                                                <span className="text-sm">Upload the following for Inpatients:</span>
+                                                <ul className="list-disc list-inside text-sm">
+                                                    <li>Prescription</li>
+                                                    <li>Clinical Abstract</li>
+                                                    <li>Waiver</li>
+                                                    <li>Recipient Record</li>
+                                                </ul>
+                                            </>) : selectedPatient && selectedPatient.patientType === "Outpatient" ? (<>
+                                                <span className="text-sm">Upload the following for Outpatients:</span>
+                                                <ul className="list-disc list-inside text-sm">
+                                                    <li>Prescription</li>
+                                                    <li>Clinical Abstract</li>
+                                                </ul>
+                                            </>) : ""
+                                        }
+                                        <Input
+                                            type="file"
+                                            size="lg"
+                                            placeholder="Upload Images"
+                                            onChange={handleImageChange}
+                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                            multiple
+                                            labelProps={{
+                                                className: "before:content-none after:content-none",
+                                            }}
+                                            accept=".jpg, .jpeg, .png"
+                                        />
+                                    </div>
+
                                 </div>
                             </div>
                         </CardBody>

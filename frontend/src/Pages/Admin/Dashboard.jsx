@@ -73,21 +73,21 @@ const Dashboard = () => {
     <>
       <div className="h-[calc(100vh-4rem)] overflow-y-auto w-full">
         <div className="min-h-fit grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full p-4">
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Available Pasteurized Milk</span>
             <div className="w-full justify-end flex items-baseline gap-2">
               <span className="font-bold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}>{available ? available.toLocaleString() : '0'}</span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Released</span>
             <div className="flex items-baseline justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {dispensedMilk?.total?.total ? dispensedMilk?.total?.total.toLocaleString() : '0'} </span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}>ml</span>
             </div>
           </div>
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Collected</span>
             <div className="flex items-baseline justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {stats?.total?.total ? stats?.total?.total.toLocaleString() : '0'} </span>
@@ -95,7 +95,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Pasteurize Soon</span>
             <div className="flex items-baseline justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {expiring ? expiring.toLocaleString() : '0'} </span>
@@ -103,7 +103,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Donors</span>
             <div className="flex items-center justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyDonors?.total?.total ? monthlyDonors?.total?.total.toLocaleString() : '0'} </span>
@@ -111,21 +111,21 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Recipients</span>
             <div className="flex items-center justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyPatients?.total?.total ? monthlyPatients?.total?.total.toLocaleString() : '0'} </span>
               <UserIcon className="text-secondary w-8 h-8" />
             </div>
           </div>
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Completed Requests</span>
             <div className="flex items-center justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyRequests?.total?.total ? monthlyRequests?.total?.total.toLocaleString() : '0'} </span>
               <LifebuoyIcon className="text-secondary w-8 h-8" />
             </div>
           </div>
-          <div className="flex justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Pending Requests</span>
             <div className="flex items-center justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyRequests?.pending ? monthlyRequests?.pending.toLocaleString() : '0'} </span>
