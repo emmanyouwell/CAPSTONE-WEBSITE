@@ -54,12 +54,14 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
         pasteurizationDate: "",
         qty: 0,
     }))
+    const [bottleType, setBottleType] = useState('')
     const [formError, setFormError] = useState(() => ({
         batch: false,
         pool: false,
         fridge: false,
         qty: false,
-        date: false
+        date: false,
+        bottleType: false,
     }));
     const { fridges, fridgeContent, allBags, loading, error } = useSelector(state => state.fridges)
     const { userDetails } = useSelector(state => state.users);
@@ -195,12 +197,14 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
     }
     const pasteurize = () => {
         console.log("Errors: ", formError)
-        if (totalVolume <= 0) {
-
+        if (totalVolume < 2000) {
+            setOpen(false);
+            toast.error("Total volume must be at least 2000 ml to pasteurized milk. Please select more milk.", { position: "bottom-right" })
             return;
         }
         if (totalVolume > 4000) {
-
+            setOpen(false);
+            toast.error("Total volume must not exceed 4000 ml to pasteurized milk", { position: "bottom-right" })
             return;
         }
         if (!selectedOption || selectedOption === "") {
@@ -209,6 +213,12 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                 fridge: true
             }))
 
+        }
+        if (!bottleType || bottleType === ""){
+            setFormError((prev) => ({
+                ...prev,
+                bottleType: true
+            }))
         }
 
         if (!batchDetails.batch || batchDetails.batch === "") {
@@ -226,19 +236,14 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
             }))
 
         }
-        if (!batchDetails.qty || batchDetails.qty === 0) {
-            setFormError((prev) => ({
-                ...prev,
-                qty: true
-            }))
-        }
+       
         if (!batchDetails.pasteurizationDate || batchDetails.pasteurizationDate === "") {
             setFormError((prev) => ({
                 ...prev,
                 date: true
             }))
         }
-        if (!selectedOption || !batchDetails.pasteurizationDate || !batchDetails.batch || !batchDetails.pool || totalVolume <= 0 || totalVolume > 4000 || !batchDetails.qty) {
+        if (!selectedOption || !bottleType || !batchDetails.pasteurizationDate || !batchDetails.batch || !batchDetails.pool || totalVolume <= 0 || totalVolume > 4000 ) {
             return;
         }
         const userInfo = [
@@ -250,8 +255,8 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                 batch: batchDetails.batch,
                 pool: batchDetails.pool,
                 donors: userInfo,
-                bottleType: totalVolume === 2000 ? 100 : totalVolume === 4000 ? 200 : 100,
-                bottleQty: batchDetails.qty,
+                bottleType: bottleType === "100ml" ? 100 : bottleType === "200ml" ? 200 : 100,
+                bottleQty: 20,
                 pasteurizationDate: batchDetails.pasteurizationDate,
             },
             userId: userDetails._id
@@ -380,7 +385,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                             </div>
                             <div className="w-full">
                                 <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
-                                    Express date
+                                    Pasteurization Date
                                 </Typography>
                                 <div className="add-event w-full">
                                     <DatePicker
@@ -431,7 +436,8 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                                 <div className="relative w-full">
                                     <Input
                                         type="number"
-                                        value={batchDetails.qty}
+                                        value={20}
+                                        disabled
                                         onChange={handleQty}
                                         className="!border-t-blue-gray-200 placeholder:text-blue-gray-300 placeholder:opacity-100  focus:!border-t-gray-900 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         labelProps={{
@@ -443,69 +449,70 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
                                         min="0"
                                         max="20"
                                     />
-                                    <div className="absolute right-1 top-1 flex gap-0.5">
-                                        <IconButton
-                                            size="sm"
-                                            className="rounded"
-                                            onClick={() => {
-                                                if (batchDetails.qty === 0) {
-                                                    setFormError((prev) => ({
-                                                        ...prev,
-                                                        qty: true
-                                                    }))
-                                                }
-                                                else if (batchDetails.qty > 0) {
-                                                    setFormError((prev) => ({
-                                                        ...prev,
-                                                        qty: false
-                                                    }))
-                                                }
-                                                setBatchDetails((cur) => ({ ...cur, qty: cur.qty === 0 ? 0 : cur.qty - 1 }))
-                                            }}
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 16 16"
-                                                fill="currentColor"
-                                                className="h-4 w-4"
-                                            >
-                                                <path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
-                                            </svg>
-                                        </IconButton>
-                                        <IconButton
-                                            size="sm"
-                                            className="rounded"
-                                            onClick={() => {
-                                                setFormError((prev) => ({
-                                                    ...prev,
-                                                    qty: false
-                                                }))
-
-                                                setBatchDetails((cur) => ({ ...cur, qty: cur.qty === 20 ? 20 : cur.qty + 1 }))
-                                            }}
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 16 16"
-                                                fill="currentColor"
-                                                className="h-4 w-4"
-                                            >
-                                                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-                                            </svg>
-                                        </IconButton>
-                                    </div>
+                                    
                                 </div>
-                                {formError.qty && <span className="text-sm text-red-500">Please enter quantity</span>}
+                               
                             </div>
                             <div className="w-full">
                                 <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
                                     Bottle Type
                                 </Typography>
-                                <Input
-                                    type="text"
-                                    name="pool"
-                                    disabled
-                                    value={totalVolume === 2000 || totalVolume < 2000 ? "100 ml" : totalVolume === 4000 || (totalVolume > 2000 && totalVolume < 4000) ? "200 ml" : "Select at least 2000 ml of milk"} />
+                                <div className="space-y-4">
+
+                                    <div>
+                                        <input
+                                            type="radio"
+                                            id="100ml"
+                                            name="100ml"
+                                            value="100ml"
+                                            className="peer hidden"
+                                            required
+                                            checked={bottleType === "100ml"}
+                                            onChange={()=> {setFormError((prev)=>({...prev, bottleType: false})); setBottleType("100ml")}}
+                                        />
+                                        <label
+                                            htmlFor="100ml"
+                                            className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                        >
+                                            <div className="block">
+                                                <Typography className="font-semibold">
+                                                    100 ml Bottle
+                                                </Typography>
+                                                <Typography className="font-normal text-gray-600">
+                                                    Used to pasteurize 2000 ml of milk
+                                                </Typography>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input
+                                            type="radio"
+                                            id="200ml"
+                                            name="200ml"
+                                            value="200ml"
+                                            className="peer hidden"
+                                            required
+                                            checked={bottleType === "200ml"}
+                                            onChange={()=> {setFormError((prev)=>({...prev, bottleType: false})); setBottleType("200ml")}}
+                                        />
+                                        <label
+                                            htmlFor="200ml"
+                                            className="block w-full cursor-pointer rounded-lg border border-gray-300 p-4 text-gray-900 ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900"
+                                        >
+                                            <div className="block">
+                                                <Typography className="font-semibold">
+                                                    200 ml Bottle
+                                                </Typography>
+                                                <Typography className="font-normal text-gray-600">
+                                                    Used to pasteurize 4000 ml of milk
+                                                </Typography>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    {formError.bottleType && <span className="text-sm text-red-500 p-4">Please choose a bottle type</span>}
+                                </div>
+                                
 
                             </div>
                         </div>
