@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { getRequestDetails, updateVolumeRequested } from '../../../../redux/actions/requestActions';
-import { Button, Card, CardBody, CardFooter, CardHeader, Carousel, Dialog, DialogBody, DialogFooter, DialogHeader, Drawer, IconButton, Input, Option, Select, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from '@material-tailwind/react'
+import { getRequestDetails, updateRequest, updateRequestStatus, updateVolumeRequested } from '../../../../redux/actions/requestActions';
+import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Carousel, Dialog, DialogBody, DialogFooter, DialogHeader, Drawer, IconButton, Input, Option, Select, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Textarea, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom'
@@ -12,10 +12,11 @@ import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { getInventories, reserveInventory } from '../../../../redux/actions/inventoryActions';
 import { formatDate, getUser } from '../../../../utils/helper';
 import placeholder from '../../../../assets/image/placeholder-image.webp'
+import { resetUpdate } from '../../../../redux/slices/requestSlice';
 
 const SingleRequest = () => {
     const dispatch = useDispatch();
-    const { requestDetails } = useSelector(state => state.requests)
+    const { requestDetails, isUpdated } = useSelector(state => state.requests)
     const { fridges } = useSelector(state => state.fridges)
     const { id } = useParams();
     const navigate = useNavigate();
@@ -31,6 +32,8 @@ const SingleRequest = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [openUpdateVolume, setOpenUpdateVolume] = useState(false);
     const [openFridge, setOpenFridge] = useState(false);
+    const [comment, setComment] = useState('');
+    const [openComment, setOpenComment] = useState(false);
     const handleOpenFridge = () => {
         setOpenFridge(!openFridge);
     }
@@ -120,7 +123,8 @@ const SingleRequest = () => {
         start: { status: false, message: "" },
         end: { status: false, message: "" },
         inventory: { status: false, message: "" },
-        addEbm: { status: false, message: "" }
+        addEbm: { status: false, message: "" },
+        comment: { status: false, message: "" }
     }));
     const handleSubmit = (e) => {
         // e.preventDefault();
@@ -303,8 +307,33 @@ const SingleRequest = () => {
         setInventoryDetails({})
         setSelectedInventory('');
     }
+    const handleComment = () => {
+        setOpenComment(!openComment);
+    }
+    const denyRequest = () => {
+        if (!comment) {
+            setFormError((prev) => ({ ...prev, comment: { status: true, message: "Please enter a comment" } }))
+            return;
+        }
+        const data = {
+            id: requestDetails._id,
+            status: 'Canceled',
+            userID: getUser()?._id,
+            comment: comment
+        }
+        dispatch(updateRequestStatus(data)).then(()=>{
+            handleComment();
+            toast.success("Request Denied", { position: "bottom-right" });
+            dispatch(getRequestDetails(id))
+        })
+    }
 
-
+    useEffect(() => {
+        if (isUpdated) {
+            toast.error("Request Denied");
+            dispatch(resetUpdate())
+        }
+    }, [isUpdated])
     return (
         <div className="p-8">
             <div className="flex flex-col gap-4 justify-between items-center">
@@ -326,9 +355,9 @@ const SingleRequest = () => {
                             Attachments
                         </Tab>
                     </TabsHeader>
-                    <TabsBody animate={{ initial: { visibility: 'visible' }, mount: { visibility: 'visible' }, unmount: { visibility: 'hidden' } }}>
+                    <TabsBody animate={{ initial: { visibility: 'visible' }, mount: { visibility: 'visible' }, unmount: { visibility: 'hidden' } }} className="h-full">
                         <TabPanel value="requestDetails" className="h-full">
-                            <Card className='w-full border-l-8 border-accent-green' style={{ boderLeftWidth: '8px', borderColor: requestDetails && requestDetails.status === 'Pending' ? 'rgb(255 193 7)' : requestDetails && requestDetails.status === 'Approved' ? 'rgb(229 55 119)' : 'rgb(76 175 80)' }}>
+                            <Card className='w-full border-l-8 border-accent-green' style={{ boderLeftWidth: '8px', borderColor: requestDetails && requestDetails.status === 'Pending' ? 'rgb(255 193 7)' : requestDetails && requestDetails.status === 'Approved' ? 'rgb(229 55 119)' : requestDetails && requestDetails.status === 'Completed' ? 'rgb(76 175 80)' : 'rgb(255 51 85)' }}>
                                 <CardBody>
                                     <div className="flex flex-col gap-4">
                                         <div className="flex items-center justify-between">
@@ -366,12 +395,21 @@ const SingleRequest = () => {
                                             <span className="font-parkinsans text-lg font-bold">Volume Requested</span>
                                             <span className="font-parkinsans text-3xl text-secondary font-bold">{requestDetails.volumeRequested?.volume} ml / {requestDetails.volumeRequested?.days} days</span>
                                         </div>
+                                        {requestDetails.status === 'Canceled' && (
+                                            <div className="flex flex-col items-start justify-between">
+                                                <span className="font-parkinsans text-lg font-bold">Comment</span>{requestDetails.comment ? requestDetails.comment : ''}
+                                            </div>
+                                        )}
+
                                     </div>
                                 </CardBody>
                                 <CardFooter>
                                     {getUser()?.role === "Admin" || getUser()?.role === "SuperAdmin" && requestDetails.status === 'Pending' ? <div className="w-full flex items-center justify-end gap-4">
-                                        <Button onClick={handleUpdateVolume} color="deep-orange">Adjust Volume</Button>
-                                        <Button color="green" onClick={handleOpenFridge}>Approve</Button>
+                                        <ButtonGroup ripple={true} color="green">
+                                            <Button onClick={handleUpdateVolume} color="green">Adjust Volume</Button>
+                                            <Button color="green" onClick={handleOpenFridge}>Approve</Button>
+                                        </ButtonGroup>
+                                        <Button color="red" onClick={handleComment}>Deny</Button>
                                     </div> : null}
 
 
@@ -380,7 +418,6 @@ const SingleRequest = () => {
 
                         </TabPanel>
                         <TabPanel value="attachments" className="h-full">
-                            
                             <div className="flex items-center justify-center md:justify-start flex-wrap gap-4">
                                 {requestDetails.images?.map((image, index) => (
                                     <Card
@@ -392,10 +429,35 @@ const SingleRequest = () => {
                                     </Card>
                                 ))}
                             </div>
+
                         </TabPanel>
                     </TabsBody>
                 </Tabs>
+                <Dialog open={openComment} handler={handleComment} size="sm" className="p-4">
 
+                    <div className="w-full">
+                        <Typography variant="h4" color="blue-gray" className="font-sofia mb-2 font-medium">
+                            Enter Comment
+                        </Typography>
+                        <Textarea
+                            label="Comment"
+                            name="comment"
+                            onChange={(e) => {setFormError((prev)=>({...prev, comment: {status: false, message: ""}}));setComment(e.target.value)}}
+                            value={comment}
+                        />
+                        {formError?.comment?.status && <Typography color="red" variant="small">
+                            {formError?.comment?.message}
+                        </Typography>}
+                    </div>
+
+                    <div className="flex items-start justify-end pt-4">
+                        <Button type="submit" color="pink" onClick={denyRequest}>
+                            Send Comment
+                        </Button>
+                    </div>
+
+
+                </Dialog>
                 <Dialog open={openUpdateVolume} handler={handleUpdateVolume} size="sm" className="p-4">
                     <form onSubmit={formik.handleSubmit} className="space-y-4">
                         <div className="w-full">
@@ -615,7 +677,7 @@ const SingleRequest = () => {
                 </Drawer>
 
                 <Dialog size="xl" open={open} handler={() => setOpen(false)}>
-                    <DialogBody className="h-[calc(100vh-8rem)] overflow-y-auto">   
+                    <DialogBody className="h-[calc(100vh-8rem)] overflow-y-auto">
                         {selectedImage ? (
                             <img src={selectedImage} alt="prescription" className="w-full h-[48rem] object-contain" />
                         ) : <img src={placeholder} alt="prescription" className="w-full h-[48rem] object-contain" />}

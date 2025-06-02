@@ -6,11 +6,17 @@ import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { EyeIcon, CheckCheck } from 'lucide-react'
 import { formatDate, getUser } from '../../../utils/helper'
-import { inpatientDispense, outpatientDispense } from '../../../redux/actions/requestActions'
+import { deleteRequest, inpatientDispense, outpatientDispense } from '../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
-const StaffRequest = ({ requests }) => {
+const StaffRequest = ({ setRefresh, requests }) => {
+    const handleDelete = (id) => {
+        dispatch(deleteRequest(id)).then(() => {
+            toast.success("Request deleted successfully", { position: 'bottom-right' });
+            setRefresh(true);
+        })
+    }
     const columnHelper = createColumnHelper();
 
     const columns = [
@@ -56,14 +62,21 @@ const StaffRequest = ({ requests }) => {
                 const request = row.original
                 return (
                     <div className="flex gap-2">
-                        <Link to={`/dashboard/request/${request._id}`}>
-                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-                        </Link>
+                        {request.status === "Canceled" ? <div className="flex gap-4 items-center">
+                            <Link to={`/dashboard/request/${request._id}`}>
+                                <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                            </Link>
+                            <Button className="bg-secondary" size="sm"><TrashIcon className="h-5 w-5" onClick={() => handleDelete(request._id)} /></Button>
+                        </div> :
+                            <Link to={`/dashboard/request/${request._id}`}>
+                                <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                            </Link>}
                     </div>
                 );
             },
         }),
     ];
+
     return (
         <>
 

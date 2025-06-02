@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { EyeIcon, CheckCheck } from 'lucide-react'
 import { formatDate, getUser } from '../../../../utils/helper'
-import { inpatientDispense, outpatientDispense } from '../../../../redux/actions/requestActions'
+import { deleteRequest, inpatientDispense, outpatientDispense } from '../../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
-const RequestTable = ({ currentPage, totalPages, requests }) => {
+const RequestTable = ({ currentPage, totalPages, requests, setRefresh }) => {
     const dispatch = useDispatch();
     const [items, setItems] = useState([
         { label: "Insulated Bag w/ Ice Pack", value: "Insulated Bag w/ Ice Pack" },
@@ -96,6 +96,12 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
         setFilteredRequest(filteredRequest);
         setReservedRequest(reservedRequest);
     }, [requests])
+    const handleDelete = (id) => {
+        dispatch(deleteRequest(id)).then(() => {
+            toast.success("Request deleted successfully", { position: 'bottom-right' });
+            setRefresh(true);
+        })
+    }
     const columnHelper = createColumnHelper();
 
     const columns = [
@@ -145,9 +151,15 @@ const RequestTable = ({ currentPage, totalPages, requests }) => {
                     <div className="flex gap-2">
                         {request.status === "Reserved" && request.patient.patientType === "Outpatient" ?
                             <Button className="bg-secondary" onClick={() => handleTransport(request)}><CheckCheck className="h-5 w-5" /></Button>
-                            : <Link to={`/dashboard/request/${request._id}`}>
-                                <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-                            </Link>}
+                            : request.status === "Canceled" ?
+                                <div className="flex items-center gap-4">
+                                    <Link to={`/dashboard/request/${request._id}`}>
+                                        <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                                    </Link>
+                                    <Button className="bg-secondary" size="sm"><TrashIcon className="h-5 w-5" onClick={() => handleDelete(request._id)} /></Button>
+                                </div> : <Link to={`/dashboard/request/${request._id}`}>
+                                    <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                                </Link>}
                     </div>
                 );
             },
