@@ -5,8 +5,8 @@ export const requestSlice = createSlice({
   name: 'request',
   initialState: {
     request: [],
-    loading: false, 
-    error: null, 
+    loading: false,
+    error: null,
     count: 0,
     requestDetails: {},
     isUpdated: false,
@@ -24,11 +24,17 @@ export const requestSlice = createSlice({
     },
     resetSuccess: (state) => {
       state.success = false;
+    },
+    resetUpdate: (state) => {
+      state.isUpdated = false;
+    },
+    resetDelete: (state) => {
+      state.isDeleted = false;
     }
   },
   extraReducers: (builder) => {
     builder
-      
+
       .addCase(getRequests.pending, (state, action) => {
         state.loading = true;
       })
@@ -40,7 +46,7 @@ export const requestSlice = createSlice({
       })
       .addCase(getRequests.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       })
 
       .addCase(addRequest.pending, (state, action) => {
@@ -55,7 +61,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-       .addCase(updateRequest.pending, (state, action) => {
+      .addCase(updateRequest.pending, (state, action) => {
         state.loading = true;
       })
       .addCase(updateRequest.fulfilled, (state, action) => {
@@ -90,7 +96,7 @@ export const requestSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       .addCase(getStaffRequests.pending, (state, action) => {
         state.loading = true;
       })
@@ -101,7 +107,7 @@ export const requestSlice = createSlice({
       })
       .addCase(getStaffRequests.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       })
 
       .addCase(updateVolumeRequested.pending, (state, action) => {
@@ -113,9 +119,9 @@ export const requestSlice = createSlice({
       })
       .addCase(updateVolumeRequested.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       })
-      
+
       .addCase(inpatientDispense.pending, (state, action) => {
         state.loading = true;
       })
@@ -125,9 +131,9 @@ export const requestSlice = createSlice({
       })
       .addCase(inpatientDispense.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       })
-      
+
       .addCase(outpatientDispense.pending, (state, action) => {
         state.loading = true;
       })
@@ -137,10 +143,10 @@ export const requestSlice = createSlice({
       })
       .addCase(outpatientDispense.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       });
-      
+
   },
 });
-export const { resetRequestDetails, resetMessage, resetSuccess } = requestSlice.actions;
+export const { resetRequestDetails, resetMessage, resetSuccess, resetUpdate, resetDelete } = requestSlice.actions;
 export default requestSlice.reducer;

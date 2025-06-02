@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { getDevices, sendNotification } from '../../../redux/actions/notifActions';
 import Select from 'react-select'
 import Loader from '../../../Components/Loader/Loader';
+import { resetDelete } from '../../../redux/slices/requestSlice';
 const StaffRequestView = () => {
     const dispatch = useDispatch();
     const { request, loading, error } = useSelector(state => state.requests)
@@ -22,12 +23,19 @@ const StaffRequestView = () => {
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedOption, setSelectedOption] = useState('All');
     const { devices } = useSelector(state => state.devices)
-
+    const [refresh, setRefresh] = useState(false);
     useEffect(() => {
         dispatch(getDevices())
         dispatch(getRequests())
         dispatch(getRecipients({ search: search, page: 1, pageSize: 100 }))
     }, [dispatch])
+    useEffect(() => {
+        if (refresh) {
+            dispatch(getRequests())
+            dispatch(resetDelete())
+            setRefresh(false);
+        }
+    }, [refresh])
     const options = [
         ...recipients.map((patient) => ({
             value: patient, label: `${patient.name} | ${patient.patientType} | ${patient.phone} | ${patient.home_address.street}, ${patient.home_address.brgy}, ${patient.home_address.city}`, patient

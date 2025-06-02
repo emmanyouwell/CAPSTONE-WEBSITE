@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { getUser } from '../../../../utils/helper';
 import Select from 'react-select'
 import Loader from '../../../../Components/Loader/Loader';
-import { resetSuccess } from '../../../../redux/slices/requestSlice';
+import { resetDelete, resetSuccess } from '../../../../redux/slices/requestSlice';
 const RequestView = () => {
     const dispatch = useDispatch();
     const { request, loading, error, success } = useSelector(state => state.requests)
@@ -21,6 +21,7 @@ const RequestView = () => {
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedOption, setSelectedOption] = useState('All');
     const { devices } = useSelector(state => state.devices)
+    const [refresh, setRefresh] = useState(false);
     const [formData, setFormData] = useState(() => ({
         patient: '',
         location: '',
@@ -36,6 +37,14 @@ const RequestView = () => {
         dispatch(getRequests())
         dispatch(getRecipients({ search: search }));
     }, [dispatch])
+    useEffect(() => {
+        if (refresh) {
+            
+            dispatch(getRequests())
+            dispatch(resetDelete())
+            setRefresh(false);
+        }
+    }, [refresh])
     useEffect(() => {
         if (success) {
             dispatch(getRequests());
@@ -210,10 +219,10 @@ const RequestView = () => {
                 <TabsBody className="h-[calc(100vh-8rem)]" animate={{ initial: { opacity: 1 }, mount: { opacity: 1 }, unmount: { opacity: 0 } }}>
                     <TabPanel value="Inpatient" className="h-full">
 
-                        <RequestTable requests={inpatient} />
+                        <RequestTable requests={inpatient} setRefresh={setRefresh} />
                     </TabPanel>
                     <TabPanel value="Outpatient" className="h-full">
-                        <RequestTable requests={outpatient} />
+                        <RequestTable requests={outpatient} setRefresh={setRefresh}/>
                     </TabPanel>
                 </TabsBody>
             </Tabs>

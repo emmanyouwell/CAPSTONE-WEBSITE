@@ -129,7 +129,7 @@ function RoutesComponent() {
         <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView /></ProtectedRoute>} />
 
         {/* Others */}
-        <Route path="profile" element={<ProtectedRoute isAdmin={true}><Profile /></ProtectedRoute>} />
+        <Route path="profile" element={<ProtectedRoute isAuthorized={true}><Profile /></ProtectedRoute>} />
         <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable /></ProtectedRoute>} />
       </Route>
     </Routes>

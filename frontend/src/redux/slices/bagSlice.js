@@ -23,7 +23,11 @@ export const bagSlice = createSlice({
     isUpdated: false,
     bagDetails: {},
   },
-  reducers: {},
+  reducers: {
+    resetUpdate: (state) => {
+      state.isUpdated = false;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createBag.pending, (state) => {
@@ -99,5 +103,5 @@ export const bagSlice = createSlice({
       });
   },
 });
-
+export const { resetUpdate } = bagSlice.actions;
 export default bagSlice.reducer;
