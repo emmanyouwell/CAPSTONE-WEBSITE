@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button } from '@material-tailwind/react';
+import { Typography, Button, Dialog, IconButton, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import placeholder from '../../../assets/image/placeholder-image.webp'
 import { EyeIcon, Pencil, Trash } from 'lucide-react';
@@ -7,6 +7,12 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
 
     const location = useLocation();
     const isAdminLocation = location.pathname.includes('dashboard');
+    const [open, setOpen] = useState(false);
+    const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+    const handleOpen = (announcement) => {
+        setOpen(!open)
+        setSelectedAnnouncement(announcement)
+    };
     useEffect(() => {
         if (announcements) {
             console.log(announcements);
@@ -43,23 +49,34 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
                         </Typography>
 
                         <div className="flex justify-end items-center gap-4 mt-auto">
-                            <Link to={`/announcements/${announcement._id}`} className="flex items-center gap-2 text-secondary">
-                                <EyeIcon size={30} className="text-secondary" />
-                                {!isAdminLocation && <span className="font-varela font-bold">View</span>}
-                            </Link>
-                            {isAdminLocation && (
-                                <>
-                                    <Link to={`/dashboard/announcement/edit/${announcement._id}`}>
-                                        <Pencil size={30} className="text-secondary" />
-                                    </Link>
-                                    <Trash size={30} className="text-secondary cursor-pointer" onClick={() => handleDelete(announcement._id)} />
-                                </>
-                            )}
+                            <Button size="sm" className="bg-secondary flex items-center justify-center gap-2" onClick={() => handleOpen(announcement)}>
+                                <EyeIcon size={20} className="text-white" />
+                                <span className="font-sofia font-bold text-white">View</span>
+                            </Button>
+
                         </div>
                     </div>
 
                 )
             })}
+            <Dialog open={open} handler={handleOpen} className="bg-white p-6 rounded-lg shadow-lg">
+                <DialogHeader className="text-primary font-bold">
+                    <Typography variant="h2" className="font-parkinsans">
+                        {selectedAnnouncement && selectedAnnouncement.title}
+                    </Typography>
+                </DialogHeader>
+                <DialogBody className="overflow-y-auto max-h-[70vh]">
+                    <img src={selectedAnnouncement ? (selectedAnnouncement.content.match(/<img[^>]+src="([^">]+)"/) ? selectedAnnouncement.content.match(/<img[^>]+src="([^">]+)"/)[1] : placeholder) : placeholder} alt="" className="w-full object-cover rounded-md mb-4" />
+                    <Typography variant="paragraph" className="text-primary">
+                        {selectedAnnouncement ? selectedAnnouncement.description : 'No description available.'}
+                    </Typography>
+                </DialogBody>
+                <DialogFooter className="space-x-2">
+                    <Button variant="filled" color="blue-gray" onClick={()=>setOpen(!open)}>
+                        close
+                    </Button>
+                </DialogFooter>
+            </Dialog>
         </>
     )
 }
