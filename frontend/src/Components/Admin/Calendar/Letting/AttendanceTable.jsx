@@ -40,7 +40,7 @@ const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) =>
         volume: "",
         expressDate: null
     }))
-    const navigate = useNavigate()
+    
     const handleDelete = (attendanceId, lettingId) => {
         dispatch(deleteAttendance({ lettingId, attendanceId })).then(() => {
             toast.success("Successfully deleted")
@@ -185,7 +185,7 @@ const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) =>
                             </MenuHandler>
                             <MenuList>
                                 <MenuItem onClick={() => handleOpen(attendees.donor._id, name)}>Add bags</MenuItem>
-                                <MenuItem onClick={() => handleDelete(attendanceId, lettingId)}>Delete</MenuItem>
+                                {from !== "RedirectDetails" && <MenuItem onClick={() => handleDelete(attendanceId, lettingId)}>Delete</MenuItem>}
                             </MenuList>
                         </Menu>
 
