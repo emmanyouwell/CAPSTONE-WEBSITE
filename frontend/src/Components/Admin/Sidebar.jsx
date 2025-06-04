@@ -37,7 +37,7 @@ export function SidebarItem({ icon, text, path, prefix, alert }) {
     return (
         <Link to={path}>
             <li className={`
-            relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${isActive ? "bg-gradient-to-tr from-pink-200 to-pink-100 text-pink-800" : "hover:bg-pink-50 text-gray-600 "}
+            relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${isActive ? "bg-gradient-to-tr from-pink-200 to-pink-100 text-pink-800" : "hover:bg-pink-50 text-black "}
         `}>
                 {icon}
                 <span className={`overflow-hidden transition-all whitespace-nowrap ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
