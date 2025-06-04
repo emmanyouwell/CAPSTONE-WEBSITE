@@ -24,27 +24,27 @@ import {
 import { useLocation } from 'react-router-dom';
 
 const superAdminItems = [
-    { title: "Donor Records", route: "/dashboard/donors", path: 'donor', icon: <HeartIcon size={20} />, category: "Records" },
-    { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon size={20} />, category: "Records" },
-    { title: "Interview Form Submissions", route: "/dashboard/submissions", path: 'submission', icon: <BadgeCheck size={20} />, category: "Records" },
-    { title: "Event Schedules", route: "/dashboard/events", path: 'event', icon: <CalendarIcon size={20} />, category: "Schedules" },
-    { title: "Pick-up Schedules", route: "/dashboard/schedules", path: 'schedule', icon: <ClockIcon size={20} />, category: "Schedules" },
+    { title: "Donor Records", route: "/dashboard/donors", path: 'donor', icon: <HeartIcon className="text-secondary" size={20} />, category: "Records" },
+    { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon className="text-secondary" size={20} />, category: "Records" },
+    { title: "Interview Form Submissions", route: "/dashboard/submissions", path: 'submission', icon: <BadgeCheck className="text-secondary" size={20} />, category: "Records" },
+    { title: "Event Schedules", route: "/dashboard/events", path: 'event', icon: <CalendarIcon className="text-secondary" size={20} />, category: "Schedules" },
+    { title: "Pick-up Schedules", route: "/dashboard/schedules", path: 'schedule', icon: <ClockIcon className="text-secondary" size={20} />, category: "Schedules" },
 
-    { title: "Collections", route: "/dashboard/collections", path: 'collection', icon: <Boxes size={20} />, category: "Inventory" },
-    { title: "Refrigerators", route: "/dashboard/inventory/refrigerator", path: 'inventory', icon: <Box size={20} />, category: "Inventory" },
+    { title: "Collections", route: "/dashboard/collections", path: 'collection', icon: <Boxes className="text-secondary" size={20} />, category: "Inventory" },
+    { title: "Refrigerators", route: "/dashboard/inventory/refrigerator", path: 'inventory', icon: <Box className="text-secondary" size={20} />, category: "Inventory" },
 
-    { title: "Requests", route: "/dashboard/requests", path: 'request', icon: <PackageOpenIcon size={20} />, category: "Inventory" },
+    { title: "Requests", route: "/dashboard/requests", path: 'request', icon: <PackageOpenIcon className="text-secondary" size={20} />, category: "Inventory" },
 
-    { title: "Account Management", route: "/dashboard/account", path: 'account', icon: <UsersIcon size={20} />, category: "Management" },
-    { title: "Announcement Management", route: "/dashboard/announcement", path: 'announcement', icon: <MegaphoneIcon size={20} />, category: "Management" },
-    { title: "Resources Management", route: "/dashboard/resources", path: 'resources', icon: <NewspaperIcon size={20} />, category: "Management" },
+    { title: "Account Management", route: "/dashboard/account", path: 'account', icon: <UsersIcon className="text-secondary" size={20} />, category: "Management" },
+    { title: "Announcement Management", route: "/dashboard/announcement", path: 'announcement', icon: <MegaphoneIcon className="text-secondary" size={20} />, category: "Management" },
+    { title: "Resources Management", route: "/dashboard/resources", path: 'resources', icon: <NewspaperIcon className="text-secondary" size={20} />, category: "Management" },
 
 
 ];
 
 const staffItems = [
-    { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon size={20} />, category: "Records" },
-    { title: "Request", route: "/dashboard/staff/requests", path: 'staff', icon: <LifeBuoy size={20} />, category: "Records" },
+    { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon className="text-secondary" size={20} />, category: "Records" },
+    { title: "Request", route: "/dashboard/staff/requests", path: 'staff', icon: <LifeBuoy className="text-secondary" size={20} />, category: "Records" },
 ]
 const SidebarComponent = ({ userDetails }) => {
 
@@ -68,7 +68,7 @@ const SidebarComponent = ({ userDetails }) => {
             <Sidebar userDetails={userDetails}>
                 {userDetails && (userDetails?.role === "Admin" || userDetails?.role === "SuperAdmin") &&
                     <SidebarItem
-                        icon={<LayoutDashboard size={20} />}
+                        icon={<LayoutDashboard className="text-secondary" size={20} />}
                         text="Dashboard"
                         path="/dashboard"
                         prefix="dashboard"
