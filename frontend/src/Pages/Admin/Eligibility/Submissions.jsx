@@ -76,7 +76,7 @@ const Submissions = () => {
                 const _id = row.original._id;
                 return (
                     <div className="flex gap-2">
-                        <a target="_blank" href={`https://script.google.com/macros/s/AKfycbzoZwYmUu_dJK-JLOTGgHEhc0p_V-Sh2hPpv0ud4eybG6xER9IVDNbFEtuWH7a9KzyS/exec?submissionId=${submissionID}`}>
+                        <a target="_blank" href={`https://script.google.com/macros/s/AKfycbwYOc13QaEjdGoJvdlFEHZ2pSsIlUmx0zksazMKD3qfXYGnYG70eNSB7M5ZX0aOiU1y/exec?submissionId=${submissionID}`}>
                             <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
                         </a>
 
