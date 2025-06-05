@@ -332,6 +332,7 @@ const DonationDetails = () => {
                                     <div className="flex items-center justify-center gap-4 mb-4">
                                         <Input
                                             label="Volume"
+                                            type="number"
                                             containerProps={{
                                                 className: "w-full",
                                             }}
@@ -341,6 +342,7 @@ const DonationDetails = () => {
                                         />
                                         <Input
                                             label="Quantity"
+                                            type="number"
                                             containerProps={{
                                                 className: "w-full",
                                             }}

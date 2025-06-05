@@ -465,7 +465,7 @@ const SingleRequest = () => {
                                 Enter New Volume
                             </Typography>
                             <Input
-                                type="text"
+                                type="number"
                                 label="Volume"
                                 name="volume"
                                 onChange={formik.handleChange}
@@ -484,7 +484,7 @@ const SingleRequest = () => {
                                 Enter New Days
                             </Typography>
                             <Input
-                                type="text"
+                                type="number"
                                 label="Days"
                                 name="days"
                                 onChange={formik.handleChange}
@@ -607,7 +607,7 @@ const SingleRequest = () => {
                                     Enter Starting Bottle Number
                                 </Typography>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     label="Bottle Number"
                                     name="start"
                                     value={data.start}
@@ -624,7 +624,7 @@ const SingleRequest = () => {
                                     Enter Ending Bottle Number
                                 </Typography>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     label="Bottle Number"
                                     name="end"
                                     value={data.end}
