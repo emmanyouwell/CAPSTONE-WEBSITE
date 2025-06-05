@@ -80,8 +80,17 @@ const Dashboard = () => {
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
+
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
-            <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Released</span>
+            <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Unpasteurized Milk</span>
+            <div className="flex items-baseline justify-end w-full gap-2">
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {expiring ? expiring.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
+            <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Distributed</span>
             <div className="flex items-baseline justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {dispensedMilk?.total?.total ? dispensedMilk?.total?.total.toLocaleString() : '0'} </span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}>ml</span>
@@ -91,14 +100,6 @@ const Dashboard = () => {
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Collected</span>
             <div className="flex items-baseline justify-end w-full gap-2">
               <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {stats?.total?.total ? stats?.total?.total.toLocaleString() : '0'} </span>
-              <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
-            <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Pasteurize Soon</span>
-            <div className="flex items-baseline justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {expiring ? expiring.toLocaleString() : '0'} </span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
