@@ -39,7 +39,7 @@ const RequestView = () => {
     }, [dispatch])
     useEffect(() => {
         if (refresh) {
-            
+
             dispatch(getRequests())
             dispatch(resetDelete())
             setRefresh(false);
@@ -92,35 +92,9 @@ const RequestView = () => {
             toast.error("Invalid Days")
             return;
         }
-        if (selectedPatient?.patientType === "Inpatient") {
-            if (images.length < 4) {
-                toast.error("Please upload all required documents for Inpatients: Prescription, Clinical Abstract, Waiver, Recipient Record", {
-                    position: "bottom-right",
-                });
-                return;
-            }
-            else if (images.length > 4) {
-                toast.error("Please upload only the required documents for Inpatients: Prescription, Clinical Abstract, Waiver, Recipient Record", {
-                    position: "bottom-right",
-                });
-                return;
-            }
-        }
-        else {
-            if (images.length < 2) {
-                toast.error("Please upload all required documents for Outpatients: Prescription, Clinical Abstract", {
-                    position: "bottom-right",
-                });
-                return;
-            }
-            else if (images.length > 2) {
-                toast.error("Please upload only the required documents for Outpatients: Prescription, Clinical Abstract", {
-                    position: "bottom-right",
-                });
-                return;
-            }
-        }
+        
         const requestedBy = getUser()?._id;
+        const imageUrls = images.map(img => img.url);
         const requestData = {
             date: new Date().toISOString().split('T')[0],
             patient,
@@ -132,7 +106,7 @@ const RequestView = () => {
             requestedBy,
             type: patientType,
             volumeRequested: { volume: Number(volume), days: Number(days) },
-            images,
+            images: imageUrls,
         };
 
         dispatch(addRequest(requestData))
@@ -183,9 +157,35 @@ const RequestView = () => {
                 setOpen(false);
             });
     };
+    const updateImageById = (id, base64Url) => {
+        setFormData(prev => ({
+            ...prev,
+            images: prev.images.map(img =>
+                img.id === id ? { ...img, url: base64Url } : img
+            )
+        }));
+    };
+    // const handleImageChange = async (e) => {
+    //     const files = Array.from(e.target.files);
 
-    const handleImageChange = async (e) => {
-        const files = Array.from(e.target.files);
+    //     const toBase64 = (file) =>
+    //         new Promise((resolve, reject) => {
+    //             const reader = new FileReader();
+    //             reader.readAsDataURL(file);
+    //             reader.onload = () => resolve(reader.result);
+    //             reader.onerror = (error) => reject(error);
+    //         });
+
+    //     const base64Files = await Promise.all(files.map(toBase64));
+
+    //     setFormData((prevFormData) => ({
+    //         ...prevFormData,
+    //         images: base64Files,
+    //     }));
+    // }
+    const handleImageChange = async (e, id) => {
+        const file = e.target.files[0];
+        if (!file) return;
 
         const toBase64 = (file) =>
             new Promise((resolve, reject) => {
@@ -195,13 +195,29 @@ const RequestView = () => {
                 reader.onerror = (error) => reject(error);
             });
 
-        const base64Files = await Promise.all(files.map(toBase64));
-
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            images: base64Files,
-        }));
-    }
+        const base64 = await toBase64(file);
+        updateImageById(id, base64);
+    };
+    useEffect(() => {
+        if (selectedPatient && selectedPatient.patientType === "Inpatient") {
+            setFormData(prev => ({
+                ...prev,
+                images: ["Prescription", "Clinical Abstract", "Waiver", "Recipient Record"].map(id => ({ id, url: "" }))
+            }));
+        } else if (selectedPatient && selectedPatient.patientType === "Outpatient") {
+            setFormData(prev => ({
+                ...prev,
+                images: ["Prescription", "Clinical Abstract"].map(id => ({ id, url: "" }))
+            }));
+        } else {
+            setFormData(prev => ({ ...prev, images: [] }));
+        }
+    }, [selectedPatient]);
+    useEffect(()=>{
+        if (formData.images){
+            console.log("Images Updated: ", formData.images);
+        }
+    },[formData.images])
     return (
         <div className="p-4">
             <Tabs value="Inpatient">
@@ -222,7 +238,7 @@ const RequestView = () => {
                         <RequestTable requests={inpatient} setRefresh={setRefresh} />
                     </TabPanel>
                     <TabPanel value="Outpatient" className="h-full">
-                        <RequestTable requests={outpatient} setRefresh={setRefresh}/>
+                        <RequestTable requests={outpatient} setRefresh={setRefresh} />
                     </TabPanel>
                 </TabsBody>
             </Tabs>
@@ -265,7 +281,7 @@ const RequestView = () => {
                                         </div>
                                     </div>
                                     <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                        Department / Hospital
+                                        {selectedPatient ? selectedPatient.patientType === "Inpatient" ? "Department" : selectedPatient.patientType === "Outpatient" ? "Hospital" : "" : "Department/Hospital"}
                                     </Typography>
                                     <Input
                                         size="lg"
@@ -321,6 +337,7 @@ const RequestView = () => {
                                     </Typography>
                                     <Input
                                         size="lg"
+                                        type="number"
                                         placeholder="Volume (ml)"
                                         value={formData.volume}
                                         onChange={(e) => setFormData({ ...formData, volume: e.target.value })}
@@ -334,6 +351,7 @@ const RequestView = () => {
                                     </Typography>
                                     <Input
                                         size="lg"
+                                        type="number"
                                         placeholder="Days"
                                         value={formData.days}
                                         onChange={(e) => setFormData({ ...formData, days: e.target.value })}
@@ -348,33 +366,100 @@ const RequestView = () => {
                                         </Typography>
                                         {selectedPatient && selectedPatient.patientType === "Inpatient" ?
                                             (<>
-                                                <span className="text-sm">Upload the following for Inpatients:</span>
-                                                <ul className="list-disc list-inside text-sm">
-                                                    <li>Prescription</li>
-                                                    <li>Clinical Abstract</li>
-                                                    <li>Waiver</li>
-                                                    <li>Recipient Record</li>
-                                                </ul>
+                                                <Typography variant="h6" color="blue-gray" className="">
+                                                    Upload Prescription
+                                                </Typography>
+                                                <Input
+                                                    type="file"
+                                                    size="lg"
+                                                    placeholder="Upload Images"
+                                                    onChange={(e) => handleImageChange(e, "Prescription")}
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }}
+                                                    accept=".jpg, .jpeg, .png"
+                                                    required
+                                                />
+                                                <Typography variant="h6" color="blue-gray" className="">
+                                                    Upload Clinical Abstract
+                                                </Typography>
+                                                <Input
+                                                    type="file"
+                                                    size="lg"
+                                                    placeholder="Upload Images"
+                                                    onChange={(e) => handleImageChange(e, "Clinical Abstract")}
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }}
+                                                    accept=".jpg, .jpeg, .png"
+                                                    required
+                                                />
+                                                <Typography variant="h6" color="blue-gray" className="">
+                                                    Upload Waiver
+                                                </Typography>
+                                                <Input
+                                                    type="file"
+                                                    size="lg"
+                                                    placeholder="Upload Images"
+                                                    onChange={(e) => handleImageChange(e, "Waiver")}
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }}
+                                                    accept=".jpg, .jpeg, .png"
+                                                    required
+                                                />
+                                                <Typography variant="h6" color="blue-gray" className="">
+                                                    Upload Recipient Record
+                                                </Typography>
+                                                <Input
+                                                    type="file"
+                                                    size="lg"
+                                                    placeholder="Upload Images"
+                                                    onChange={(e) => handleImageChange(e, "Recipient Record")}
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }}
+                                                    accept=".jpg, .jpeg, .png"
+                                                    required
+                                                />
                                             </>) : selectedPatient && selectedPatient.patientType === "Outpatient" ? (<>
-                                                <span className="text-sm">Upload the following for Outpatients:</span>
-                                                <ul className="list-disc list-inside text-sm">
-                                                    <li>Prescription</li>
-                                                    <li>Clinical Abstract</li>
-                                                </ul>
+                                                <Typography variant="h6" color="blue-gray" className="">
+                                                    Upload Prescription
+                                                </Typography>
+                                                <Input
+                                                    type="file"
+                                                    size="lg"
+                                                    placeholder="Upload Images"
+                                                    onChange={(e) => handleImageChange(e, "Prescription")}
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }}
+                                                    accept=".jpg, .jpeg, .png"
+                                                    required
+                                                />
+                                                <Typography variant="h6" color="blue-gray" className="">
+                                                  Upload Clinical Abstract
+                                                </Typography>
+                                                <Input
+                                                    type="file"
+                                                    size="lg"
+                                                    placeholder="Upload Images"
+                                                    onChange={(e)=>handleImageChange(e, "Clinical Abstract")}
+                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                    labelProps={{
+                                                        className: "before:content-none after:content-none",
+                                                    }}
+                                                    accept=".jpg, .jpeg, .png"
+                                                    required
+                                                />
                                             </>) : ""
                                         }
-                                        <Input
-                                            type="file"
-                                            size="lg"
-                                            placeholder="Upload Images"
-                                            onChange={handleImageChange}
-                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                            multiple
-                                            labelProps={{
-                                                className: "before:content-none after:content-none",
-                                            }}
-                                            accept=".jpg, .jpeg, .png"
-                                        />
+
                                     </div>
 
                                 </div>
