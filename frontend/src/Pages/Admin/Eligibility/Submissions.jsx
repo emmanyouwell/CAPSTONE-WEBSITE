@@ -20,7 +20,7 @@ const Submissions = () => {
             dispatch(resetUpdate())
         }
     }, [dispatch, isUpdated])
-    const eligibilityOptions = ['Eligible', 'Not Eligible'];
+    const eligibilityOptions = ['Eligible', 'Ineligible'];
     const [open, setOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [id, setId] = useState('');
@@ -95,7 +95,7 @@ const Submissions = () => {
                         Enter Eligibility
                     </Typography>
                     <Typography className="mt-1 font-normal text-gray-600">
-                        Please select the fridge you would like to store the milk in.
+                        Please select the eligibility status for the donor.
                     </Typography>
                     <IconButton
                         size="sm"
