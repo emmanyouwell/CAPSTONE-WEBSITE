@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
+const VITE_PYTHON_URL = import.meta.env.VITE_PYTHON_URL;
 import api from '../../api/axiosInstance'
 export const getDonors = createAsyncThunk(
     'donor/getDonors',
@@ -125,3 +126,19 @@ export const getSubmissions = createAsyncThunk(
     }
 )
 
+export const getModelReport = createAsyncThunk(
+    'donor/getModelReport',
+    async (req, thunkAPI) => {
+       
+
+        try {
+            const response = await axios.get(`${VITE_PYTHON_URL}/model_report`)
+
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)

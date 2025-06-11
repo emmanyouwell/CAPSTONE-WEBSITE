@@ -256,7 +256,7 @@ export function donorsPerBarangay(donorLocation) {
         responsive: true,
         plugins: {
             legend: {
-                position: 'bottom',
+                display: false
             },
             datalabels: {
                 color: '#fff',
