@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSubmissions, updateDonor } from '../../../redux/actions/donorActions';
-import { Button, Card, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
+import { getModelReport, getSubmissions, updateDonor } from '../../../redux/actions/donorActions';
+import { Button, Card, CardBody, CardFooter, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
 import { EyeIcon, PencilLine } from 'lucide-react';
 import { formatDate } from '../../../utils/helper';
 import { XMarkIcon } from '@heroicons/react/24/outline';
@@ -9,12 +9,15 @@ import { toast } from 'react-toastify';
 import { resetUpdate } from '../../../redux/slices/donorSlice';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
+import { Link } from 'react-router-dom';
+import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 
 
 const Submissions = () => {
     const dispatch = useDispatch();
-    const { submissions, isUpdated, loading } = useSelector((state) => state.donors);
+    const { submissions, isUpdated, model, loading } = useSelector((state) => state.donors);
     useEffect(() => {
+        dispatch(getModelReport())
         dispatch(getSubmissions());
         if (isUpdated) {
             dispatch(resetUpdate())
@@ -87,8 +90,80 @@ const Submissions = () => {
         }),
     ];
     return (
-        <div className="w-full h-full p-4">
-            <DataTable data={submissions} columns={columns} pageSize={10}/>
+        <div className="relative w-full h-full">
+            <Link to="/dashboard/donors" className="absolute top-4 left-4">
+                <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
+                    <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
+                </div>
+            </Link>
+            <div className="h-[calc(30vh)] bg-secondary w-full p-4 mb-4">
+                <Typography variant="h3" className="text-center mb-4 text-white font-parkinsans">Performance</Typography>
+                <div className="flex items-stretch gap-4 w-full">
+                    <Card className="flex-1">
+                        <CardBody>
+                            <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
+                                {model?.accuracy ? model.accuracy : '0.00%'}
+                            </Typography>
+                            <Typography variant="h5" color="gray" className="mb-2">
+                                Accuracy
+                            </Typography>
+                            <Typography>
+                                How often the model is correct overall?
+                            </Typography>
+                        </CardBody>
+                    </Card>
+                    <Card className="flex-1">
+                        <CardBody>
+                            <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
+                                {model?.precision?.Overall
+                                    ? `${(Number(model.precision.Overall) * 100).toFixed(2)}%`
+                                    : '0.00%'}
+
+                            </Typography>
+                            <Typography variant="h5" color="gray" className="mb-2">
+                                Precision
+                            </Typography>
+                            <Typography>
+                                How often the model correctly identifies actual positives?
+                            </Typography>
+                        </CardBody>
+                    </Card>
+                    <Card className="flex-1">
+                        <CardBody>
+                            <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
+                                {model?.recall?.Overall
+                                    ? `${(Number(model.recall.Overall) * 100).toFixed(2)}%`
+                                    : '0.00%'}
+
+                            </Typography>
+                            <Typography variant="h5" color="gray" className="mb-2">
+                                Recall
+                            </Typography>
+                            <Typography>
+                                How good the model is at catching all real positives?
+                            </Typography>
+                        </CardBody>
+                    </Card>
+                    <Card className="flex-1">
+                        <CardBody>
+                            <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
+                                {model?.f1_score?.Overall
+                                    ? `${(Number(model.f1_score.Overall) * 100).toFixed(2)}%`
+                                    : '0.00%'}
+
+                            </Typography>
+                            <Typography variant="h5" color="gray" className="mb-2">
+                                F1 Score
+                            </Typography>
+                            <Typography>
+                                A balance between precision and recall.
+                            </Typography>
+                        </CardBody>
+                    </Card>
+                </div>
+
+            </div>
+            <DataTable data={submissions} columns={columns} pageSize={10} height="h-[calc(70vh-8rem)]" />
             <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
                 <DialogHeader className="relative m-0 block">
                     <Typography variant="h4" color="blue-gray">

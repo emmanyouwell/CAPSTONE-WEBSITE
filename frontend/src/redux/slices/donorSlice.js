@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { checkEligibility, getDonors, getSingleDonor, getSubmissions, updateDonor } from '../actions/donorActions';
+import { checkEligibility, getDonors, getModelReport, getSingleDonor, getSubmissions, updateDonor } from '../actions/donorActions';
 export const donorSlice = createSlice({
   name: 'donor',
   initialState: {
@@ -13,6 +13,7 @@ export const donorSlice = createSlice({
     donorDetails: {},
     isEligible: false,
     submissions: [],
+    model: {}
   },
   reducers: {
     resetUpdate: (state) => {
@@ -82,6 +83,17 @@ export const donorSlice = createSlice({
         state.submissions = action.payload.donors;
       })
       .addCase(getSubmissions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getModelReport.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getModelReport.fulfilled, (state, action) => {
+        state.loading = false;
+        state.model = action.payload;
+      })
+      .addCase(getModelReport.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
