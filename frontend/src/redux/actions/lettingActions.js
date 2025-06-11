@@ -152,7 +152,7 @@ export const getUpcomingLettings = createAsyncThunk(
         console.log("Config: ", config)
         try {
 
-            const response = await api.get(`${VITE_APP_URL}/api/v1/upcoming/lettings`, config);
+            const response = await axios.get(`${VITE_APP_URL}/api/v1/upcoming/lettings`, config);
             return response.data;
 
         } catch (error) {

@@ -21,7 +21,7 @@ export const getAnnouncement = createAsyncThunk(
             else {
                 urlString = `${VITE_APP_URL}/api/v1/announcements`
             }
-            const response = await api.get(urlString, config);
+            const response = await axios.get(urlString, config);
             console.log("Response", response.data)
             console.log("URL: ", urlString)
             return response.data;
