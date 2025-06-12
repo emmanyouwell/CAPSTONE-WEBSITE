@@ -5,6 +5,7 @@ export const donorSlice = createSlice({
   initialState: {
     donors: [],
     loading: false,
+    pythonLoading: false,
     error: null,
     pageSize: 0,
     totalDonors: 0,
@@ -87,14 +88,14 @@ export const donorSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(getModelReport.pending, (state, action) => {
-        state.loading = true;
+        state.pythonLoading = true;
       })
       .addCase(getModelReport.fulfilled, (state, action) => {
-        state.loading = false;
+        state.pythonLoading = false;
         state.model = action.payload;
       })
       .addCase(getModelReport.rejected, (state, action) => {
-        state.loading = false;
+        state.pythonLoading = false;
         state.error = action.payload;
       });
   },

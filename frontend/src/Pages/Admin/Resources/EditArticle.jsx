@@ -14,7 +14,7 @@ const modules = {
             [{ align: [] }],
             ["bold", "italic", "underline"],
             [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
+            ["link"],
         ],
     },
 };
