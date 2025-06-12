@@ -11,11 +11,12 @@ import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { Link } from 'react-router-dom';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
-
+import HorizontalLoader from '../../../Components/Loader/HorizontalLoader';
+import Loader from '../../../Components/Loader/Loader';
 
 const Submissions = () => {
     const dispatch = useDispatch();
-    const { submissions, isUpdated, model, loading } = useSelector((state) => state.donors);
+    const { submissions, isUpdated, model, loading, pythonLoading } = useSelector((state) => state.donors);
     useEffect(() => {
         dispatch(getModelReport())
         dispatch(getSubmissions());
@@ -102,7 +103,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {model?.accuracy ? model.accuracy : '0.00%'}
+                                {pythonLoading ? <Loader/> : model?.accuracy ? model.accuracy : '0.00%'}
                             </Typography>
                             <Typography variant="h5" color="gray" className="mb-2">
                                 Accuracy
@@ -115,7 +116,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {model?.precision?.Overall
+                              {pythonLoading ? <Loader/> : model?.precision?.Overall
                                     ? `${(Number(model.precision.Overall) * 100).toFixed(2)}%`
                                     : '0.00%'}
 
@@ -131,7 +132,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {model?.recall?.Overall
+                                {pythonLoading ? <Loader/> :model?.recall?.Overall
                                     ? `${(Number(model.recall.Overall) * 100).toFixed(2)}%`
                                     : '0.00%'}
 
@@ -147,7 +148,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {model?.f1_score?.Overall
+                                {pythonLoading ? <Loader/> :model?.f1_score?.Overall
                                     ? `${(Number(model.f1_score.Overall) * 100).toFixed(2)}%`
                                     : '0.00%'}
 

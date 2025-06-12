@@ -114,7 +114,8 @@ span .article-content {
   color: #E53777; 
 }
 .ql-editor {
-   max-width: 800px;
+  max-width: 800px;
+  min-height: 800px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px 30px;
@@ -123,7 +124,8 @@ span .article-content {
 
 .ql-container {
   background-color: gray;
-  max-height: 400px;
+
+  height: 800px;
   /* Ensure the container matches the editor height */
   overflow-y: auto;
   /* Enable vertical scrolling when content overflows */
