@@ -55,6 +55,7 @@ import CreateAnnouncement from "./Pages/Admin/Announcement/CreateAnnouncement";
 import SingleAnnouncement from "./Pages/Admin/Announcement/SingleAnnouncement";
 import EditAnnouncement from "./Pages/Admin/Announcement/EditAnnouncement";
 import InactivityHandler from "./InactivityHandler";
+import 'filepond/dist/filepond.min.css';
 
 
 function RoutesComponent() {

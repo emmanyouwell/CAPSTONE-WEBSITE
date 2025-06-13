@@ -165,24 +165,7 @@ const RequestView = () => {
             )
         }));
     };
-    // const handleImageChange = async (e) => {
-    //     const files = Array.from(e.target.files);
-
-    //     const toBase64 = (file) =>
-    //         new Promise((resolve, reject) => {
-    //             const reader = new FileReader();
-    //             reader.readAsDataURL(file);
-    //             reader.onload = () => resolve(reader.result);
-    //             reader.onerror = (error) => reject(error);
-    //         });
-
-    //     const base64Files = await Promise.all(files.map(toBase64));
-
-    //     setFormData((prevFormData) => ({
-    //         ...prevFormData,
-    //         images: base64Files,
-    //     }));
-    // }
+   
     const handleImageChange = async (e, id) => {
         const file = e.target.files[0];
         if (!file) return;
