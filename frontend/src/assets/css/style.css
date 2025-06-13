@@ -45,12 +45,14 @@
 .custom-shape-divider-top-1741406764 .shape-fill {
   fill: #f5f5dc;
 }
+
 span .article-content {
   font-family: "Varela Round", "sans-serif";
   font-size: 1.2rem;
   line-height: 1.6;
   color: #333;
 }
+
 .article-content {
   max-width: 800px;
   margin-left: auto;
@@ -77,6 +79,7 @@ span .article-content {
   font-size: 1.75em;
   margin-bottom: 8px;
 }
+
 .article-content h3 {
   font-size: 1.5em;
   margin-bottom: 8px;
@@ -109,10 +112,12 @@ span .article-content {
   object-fit: contain;
   margin: 0 auto;
 }
-.article-content strong{
+
+.article-content strong {
   font-weight: bold;
-  color: #E53777; 
+  color: #E53777;
 }
+
 .ql-editor {
   max-width: 800px;
   min-height: 800px;
@@ -146,10 +151,12 @@ span .article-content {
   /* Adjust size */
   margin-bottom: 10px;
 }
-.ql-editor strong{
+
+.ql-editor strong {
   font-weight: bold;
-  color: #E53777; 
+  color: #E53777;
 }
+
 .ql-align-center {
   text-align: center;
 }
@@ -314,6 +321,18 @@ input[id^="react-select-"] {
   box-shadow: none !important;
 }
 
-.select-border-black:has(input:focus) > div:first-of-type {
+.select-border-black:has(input:focus)>div:first-of-type {
   box-shadow: 0 0 0 1px rgb(31, 31, 31) !important;
+}
+
+.filepond--file {
+  background-color: #E53777 !important;
+}
+
+.filepond--file .filepond--file-info {
+  color: #fff !important;
+}
+
+.filepond--credits {
+  display: none !important;
 }
