@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getModelReport, getSubmissions, updateDonor } from '../../../redux/actions/donorActions';
 import { Button, Card, CardBody, CardFooter, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
-import { EyeIcon, PencilLine } from 'lucide-react';
+import { EyeIcon, PencilLine, SquarePenIcon } from 'lucide-react';
 import { formatDate } from '../../../utils/helper';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -81,10 +81,10 @@ const Submissions = () => {
                 return (
                     <div className="flex gap-2">
                         <a target="_blank" href={`https://script.google.com/macros/s/AKfycbwYOc13QaEjdGoJvdlFEHZ2pSsIlUmx0zksazMKD3qfXYGnYG70eNSB7M5ZX0aOiU1y/exec?submissionId=${submissionID}`}>
-                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
+                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
                         </a>
-
-                        <Button className="bg-success" onClick={() => handleOpen(_id)}><PencilLine className="h-5 w-5" /></Button>
+                        <IconButton variant="text" className="text-secondary rounded-full" onClick={()=>handleOpen(_id)}><SquarePenIcon size={22} className="text-secondary" /></IconButton>
+                        
                     </div>
                 );
             },
@@ -103,20 +103,21 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {pythonLoading ? <Loader/> : model?.accuracy ? model.accuracy : '0.00%'}
+                                {pythonLoading ? <Loader /> : model?.accuracy ? model.accuracy : '0.00%'}
                             </Typography>
                             <Typography variant="h5" color="gray" className="mb-2">
                                 Accuracy
                             </Typography>
                             <Typography>
-                                How often the model is correct overall?
+                                How often the system is right overall.
                             </Typography>
+
                         </CardBody>
                     </Card>
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                              {pythonLoading ? <Loader/> : model?.precision?.Overall
+                                {pythonLoading ? <Loader /> : model?.precision?.Overall
                                     ? `${(Number(model.precision.Overall) * 100).toFixed(2)}%`
                                     : '0.00%'}
 
@@ -125,14 +126,14 @@ const Submissions = () => {
                                 Precision
                             </Typography>
                             <Typography>
-                                How often the model correctly identifies actual positives?
+                                How often those marked as eligible truly are.
                             </Typography>
                         </CardBody>
                     </Card>
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {pythonLoading ? <Loader/> :model?.recall?.Overall
+                                {pythonLoading ? <Loader /> : model?.recall?.Overall
                                     ? `${(Number(model.recall.Overall) * 100).toFixed(2)}%`
                                     : '0.00%'}
 
@@ -141,14 +142,14 @@ const Submissions = () => {
                                 Recall
                             </Typography>
                             <Typography>
-                                How good the model is at catching all real positives?
+                                How well the system finds all eligible donors.
                             </Typography>
                         </CardBody>
                     </Card>
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {pythonLoading ? <Loader/> :model?.f1_score?.Overall
+                                {pythonLoading ? <Loader /> : model?.f1_score?.Overall
                                     ? `${(Number(model.f1_score.Overall) * 100).toFixed(2)}%`
                                     : '0.00%'}
 

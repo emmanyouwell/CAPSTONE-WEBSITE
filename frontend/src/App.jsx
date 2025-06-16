@@ -56,6 +56,10 @@ import SingleAnnouncement from "./Pages/Admin/Announcement/SingleAnnouncement";
 import EditAnnouncement from "./Pages/Admin/Announcement/EditAnnouncement";
 import InactivityHandler from "./InactivityHandler";
 import 'filepond/dist/filepond.min.css';
+import Archive from "./Pages/Admin/Archive/Archive";
+import ArchiveLayout from "./Pages/Admin/Archive/ArchiveLayout";
+import AnnouncementArchive from "./Pages/Admin/Archive/AnnouncementArchive";
+import ArticleArchive from "./Pages/Admin/Archive/ArticleArchive";
 
 
 function RoutesComponent() {
@@ -126,8 +130,15 @@ function RoutesComponent() {
         <Route path="resources/edit/:id" element={<ProtectedRoute isAdmin={true}><EditArticle /></ProtectedRoute>} />
 
         {/* Staff Dashboard */}
-        
+
         <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView /></ProtectedRoute>} />
+
+        <Route path="archive" element={<ProtectedRoute isAdmin={true}><ArchiveLayout /></ProtectedRoute>}>
+          <Route index element={<ProtectedRoute isAdmin={true}><Archive /></ProtectedRoute>} />
+          <Route path="announcements" element={<ProtectedRoute isAdmin={true}><AnnouncementArchive /></ProtectedRoute>} />
+          <Route path="resources" element={<ProtectedRoute isAdmin={true}><ArticleArchive /></ProtectedRoute>} />
+        </Route>
+
 
         {/* Others */}
         <Route path="profile" element={<ProtectedRoute isAuthorized={true}><Profile /></ProtectedRoute>} />
