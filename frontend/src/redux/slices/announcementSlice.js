@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addAnnouncements, addHTMLAnnouncements, deleteAnnouncement, getAnnouncement, getAnnouncementDetails, updateAnnouncements, updateHTMLAnnouncement } from '../actions/announcementActions';
+import { addAnnouncements, addHTMLAnnouncements, deleteAnnouncement, getAnnouncement, getAnnouncementDetails, getArchivedAnnouncements, restoreAnnouncement, softDeleteAnnouncement, updateAnnouncements, updateHTMLAnnouncement } from '../actions/announcementActions';
 
 
 export const announcementSlice = createSlice({
@@ -33,6 +33,17 @@ export const announcementSlice = createSlice({
                 state.announcements = action.payload.articles;
             })
             .addCase(getAnnouncement.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(getArchivedAnnouncements.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(getArchivedAnnouncements.fulfilled, (state, action) => {
+                state.loading = false;
+                state.announcements = action.payload.articles;
+            })
+            .addCase(getArchivedAnnouncements.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
@@ -99,6 +110,28 @@ export const announcementSlice = createSlice({
                 state.isUpdated = action.payload.success;
             })
             .addCase(updateHTMLAnnouncement.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(softDeleteAnnouncement.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(softDeleteAnnouncement.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isDeleted = action.payload.success;
+            })
+            .addCase(softDeleteAnnouncement.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(restoreAnnouncement.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(restoreAnnouncement.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload.success;
+            })
+            .addCase(restoreAnnouncement.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

@@ -1,9 +1,130 @@
-import React from 'react'
-
+import React, { useState, useEffect } from 'react'
+import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
+import { Link } from 'react-router-dom'
+import { ArrowLongLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
+import ArticleList from '../../../Components/Articles/ArticleList';
+import { resetDelete } from '../../../redux/slices/articleSlice';
+import { deleteAnnouncement, getAnnouncement, getArchivedAnnouncements, restoreAnnouncement } from '../../../redux/actions/announcementActions';
+import { createColumnHelper } from '@tanstack/react-table';
+import DataTable from '../../../Components/DataTables/tanstack/DataTable';
+import { formatDate } from '../../../utils/helper';
+import { ArrowRightToLine, EyeIcon, RotateCcw, SquarePenIcon, Trash } from 'lucide-react';
+import { toast } from 'react-toastify';
 const AnnouncementArchive = () => {
+  const [IsLargeScreen, setIsLargeScreen] = useState(false);
+  const dispatch = useDispatch();
+  const { announcements, isDeleted, loading, success, error } = useSelector((state) => state.announcements)
+  const [search, setSearch] = useState('');
+
+
+  const handleRestore = (id) => {
+    dispatch(restoreAnnouncement(id));
+  }
+  const handleTextChange = (e) => {
+    setSearch(e.target.value);
+  }
+  const handleSubmit = () => {
+    dispatch(getArchivedAnnouncements(search));
+  }
+  useEffect(() => {
+
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 768); // Tailwind's md breakpoint is 768px
+    };
+
+    // Set initial screen size and add event listener
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [])
+
+  useEffect(() => {
+    console.log("Fetching announcements");
+    dispatch(getArchivedAnnouncements());
+  }, [dispatch])
+  useEffect(()=> { 
+    dispatch(getArchivedAnnouncements(search));
+  }, [search, dispatch])
+  useEffect(() => {
+    if (success) {
+      console.log("deleted");
+      toast.success("Announcement restored successfully");
+      dispatch(resetDelete());
+      dispatch(getArchivedAnnouncements());
+    }
+  }, [success, dispatch])
+  const columnHelper = createColumnHelper();
+
+  const columns = [
+    columnHelper.accessor(row => row.title, {
+      id: 'title',
+      header: 'Title',
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor(row => row.description, {
+      id: 'description',
+      header: 'Description',
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor(row => formatDate(row.createdAt), {
+      id: 'createdAt',
+      header: 'Date Published',
+      cell: info => info.getValue(),
+    }),
+
+    columnHelper.display({
+      id: 'actions',
+      header: 'Restore',
+      cell: ({ row }) => {
+        const announcement = row.original
+        return (
+          <div className="flex gap-2">
+            <IconButton variant="text" className="text-secondary rounded-full"><RotateCcw size={22} className="text-secondary cursor-pointer" onClick={() => handleRestore(announcement._id)} /></IconButton>
+          </div>
+        );
+      },
+    }),
+  ];
   return (
-    <div>AnnouncementArchive</div>
+    <>
+      <section className="relative w-full h-full">
+
+        <div className="flex justify-between items-center h-max w-full mb-4">
+          <Link to="/dashboard/archive" className="">
+            <div className="h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/60 hover:text-gray-700 transition-all hover:cursor-pointer">
+              <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
+            </div>
+          </Link>
+          
+          <div className="flex items-center justify-start gap-4">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full">
+              <div className="flex justify-center items-center gap-4">
+                <div className="relative flex w-full gap-2 md:w-max">
+                  <Input
+                    type="search"
+                    color="gray"
+                    label="Search for announcements..."
+                    className="pr-10"
+                    onChange={handleTextChange}
+                    containerProps={{
+                      className: "min-w-[288px] bg-white rounded-lg",
+                    }}
+                  />
+                  <MagnifyingGlassIcon className="h-8 w-8 !absolute right-1 top-1 rounded text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer" onClick={handleSubmit} />
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <DataTable data={announcements} columns={columns} pageSize={10} />
+      </section>
+    </>
   )
 }
 
-export default AnnouncementArchive
+export default AnnouncementArchive;

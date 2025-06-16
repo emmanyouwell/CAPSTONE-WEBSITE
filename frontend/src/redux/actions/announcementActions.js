@@ -159,3 +159,71 @@ export const updateHTMLAnnouncement = createAsyncThunk(
         }
     }
 )
+
+
+export const softDeleteAnnouncement = createAsyncThunk(
+    'announcement/softDeleteAnnouncement',
+    async(id, thunkAPI) => {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            withCredentials: true
+        }
+        try {
+            const response = await api.put(`${VITE_APP_URL}/api/v1/announcement/archive/${id}`, config);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+export const restoreAnnouncement = createAsyncThunk(
+    'announcement/restoreAnnouncement',
+    async(id, thunkAPI) => {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            withCredentials: true
+        }
+        try {
+            const response = await api.put(`${VITE_APP_URL}/api/v1/announcement/restore/${id}`, config);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
+
+export const getArchivedAnnouncements = createAsyncThunk(
+    'announcement/getArchivedAnnouncements',
+    async(query, thunkAPI) => {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            withCredentials: true
+        }
+        try {
+            let urlString = ''
+            if (query){
+                urlString = `${VITE_APP_URL}/api/v1/announcements/archived?search=${query}`
+            }
+            else {
+                urlString = `${VITE_APP_URL}/api/v1/announcements/archived`
+            }
+            const response = await api.get(urlString, config);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
