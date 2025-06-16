@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
 import { PencilIcon, PencilSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
-import { EyeIcon, CheckCheck } from 'lucide-react'
+import { EyeIcon, CheckCheck, Trash } from 'lucide-react'
 import { formatDate, getUser } from '../../../../utils/helper'
 import { deleteRequest, inpatientDispense, outpatientDispense } from '../../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
@@ -154,11 +154,11 @@ const RequestTable = ({ currentPage, totalPages, requests, setRefresh }) => {
                             : request.status === "Canceled" ?
                                 <div className="flex items-center gap-4">
                                     <Link to={`/dashboard/request/${request._id}`}>
-                                        <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                                        <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
                                     </Link>
-                                    <Button className="bg-secondary" size="sm"><TrashIcon className="h-5 w-5" onClick={() => handleDelete(request._id)} /></Button>
+                                    <IconButton variant="text" className="text-secondary rounded-full"><Trash size={22} className="text-secondary cursor-pointer" onClick={() => handleDelete(request._id)} /></IconButton>
                                 </div> : <Link to={`/dashboard/request/${request._id}`}>
-                                    <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                                    <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
                                 </Link>}
                     </div>
                 );

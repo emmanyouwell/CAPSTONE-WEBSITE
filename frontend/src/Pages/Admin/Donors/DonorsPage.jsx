@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDonors } from '../../../redux/actions/donorActions'
-import { Input, Button } from '@material-tailwind/react'
+import { Input, Button, IconButton } from '@material-tailwind/react'
 import DonorCards from '../../../Components/Admin/Donors/DonorCards'
 import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Select, Option } from '@material-tailwind/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
+import { EyeIcon } from 'lucide-react'
 const DonorsPage = () => {
     const dispatch = useDispatch();
     const { donors, pageSize, totalDonors, totalPages, loading, error } = useSelector((state) => state.donors);
@@ -115,9 +116,7 @@ const DonorsPage = () => {
                 return (
                     <div className="flex gap-2">
                         <Link to={`/dashboard/donors/${id}`}>
-                            <button className="text-blue-500 hover:underline">
-                                View
-                            </button>
+                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
                         </Link>
                     </div>
                 );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Card, Input, Select, Option } from '@material-tailwind/react'
+import { Button, Card, Input, Select, Option, IconButton } from '@material-tailwind/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
@@ -69,10 +69,7 @@ const CollectionsTable = () => {
                 return (
                     <div className="flex gap-2">
                         <Link to={`/dashboard/collections/details/${pubDetails?._id || privDetails?._id}`} state={{ type: collectionType, collectionId: _id, status: status }} className="text-blue-500">
-
-                            <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
-
-
+                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
                         </Link>
                     </div>
                 );

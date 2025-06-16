@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecipients } from '../../../redux/actions/recipientActions'
-import { Input, Button } from '@material-tailwind/react'
+import { Input, Button, IconButton } from '@material-tailwind/react'
 import DonorCards from '../../../Components/Admin/Donors/DonorCards'
 import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Select, Option } from '@material-tailwind/react'
@@ -10,6 +10,7 @@ import { getUser } from '../../../utils/helper'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
+import { EyeIcon } from 'lucide-react'
 const RecipientPage = () => {
     const dispatch = useDispatch();
     const { recipients, pageSize, totalRecipients, totalPages, loading, error } = useSelector((state) => state.recipients);
@@ -119,9 +120,7 @@ const RecipientPage = () => {
                 return (
                     <div className="flex gap-2">
                         <Link to={`/dashboard/recipient/${id}`}>
-                            <button className="text-blue-500 hover:underline">
-                                View
-                            </button>
+                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
                         </Link>
                     </div>
                 );

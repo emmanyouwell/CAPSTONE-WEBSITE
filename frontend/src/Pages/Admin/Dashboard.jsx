@@ -122,7 +122,7 @@ const Dashboard = () => {
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Completed Requests</span>
             <div className="flex items-center justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyRequests?.total?.total ? monthlyRequests?.total?.total.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyRequests?.completed ? monthlyRequests?.completed.toLocaleString() : '0'} </span>
               <LifebuoyIcon className="text-secondary w-8 h-8" />
             </div>
           </div>
