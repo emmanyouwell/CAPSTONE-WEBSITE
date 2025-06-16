@@ -49,11 +49,10 @@ const CreateResources = () => {
     const navigate = useNavigate();
     const { loading, error, success } = useSelector((state) => state.articles);
 
-    const [title, setTitle] = useState(""); // 🔥 Title state
-    const [description, setDescription] = useState(""); // 🔥 Description state
-    const [content, setContent] = useState(""); // 🔥 Content state
+    const [title, setTitle] = useState(""); 
+    const [description, setDescription] = useState(""); 
+    const [content, setContent] = useState("");
     const [images, setImages] = useState([]);
-    const [imagePreview, setImagePreview] = useState([]);
     const handleRemoveImage = (index) => {
         setImages((prev) => {
             const updated = [...prev];

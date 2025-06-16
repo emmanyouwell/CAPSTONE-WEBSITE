@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Dialog, IconButton, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react';
+import { Typography, Button, Dialog, IconButton, DialogHeader, DialogBody, DialogFooter, Carousel } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import placeholder from '../../../assets/image/placeholder-image.webp'
 import { EyeIcon, Pencil, Trash } from 'lucide-react';
@@ -27,11 +27,19 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
                     month: 'short', // "Jan"
                     day: 'numeric', // "21"
                 });
-                const imageUrl = (announcement?.content) ? announcement.content.match(/<img[^>]+src="([^">]+)"/) ? announcement.content.match(/<img[^>]+src="([^">]+)"/)[1] : placeholder : null;
-                // const imageUrl = placeholder;
                 return (
                     <div className="bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-full max-w-sm h-96">
-                        <img src={imageUrl} alt="" className="h-40 object-cover rounded-md" />
+                        <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max">
+                            {announcement?.images?.map((image, index) => (
+                                <div key={index} className="relative h-40 w-full">
+                                    <img
+                                        src={image.url}
+                                        alt={`Announcement Image ${index + 1}`}
+                                        className="w-1/2 h-full object-cover  mx-auto"
+                                    />
+                                </div>
+                            ))}
+                        </Carousel>
 
                         <Typography className="text-primary line-clamp-2 overflow-hidden text-base sm:text-lg md:text-xl mt-2 font-bold">
                             {announcement.title}
@@ -60,19 +68,29 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
                 )
             })}
             <Dialog open={open} handler={handleOpen} className="bg-white p-6 rounded-lg shadow-lg">
-                <DialogHeader className="text-primary font-bold">
+                <DialogHeader className="text-primary font-bold p-0">
                     <Typography variant="h2" className="font-parkinsans">
                         {selectedAnnouncement && selectedAnnouncement.title}
                     </Typography>
                 </DialogHeader>
                 <DialogBody className="overflow-y-auto max-h-[70vh]">
-                    <img src={selectedAnnouncement ? (selectedAnnouncement.content.match(/<img[^>]+src="([^">]+)"/) ? selectedAnnouncement.content.match(/<img[^>]+src="([^">]+)"/)[1] : placeholder) : placeholder} alt="" className="w-full object-cover rounded-md mb-4" />
+                    <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max">
+                        {selectedAnnouncement?.images?.map((image, index) => (
+                            <div key={index} className="relative h-96 w-full">
+                                <img
+                                    src={image.url}
+                                    alt={`Article Image ${index + 1}`}
+                                    className="w-full h-full object-contain rounded-xl"
+                                />
+                            </div>
+                        ))}
+                    </Carousel>
                     <Typography variant="paragraph" className="text-primary">
                         {selectedAnnouncement ? selectedAnnouncement.description : 'No description available.'}
                     </Typography>
                 </DialogBody>
                 <DialogFooter className="space-x-2">
-                    <Button variant="filled" color="blue-gray" onClick={()=>setOpen(!open)}>
+                    <Button variant="filled" color="blue-gray" onClick={() => setOpen(!open)}>
                         close
                     </Button>
                 </DialogFooter>

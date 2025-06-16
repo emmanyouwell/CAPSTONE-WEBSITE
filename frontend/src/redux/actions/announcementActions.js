@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
+import axios from 'axios';
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 import api from '../../api/axiosInstance';
 export const getAnnouncement = createAsyncThunk(
-    'article/getAnnouncement',
+    'announcement/getAnnouncement',
     async (query, thunkAPI) => {
         
         const config = {
@@ -21,7 +21,7 @@ export const getAnnouncement = createAsyncThunk(
             else {
                 urlString = `${VITE_APP_URL}/api/v1/announcements`
             }
-            const response = await axios.get(urlString, config);
+            const response = await axios.get(urlString,config);
             console.log("Response", response.data)
             console.log("URL: ", urlString)
             return response.data;
@@ -32,7 +32,7 @@ export const getAnnouncement = createAsyncThunk(
 )
 
 export const addAnnouncements = createAsyncThunk(
-    'article/addAnnouncements',
+    'announcement/addAnnouncements',
     async (req, thunkAPI) => {
 
         
@@ -56,7 +56,7 @@ export const addAnnouncements = createAsyncThunk(
 )
 
 export const updateAnnouncements = createAsyncThunk(
-    'article/updateAnnouncements',
+    'announcement/updateAnnouncements',
     async (req, thunkAPI) => {
         
         const config = {
@@ -76,7 +76,7 @@ export const updateAnnouncements = createAsyncThunk(
 )
 
 export const deleteAnnouncement = createAsyncThunk(
-    'article/deleteAnnouncement',
+    'announcement/deleteAnnouncement',
     async (id, thunkAPI) => {
         
         const config = {
@@ -96,7 +96,7 @@ export const deleteAnnouncement = createAsyncThunk(
 )
 
 export const getAnnouncementDetails = createAsyncThunk(
-    'article/getAnnouncementDetails',
+    'announcement/getAnnouncementDetails',
     async (id, thunkAPI) => {
         
         const config = {
@@ -117,7 +117,7 @@ export const getAnnouncementDetails = createAsyncThunk(
 
 
 export const addHTMLAnnouncements = createAsyncThunk(
-    'article/addHTMLAnnouncements',
+    'announcement/addHTMLAnnouncements',
     async (req, thunkAPI) => {
 
         
@@ -141,7 +141,7 @@ export const addHTMLAnnouncements = createAsyncThunk(
 
 
 export const updateHTMLAnnouncement = createAsyncThunk(
-    'article/updateHTMLAnnouncement',
+    'announcement/updateHTMLAnnouncement',
     async (req, thunkAPI) => {
         
         const config = {
