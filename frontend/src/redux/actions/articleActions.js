@@ -31,6 +31,34 @@ export const getArticles = createAsyncThunk(
     }
 )
 
+
+export const getArchivedArticles = createAsyncThunk(
+    'article/getArchivedArticles',
+    async(query, thunkAPI) => {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            withCredentials: true
+        }
+        try {
+            let urlString = ''
+            if (query){
+                urlString = `${VITE_APP_URL}/api/v1/articles/archived?search=${query}`
+            }
+            else {
+                urlString = `${VITE_APP_URL}/api/v1/articles/archived`
+            }
+            const response = await api.get(urlString, config);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
 export const addArticles = createAsyncThunk(
     'article/addArticles',
     async(req, thunkAPI) => {
@@ -132,6 +160,44 @@ export const deleteArticle = createAsyncThunk(
         }
         try {
             const response = await api.delete(`${VITE_APP_URL}/api/v1/article/${id}`, config);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+export const softDeleteArticle = createAsyncThunk(
+    'article/softDeleteArticle',
+    async(id, thunkAPI) => {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            withCredentials: true
+        }
+        try {
+            const response = await api.put(`${VITE_APP_URL}/api/v1/article/archive/${id}`, config);
+            return response.data;
+        }catch (error){
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+export const restoreArticle = createAsyncThunk(
+    'article/restoreArticle',
+    async(id, thunkAPI) => {
+        
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            withCredentials: true
+        }
+        try {
+            const response = await api.put(`${VITE_APP_URL}/api/v1/article/restore/${id}`, config);
             return response.data;
         }catch (error){
             return thunkAPI.rejectWithValue(error.message);

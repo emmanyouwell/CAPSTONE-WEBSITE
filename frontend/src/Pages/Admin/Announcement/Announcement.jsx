@@ -5,12 +5,13 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
 import ArticleList from '../../../Components/Articles/ArticleList';
-import { resetDelete } from '../../../redux/slices/articleSlice';
-import { deleteAnnouncement, getAnnouncement } from '../../../redux/actions/announcementActions';
+import { resetDelete } from '../../../redux/slices/announcementSlice';
+import { deleteAnnouncement, getAnnouncement, softDeleteAnnouncement } from '../../../redux/actions/announcementActions';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
-import { EyeIcon, SquarePenIcon, Trash } from 'lucide-react';
+import { Archive, EyeIcon, SquarePenIcon, Trash } from 'lucide-react';
+import { toast } from 'react-toastify';
 const Announcement = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
@@ -18,8 +19,8 @@ const Announcement = () => {
     const [search, setSearch] = useState('');
 
 
-    const handleDelete = (id) => {
-        dispatch(deleteAnnouncement(id));
+    const handleArchive = (id) => {
+        dispatch(softDeleteAnnouncement(id));
     }
     const handleReset = () => {
         setSearch('');
@@ -28,7 +29,7 @@ const Announcement = () => {
         setSearch(e.target.value);
     }
     const handleSubmit = () => {
-
+        dispatch(getAnnouncement(search));
     }
     useEffect(() => {
 
@@ -47,10 +48,13 @@ const Announcement = () => {
         console.log("Fetching announcements");
         dispatch(getAnnouncement());
     }, [dispatch])
-
+    useEffect(() => {
+        dispatch(getAnnouncement(search));
+    }, [search, dispatch])
     useEffect(() => {
         if (isDeleted) {
             console.log("deleted");
+            toast.success("Announcement archived successfully");
             dispatch(resetDelete());
             dispatch(getAnnouncement());
         }
@@ -83,7 +87,7 @@ const Announcement = () => {
                     <div className="flex gap-2">
                         <Link to={`/announcements/${announcement._id}`}><IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25}/></IconButton></Link>
                         <Link to={`/dashboard/announcement/edit/${announcement._id}`}><IconButton variant="text" className="text-secondary rounded-full"><SquarePenIcon size={22} className="text-secondary" /></IconButton></Link>
-                        <IconButton variant="text" className="text-secondary rounded-full"><Trash size={22} className="text-secondary cursor-pointer" onClick={() => handleDelete(announcement._id)} /></IconButton>
+                        <IconButton variant="text" className="text-secondary rounded-full"><Archive size={22} className="text-secondary cursor-pointer" onClick={() => handleArchive(announcement._id)} /></IconButton>
                     </div>
                 );
             },
@@ -99,7 +103,7 @@ const Announcement = () => {
                                 <Input
                                     type="search"
                                     color="gray"
-                                    label="Search for articles..."
+                                    label="Search for announcements..."
                                     className="pr-10"
                                     onChange={handleTextChange}
                                     containerProps={{

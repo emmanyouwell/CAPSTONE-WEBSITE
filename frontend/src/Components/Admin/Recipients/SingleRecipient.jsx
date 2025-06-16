@@ -97,7 +97,8 @@ const SingleRecipient = () => {
                     </div>
                 </Link>
                 <div className="h-[calc(10vh)] bg-secondary w-full p-4">
-                    <Typography variant="h3" className="text-center mb-4 text-white font-parkinsans">Patient Information</Typography></div>
+                    <Typography variant="h3" className="text-center mb-4 text-white font-parkinsans">Patient Information</Typography>
+                </div>
                 <div className="flex flex-col gap-8 p-4">
                     <div className="flex h-[calc(100vh-25rem)] items-start justify-center gap-4">
                         <div className="w-full h-full flex flex-col overflow-y-auto gap-4 p-4 border border-gray-600 rounded-lg">

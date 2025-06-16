@@ -3,13 +3,14 @@ import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
+import { deleteArticle, getArticles, softDeleteArticle } from '../../../redux/actions/articleActions';
 import ArticleList from '../../../Components/Articles/ArticleList';
 import { resetDelete } from '../../../redux/slices/articleSlice';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
-import { EyeIcon, Pencil, SquarePenIcon, Trash } from 'lucide-react';
+import { Archive, EyeIcon, Pencil, SquarePenIcon, Trash } from 'lucide-react';
+import { toast } from 'react-toastify';
 const Resources = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const Resources = () => {
 
 
     const handleDelete = (id) => {
-        dispatch(deleteArticle(id));
+        dispatch(softDeleteArticle(id));
     }
     const handleReset = () => {
         setSearch('');
@@ -27,7 +28,7 @@ const Resources = () => {
         setSearch(e.target.value);
     }
     const handleSubmit = () => {
-
+        dispatch(getArticles(search));
     }
     useEffect(() => {
 
@@ -45,10 +46,13 @@ const Resources = () => {
     useEffect(() => {
         dispatch(getArticles());
     }, [dispatch])
-
+    useEffect(()=>{
+      dispatch(getArticles(search));
+    },[search])
     useEffect(() => {
         if (isDeleted) {
             console.log("deleted");
+            toast.success("Article archived successfully");
             dispatch(resetDelete());
             dispatch(getArticles());
         }
@@ -81,8 +85,8 @@ const Resources = () => {
                     <div className="flex items-center gap-2">
                         <Link to={`/article/${article._id}`}><IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton></Link>
                         <Link to={`/dashboard/resources/edit/${article._id}`}><IconButton variant="text" className="text-secondary rounded-full"><SquarePenIcon size={22} className="text-secondary" /></IconButton></Link>
-                        <IconButton variant="text" className="text-secondary rounded-full"><Trash size={22} className="text-secondary cursor-pointer" onClick={() => handleDelete(article._id)} /></IconButton>
-                        
+                        <IconButton variant="text" className="text-secondary rounded-full"><Archive size={22} className="text-secondary cursor-pointer" onClick={() => handleDelete(article._id)} /></IconButton>
+
                     </div>
                 );
             },

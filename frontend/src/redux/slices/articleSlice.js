@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getArticles, addArticles, addHTMLArticles,updateHTMLArticle, updateArticle, getArticleDetails, deleteArticle } from '../actions/articleActions';
+import { getArticles, addArticles, addHTMLArticles,updateHTMLArticle, updateArticle, getArticleDetails, deleteArticle, restoreArticle, softDeleteArticle, getArchivedArticles } from '../actions/articleActions';
 
 export const articleSlice = createSlice({
     name: 'article',
@@ -33,6 +33,17 @@ export const articleSlice = createSlice({
                 state.articles = action.payload.articles;
             })
             .addCase(getArticles.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(getArchivedArticles.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(getArchivedArticles.fulfilled, (state, action) => {
+                state.loading = false;
+                state.articles = action.payload.articles;
+            })
+            .addCase(getArchivedArticles.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
@@ -99,6 +110,28 @@ export const articleSlice = createSlice({
                 state.isDeleted = action.payload.success;
             })
             .addCase(deleteArticle.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(softDeleteArticle.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(softDeleteArticle.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isDeleted = action.payload.success;
+            })
+            .addCase(softDeleteArticle.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(restoreArticle.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(restoreArticle.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload.success;
+            })
+            .addCase(restoreArticle.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
