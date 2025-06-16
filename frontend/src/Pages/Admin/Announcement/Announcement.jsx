@@ -44,6 +44,7 @@ const Announcement = () => {
     }, [])
 
     useEffect(() => {
+        console.log("Fetching announcements");
         dispatch(getAnnouncement());
     }, [dispatch])
 

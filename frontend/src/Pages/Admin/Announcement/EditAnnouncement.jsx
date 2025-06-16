@@ -1,21 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Button, Input, Textarea } from "@material-tailwind/react"; // Import Textarea component
+import { Button, Input, Textarea, Typography } from "@material-tailwind/react"; // Import Textarea component
 import { useDispatch, useSelector } from "react-redux";
 
 import Loader from "../../../Components/Loader/Loader";
 import { useNavigate, useParams } from "react-router-dom";
 import { resetUpdate } from "../../../redux/slices/announcementSlice";
 import { getAnnouncementDetails, updateHTMLAnnouncement } from "../../../redux/actions/announcementActions";
+import { FilePond, registerPlugin } from 'react-filepond';
+
+import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileEncode, FilePondPluginFileValidateType);
 const modules = {
     toolbar: {
         container: [
             [{ header: [1, 2, 3, false] }],
+            [{ color: [] }, { background: [] }],
             [{ align: [] }],
             ["bold", "italic", "underline"],
             [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
+            ["link"],
+
+            [{ indent: "-1" }, { indent: "+1" }],
+            ["blockquote"]
         ],
     },
 };
@@ -29,20 +38,63 @@ const formats = [
     "list",
     "bullet",
     "link",
-    "image",
+    "color",
+    "background",
+    "indent",
+    "blockquote"
 ];
 
 const EditAnnouncement = () => {
+    const pondRef = useRef(null);
     const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading, error, isUpdated, announcementDetails } = useSelector((state) => state.announcements);
 
-    const [title, setTitle] = useState(""); // 🔥 Title state
-    const [description, setDescription] = useState(""); // 🔥 Description state
-    const [content, setContent] = useState(""); // 🔥 Content state
-    const [show, setShow] = useState(false);
 
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [content, setContent] = useState("");
+    const [images, setImages] = useState([]);
+    const [imagePreview, setImagePreview] = useState([]);
+
+
+
+    const handleRemoveImage = (index, isNew) => {
+        console.log("Remove:", index, "Is new:", isNew);
+        if (isNew) {
+            // Remove from new uploads
+            setImages(prev => {
+                const updated = [...prev];
+                updated.splice(index - imagePreview.length, 1);
+
+                // Sync with FilePond instance
+                const pond = pondRef.current;
+                if (pond) {
+                    pond.removeFile(index - imagePreview.length); // Adjust index
+                }
+
+                return updated;
+            });
+        } else {
+            // Remove from existing images
+            setImagePreview(prev => prev.filter((_, i) => i !== index));
+        }
+    };
+    const handleFilePondUpdate = (fileItems) => {
+        const base64Images = fileItems.map(fileItem => {
+            const encoded = fileItem.getFileEncodeBase64String?.();
+            if (!encoded) return null;
+
+            return {
+                local: true,
+                url: `data:${fileItem.fileType};base64,${encoded}`
+            };
+        }).filter(Boolean);
+
+        setImages(base64Images);
+    };
+    const allImages = [...imagePreview, ...images];
     const onSave = () => {
         console.log({ title, description, content });
         const req = {
@@ -50,6 +102,7 @@ const EditAnnouncement = () => {
             description: description,
             content: content,
             id: id,
+            images: allImages
         };
         dispatch(updateHTMLAnnouncement(req));
     };
@@ -71,6 +124,7 @@ const EditAnnouncement = () => {
             setTitle(announcementDetails.title);
             setDescription(announcementDetails.description);
             setContent(announcementDetails.content);
+            setImagePreview(announcementDetails.images || []);
         }
     }, [announcementDetails])
     return (
@@ -94,7 +148,32 @@ const EditAnnouncement = () => {
                 className="w-full p-2 border border-gray-300 rounded"
                 rows={3} // Adjust the number of rows as needed
             />
+            <Typography variant="h6" color="blue-gray" className="">
+                Upload Image
+            </Typography>
 
+            <FilePond
+                ref={pondRef}
+                allowImagePreview={false}
+                allowMultiple={true}
+                allowFileEncode={true}
+                acceptedFileTypes={["image/png", "image/jpeg", "image/jpg"]}
+                onupdatefiles={handleFilePondUpdate}
+                labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+            />
+            <div className="flex items-center flex-wrap gap-4 mt-4">
+                {allImages.map((image, index) => (
+                    <div key={index} className="relative w-max">
+                        <button
+                            onClick={() => handleRemoveImage(index, !!image.local)}
+                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center z-10"
+                        >
+                            &times;
+                        </button>
+                        <img src={image.url} alt="preview" className="w-72 h-52 object-cover rounded shadow" />
+                    </div>
+                ))}
+            </div>
             {/* ReactQuill Editor */}
             <ReactQuill value={content} onChange={setContent} modules={modules} formats={formats} />
 
