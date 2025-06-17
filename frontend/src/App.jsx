@@ -60,6 +60,8 @@ import Archive from "./Pages/Admin/Archive/Archive";
 import ArchiveLayout from "./Pages/Admin/Archive/ArchiveLayout";
 import AnnouncementArchive from "./Pages/Admin/Archive/AnnouncementArchive";
 import ArticleArchive from "./Pages/Admin/Archive/ArticleArchive";
+import ReportsLayout from "./Pages/Admin/Reports/ReportsLayout";
+import DonorsPerMonth from "./Pages/Admin/Reports/DonorsPerMonth";
 
 
 function RoutesComponent() {
@@ -78,6 +80,14 @@ function RoutesComponent() {
 
       <Route path="/dashboard" element={<ProtectedRoute isAuthorized={true}><DashboardLayout /></ProtectedRoute>}>
         <Route index element={<ProtectedRoute isAdmin={true}><Dashboard /></ProtectedRoute>} />
+
+        {/* Report paths */}
+        <Route path="reports" element={<ProtectedRoute isAdmin={true}><ReportsLayout /></ProtectedRoute>}>
+          <Route path="donorsPerMonth" element={<ProtectedRoute isAdmin={true}><DonorsPerMonth /></ProtectedRoute>} />
+
+        </Route>
+
+
 
         {/* Donor paths */}
         <Route path="donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
@@ -133,6 +143,8 @@ function RoutesComponent() {
 
         <Route path="staff/requests" element={<ProtectedRoute isStaff={true}><StaffRequestView /></ProtectedRoute>} />
 
+
+        {/* Archive */}
         <Route path="archive" element={<ProtectedRoute isAdmin={true}><ArchiveLayout /></ProtectedRoute>}>
           <Route index element={<ProtectedRoute isAdmin={true}><Archive /></ProtectedRoute>} />
           <Route path="announcements" element={<ProtectedRoute isAdmin={true}><AnnouncementArchive /></ProtectedRoute>} />
