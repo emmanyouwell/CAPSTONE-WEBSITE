@@ -20,7 +20,8 @@ import {
     PackageOpenIcon,
     PlusCircleIcon,
     BadgeCheck,
-    Archive
+    Archive,
+    FileChartColumn
 } from 'lucide-react'
 import { useLocation } from 'react-router-dom';
 
@@ -68,13 +69,27 @@ const SidebarComponent = ({ userDetails }) => {
         <main>
             <Sidebar userDetails={userDetails}>
                 {userDetails && (userDetails?.role === "Admin" || userDetails?.role === "SuperAdmin") &&
-                    <SidebarItem
-                        icon={<LayoutDashboard className="text-secondary" size={20} />}
-                        text="Dashboard"
-                        path="/dashboard"
-                        prefix="dashboard"
-                        alert
-                    />
+                    <>
+                        <SidebarItem
+                            icon={<LayoutDashboard className="text-secondary" size={20} />}
+                            text="Dashboard"
+                            path="/dashboard"
+                            prefix="dashboard"
+
+                        />
+
+                        <SidebarItem
+                            icon={<FileChartColumn className="text-secondary" size={20} />}
+                            text="Reports"
+                            prefix="reports"
+                        >
+                            <SidebarItem
+                                icon={<BarChart3 className="text-secondary" size={20} />}
+                                text="Breast Milk Donors"
+                                path="/dashboard/reports/donorsPerMonth"
+                                prefix="reports" />
+                        </SidebarItem>
+                    </>
                 }
 
                 {Object.entries(groupedItems).map(([category, items], index) => (
