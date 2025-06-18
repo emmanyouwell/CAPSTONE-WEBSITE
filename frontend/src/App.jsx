@@ -83,7 +83,7 @@ function RoutesComponent() {
 
         {/* Report paths */}
         <Route path="reports" element={<ProtectedRoute isAdmin={true}><ReportsLayout /></ProtectedRoute>}>
-          <Route path="donorsPerMonth" element={<ProtectedRoute isAdmin={true}><DonorsPerMonth /></ProtectedRoute>} />
+          <Route index element={<ProtectedRoute isAdmin={true}><DonorsPerMonth /></ProtectedRoute>} />
 
         </Route>
 

@@ -198,7 +198,7 @@ export const sortDonation = (donations, order = "desc") => {
     return donationsWithDate.map((item) => item.donation);
 }
 
-export const sortRequest = (requests, order="desc")=>{
+export const sortRequest = (requests, order = "desc") => {
     if (!Array.isArray(requests)) return [];
     // Map each request to an object with its parsed date and original request
     const requestsWithDate = requests
@@ -223,3 +223,60 @@ export const sortRequest = (requests, order="desc")=>{
     // Return the original request objects, now sorted
     return requestsWithDate.map((item) => item.request);
 }
+
+export const normalizeData = (months, donors, patients, milkCollected) => {
+
+
+    const page1_data = months.map((month) => {
+        const key = month.charAt(0) + month.slice(1).toLowerCase(); // e.g., "June"
+        const d = donors[key];
+        const p = patients[key];
+
+        return [
+            month,
+            d?.community || 0,
+            d?.private || 0,
+            d?.total || 0,
+            p?.inpatient || 0,
+            p?.outpatient || 0,
+            p?.total || 0,
+        ];
+    });
+
+    const page1_total = [
+        'TOTAL',
+        donors.total?.community || 0,
+        donors.total?.private || 0,
+        donors.total?.total || 0,
+        patients.total?.inpatient || 0,
+        patients.total?.outpatient || 0,
+        patients.total?.total || 0,
+    ];
+
+    const page2_data = months.map((month) => {
+        const key = month.charAt(0) + month.slice(1).toLowerCase(); // e.g., "June"
+        const d = milkCollected[key];
+        const p = patients[key];
+
+        return [
+            month,
+            d?.community / 1000 || 0,
+            d?.private / 1000 || 0,
+            d?.total / 1000 || 0,
+            p?.inpatient / 1000 || 0,
+            p?.outpatient / 1000 || 0,
+            p?.total / 1000 || 0,
+        ];
+    });
+
+    const page2_total = [
+        'TOTAL',
+        milkCollected.total?.community / 1000 || 0,
+        milkCollected.total?.private / 1000 || 0,
+        milkCollected.total?.total / 1000 || 0,
+        patients.total?.inpatient / 1000 || 0,
+        patients.total?.outpatient / 1000 || 0,
+        patients.total?.total / 1000 || 0,
+    ]
+    return { page1_data, page1_total, page2_data, page2_total };
+};
