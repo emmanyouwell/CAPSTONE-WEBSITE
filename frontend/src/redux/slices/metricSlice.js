@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth, getDonorLocation, getPatientHospital } from '../actions/metricActions';
+import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth, getDonorLocation, getPatientHospital, getPasteurizedMilkPerMonth } from '../actions/metricActions';
 import { getAvailableMilk } from '../actions/metricActions';
 import { getExpiringMilk } from '../actions/metricActions';
 export const metricSlice = createSlice({
@@ -10,6 +10,7 @@ export const metricSlice = createSlice({
         stats: {},
         available: 0,
         expiring: 0,
+        pastPerMonth: {},
         volumePerLocation: {},
         donorLocation: {},
         monthlyDonors: {},
@@ -141,6 +142,17 @@ export const metricSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
+            .addCase(getPasteurizedMilkPerMonth.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(getPasteurizedMilkPerMonth.fulfilled, (state, action) => {
+                state.loading = false;
+                state.pastPerMonth = action.payload.monthlyVolumes;
+            })
+            .addCase(getPasteurizedMilkPerMonth.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
     },
 });
 
