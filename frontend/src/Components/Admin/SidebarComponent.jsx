@@ -79,16 +79,10 @@ const SidebarComponent = ({ userDetails }) => {
                         />
 
                         <SidebarItem
-                            icon={<FileChartColumn className="text-secondary" size={20} />}
+                            icon={<BarChart3 className="text-secondary" size={20} />}
                             text="Reports"
-                            prefix="reports"
-                        >
-                            <SidebarItem
-                                icon={<BarChart3 className="text-secondary" size={20} />}
-                                text="Breast Milk Donors"
-                                path="/dashboard/reports/donorsPerMonth"
-                                prefix="reports" />
-                        </SidebarItem>
+                            path="/dashboard/reports"
+                            prefix="reports" />
                     </>
                 }
 
