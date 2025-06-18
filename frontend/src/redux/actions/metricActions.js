@@ -226,3 +226,25 @@ export const getPatientHospital = createAsyncThunk(
         }
     }
 )
+
+export const getPasteurizedMilkPerMonth = createAsyncThunk(
+    'donorsPerMonth/getPasteurizedMilkPerMonth',
+    async (thunkAPI) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true
+        }
+
+        try {
+            const response = await api.get(`${VITE_APP_URL}/api/v1/pasteurizedMilkPerMonth`, config)
+
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)

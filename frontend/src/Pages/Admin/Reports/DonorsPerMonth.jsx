@@ -5,8 +5,9 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Page, Text, View, Document, StyleSheet, pdf } from '@react-pdf/renderer';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDonorsPerMonth, getMilkPerMonth, getPatientsPerMonth } from '../../../redux/actions/metricActions';
+import { getAvailableMilk, getDispensedMilkPerMonth, getDonorsPerMonth, getMilkPerMonth, getPasteurizedMilkPerMonth, getPatientsPerMonth } from '../../../redux/actions/metricActions';
 import { normalizeData } from '../../../utils/helper';
+import Select from 'react-select';
 // Styles
 const styles = StyleSheet.create({
     page: {
@@ -72,26 +73,6 @@ const styles = StyleSheet.create({
     },
 });
 
-// const data = [
-//     ['JANUARY', 67, 7, 74, 14, 8, 22],
-//     ['FEBRUARY', 151, 9, 160, 16, 8, 24],
-//     ['MARCH', 145, 11, 156, 19, 10, 29],
-//     ['APRIL', 82, 10, 92, 18, 9, 27],
-//     ['MAY', 258, 10, 268, 15, 17, 32],
-//     ['JUNE', 169, 10, 179, 11, 20, 31],
-//     ['JULY', 121, 11, 132, 12, 13, 25],
-//     ['AUGUST', 238, 8, 246, 16, 12, 28],
-//     ['SEPTEMBER', 148, 8, 156, 15, 18, 33],
-//     ['OCTOBER', 150, 14, 164, 16, 5, 21],
-//     ['NOVEMBER', 123, 9, 132, 15, 6, 21],
-//     ['DECEMBER', 91, 8, 99, 16, 12, 28],
-// ];
-
-
-
-
-// Total row
-// const total = ['TOTAL', 1743, 115, 1858, 183, 138, 321];
 const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
     <Document>
         <Page size="A4" orientation="landscape" style={styles.page}>
@@ -181,7 +162,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
                         <Text style={styles.cell}>{row[4]}</Text>
                         <Text style={styles.cell}>{row[5]}</Text>
                         <Text style={[styles.cell, styles.totalCol]}>{row[6]}</Text>
-                        <Text style={styles.cell}>{row[6]}</Text>
+                        <Text style={styles.cell}>{row[7]}</Text>
                     </View>
                 ))}
 
@@ -194,7 +175,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
                     <Text style={styles.cell}>{page2_total[4]}</Text>
                     <Text style={styles.cell}>{page2_total[5]}</Text>
                     <Text style={styles.cell}>{page2_total[6]}</Text>
-                    <Text style={styles.cell}>{page2_total[6]}</Text>
+                    <Text style={styles.cell}>{page2_total[7]}</Text>
                 </View>
             </View>
         </Page>
@@ -202,7 +183,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
 );
 const DonorsPerMonth = () => {
     const dispatch = useDispatch();
-    const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
+    const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, pastPerMonth} = useSelector((state) => state.metrics);
     const [pdfUrl, setPdfUrl] = useState(null);
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     // Data rows
@@ -215,24 +196,48 @@ const DonorsPerMonth = () => {
             const blob = await pdf(<MyDocument page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} />).toBlob();
             setPdfUrl(URL.createObjectURL(blob));
         }
-        if (monthlyDonors && monthlyPatients && stats) {
-            const { page1_data, page1_total, page2_data, page2_total } = normalizeData(months, monthlyDonors, monthlyPatients, stats);
+        if (monthlyDonors && monthlyPatients && stats && dispensedMilk && pastPerMonth) {
+            const { page1_data, page1_total, page2_data, page2_total } = normalizeData(months, monthlyDonors, monthlyPatients, stats, dispensedMilk, pastPerMonth);
 
             generatePdf(page1_data, page1_total, page2_data, page2_total);
         }
 
-    }, [monthlyDonors, monthlyPatients, stats])
+    }, [monthlyDonors, monthlyPatients, stats, dispensedMilk, pastPerMonth])
     useEffect(() => {
         dispatch(getDonorsPerMonth());
         dispatch(getPatientsPerMonth());
         dispatch(getMilkPerMonth());
+        dispatch(getDispensedMilkPerMonth());
+        dispatch(getPasteurizedMilkPerMonth())
     }, [dispatch])
+    
     return (
-        <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
-            <div className="h-[80vh]">
-                {pdfUrl ? <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} /> : <p>Loading...</p>}
-            </div>
-        </Worker>
+        <>
+            {/* <Select
+                className="w-full select-border-black"
+                value={selectedDonor ? options.find(opt => opt.value._id === selectedDonor._id) : null}
+                onChange={(selected) => { setSelectedDonor(selected.value) }}
+                options={options}
+                isSearchable
+                formatOptionLabel={(option) =>
+                (
+                    <div className="flex flex-col text-lg">
+                        <span className="font-semibold">
+                            {option.value.user.name.first} {option.value.user.name.last} | {option.value.user.phone}
+                        </span>
+                        <span className="text-md">
+                            {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
+                        </span>
+                    </div>
+                )
+                }
+            /> */}
+            <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
+                <div className="h-[80vh]">
+                    {pdfUrl ? <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} /> : <p>Loading...</p>}
+                </div>
+            </Worker>
+        </>
     )
 }
 

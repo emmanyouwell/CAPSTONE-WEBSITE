@@ -224,7 +224,7 @@ export const sortRequest = (requests, order = "desc") => {
     return requestsWithDate.map((item) => item.request);
 }
 
-export const normalizeData = (months, donors, patients, milkCollected) => {
+export const normalizeData = (months, donors, patients, milkCollected, milkDispensed, available) => {
 
 
     const page1_data = months.map((month) => {
@@ -256,8 +256,8 @@ export const normalizeData = (months, donors, patients, milkCollected) => {
     const page2_data = months.map((month) => {
         const key = month.charAt(0) + month.slice(1).toLowerCase(); // e.g., "June"
         const d = milkCollected[key];
-        const p = patients[key];
-
+        const p = milkDispensed[key];
+        const a = available[key];
         return [
             month,
             d?.community / 1000 || 0,
@@ -266,6 +266,7 @@ export const normalizeData = (months, donors, patients, milkCollected) => {
             p?.inpatient / 1000 || 0,
             p?.outpatient / 1000 || 0,
             p?.total / 1000 || 0,
+            a ? a / 1000 : 0,
         ];
     });
 
@@ -274,9 +275,10 @@ export const normalizeData = (months, donors, patients, milkCollected) => {
         milkCollected.total?.community / 1000 || 0,
         milkCollected.total?.private / 1000 || 0,
         milkCollected.total?.total / 1000 || 0,
-        patients.total?.inpatient / 1000 || 0,
-        patients.total?.outpatient / 1000 || 0,
-        patients.total?.total / 1000 || 0,
+        milkDispensed.total?.inpatient / 1000 || 0,
+        milkDispensed.total?.outpatient / 1000 || 0,
+        milkDispensed.total?.total / 1000 || 0,
+        available.total?.total / 1000 || 0
     ]
     return { page1_data, page1_total, page2_data, page2_total };
 };

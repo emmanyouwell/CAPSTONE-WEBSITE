@@ -48,7 +48,8 @@ const RequestTable = ({ currentPage, totalPages, requests, setRefresh }) => {
             const data = {
                 transport: selectedOption,
                 request: id,
-                approvedBy: getUser()._id
+                approvedBy: getUser()._id,
+                dispenseAt: Date.now()
             }
             console.log(data);
 
@@ -64,6 +65,7 @@ const RequestTable = ({ currentPage, totalPages, requests, setRefresh }) => {
             const data = {
                 transport: selectedOption,
                 request: reservedRequest,
+                dispenseAt: Date.now(),
                 approvedBy: getUser()._id
             }
             dispatch(inpatientDispense(data)).then(() => {
