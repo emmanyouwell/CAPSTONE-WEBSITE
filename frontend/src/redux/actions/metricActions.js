@@ -5,7 +5,7 @@ import api from '../../api/axiosInstance'
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 export const getMilkPerMonth = createAsyncThunk(
     'milkPerMonth/getMilkPerMonth',
-    async (thunkAPI) => {
+    async ({year=""} = {}, thunkAPI) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -14,7 +14,13 @@ export const getMilkPerMonth = createAsyncThunk(
         }
 
         try {
-            const response = await api.get(`${VITE_APP_URL}/api/v1/milkPerMonth`, config)
+            console.log("Fetching milk per month...")
+            let urlString = `${VITE_APP_URL}/api/v1/milkPerMonth`
+            if (year!=="") {
+                urlString += `?year=${year}`
+            }
+            console.log("urlString: ", urlString)
+            const response = await api.get(urlString, config)
 
             return response.data;
 
@@ -27,7 +33,7 @@ export const getMilkPerMonth = createAsyncThunk(
 
 export const getDonorsPerMonth = createAsyncThunk(
     'donorsPerMonth/getDonorsPerMonth',
-    async (thunkAPI) => {
+    async ({year=""} = {}, thunkAPI) => {
 
        
         const config = {
@@ -38,7 +44,11 @@ export const getDonorsPerMonth = createAsyncThunk(
         }
 
         try {
-            const response = await api.get(`${VITE_APP_URL}/api/v1/donorsPerMonth`, config)
+            let urlString = `${VITE_APP_URL}/api/v1/donorsPerMonth`
+            if (year!=="") {
+                urlString += `?year=${year}`
+            }
+            const response = await api.get(urlString, config)
 
             return response.data;
 
@@ -51,7 +61,7 @@ export const getDonorsPerMonth = createAsyncThunk(
 
 export const getDispensedMilkPerMonth = createAsyncThunk(
     'donorsPerMonth/getDispensedMilkPerMonth',
-    async (thunkAPI) => {
+    async ({year=""} = {}, thunkAPI) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +70,11 @@ export const getDispensedMilkPerMonth = createAsyncThunk(
         }
 
         try {
-            const response = await api.get(`${VITE_APP_URL}/api/v1/dispensePerMonth`, config)
+            let urlString = `${VITE_APP_URL}/api/v1/dispensePerMonth`
+            if (year!=="") {
+                urlString += `?year=${year}`
+            }
+            const response = await api.get(urlString, config)
 
             return response.data;
 
@@ -73,7 +87,7 @@ export const getDispensedMilkPerMonth = createAsyncThunk(
 
 export const getPatientsPerMonth = createAsyncThunk(
     'donorsPerMonth/getPatientsPerMonth',
-    async (thunkAPI) => {
+    async ({year=""} = {}, thunkAPI) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -82,7 +96,11 @@ export const getPatientsPerMonth = createAsyncThunk(
         }
 
         try {
-            const response = await api.get(`${VITE_APP_URL}/api/v1/patientsPerMonth`, config)
+            let urlString= `${VITE_APP_URL}/api/v1/patientsPerMonth`;
+            if (year!=="") {
+                urlString += `?year=${year}`
+            }
+            const response = await api.get(urlString, config)
 
             return response.data;
 
@@ -117,7 +135,7 @@ export const getRequestsPerMonth = createAsyncThunk(
 
 export const getAvailableMilk = createAsyncThunk(
     'donorsPerMonth/getAvailableMilk',
-    async (thunkAPI) => {
+    async ({year=""} = {}, thunkAPI) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -126,7 +144,11 @@ export const getAvailableMilk = createAsyncThunk(
         }
 
         try {
-            const response = await api.get(`${VITE_APP_URL}/api/v1/availableMilk`, config)
+            let urlString = `${VITE_APP_URL}/api/v1/availableMilk`
+            if (year!=="") {
+                urlString += `?year=${year}`
+            }
+            const response = await api.get(urlString, config)
 
             return response.data;
 
@@ -229,7 +251,7 @@ export const getPatientHospital = createAsyncThunk(
 
 export const getPasteurizedMilkPerMonth = createAsyncThunk(
     'donorsPerMonth/getPasteurizedMilkPerMonth',
-    async (thunkAPI) => {
+    async ({year=""} = {},thunkAPI) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -238,7 +260,11 @@ export const getPasteurizedMilkPerMonth = createAsyncThunk(
         }
 
         try {
-            const response = await api.get(`${VITE_APP_URL}/api/v1/pasteurizedMilkPerMonth`, config)
+            let urlString=`${VITE_APP_URL}/api/v1/pasteurizedMilkPerMonth`
+            if (year!=="") {
+                urlString += `?year=${year}`
+            }
+            const response = await api.get(urlString, config)
 
             return response.data;
 

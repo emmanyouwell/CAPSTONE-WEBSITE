@@ -5,7 +5,17 @@ import { getExpiringMilk } from '../actions/metricActions';
 export const metricSlice = createSlice({
     name: 'metric',
     initialState: {
-        loading: false,
+        statsLoading: false,
+        monthlyDonorsLoading: false,
+        pastPerMonthLoading: false,
+        volumePerLocationLoading: false,
+        donorLocationLoading: false,
+        dispensedMilkLoading: false,
+        monthlyPatientsLoading: false,
+        monthlyRequestsLoading: false,
+        patientHospitalLoading: false,
+        availableLoading: false,
+        expiringLoading: false,
         error: null,
         stats: {},
         available: 0,
@@ -24,133 +34,133 @@ export const metricSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getMilkPerMonth.pending, (state, action) => {
-                state.loading = true;
+                state.statsLoading = true;
             })
             .addCase(getMilkPerMonth.fulfilled, (state, action) => {
-                state.loading = false;
+                state.statsLoading = false;
                 state.stats = action.payload.stats;
             })
             .addCase(getMilkPerMonth.rejected, (state, action) => {
-                state.loading = false;
+                state.statsLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getDonorsPerMonth.pending, (state, action) => {
-                state.loading = true;
+                state.monthlyDonorsLoading = true;
             })
             .addCase(getDonorsPerMonth.fulfilled, (state, action) => {
-                state.loading = false;
+                state.monthlyDonorsLoading = false;
                 state.monthlyDonors = action.payload.result;
             })
             .addCase(getDonorsPerMonth.rejected, (state, action) => {
-                state.loading = false;
+                state.monthlyDonorsLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getDispensedMilkPerMonth.pending, (state, action) => {
-                state.loading = true;
+                state.dispensedMilkLoading = true;
             })
             .addCase(getDispensedMilkPerMonth.fulfilled, (state, action) => {
-                state.loading = false;
+                state.dispensedMilkLoading = false;
                 state.dispensedMilk = action.payload.dispensedMilk;
             })
             .addCase(getDispensedMilkPerMonth.rejected, (state, action) => {
-                state.loading = false;
+                state.dispensedMilkLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getPatientsPerMonth.pending, (state, action) => {
-                state.loading = true;
+                state.monthlyPatientsLoading = true;
             })
             .addCase(getPatientsPerMonth.fulfilled, (state, action) => {
-                state.loading = false;
+                state.monthlyPatientsLoading = false;
                 state.monthlyPatients = action.payload.recipients;
             })
             .addCase(getPatientsPerMonth.rejected, (state, action) => {
-                state.loading = false;
+                state.monthlyPatientsLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getRequestsPerMonth.pending, (state, action) => {
-                state.loading = true;
+                state.monthlyRequestsLoading = true;
             })
             .addCase(getRequestsPerMonth.fulfilled, (state, action) => {
-                state.loading = false;
+                state.monthlyRequestsLoading = false;
                 state.monthlyRequests = action.payload.requests;
             })
             .addCase(getRequestsPerMonth.rejected, (state, action) => {
-                state.loading = false;
+                state.monthlyRequestsLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getAvailableMilk.pending, (state, action) => {
-                state.loading = true;
+                state.availableLoading = true;
             })
             .addCase(getAvailableMilk.fulfilled, (state, action) => {
-                state.loading = false;
+                state.availableLoading = false;
                 state.available = action.payload.availableMilk;
             })
             .addCase(getAvailableMilk.rejected, (state, action) => {
-                state.loading = false;
+                state.availableLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getExpiringMilk.pending, (state, action) => {
-                state.loading = true;
+                state.expiringLoading = true;
             })
             .addCase(getExpiringMilk.fulfilled, (state, action) => {
-                state.loading = false;
+                state.expiringLoading = false;
                 state.expiring = action.payload.expiringMilk;
             })
             .addCase(getExpiringMilk.rejected, (state, action) => {
-                state.loading = false;
+                state.expiringLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getVolumePerLocation.pending, (state, action) => {
-                state.loading = true;
+                state.volumePerLocationLoading = true;
             })
             .addCase(getVolumePerLocation.fulfilled, (state, action) => {
-                state.loading = false;
+                state.volumePerLocationLoading = false;
                 state.volumePerLocation = action.payload.volumePerLocation;
             })
             .addCase(getVolumePerLocation.rejected, (state, action) => {
-                state.loading = false;
+                state.volumePerLocationLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getDonorLocation.pending, (state, action) => {
-                state.loading = true;
+                state.donorLocationLoading = true;
             })
             .addCase(getDonorLocation.fulfilled, (state, action) => {
-                state.loading = false;
+                state.donorLocationLoading = false;
                 state.donorLocation = action.payload.donors;
             })
             .addCase(getDonorLocation.rejected, (state, action) => {
-                state.loading = false;
+                state.donorLocationLoading = false;
                 state.error = action.payload;
             })
 
             .addCase(getPatientHospital.pending, (state, action) => {
-                state.loading = true;
+                state.patientHospitalLoading = true;
             })
             .addCase(getPatientHospital.fulfilled, (state, action) => {
-                state.loading = false;
+                state.patientHospitalLoading = false;
                 state.patientHospital = action.payload.hospitals;
             })
             .addCase(getPatientHospital.rejected, (state, action) => {
-                state.loading = false;
+                state.patientHospitalLoading = false;
                 state.error = action.payload;
             })
             .addCase(getPasteurizedMilkPerMonth.pending, (state, action) => {
-                state.loading = true;
+                state.pastPerMonthLoading = true;
             })
             .addCase(getPasteurizedMilkPerMonth.fulfilled, (state, action) => {
-                state.loading = false;
+                state.pastPerMonthLoading = false;
                 state.pastPerMonth = action.payload.monthlyVolumes;
             })
             .addCase(getPasteurizedMilkPerMonth.rejected, (state, action) => {
-                state.loading = false;
+                state.pastPerMonthLoading = false;
                 state.error = action.payload;
             });
     },

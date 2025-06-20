@@ -4,9 +4,9 @@ const HorizontalLoader = () => {
     return (
 
         <div className="w-full gap-x-2 flex items-center mb-8">
-            <div className="w-3 bg-[#d07697] animate-pulse h-3 rounded-full"></div>
-            <div className="w-3 animate-pulse h-3 bg-[#dc5385] rounded-full"></div>
-            <div className="w-3 h-3 animate-pulse bg-[#E53777] rounded-full"></div>
+            <div className="w-2 bg-[#d07697] animate-bounce h-2 rounded-full"></div>
+            <div className="w-2 animate-bounce h-2 bg-[#dc5385] rounded-full"></div>
+            <div className="w-2 h-2 animate-bounce bg-[#E53777] rounded-full"></div>
         </div>
 
     )
