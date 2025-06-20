@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAvailableMilk, getDispensedMilkPerMonth, getDonorsPerMonth, getMilkPerMonth, getPasteurizedMilkPerMonth, getPatientsPerMonth } from '../../../redux/actions/metricActions';
 import { normalizeData } from '../../../utils/helper';
 import Select from 'react-select';
+import { Typography } from '@material-tailwind/react';
 // Styles
 const styles = StyleSheet.create({
     page: {
@@ -183,14 +184,27 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
 );
 const DonorsPerMonth = () => {
     const dispatch = useDispatch();
-    const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, pastPerMonth} = useSelector((state) => state.metrics);
+    const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, pastPerMonth } = useSelector((state) => state.metrics);
     const [pdfUrl, setPdfUrl] = useState(null);
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
+    const [selectedYear, setSelectedYear] = useState(null);
     // Data rows
     const months = [
         'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
         'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'
     ];
+    const currentYear = new Date().getFullYear();
+    const startYear = 2020;
+
+    const yearOptions = [];
+
+    for (let year = startYear; year <= currentYear; year++) {
+        yearOptions.push({ value: year, label: year.toString() });
+    }
+    const handleChange = (selectedOption) => {
+        setSelectedYear(selectedOption);
+
+    };
     useEffect(() => {
         const generatePdf = async (page1_data, page1_total, page2_data, page2_total) => {
             const blob = await pdf(<MyDocument page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} />).toBlob();
@@ -208,30 +222,32 @@ const DonorsPerMonth = () => {
         dispatch(getPatientsPerMonth());
         dispatch(getMilkPerMonth());
         dispatch(getDispensedMilkPerMonth());
-        dispatch(getPasteurizedMilkPerMonth())
+        dispatch(getPasteurizedMilkPerMonth());
+        setSelectedYear({ value: currentYear, label: currentYear.toString() })
     }, [dispatch])
-    
+    useEffect(() => {
+        if (selectedYear) {
+            dispatch(getDonorsPerMonth({ year: selectedYear.value }));
+            dispatch(getPatientsPerMonth({ year: selectedYear.value }));
+            dispatch(getMilkPerMonth({ year: selectedYear.value }));
+            dispatch(getDispensedMilkPerMonth({ year: selectedYear.value }));
+            dispatch(getPasteurizedMilkPerMonth({ year: selectedYear.value }))
+        }
+
+    }, [dispatch, selectedYear])
     return (
         <>
-            {/* <Select
-                className="w-full select-border-black"
-                value={selectedDonor ? options.find(opt => opt.value._id === selectedDonor._id) : null}
-                onChange={(selected) => { setSelectedDonor(selected.value) }}
-                options={options}
-                isSearchable
-                formatOptionLabel={(option) =>
-                (
-                    <div className="flex flex-col text-lg">
-                        <span className="font-semibold">
-                            {option.value.user.name.first} {option.value.user.name.last} | {option.value.user.phone}
-                        </span>
-                        <span className="text-md">
-                            {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
-                        </span>
-                    </div>
-                )
-                }
-            /> */}
+            <div className="flex gap-4 items-center mb-4">
+                <Typography variant="h5">Year:</Typography>
+                <Select
+                    options={yearOptions}
+                    value={selectedYear}
+                    onChange={handleChange}
+                    placeholder="Select year"
+                    className="w-max"
+                />
+            </div>
+
             <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
                 <div className="h-[80vh]">
                     {pdfUrl ? <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} /> : <p>Loading...</p>}

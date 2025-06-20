@@ -17,7 +17,9 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { Accordion, AccordionHeader, AccordionBody, Card, CardHeader, Typography } from '@material-tailwind/react';
 import { formatNumber } from '../../utils/helper'
 import { donorsPerBarangay, milkCollectedChartData, milkDonatedPerBarangay, monthlyDispensedMilkChartData, monthlyDonorsChartData, monthlyPatientsChartData, patientPerHospital } from '../../data/metricsData';
-
+import Loader from '../../Components/Loader/Loader'
+import HorizontalLoader from '../../Components/Loader/HorizontalLoader';
+import { useCountUp } from '../../utils/hooks/useCountUp';
 // Register required components
 ChartJS.register(BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
 
@@ -38,7 +40,7 @@ function Icon({ id, open }) {
 }
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
+  const {statsLoading, monthlyDonorsLoading, expiringLoading, dispensedMilkLoading, monthlyPatientsLoading, monthlyRequestsLoading, availableLoading, stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
 
   useEffect(() => {
     dispatch(getMilkPerMonth());
@@ -52,6 +54,15 @@ const Dashboard = () => {
     dispatch(getDonorLocation());
     dispatch(getPatientHospital());
   }, [dispatch])
+
+  const animatedAvailable = useCountUp(available, availableLoading, 800, 20);
+  const animatedExpiring = useCountUp(expiring, expiringLoading, 800, 20);
+  const animatedMonthlyDonors = useCountUp(monthlyDonors?.total?.total, monthlyDonorsLoading, 800, 20);
+  const animatedMonthlyPatients = useCountUp(monthlyPatients?.total?.total, monthlyPatientsLoading, 800, 20);
+  const animatedDispensedMilk = useCountUp(dispensedMilk?.total?.total, dispensedMilkLoading, 800, 20);
+  const animatedStats = useCountUp(stats?.total?.total, statsLoading, 800, 20);
+  const animatedCompletedRequests = useCountUp(monthlyRequests?.completed, monthlyRequestsLoading, 800, 20);
+  const animatedPendingRequests = useCountUp(monthlyRequests?.pending, monthlyRequestsLoading, 800, 20);
 
   const { data: statsData, options: statsOptions } = milkCollectedChartData(stats);
   const { data: donorData, options: donorOptions } = monthlyDonorsChartData(monthlyDonors);
@@ -76,7 +87,7 @@ const Dashboard = () => {
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Available Pasteurized Milk</span>
             <div className="w-full justify-end flex items-baseline gap-2">
-              <span className="font-bold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}>{available ? available.toLocaleString() : '0'}</span>
+              <span className="font-bold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}>{animatedAvailable.toLocaleString()}</span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
@@ -84,7 +95,7 @@ const Dashboard = () => {
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Unpasteurized Milk</span>
             <div className="flex items-baseline justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {expiring ? expiring.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedExpiring.toLocaleString()} </span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
@@ -92,14 +103,14 @@ const Dashboard = () => {
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Distributed</span>
             <div className="flex items-baseline justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {dispensedMilk?.total?.total ? dispensedMilk?.total?.total.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedDispensedMilk.toLocaleString()} </span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}>ml</span>
             </div>
           </div>
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Collected</span>
             <div className="flex items-baseline justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {stats?.total?.total ? stats?.total?.total.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedStats.toLocaleString() } </span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
@@ -107,7 +118,7 @@ const Dashboard = () => {
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Donors</span>
             <div className="flex items-center justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyDonors?.total?.total ? monthlyDonors?.total?.total.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedMonthlyDonors.toLocaleString()} </span>
               <UserIcon className="text-secondary w-8 h-8" />
             </div>
           </div>
@@ -115,21 +126,21 @@ const Dashboard = () => {
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Recipients</span>
             <div className="flex items-center justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyPatients?.total?.total ? monthlyPatients?.total?.total.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedMonthlyPatients.toLocaleString()} </span>
               <UserIcon className="text-secondary w-8 h-8" />
             </div>
           </div>
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Completed Requests</span>
             <div className="flex items-center justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyRequests?.completed ? monthlyRequests?.completed.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedCompletedRequests.toLocaleString()} </span>
               <LifebuoyIcon className="text-secondary w-8 h-8" />
             </div>
           </div>
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Pending Requests</span>
             <div className="flex items-center justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {monthlyRequests?.pending ? monthlyRequests?.pending.toLocaleString() : '0'} </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedPendingRequests.toLocaleString()} </span>
               <LifebuoyIcon className="text-secondary w-8 h-8" />
             </div>
           </div>
