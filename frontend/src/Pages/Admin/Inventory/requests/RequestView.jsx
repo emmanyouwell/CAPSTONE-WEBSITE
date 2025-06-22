@@ -12,7 +12,9 @@ import { getUser } from '../../../../utils/helper';
 import Select from 'react-select'
 import Loader from '../../../../Components/Loader/Loader';
 import { resetDelete, resetSuccess } from '../../../../redux/slices/requestSlice';
+import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext';
 const RequestView = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
     const { request, loading, error, success } = useSelector(state => state.requests)
     const { loading: loadingPatients, recipients } = useSelector(state => state.recipients)
@@ -32,6 +34,13 @@ const RequestView = () => {
         days: '',
         images: []
     }));
+
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Requests' }
+        ])
+    },[])
     useEffect(() => {
         dispatch(getDevices())
         dispatch(getRequests())

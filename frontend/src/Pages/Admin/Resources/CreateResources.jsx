@@ -11,6 +11,7 @@ import { FilePond, registerPlugin } from 'react-filepond';
 
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 registerPlugin(FilePondPluginFileEncode, FilePondPluginFileValidateType);
 const modules = {
     toolbar: {
@@ -44,6 +45,7 @@ const formats = [
 ];
 
 const CreateResources = () => {
+    const { setBreadcrumb } = useBreadcrumb();
     const pondRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -102,7 +104,13 @@ const CreateResources = () => {
             dispatch(resetSuccess());
         }
     }, [success, navigate, dispatch])
-
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Articles", path: "/dashboard/resources" },
+            { name: "Create Article", path: "/dashboard/resources/create" }
+        ]);
+    },[])
     return (
         <div className="p-4 space-y-4">
 

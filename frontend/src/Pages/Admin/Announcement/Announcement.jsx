@@ -12,7 +12,9 @@ import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
 import { Archive, EyeIcon, SquarePenIcon, Trash } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 const Announcement = () => {
+    const { setBreadcrumb } = useBreadcrumb();
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
     const { announcements, isDeleted, loading, error } = useSelector((state) => state.announcements)
@@ -93,6 +95,12 @@ const Announcement = () => {
             },
         }),
     ];
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Announcements' }
+        ])
+    },[])
     return (
         <>
             <section className="p-4">

@@ -4,10 +4,18 @@ import { getLettings } from '../../../../redux/actions/lettingActions'
 import { Button, Card } from '@material-tailwind/react';
 import { ArrowLongLeftIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-
+import {useBreadcrumb} from '../../../Breadcrumb/BreadcrumbContext'
 const History = () => {
     const dispatch = useDispatch();
+    const {setBreadcrumb} = useBreadcrumb();
     const { lettings, loading } = useSelector((state) => state.lettings);
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Event Schedules', path: '/dashboard/events' },
+            { name: 'History'}
+        ])
+    },[])
     useEffect(() => {
         dispatch(getLettings());
     }, [dispatch])
@@ -39,7 +47,7 @@ const History = () => {
                             <div className="text-md">Donors: {lets.attendance.length}</div>
                             <div className="text-md">Total collected volume: {lets.totalVolume} ml</div>
                         </div>
-                        <Link to={`/dashboard/events/attendance/${lets._id}`}>
+                        <Link to={`/dashboard/events/attendance/${lets._id}`} state={{eventStatus: lets.status}}>
                             <Button className="bg-secondary"><EyeIcon className="h-5 w-5" /></Button>
                         </Link>
                     </Card>))}

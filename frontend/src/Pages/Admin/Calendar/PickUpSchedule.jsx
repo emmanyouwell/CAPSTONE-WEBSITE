@@ -5,10 +5,18 @@ import { getAllSchedules } from '../../../redux/actions/scheduleActions'
 import { Typography } from '@material-tailwind/react'
 import ScheduleComponent from '../../../Components/Admin/Calendar/Calendar'
 import { AddEvent } from '../../../Components/Admin/Calendar/AddEvent'
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 
 const PickUpSchedule = () => {
     const dispatch = useDispatch();
+    const {setBreadcrumb} = useBreadcrumb();
     const { schedules, loading, error } = useSelector((state) => state.schedules);
+    useEffect(()=>{
+        setBreadcrumb([
+            {name: "Dashboard", path: "/dashboard"},
+            {name: "Pick-up Schedules"}
+        ])
+    },[])
     useEffect(() => {
         dispatch(getAllSchedules());
     }, [dispatch])

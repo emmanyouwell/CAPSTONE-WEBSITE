@@ -25,6 +25,7 @@ import { addInventory } from "../../../redux/actions/inventoryActions";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 import DatePicker from "react-datepicker";
+import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 function Icon({ id, open }) {
     return (
         <svg
@@ -40,6 +41,7 @@ function Icon({ id, open }) {
     );
 }
 const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
+    const {setBreadcrumb} = useBreadcrumb();
     const { id } = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -276,7 +278,13 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
         console.log("donors: ", selectedBags);
     }
 
-
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Refrigerators', path: '/dashboard/inventory/refrigerator' },
+            { name: 'Unpasteurized Milk' }
+        ])
+    },[])
     useEffect(() => {
         dispatch(openFridge(id));
         dispatch(getFridges())

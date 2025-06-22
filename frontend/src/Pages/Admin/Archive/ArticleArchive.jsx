@@ -11,7 +11,9 @@ import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
 import { EyeIcon, Pencil, RotateCcw, SquarePenIcon, Trash } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 const ArticleArchive = () => {
+  const {setBreadcrumb} = useBreadcrumb();
   const [IsLargeScreen, setIsLargeScreen] = useState(false);
   const dispatch = useDispatch();
   const { articles, isDeleted, loading, error, success } = useSelector((state) => state.articles);
@@ -27,6 +29,13 @@ const ArticleArchive = () => {
   const handleSubmit = () => {
     dispatch(getArchivedArticles(search));
   }
+  useEffect(()=>{
+    setBreadcrumb([
+      { name: "Dashboard", path: "/dashboard" },
+      { name: "Archive", path: "/dashboard/archive" },
+      { name: "Articles", path: "/dashboard/archive/articles" }
+    ])
+  },[])
   useEffect(() => {
 
     const handleResize = () => {

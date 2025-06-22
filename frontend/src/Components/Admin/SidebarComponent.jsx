@@ -39,7 +39,7 @@ const superAdminItems = [
 
     { title: "Account Management", route: "/dashboard/account", path: 'account', icon: <UsersIcon className="text-secondary" size={20} />, category: "Management" },
     { title: "Announcement Management", route: "/dashboard/announcement", path: 'announcement', icon: <MegaphoneIcon className="text-secondary" size={20} />, category: "Management" },
-    { title: "Resources Management", route: "/dashboard/resources", path: 'resources', icon: <NewspaperIcon className="text-secondary" size={20} />, category: "Management" },
+    { title: "Articles Management", route: "/dashboard/resources", path: 'resources', icon: <NewspaperIcon className="text-secondary" size={20} />, category: "Management" },
     { title: "Archive", route: "/dashboard/archive", path: 'archive', icon: <Archive className="text-secondary" size={20} />, category: "Archive" },
 
 ];

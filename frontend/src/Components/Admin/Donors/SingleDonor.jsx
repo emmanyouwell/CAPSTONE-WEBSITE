@@ -10,12 +10,20 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../DataTables/tanstack/DataTable'
 import { set } from 'date-fns'
+import { useBreadcrumb } from '../../Breadcrumb/BreadcrumbContext'
 const SingleDonor = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const { id } = useParams();
     const dispatch = useDispatch();
     const { donorDetails, loading, error } = useSelector((state) => state.donors);
     const [chartData, setChartData] = useState([]);
-
+    useEffect(()=>{
+        setBreadcrumb([
+            {name: "Dashboard", path: "/dashboard"},
+            {name: "Donors", path: "/dashboard/donors"},
+            {name: "Profile"}
+        ])
+    },[donorDetails])
     useEffect(() => {
         dispatch(getSingleDonor(id));
     }, [dispatch, id])

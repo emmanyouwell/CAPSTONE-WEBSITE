@@ -8,14 +8,22 @@ import { AddEvent } from '../../../Components/Admin/Calendar/AddEvent'
 import { getLettings } from '../../../redux/actions/lettingActions'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 
 const Schedule = () => {
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
 
     const { lettings, loading, error } = useSelector((state) => state.lettings);
     useEffect(() => {
         dispatch(getLettings());
     }, [dispatch])
+    useEffect(() => {
+        setBreadcrumb([
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Event Schedules", path: "/dashboard/events" }
+        ])
+    }, [])
 
 
     return (
@@ -23,16 +31,16 @@ const Schedule = () => {
             <div className="flex items-center justify-between gap-4 mb-4">
                 <AddEvent />
                 <Link to="/dashboard/event/history">
-                <Button size="sm" color="deep-orange" className="flex items-center justify-center gap-2">
-                    <ClockIcon className="w-5 h-5" />
-                    History
-                </Button>
+                    <Button size="sm" color="deep-orange" className="flex items-center justify-center gap-2">
+                        <ClockIcon className="w-5 h-5" />
+                        History
+                    </Button>
                 </Link>
             </div>
 
             {lettings && <ScheduleComponent events={lettings} type="events" />}
             <div className="flex items-center gap-4">
-                
+
                 <div className="flex items-center">
                     <div className="w-3 h-3 bg-neutral-dark rounded-full"></div>
                     <Typography className="ml-2" variant="lead">Upcoming</Typography>

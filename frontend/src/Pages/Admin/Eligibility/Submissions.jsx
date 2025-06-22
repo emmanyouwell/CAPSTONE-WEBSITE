@@ -13,10 +13,18 @@ import { Link } from 'react-router-dom';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 import HorizontalLoader from '../../../Components/Loader/HorizontalLoader';
 import Loader from '../../../Components/Loader/Loader';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 
 const Submissions = () => {
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
     const { submissions, isUpdated, model, loading, pythonLoading } = useSelector((state) => state.donors);
+    useEffect(() => {
+        setBreadcrumb([
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Interview Form Submissions", path: "/dashboard/submissions" }
+        ])
+    }, [])
     useEffect(() => {
         dispatch(getModelReport())
         dispatch(getSubmissions());
@@ -83,8 +91,8 @@ const Submissions = () => {
                         <a target="_blank" href={`https://script.google.com/macros/s/AKfycbwYOc13QaEjdGoJvdlFEHZ2pSsIlUmx0zksazMKD3qfXYGnYG70eNSB7M5ZX0aOiU1y/exec?submissionId=${submissionID}`}>
                             <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
                         </a>
-                        <IconButton variant="text" className="text-secondary rounded-full" onClick={()=>handleOpen(_id)}><SquarePenIcon size={22} className="text-secondary" /></IconButton>
-                        
+                        <IconButton variant="text" className="text-secondary rounded-full" onClick={() => handleOpen(_id)}><SquarePenIcon size={22} className="text-secondary" /></IconButton>
+
                     </div>
                 );
             },

@@ -25,6 +25,7 @@ import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 import { formatDate } from "../../../utils/helper";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
+import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 function Icon({ id, open }) {
     return (
         <svg
@@ -40,6 +41,7 @@ function Icon({ id, open }) {
     );
 }
 const PasteurizedMilk = ({ currentPage, totalPages }) => {
+    const {setBreadcrumb} = useBreadcrumb();
     const { id } = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -157,6 +159,13 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
         }),
     ];
     const items = fridgeContent.filter((f) => f.status === "Available");
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Refrigerator', path: '/dashboard/inventory/refrigerator' },
+            { name: 'Pasteurized Milk' }
+        ])
+    },[])
     return (
         <div className="w-full h-[calc(100vh-2rem)] overflow-y-scroll p-8" >
             <div className="flex justify-between items-center mb-4">

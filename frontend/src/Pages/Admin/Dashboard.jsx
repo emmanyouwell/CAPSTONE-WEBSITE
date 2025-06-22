@@ -20,6 +20,8 @@ import { donorsPerBarangay, milkCollectedChartData, milkDonatedPerBarangay, mont
 import Loader from '../../Components/Loader/Loader'
 import HorizontalLoader from '../../Components/Loader/HorizontalLoader';
 import { useCountUp } from '../../utils/hooks/useCountUp';
+import { useBeforeUnload } from 'react-router-dom';
+import { useBreadcrumb } from '../../Components/Breadcrumb/BreadcrumbContext';
 // Register required components
 ChartJS.register(BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
 
@@ -39,9 +41,14 @@ function Icon({ id, open }) {
   );
 }
 const Dashboard = () => {
+  const {setBreadcrumb} = useBreadcrumb();
   const dispatch = useDispatch();
   const {statsLoading, monthlyDonorsLoading, expiringLoading, dispensedMilkLoading, monthlyPatientsLoading, monthlyRequestsLoading, availableLoading, stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
-
+  useEffect(()=>{
+    setBreadcrumb([
+      {name: "Dashboard", path: "/dashboard"},
+    ])
+  }, [])
   useEffect(() => {
     dispatch(getMilkPerMonth());
     dispatch(getDispensedMilkPerMonth());

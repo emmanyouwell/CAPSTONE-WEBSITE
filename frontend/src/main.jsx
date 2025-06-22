@@ -7,13 +7,14 @@ import store from './redux/store';
 import { setupAxiosInterceptors } from './api/setupInterceptor';
 import { ThemeProvider } from '@material-tailwind/react';
 import { theme } from './utils/theme.js';
+import { BreadcrumbProvider } from './Components/Breadcrumb/BreadcrumbContext.jsx';
 setupAxiosInterceptors();
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <ThemeProvider value={theme}>
-    
-      <App />
-    
+      <BreadcrumbProvider>
+        <App />
+      </BreadcrumbProvider>
     </ThemeProvider>
   </Provider>
 )
