@@ -9,7 +9,9 @@ import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
 import { EyeIcon } from 'lucide-react'
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 const DonorsPage = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
     const { donors, pageSize, totalDonors, totalPages, loading, error } = useSelector((state) => state.donors);
     const [search, setSearch] = useState('');
@@ -129,6 +131,12 @@ const DonorsPage = () => {
             .then((data) => console.log('Donors fetched:', data))
             .catch((err) => console.error('Error fetching donors:', err));
     }, [dispatch, search, currentPage, brgy, type])
+    useEffect(()=>{
+        setBreadcrumb([
+            {name: "Dashboard", path: "/dashboard"},
+            {name: "Donors", path: "/dashboard/donors"}
+        ])
+    },[])
     return (
         <div className="p-4 flex flex-col gap-4">
             <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">

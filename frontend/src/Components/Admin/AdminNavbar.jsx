@@ -11,6 +11,7 @@ import {
   Avatar,
   Card,
   IconButton,
+  Breadcrumbs,
 } from "@material-tailwind/react";
 import {
   InboxArrowDownIcon,
@@ -22,8 +23,9 @@ import {
 } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, logoutUser } from "../../redux/actions/userActions";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
+import { useBreadcrumb } from "../Breadcrumb/BreadcrumbContext";
 
 
 function ProfileMenu() {
@@ -34,15 +36,15 @@ function ProfileMenu() {
   const closeMenu = () => setIsMenuOpen(false);
   const logoutHandler = () => {
     dispatch(logoutUser('logged out'));
-    
+
     setIsMenuOpen(false);
   }
   const goToProfile = () => {
     navigate('/dashboard/profile');
   }
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getUser())
-  },[dispatch])
+  }, [dispatch])
   // profile menu component
   const profileMenuItems = [
     {
@@ -107,7 +109,7 @@ function ProfileMenu() {
 
 export function ComplexNavbar({ pageTitle, isNavOpen, setIsNavOpen }) {
 
-
+  const { breadcrumb } = useBreadcrumb();
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   useEffect(() => {
@@ -120,28 +122,21 @@ export function ComplexNavbar({ pageTitle, isNavOpen, setIsNavOpen }) {
     <Navbar className="top-0 z-10 mx-auto max-w-full p-2 rounded-none lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
         <div className="flex">
-          {/* <IconButton
-            size="sm"
-            color="blue-gray"
-            variant="text"
-            onClick={toggleIsNavOpen}
-            className="mr-2 lg:hidden"
-          >
-            <Bars2Icon className="h-6 w-6" />
-          </IconButton> */}
-          <Typography
-            as="a"
-            href="#"
-            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
-          >
-            {/* {pageTitle} */} Dashboard
-          </Typography>
+          <Breadcrumbs className="bg-white">
+            {breadcrumb.map((item, index) =>
+              item.path && index !== breadcrumb.length - 1 ? (
+                <Link key={index} to={item.path} className="text-blue-gray-800 hover:text-secondary hover:underline">
+                  {item.name}
+                </Link>
+              ) : (
+                <Typography key={index} color="blue-gray" className="font-semibold text-secondary">
+                  {item.name}
+                </Typography>
+              )
+            )}
+          </Breadcrumbs>
+         
         </div>
-
-
-
-
-
         <ProfileMenu />
       </div>
 

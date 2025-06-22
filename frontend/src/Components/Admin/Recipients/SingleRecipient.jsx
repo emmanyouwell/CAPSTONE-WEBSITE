@@ -9,7 +9,9 @@ import { formatDate, sortRequest } from '../../../utils/helper'
 import RequestList from './RequestList'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../DataTables/tanstack/DataTable'
+import { useBreadcrumb } from '../../Breadcrumb/BreadcrumbContext'
 const SingleRecipient = () => {
+    const { setBreadcrumb } = useBreadcrumb();
     const { id } = useParams();
     const dispatch = useDispatch();
     const { patientDetails, loading, error } = useSelector((state) => state.recipients);
@@ -23,41 +25,7 @@ const SingleRecipient = () => {
             console.log("patient: ", sortRequest(patientDetails.requested));
         }
     }, [patientDetails])
-    /**
-     *  "requested": [
-            {
-                "volumeRequested": {
-                    "volume": 300,
-                    "days": 3
-                },
-                "tchmb": {
-                    "ebm": []
-                },
-                "_id": "683c86ca7ffdeec9872ed7dc",
-                "date": "2025-06-01T00:00:00.000Z",
-                "patient": "683c839f67670a836a46ba69",
-                "department": "NICU",
-                "hospital": "Taguig-Pateros District Hospital",
-                "diagnosis": "Pre-term",
-                "reason": "needs more milk",
-                "doctor": "Dr. Gen",
-                "requestedBy": "683947c507fe806cdab995d5",
-                "status": "Pending",
-                "type": "Inpatient",
-                "images": [
-                    {
-                        "public_id": "requests/mkhzq0wxjpirlts3k32m",
-                        "url": "https://res.cloudinary.com/dkhhpo8zw/image/upload/v1748797131/requests/mkhzq0wxjpirlts3k32m.jpg",
-                        "_id": "683c86ca7ffdeec9872ed7dd"
-                    }
-                ],
-                "isDeleted": false,
-                "deletedAt": null,
-                "createdAt": "2025-06-01T16:58:50.360Z",
-                "__v": 0
-            }
-        ],
-     */
+
     const columnHelper = createColumnHelper();
 
     const columns = [
@@ -88,6 +56,13 @@ const SingleRecipient = () => {
         }),
 
     ];
+    useEffect(() => {
+        setBreadcrumb([
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Recipients", path: "/dashboard/recipients" },
+            { name: "Profile" }
+        ])
+    }, [])
     return (
         <>
             <div className="relative w-full h-full">

@@ -12,7 +12,10 @@ import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
 import { ArrowRightToLine, EyeIcon, RotateCcw, SquarePenIcon, Trash } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
+import { resetSuccess } from '../../../redux/slices/announcementSlice';
 const AnnouncementArchive = () => {
+  const { setBreadcrumb } = useBreadcrumb();
   const [IsLargeScreen, setIsLargeScreen] = useState(false);
   const dispatch = useDispatch();
   const { announcements, isDeleted, loading, success, error } = useSelector((state) => state.announcements)
@@ -40,7 +43,13 @@ const AnnouncementArchive = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, [])
-
+  useEffect(()=>{
+    setBreadcrumb([
+      { name: "Dashboard", path: "/dashboard" },
+      { name: "Archive", path: "/dashboard/archive" },
+      { name: "Announcements", path: "/dashboard/archive/announcements" }
+    ])
+  },[])
   useEffect(() => {
     console.log("Fetching announcements");
     dispatch(getArchivedAnnouncements());
@@ -52,7 +61,7 @@ const AnnouncementArchive = () => {
     if (success) {
       console.log("deleted");
       toast.success("Announcement restored successfully");
-      dispatch(resetDelete());
+      dispatch(resetSuccess());
       dispatch(getArchivedAnnouncements());
     }
   }, [success, dispatch])

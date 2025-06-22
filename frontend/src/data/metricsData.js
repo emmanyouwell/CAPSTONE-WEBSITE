@@ -198,7 +198,7 @@ export function milkDonatedPerBarangay(volumePerLocation) {
         responsive: true,
         plugins: {
             legend: {
-                position: 'bottom',
+                display: false
             },
             datalabels: {
                 color: '#fff',
@@ -314,7 +314,7 @@ export function patientPerHospital(patientHospital) {
         responsive: true,
         plugins: {
             legend: {
-                position: 'bottom',
+                display: false
             },
             datalabels: {
                 color: '#fff',

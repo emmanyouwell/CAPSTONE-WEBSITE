@@ -14,7 +14,9 @@ import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { addInventory } from '../../../../redux/actions/inventoryActions'
 import { toast } from 'react-toastify'
+import { useBreadcrumb } from '../../../Breadcrumb/BreadcrumbContext'
 const PickUpDetails = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -85,6 +87,13 @@ const PickUpDetails = () => {
     const handleCompleteOpen = () => {
         setComplete(!complete);
     }
+    useEffect(()=>{
+        setBreadcrumb([
+            {name: "Dashboard", path: "/dashboard"},
+            {name: "Pick-up Schedules", path: "/dashboard/schedules"},
+            {name: "Pick Up Details"}
+        ])
+    },[])
     useEffect(() => {
         dispatch(getSingleSchedule(id));
         dispatch(getAllUsers({ role: "Admin" }))

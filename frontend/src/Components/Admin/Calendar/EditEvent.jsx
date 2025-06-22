@@ -13,7 +13,9 @@ import { resetDelete, resetUpdate } from '../../../redux/slices/lettingSlice';
 import { Link } from 'react-router-dom';
 import { deleteLetting, getLettingDetails, updateLetting } from '../../../redux/actions/lettingActions';
 import DatePicker from 'react-datepicker';
+import { useBreadcrumb } from '../../Breadcrumb/BreadcrumbContext';
 const EditEvent = () => {
+    const { setBreadcrumb } = useBreadcrumb();
     const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -35,7 +37,7 @@ const EditEvent = () => {
             status: '',
             date: '',
             venue: '',
-           
+
             user: getUser()._id
         },
         validationSchema,
@@ -60,6 +62,13 @@ const EditEvent = () => {
         dispatch(deleteLetting(id));
     }
     useEffect(() => {
+        setBreadcrumb([
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Event Schedules", path: "/dashboard/events" },
+            {name: "Edit Event",}
+        ])
+    }, [])
+    useEffect(() => {
         const getDetails = async () => {
             await dispatch(getLettingDetails(id));
         };
@@ -70,7 +79,7 @@ const EditEvent = () => {
     useEffect(() => {
         if (lettingDetails && lettingDetails.actDetails) {
             const eventDate = new Date(lettingDetails.actDetails.date)
-            
+
 
             formik.setValues({
                 title: lettingDetails.activity,
@@ -205,7 +214,7 @@ const EditEvent = () => {
                                     )}
                                 </div>
 
-                               
+
                             </div>
                         </CardBody>
 

@@ -1,11 +1,13 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import React from 'react'
+import React, { useEffect } from 'react'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { Link } from 'react-router-dom';
 import { EyeIcon } from 'lucide-react';
 import { Button, IconButton } from '@material-tailwind/react';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 
 const Archive = () => {
+    const { setBreadcrumb } = useBreadcrumb();
     const data = [
         {
             section: "Announcements",
@@ -39,6 +41,12 @@ const Archive = () => {
             },
         }),
     ];
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Archive' }
+        ])
+    },[])
     return (
         <DataTable data={data} columns={columns} pageSize={10} height="h-[calc(70vh-8rem)]" />
     )

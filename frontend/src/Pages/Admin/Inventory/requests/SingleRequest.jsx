@@ -13,8 +13,10 @@ import { getInventories, reserveInventory } from '../../../../redux/actions/inve
 import { formatDate, getUser } from '../../../../utils/helper';
 import placeholder from '../../../../assets/image/placeholder-image.webp'
 import { resetUpdate } from '../../../../redux/slices/requestSlice';
+import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext';
 
 const SingleRequest = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
     const { requestDetails, isUpdated } = useSelector(state => state.requests)
     const { fridges } = useSelector(state => state.fridges)
@@ -334,6 +336,13 @@ const SingleRequest = () => {
             dispatch(resetUpdate())
         }
     }, [isUpdated])
+    useEffect(()=>{
+        setBreadcrumb([
+            {"name": "Dashboard", "path": "/dashboard"},
+            {"name": "Requests", "path": "/dashboard/requests"},
+            {"name": `Request Details`}
+        ])
+    },[])
     return (
         <div className="p-8">
             <div className="flex flex-col gap-4 justify-between items-center">

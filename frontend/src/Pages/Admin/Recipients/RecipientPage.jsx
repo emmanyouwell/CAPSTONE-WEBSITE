@@ -11,7 +11,9 @@ import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
 import { EyeIcon } from 'lucide-react'
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 const RecipientPage = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
     const { recipients, pageSize, totalRecipients, totalPages, loading, error } = useSelector((state) => state.recipients);
     const [search, setSearch] = useState('');
@@ -133,7 +135,12 @@ const RecipientPage = () => {
             .then((data) => console.log('Recipients fetched:', data))
             .catch((err) => console.error('Error fetching Recipients:', err));
     }, [dispatch, search, currentPage, brgy, type])
-
+    useEffect(()=>{
+        setBreadcrumb([
+            {name: "Dashboard", path: "/dashboard"},
+            {name: "Recipients", path: "/dashboard/recipients"}
+        ])
+    },[])
     useEffect(() => {
         // Load the Tally embed script
         const script = document.createElement("script");

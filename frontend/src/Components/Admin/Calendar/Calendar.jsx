@@ -38,7 +38,7 @@ const ScheduleComponent = ({ events, type }) => {
     const handleOpen = async (event, type) => {
 
         if (event.status === "Done") {
-            navigate(`/dashboard/events/attendance/${event.id}`);
+            navigate(`/dashboard/events/attendance/${event.id}`, {state: {eventStatus: event.status}});
         }
         if (type === "events") {
             console.log("events: ", event);

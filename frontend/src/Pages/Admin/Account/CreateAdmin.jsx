@@ -14,7 +14,9 @@ import { resetRegister } from "../../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 const CreateAdmin = () => {
+  const {setBreadcrumb} = useBreadcrumb();
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { loading, error, isRegistered, userDetails, user } = useSelector((state) => state.users);
@@ -61,6 +63,13 @@ const CreateAdmin = () => {
   useEffect(() => {
     dispatch(getUserDetails())
   }, [dispatch]);
+  useEffect(()=>{
+    setBreadcrumb([
+      { name: "Dashboard", path: "/dashboard" },
+      { name: "Account", path: "/dashboard/account" },
+      { name: "Create Employee Account" }
+    ])
+  },[])
   return (
     <section className="w-full p-4">
       <div>

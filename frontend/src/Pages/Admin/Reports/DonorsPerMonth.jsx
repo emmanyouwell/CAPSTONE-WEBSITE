@@ -9,6 +9,7 @@ import { getAvailableMilk, getDispensedMilkPerMonth, getDonorsPerMonth, getMilkP
 import { normalizeData } from '../../../utils/helper';
 import Select from 'react-select';
 import { Typography } from '@material-tailwind/react';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 // Styles
 const styles = StyleSheet.create({
     page: {
@@ -183,6 +184,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
     </Document>
 );
 const DonorsPerMonth = () => {
+    const {setBreadcrumb} = useBreadcrumb()
     const dispatch = useDispatch();
     const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, pastPerMonth } = useSelector((state) => state.metrics);
     const [pdfUrl, setPdfUrl] = useState(null);
@@ -205,6 +207,12 @@ const DonorsPerMonth = () => {
         setSelectedYear(selectedOption);
 
     };
+    useEffect(()=>{
+        setBreadcrumb([
+            {name: "Dashboard", path: "/dashboard"},
+            {name: "Reports", path: "/dashboard/reports"},
+        ])
+    },[])
     useEffect(() => {
         const generatePdf = async (page1_data, page1_total, page2_data, page2_total) => {
             const blob = await pdf(<MyDocument page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} />).toBlob();

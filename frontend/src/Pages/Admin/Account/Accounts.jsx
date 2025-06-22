@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllUsers, getUserDetails } from '../../../redux/actions/userActions';
 import { Link } from 'react-router-dom';
 import AccountTable from '../../../Components/Admin/Account/AccountTable';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 const sortTypes = [
     "First Name (Desc)",
     "First Name (Asc)",
@@ -20,6 +21,7 @@ const roleTypes = [
     "Staff"
 ]
 const Accounts = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
     const { users, totalPages, userDetails, pageSize } = useSelector(state => state.users);
     const [search, setSearch] = useState('');
@@ -84,6 +86,12 @@ const Accounts = () => {
         dispatch(getAllUsers({ search: search, page: currentPage, pageSize: pageSize, sortBy: sortBy, order: sortOrder, role: roleType }));
         dispatch(getUserDetails())
     }, [dispatch, search, currentPage, sortBy, sortOrder, roleType])
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Accounts' }
+        ])
+    },[])
     return (
         <div className="flex flex-col items-center justify-center w-full gap-4 p-4  h-[calc(100vh-2rem)]">
             <div className="flex w-full items-center justify-start gap-4">

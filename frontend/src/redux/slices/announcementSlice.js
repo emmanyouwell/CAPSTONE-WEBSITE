@@ -22,6 +22,9 @@ export const announcementSlice = createSlice({
         resetError: (state) => {
             state.error = null
         },
+        resetSuccess: (state) => {
+            state.success = false;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -137,5 +140,5 @@ export const announcementSlice = createSlice({
             })
     }
 })
-export const { resetUpdate, resetDelete, resetError } = announcementSlice.actions;
+export const { resetUpdate, resetDelete, resetError, resetSuccess } = announcementSlice.actions;
 export default announcementSlice.reducer;

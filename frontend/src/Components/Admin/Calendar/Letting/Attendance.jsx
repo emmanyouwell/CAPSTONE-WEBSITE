@@ -17,8 +17,10 @@ import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { addInventory } from '../../../../redux/actions/inventoryActions';
 import { ArrowDownIcon, ArrowUpIcon, SquareCheck } from 'lucide-react';
 import { resetError, resetSuccess } from '../../../../redux/slices/lettingSlice';
+import { useBreadcrumb } from '../../../Breadcrumb/BreadcrumbContext';
 
 const Attendance = () => {
+  const { setBreadcrumb } = useBreadcrumb();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -29,7 +31,7 @@ const Attendance = () => {
   const from = location.state?.from;
   const collectionId = location.state?.collectionId;
   const status = location.state?.status
-
+  const eventStatus = location.state?.eventStatus;
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
   const [openSubmit, setOpenSubmit] = useState(false)
@@ -40,6 +42,24 @@ const Attendance = () => {
     setSelectedOption(e.target.value)
   }
   const [refresh, setRefresh] = useState(false);
+  useEffect(() => {
+    if (eventStatus === 'Done') {
+      setBreadcrumb([
+        { name: "Dashboard", path: "/dashboard" },
+        { name: "Event Schedules", path: "/dashboard/events" },
+        { name: "History", path: "/dashboard/event/history" },
+        { name: "Attendance" }
+      ])
+    }
+    else {
+      setBreadcrumb([
+        { name: "Dashboard", path: "/dashboard" },
+        { name: "Event Schedules", path: "/dashboard/events" },
+        { name: "Attendance" }
+      ])
+    }
+
+  }, [eventStatus])
   useEffect(() => {
     console.log('dispatching getlettingdetails')
     dispatch(getLettingDetails(id));

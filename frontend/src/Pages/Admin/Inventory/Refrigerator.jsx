@@ -22,7 +22,9 @@ import Loader from '../../../Components/Loader/Loader'
 import Select from 'react-select';
 import { toast } from 'react-toastify'
 import { resetUpdate } from '../../../redux/slices/fridgeSlice'
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 const Refrigerator = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch()
     const { fridgeDetails, fridges, available, loading, isUpdated, error } = useSelector(state => state.fridges)
     useEffect(() => {
@@ -44,7 +46,12 @@ const Refrigerator = () => {
         name: '',
         fridgeType: ''
     }));
-
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Refrigerators' }
+        ])
+    },[])
     useEffect(() => {
         setFormData({
             name: fridgeDetails.name,

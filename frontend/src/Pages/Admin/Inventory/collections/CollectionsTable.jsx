@@ -9,7 +9,9 @@ import { EyeIcon } from 'lucide-react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatDate } from '../../../../utils/helper'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
+import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext'
 const CollectionsTable = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch()
     const { collections, loading, error } = useSelector(state => state.collections)
 
@@ -76,6 +78,12 @@ const CollectionsTable = () => {
             },
         }),
     ];
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Collections' }
+        ])
+    },[])
     useEffect(() => {
         dispatch(getAllCollections({ search: search, type: type }))
     }, [dispatch, search, type])

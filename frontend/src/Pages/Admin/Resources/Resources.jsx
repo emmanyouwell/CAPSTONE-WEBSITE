@@ -11,7 +11,9 @@ import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
 import { Archive, EyeIcon, Pencil, SquarePenIcon, Trash } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 const Resources = () => {
+    const {setBreadcrumb} = useBreadcrumb();
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
     const { articles, isDeleted, loading, error } = useSelector((state) => state.articles);
@@ -92,6 +94,12 @@ const Resources = () => {
             },
         }),
     ];
+    useEffect(()=>{
+        setBreadcrumb([
+            { name: 'Dashboard', path: '/dashboard' },
+            { name: 'Articles' }
+        ])
+    },[])
     return (
         <>
             <section className="p-4">
