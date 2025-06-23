@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth, getDonorLocation, getPatientHospital, getPasteurizedMilkPerMonth } from '../actions/metricActions';
+import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth, getDonorLocation, getPatientHospital, getPasteurizedMilkPerMonth, getDonorAgeDemographic } from '../actions/metricActions';
 import { getAvailableMilk } from '../actions/metricActions';
 import { getExpiringMilk } from '../actions/metricActions';
 export const metricSlice = createSlice({
@@ -16,7 +16,9 @@ export const metricSlice = createSlice({
         patientHospitalLoading: false,
         availableLoading: false,
         expiringLoading: false,
+        donorAgeLoading: false,
         error: null,
+        donorAge: {},
         stats: {},
         available: 0,
         expiring: 0,
@@ -162,7 +164,18 @@ export const metricSlice = createSlice({
             .addCase(getPasteurizedMilkPerMonth.rejected, (state, action) => {
                 state.pastPerMonthLoading = false;
                 state.error = action.payload;
-            });
+            })
+            .addCase(getDonorAgeDemographic.pending, (state, action) => {
+                state.donorAgeLoading = true;
+            })
+            .addCase(getDonorAgeDemographic.fulfilled, (state, action) => {
+                state.donorAgeLoading = false;
+                state.donorAge = action.payload.donorAge;
+            })
+            .addCase(getDonorAgeDemographic.rejected, (state, action) => {
+                state.donorAgeLoading = false;
+                state.error = action.payload;
+            })
     },
 });
 

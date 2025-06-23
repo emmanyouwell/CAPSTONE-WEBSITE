@@ -6,13 +6,13 @@ const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 export const getDevices = createAsyncThunk(
     'devices/getDevices',
     async (query, thunkAPI) => {
-        
-        
+
+
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                
+
             },
             withCredentials: true
         }
@@ -34,12 +34,12 @@ export const addDevice = createAsyncThunk(
     'device/addDevice',
     async (req, thunkAPI) => {
 
-        
-        
+
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                
+
             },
             withCredentials: true
         }
@@ -60,20 +60,52 @@ export const addDevice = createAsyncThunk(
 export const sendNotification = createAsyncThunk(
     'notification/sendNotification',
     async (req, thunkAPI) => {
-        
-        
-        
+
+
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                
+
             },
             withCredentials: true
         }
         try {
 
             const response = await api.post(`${VITE_APP_URL}/api/v1/send-notification`, req, config)
-            
+
+            return response.data;
+
+        } catch (error) {
+
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+)
+
+
+// Send Notification
+export const sendNotifications = createAsyncThunk(
+    'notifications/sendNotifications',
+    async (data, thunkAPI) => {
+
+        const token = await getToken();
+
+        if (!token) {
+            throw new Error('No token available');
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        try {
+
+            const response = await api.post(`/api/v1/notifications/send`, data, config)
+
             return response.data;
 
         } catch (error) {

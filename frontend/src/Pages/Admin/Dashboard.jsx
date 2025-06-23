@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMilkPerMonth, getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk, getDonorLocation, getPatientHospital } from '../../redux/actions/metricActions'
+import { getMilkPerMonth, getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk, getDonorLocation, getPatientHospital, getDonorAgeDemographic } from '../../redux/actions/metricActions'
 import { LifebuoyIcon, UserIcon } from '@heroicons/react/24/solid'
 
 import {
@@ -10,20 +10,21 @@ import {
   CategoryScale,
   LinearScale,
   Tooltip,
-  Legend
+  PointElement,
+  Legend,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Bar, Pie } from 'react-chartjs-2';
+import { Bar, Bubble, Pie } from 'react-chartjs-2';
 import { Accordion, AccordionHeader, AccordionBody, Card, CardHeader, Typography } from '@material-tailwind/react';
 import { formatNumber } from '../../utils/helper'
-import { donorsPerBarangay, milkCollectedChartData, milkDonatedPerBarangay, monthlyDispensedMilkChartData, monthlyDonorsChartData, monthlyPatientsChartData, patientPerHospital } from '../../data/metricsData';
+import { donorAgeDemographic, donorsPerBarangay, milkCollectedChartData, milkDonatedPerBarangay, monthlyDispensedMilkChartData, monthlyDonorsChartData, monthlyPatientsChartData, patientPerHospital } from '../../data/metricsData';
 import Loader from '../../Components/Loader/Loader'
 import HorizontalLoader from '../../Components/Loader/HorizontalLoader';
 import { useCountUp } from '../../utils/hooks/useCountUp';
 import { useBeforeUnload } from 'react-router-dom';
 import { useBreadcrumb } from '../../Components/Breadcrumb/BreadcrumbContext';
 // Register required components
-ChartJS.register(BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
+ChartJS.register(BarElement, PointElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
 
 
 function Icon({ id, open }) {
@@ -41,12 +42,12 @@ function Icon({ id, open }) {
   );
 }
 const Dashboard = () => {
-  const {setBreadcrumb} = useBreadcrumb();
+  const { setBreadcrumb } = useBreadcrumb();
   const dispatch = useDispatch();
-  const {statsLoading, monthlyDonorsLoading, expiringLoading, dispensedMilkLoading, monthlyPatientsLoading, monthlyRequestsLoading, availableLoading, stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests } = useSelector((state) => state.metrics);
-  useEffect(()=>{
+  const { statsLoading, monthlyDonorsLoading, expiringLoading, dispensedMilkLoading, monthlyPatientsLoading, monthlyRequestsLoading, availableLoading, stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, donorAge, donorAgeLoading } = useSelector((state) => state.metrics);
+  useEffect(() => {
     setBreadcrumb([
-      {name: "Dashboard", path: "/dashboard"},
+      { name: "Dashboard", path: "/dashboard" },
     ])
   }, [])
   useEffect(() => {
@@ -60,6 +61,7 @@ const Dashboard = () => {
     dispatch(getVolumePerLocation());
     dispatch(getDonorLocation());
     dispatch(getPatientHospital());
+    dispatch(getDonorAgeDemographic());
   }, [dispatch])
 
   const animatedAvailable = useCountUp(available, availableLoading, 800, 20);
@@ -78,6 +80,7 @@ const Dashboard = () => {
   const { data: volumeLocationData, options: volumeLocationOptions } = milkDonatedPerBarangay(volumePerLocation);
   const { data: donorLocationData, options: donorLocationOptions } = donorsPerBarangay(donorLocation);
   const { data: patientHospitalData, options: patientHospitalOptions } = patientPerHospital(patientHospital);
+  const { data: donorAgeData, options: donorAgeOptions } = donorAgeDemographic(donorAge);
   const [open, setOpen] = useState(0);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -106,7 +109,7 @@ const Dashboard = () => {
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
-          
+
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Distributed</span>
             <div className="flex items-baseline justify-end w-full gap-2">
@@ -117,7 +120,7 @@ const Dashboard = () => {
           <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
             <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Collected</span>
             <div className="flex items-baseline justify-end w-full gap-2">
-              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedStats.toLocaleString() } </span>
+              <span className="font-semibold text-gray-900" style={{ fontSize: 'clamp(2rem, 2vw, 3rem)' }}> {animatedStats.toLocaleString()} </span>
               <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
             </div>
           </div>
@@ -198,6 +201,14 @@ const Dashboard = () => {
                   </CardHeader>
                   <div className="max-h-[400px] flex items-center justify-center p-4">
                     <Pie data={donorLocationData} options={donorLocationOptions} />
+                  </div>
+                </Card>
+                <Card className="p-4 border shadow-lg">
+                  <CardHeader shadow={false} floated={false}>
+                    <Typography variant="h5" color="blue-gray">Donors Age Distribution {donorAge && donorAge.total ? `(${formatNumber(donorAge.total)})` : '(0)'}</Typography>
+                  </CardHeader>
+                  <div className="max-h-[400px] flex items-center justify-center p-4">
+                    <Bar data={donorAgeData} options={donorAgeOptions} />
                   </div>
                 </Card>
               </div>

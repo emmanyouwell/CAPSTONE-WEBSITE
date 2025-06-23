@@ -252,7 +252,7 @@ const DonorsPerMonth = () => {
                     value={selectedYear}
                     onChange={handleChange}
                     placeholder="Select year"
-                    className="w-max"
+                    className="w-max z-20"
                 />
             </div>
 

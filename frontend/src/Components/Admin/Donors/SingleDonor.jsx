@@ -156,7 +156,7 @@ const SingleDonor = () => {
 
                                     <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                                         <dt className="font-medium text-gray-900">Age</dt>
-                                        <dd className="text-gray-700 sm:col-span-2 text-right">{donorDetails && donorDetails.age && donorDetails.age.value} {donorDetails && donorDetails.age && donorDetails.age.unit}</dd>
+                                        <dd className="text-gray-700 sm:col-span-2 text-right">{donorDetails && donorDetails.age}</dd> 
                                     </div>
 
                                     <div className="grid grid-cols-1 gap-1 py-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
