@@ -282,3 +282,8 @@ export const normalizeData = (months, donors, patients, milkCollected, milkDispe
     ]
     return { page1_data, page1_total, page2_data, page2_total };
 };
+
+
+export const toTitleCase = (str) => {
+    return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}

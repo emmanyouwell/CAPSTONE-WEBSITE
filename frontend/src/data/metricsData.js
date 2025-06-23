@@ -1,5 +1,7 @@
 // chartDataUtils.js
 
+import { toTitleCase } from "../utils/helper";
+
 export function milkCollectedChartData(stats) {
     const months = Object.keys(stats).filter((key) => key !== 'total');
     const communityData = months.map((month) => stats[month].community);
@@ -11,12 +13,20 @@ export function milkCollectedChartData(stats) {
             {
                 label: 'Community',
                 data: communityData,
-                backgroundColor: '#336699',
+                borderColor: 'rgba(51, 102, 153, 1)',
+                backgroundColor: 'rgba(51, 102, 153, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             },
             {
                 label: 'Private',
                 data: privateData,
-                backgroundColor: '#F06395',
+                borderColor: 'rgba(240, 99, 149, 1)',
+                backgroundColor: 'rgba(240, 99, 149, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             },
         ],
     };
@@ -24,6 +34,9 @@ export function milkCollectedChartData(stats) {
     const options = {
         responsive: true,
         plugins: {
+            datalabels: {
+                color: "#000"
+            },
             legend: { position: 'top' },
             tooltip: {
                 mode: 'index',
@@ -53,12 +66,20 @@ export function monthlyDonorsChartData(monthlyDonors) {
             {
                 label: 'Community',
                 data: communityData,
-                backgroundColor: '#336699',
+                borderColor: 'rgba(51, 102, 153, 1)',
+                backgroundColor: 'rgba(51, 102, 153, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             },
             {
                 label: 'Private',
                 data: privateData,
-                backgroundColor: '#F06395',
+                borderColor: 'rgba(240, 99, 149, 1)',
+                backgroundColor: 'rgba(240, 99, 149, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             },
         ],
     };
@@ -66,6 +87,9 @@ export function monthlyDonorsChartData(monthlyDonors) {
     const options = {
         responsive: true,
         plugins: {
+            datalabels: {
+                color: '#000'
+            },
             legend: { position: 'top' },
             tooltip: {
                 mode: 'index',
@@ -98,12 +122,20 @@ export function monthlyPatientsChartData(monthlyPatients) {
             {
                 label: 'Inpatient',
                 data: inpatientData,
-                backgroundColor: '#336699',
+                borderColor: 'rgba(51, 102, 153, 1)',
+                backgroundColor: 'rgba(51, 102, 153, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             },
             {
                 label: 'Outpatient',
                 data: outpatientData,
-                backgroundColor: '#F06395',
+                borderColor: 'rgba(240, 99, 149, 1)',
+                backgroundColor: 'rgba(240, 99, 149, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             },
         ],
     };
@@ -111,6 +143,9 @@ export function monthlyPatientsChartData(monthlyPatients) {
     const options = {
         responsive: true,
         plugins: {
+            datalabels: {
+                color: "#000"
+            },
             legend: { position: 'top' },
             tooltip: {
                 mode: 'index',
@@ -140,12 +175,20 @@ export function monthlyDispensedMilkChartData(dispensedMilk) {
             {
                 label: 'Inpatient',
                 data: inpatientData,
-                backgroundColor: '#336699'
+                borderColor: 'rgba(51, 102, 153, 1)',
+                backgroundColor: 'rgba(51, 102, 153, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             },
             {
                 label: 'Outpatient',
                 data: outpatientData,
-                backgroundColor: '#F06395'
+                borderColor: 'rgba(240, 99, 149, 1)',
+                backgroundColor: 'rgba(240, 99, 149, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
             }
         ]
     };
@@ -154,6 +197,9 @@ export function monthlyDispensedMilkChartData(dispensedMilk) {
     const options = {
         responsive: true,
         plugins: {
+            datalabels: {
+                color: "#000"
+            },
             legend: { position: 'top' },
             tooltip: {
                 mode: 'index',
@@ -176,7 +222,8 @@ export function monthlyDispensedMilkChartData(dispensedMilk) {
 export function milkDonatedPerBarangay(volumePerLocation) {
     const entries = Object.entries(volumePerLocation).filter(([key]) => key !== 'total');
 
-    const labels = entries.map(([location]) => location);
+    const locations = entries.map(([location]) => location);
+    const labels = locations.map(toTitleCase)
     const dataValues = entries.map(([, volume]) => volume);
 
     const data = {
@@ -186,9 +233,17 @@ export function milkDonatedPerBarangay(volumePerLocation) {
                 label: 'Volume',
                 data: dataValues,
                 backgroundColor: [
-                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                    '#9966FF', '#FF9F40', '#FF6384', '#36A2EB',
-                    '#C9CBCF', '#7FCDCD', '#DE6B6B',
+                    'rgba(255, 99, 132, 0.5)',  // #FF6384
+                    'rgba(54, 162, 235, 0.5)',  // #36A2EB
+                    'rgba(255, 206, 86, 0.5)',  // #FFCE56
+                    'rgba(75, 192, 192, 0.5)',  // #4BC0C0
+                    'rgba(153, 102, 255, 0.5)', // #9966FF
+                    'rgba(255, 159, 64, 0.5)',  // #FF9F40
+                    'rgba(255, 99, 132, 0.5)',  // #FF6384 (again)
+                    'rgba(54, 162, 235, 0.5)',  // #36A2EB (again)
+                    'rgba(201, 203, 207, 0.5)', // #C9CBCF
+                    'rgba(127, 205, 205, 0.5)', // #7FCDCD
+                    'rgba(222, 107, 107, 0.5)'  // #DE6B6B
                 ],
                 borderWidth: 1,
             },
@@ -201,7 +256,7 @@ export function milkDonatedPerBarangay(volumePerLocation) {
                 display: false
             },
             datalabels: {
-                color: '#fff',
+                color: '#000',
                 font: {
                     weight: 'semibold',
                     size: 14,
@@ -219,7 +274,7 @@ export function milkDonatedPerBarangay(volumePerLocation) {
                 callbacks: {
                     label: function (tooltipItem) {
                         const value = tooltipItem.raw || 0;
-                        return `Volume: ${value.toLocaleString()} ml`;
+                        return `Volume: ${value.toLocaleString()}`;
                     },
                 },
             },
@@ -244,9 +299,17 @@ export function donorsPerBarangay(donorLocation) {
                 label: 'Volume',
                 data: dataValues,
                 backgroundColor: [
-                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                    '#9966FF', '#FF9F40', '#FF6384', '#36A2EB',
-                    '#C9CBCF', '#7FCDCD', '#DE6B6B',
+                    'rgba(255, 99, 132, 0.5)',  // #FF6384
+                    'rgba(54, 162, 235, 0.5)',  // #36A2EB
+                    'rgba(255, 206, 86, 0.5)',  // #FFCE56
+                    'rgba(75, 192, 192, 0.5)',  // #4BC0C0
+                    'rgba(153, 102, 255, 0.5)', // #9966FF
+                    'rgba(255, 159, 64, 0.5)',  // #FF9F40
+                    'rgba(255, 99, 132, 0.5)',  // #FF6384 (again)
+                    'rgba(54, 162, 235, 0.5)',  // #36A2EB (again)
+                    'rgba(201, 203, 207, 0.5)', // #C9CBCF
+                    'rgba(127, 205, 205, 0.5)', // #7FCDCD
+                    'rgba(222, 107, 107, 0.5)'  // #DE6B6B
                 ],
                 borderWidth: 1,
             },
@@ -259,7 +322,7 @@ export function donorsPerBarangay(donorLocation) {
                 display: false
             },
             datalabels: {
-                color: '#fff',
+                color: '#000',
                 font: {
                     weight: 'semibold',
                     size: 14,
@@ -302,9 +365,17 @@ export function patientPerHospital(patientHospital) {
                 label: 'Volume',
                 data: dataValues,
                 backgroundColor: [
-                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                    '#9966FF', '#FF9F40', '#FF6384', '#36A2EB',
-                    '#C9CBCF', '#7FCDCD', '#DE6B6B',
+                    'rgba(255, 99, 132, 0.5)',  // #FF6384
+                    'rgba(54, 162, 235, 0.5)',  // #36A2EB
+                    'rgba(255, 206, 86, 0.5)',  // #FFCE56
+                    'rgba(75, 192, 192, 0.5)',  // #4BC0C0
+                    'rgba(153, 102, 255, 0.5)', // #9966FF
+                    'rgba(255, 159, 64, 0.5)',  // #FF9F40
+                    'rgba(255, 99, 132, 0.5)',  // #FF6384 (again)
+                    'rgba(54, 162, 235, 0.5)',  // #36A2EB (again)
+                    'rgba(201, 203, 207, 0.5)', // #C9CBCF
+                    'rgba(127, 205, 205, 0.5)', // #7FCDCD
+                    'rgba(222, 107, 107, 0.5)'  // #DE6B6B
                 ],
                 borderWidth: 1,
             },
@@ -317,7 +388,7 @@ export function patientPerHospital(patientHospital) {
                 display: false
             },
             datalabels: {
-                color: '#fff',
+                color: '#000',
                 font: {
                     weight: 'semibold',
                     size: 14,
@@ -394,4 +465,64 @@ export function donationHistory(volumeByDate) {
     };
 
     return { data, options };
+}
+
+export function donorAgeDemographic(donorAge) {
+    const labels = Object.keys(donorAge).filter(key => key !== 'total');
+    const dataCounts = labels.map(age => donorAge[age]);
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Number of Donors',
+                data: dataCounts,
+                borderColor: 'rgba(240, 99, 149, 1)',
+                backgroundColor: 'rgba(240, 99, 149, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false
+            }
+        ]
+    };
+
+    const options = {
+        responsive: true,
+        plugins: {
+            datalabels: {
+                color: "#000"
+            },
+            legend: {
+                position: 'top'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (context) {
+                        return `Donors: ${context.formattedValue}`;
+                    }
+                }
+            },
+            title: {
+                display: true,
+                text: 'Donor Age Distribution'
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Age'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Number of Donors'
+                }
+            }
+        }
+    };
+
+
+    return { data, options }
 }
