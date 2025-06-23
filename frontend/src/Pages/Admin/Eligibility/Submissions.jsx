@@ -67,7 +67,7 @@ const Submissions = () => {
         }),
         columnHelper.accessor(row => row.eligibility, {
             id: 'eligibility',
-            header: 'Eligibility',
+            header: 'Prediction',
             cell: info => info.getValue(),
         }),
         columnHelper.accessor(row => `${formatDate(row.lastSubmissionDate)}`, {
@@ -100,7 +100,7 @@ const Submissions = () => {
     ];
     return (
         <div className="relative w-full h-full">
-            <Link to="/dashboard/donors" className="absolute top-4 left-4">
+            <Link to="/dashboard" className="absolute top-4 left-4">
                 <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
                     <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                 </div>

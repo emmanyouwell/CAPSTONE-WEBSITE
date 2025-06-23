@@ -79,7 +79,6 @@ const CreateAnnouncement = () => {
         const req = {
             title: title,
             description: description,
-            content: content,
             images: imageUrls
         };
         dispatch(addHTMLAnnouncements(req));
@@ -108,7 +107,7 @@ const CreateAnnouncement = () => {
         setBreadcrumb([
             { name: "Dashboard", path: "/dashboard" },
             { name: "Announcement", path: "/dashboard/announcement" },
-            { name: "Create Announcement" }
+            { name: "Create New Announcement" }
         ]);
     }, []);
     return (
@@ -157,9 +156,7 @@ const CreateAnnouncement = () => {
                     </div>
                 ))}
             </div>
-            {/* ReactQuill Editor */}
-            <ReactQuill value={content} onChange={setContent} modules={modules} formats={formats} />
-
+          
             {/* Save Button */}
             {loading ? (
                 <Loader />

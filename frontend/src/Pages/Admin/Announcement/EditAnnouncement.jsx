@@ -102,7 +102,6 @@ const EditAnnouncement = () => {
         const req = {
             title: title,
             description: description,
-            content: content,
             id: id,
             images: allImages
         };
@@ -183,9 +182,7 @@ const EditAnnouncement = () => {
                     </div>
                 ))}
             </div>
-            {/* ReactQuill Editor */}
-            <ReactQuill value={content} onChange={setContent} modules={modules} formats={formats} />
-
+          
             {/* Save Button */}
             {loading ? (
                 <Loader />
