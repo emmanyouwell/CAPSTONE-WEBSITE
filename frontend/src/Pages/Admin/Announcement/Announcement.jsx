@@ -87,7 +87,6 @@ const Announcement = () => {
                 const announcement = row.original
                 return (
                     <div className="flex gap-2">
-                        <Link to={`/announcements/${announcement._id}`}><IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25}/></IconButton></Link>
                         <Link to={`/dashboard/announcement/edit/${announcement._id}`}><IconButton variant="text" className="text-secondary rounded-full"><SquarePenIcon size={22} className="text-secondary" /></IconButton></Link>
                         <IconButton variant="text" className="text-secondary rounded-full"><Archive size={22} className="text-secondary cursor-pointer" onClick={() => handleArchive(announcement._id)} /></IconButton>
                     </div>
@@ -95,12 +94,12 @@ const Announcement = () => {
             },
         }),
     ];
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: 'Dashboard', path: '/dashboard' },
             { name: 'Announcements' }
         ])
-    },[])
+    }, [])
     return (
         <>
             <section className="p-4">

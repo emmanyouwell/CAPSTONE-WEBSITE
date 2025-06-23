@@ -29,13 +29,13 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
                 });
                 return (
                     <div className="bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-full max-w-sm h-96">
-                        <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max">
+                        <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max  overflow-hidden">
                             {announcement?.images?.map((image, index) => (
                                 <div key={index} className="relative h-40 w-full">
                                     <img
                                         src={image.url}
                                         alt={`Announcement Image ${index + 1}`}
-                                        className="w-1/2 h-full object-cover  mx-auto"
+                                        className="w-1/2 h-full object-cover mx-auto"
                                     />
                                 </div>
                             ))}
