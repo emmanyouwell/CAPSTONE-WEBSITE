@@ -4,18 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getSingleDonor } from '../../../redux/actions/donorActions'
 import { Typography } from '@material-tailwind/react'
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid'
-import DonationList from './DonationList'
 import { donationHistoryChart, formatDate, sortDonation } from '../../../utils/helper'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../DataTables/tanstack/DataTable'
-import { set } from 'date-fns'
 import { useBreadcrumb } from '../../Breadcrumb/BreadcrumbContext'
 const SingleDonor = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const { id } = useParams();
     const dispatch = useDispatch();
-    const { donorDetails, loading, error } = useSelector((state) => state.donors);
+    const { donorDetails} = useSelector((state) => state.donors);
     const [chartData, setChartData] = useState([]);
     useEffect(()=>{
         setBreadcrumb([

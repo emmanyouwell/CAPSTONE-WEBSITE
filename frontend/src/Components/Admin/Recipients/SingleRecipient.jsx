@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPatientDetails } from '../../../redux/actions/recipientActions'
 import { Typography } from '@material-tailwind/react'
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid'
-// import DonationList from './DonationList'
 import { formatDate, sortRequest } from '../../../utils/helper'
-import RequestList from './RequestList'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../DataTables/tanstack/DataTable'
 import { useBreadcrumb } from '../../Breadcrumb/BreadcrumbContext'
@@ -14,7 +12,7 @@ const SingleRecipient = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const { id } = useParams();
     const dispatch = useDispatch();
-    const { patientDetails, loading, error } = useSelector((state) => state.recipients);
+    const { patientDetails } = useSelector((state) => state.recipients);
 
     useEffect(() => {
         dispatch(getPatientDetails(id));
@@ -125,8 +123,6 @@ const SingleRecipient = () => {
                             <DataTable columns={columns} data={sortRequest(patientDetails.requested)} pageSize={5} height="h-full" />
                         </div>
                     </div>
-
-                    {/* {patientDetails && patientDetails.requested && <RequestList requests={patientDetails.requested} />} */}
 
                 </div>
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import EventDetails from './EventDetails'
-import { Badge, Chip } from '@material-tailwind/react'
+import { Chip } from '@material-tailwind/react'
 
 const UpcomingEvents = ({ events }) => {
     return (

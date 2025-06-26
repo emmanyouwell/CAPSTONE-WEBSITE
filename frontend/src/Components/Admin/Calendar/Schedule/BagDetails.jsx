@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Menu,
     MenuHandler,
@@ -14,7 +14,7 @@ import {
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { updateBag } from '../../../../redux/actions/bagActions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 const BagDetails = ({ bag, from, status, scheduleId }) => {
     const [bagDetails, setBagDetails] = useState(() => ({

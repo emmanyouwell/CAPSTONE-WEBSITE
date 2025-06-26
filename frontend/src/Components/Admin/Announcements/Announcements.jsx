@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
-import { Badge, Chip } from '@material-tailwind/react'
-import ArticleList from '../../Articles/ArticleList'
+import { Chip } from '@material-tailwind/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteAnnouncement, getAnnouncement } from '../../../redux/actions/announcementActions'
 import AnnouncementList from '../../../Pages/Admin/Announcement/AnnouncementList'
 
 const Announcements = () => {
     const dispatch = useDispatch();
-    const { announcements, loading, error } = useSelector((state) => state.announcements);
+    const { announcements } = useSelector((state) => state.announcements);
     useEffect(() => {
         dispatch(getAnnouncement());
 

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
-import { FooterWithLogo } from "./Components/Footer";
 import DonorApplication from "./Pages/User/DonorApplication";
 import Article from "./Pages/Article";
 import SingleArticle from "./Pages/SingleArticle";
@@ -10,8 +9,6 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import Dashboard from "./Pages/Admin/Dashboard";
 import { getUser } from "./utils/helper";
 import ScrollToTop from "./utils/ScrollToTop";
-import AdminSideNav from "./Components/Admin/AdminSideNav";
-import { useMediaQuery } from 'react-responsive';
 import { ComplexNavbar } from "./Components/Admin/AdminNavbar";
 import DonorsPage from "./Pages/Admin/Donors/DonorsPage";
 import SingleDonor from "./Components/Admin/Donors/SingleDonor";
@@ -26,7 +23,6 @@ import Resources from "./Pages/Admin/Resources/Resources";
 import Announcement from "./Pages/Admin/Announcement/Announcement";
 import CreateResources from "./Pages/Admin/Resources/CreateResources";
 import EditArticle from "./Pages/Admin/Resources/EditArticle";
-import Homepage from "./Pages/Admin/Inventory/Homepage";
 import Refrigerator from "./Pages/Admin/Inventory/Refrigerator";
 import Profile from "./Pages/Admin/Profile/Profile";
 import PickUpSchedule from "./Pages/Admin/Calendar/PickUpSchedule";
@@ -45,10 +41,7 @@ import SidebarComponent from "./Components/Admin/SidebarComponent";
 import PasteurizedMilk from "./Pages/Admin/Inventory/PasteurizedMilk";
 import RequestView from "./Pages/Admin/Inventory/requests/RequestView";
 import DashboardLayout from "./Pages/DashboardLayout";
-import { useSelector } from "react-redux";
-import RequestDataTable from "./Components/DataTables/RequestDataTable";
 import SingleRequest from "./Pages/Admin/Inventory/requests/SingleRequest";
-import StaffRequest from "./Pages/Staff/Requests/StaffRequest";
 import StaffRequestView from "./Pages/Staff/Requests/StaffRequestView";
 import Submissions from "./Pages/Admin/Eligibility/Submissions";
 import CreateAnnouncement from "./Pages/Admin/Announcement/CreateAnnouncement";
@@ -154,7 +147,7 @@ function RoutesComponent() {
 
         {/* Others */}
         <Route path="profile" element={<ProtectedRoute isAuthorized={true}><Profile /></ProtectedRoute>} />
-        <Route path="table" element={<ProtectedRoute isAuthorized={true}><RequestDataTable /></ProtectedRoute>} />
+        
       </Route>
     </Routes>
   )
@@ -162,14 +155,10 @@ function RoutesComponent() {
 }
 function MainContent() {
   const location = useLocation();
-  const [pageTitle, setPageTitle] = useState('Dashboard');
   const isAdministrativePersonnelRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/staff');
   const isAdministrativePersonnelUser = getUser() && (getUser().role === 'Admin' || getUser().role === 'Staff' || getUser().role === 'SuperAdmin');
-  const donorMatch = useMatch('/admin/donors/:id');
-  const recipientMatch = useMatch('/admin/recipient/:id');
-  const eventMatch = useMatch('/admin/events/:id');
+  
   const [userDetails, setUserDetails] = useState({});
-  const { isLoggedIn } = useSelector((state) => state.users)
   useEffect(() => {
     if (getUser()) {
       setUserDetails({
@@ -180,79 +169,15 @@ function MainContent() {
     }
   }, [location.pathname])
 
-  useEffect(() => {
-    // Set the page title based on the current path
-    const path = location.pathname;
-    if (donorMatch) {
-      setPageTitle('Donor Information');
-    }
-    else if (recipientMatch) {
-      setPageTitle('Recipient Information');
-    }
-    else if (eventMatch) {
-      setPageTitle('Edit Event');
-    }
-    else {
-      switch (path) {
-        case '/admin/donors':
-          setPageTitle('Donor Record');
-          break;
-        case '/admin/recipients':
-          setPageTitle('Recipient Record');
-          break;
-        case '/admin/events':
-          setPageTitle('Event schedules');
-          break;
-        case '/admin/account':
-          setPageTitle('Accounts');
-          break;
-        case '/admin/account/create-admin':
-          setPageTitle('Create Admin');
-          break;
-        case '/admin/resources':
-          setPageTitle('Resources');
-          break;
-        case '/admin/resources/create':
-          setPageTitle('Create Resources');
-          break;
-        case '/admin/inventory':
-          setPageTitle('Inventory');
-          break;
-        case '/admin/profile':
-          setPageTitle('Profile');
-          break;
-        case '/admin/inventory/refrigerator':
-          setPageTitle('Refrigerator Inventory');
-          break;
-        case '/admin/pickup/schedules':
-          setPageTitle('Pick-up Schedules');
-          break;
-        case '/admin/collections':
-          setPageTitle('Milk Collections');
-          break;
-        case '/admin/requests':
-          setPageTitle('Requests');
-          break;
-        case '/admin/dashboard':
-        default:
-          setPageTitle('Dashboard');
-          break;
-      }
-    }
-    // Save the current page title to localStorage
-    localStorage.setItem('pageTitle', pageTitle);
-  }, [location, pageTitle]);
-  const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1024px' })
   const [isNavOpen, setIsNavOpen] = useState(false)
   return (
     <div>
-      {/* {isAdministrativePersonnelUser && isAdministrativePersonnelRoute && <AdminSideNav isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen}/>} */}
       {isAdministrativePersonnelRoute && isAdministrativePersonnelUser ?
         <div className="flex">
           <SidebarComponent userDetails={userDetails} />
           <ScrollToTop />
           <div className="w-full flex flex-col gap-2">
-            <ComplexNavbar pageTitle={pageTitle} isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+            <ComplexNavbar isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
             <RoutesComponent />
           </div>
         </div> : <RoutesComponent />}
@@ -269,8 +194,6 @@ function App() {
       <BrowserRouter>
         <InactivityHandler />
         <MainContent />
-
-        {/* <FooterWithLogo /> */}
       </BrowserRouter>
     </>
   );

@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getEventDetails } from '../../../redux/actions/eventActions'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Card, CardHeader, CardBody, CardFooter, Typography, Input, Textarea, Button, IconButton, Select, Option } from "@material-tailwind/react";
-import { XMarkIcon, TrashIcon, ArrowLongLeftIcon } from "@heroicons/react/24/outline";
+import { Card, CardHeader, CardBody, CardFooter, Typography, Input, Textarea, Button } from "@material-tailwind/react";
+import { TrashIcon, ArrowLongLeftIcon } from "@heroicons/react/24/outline";
 import { getUser } from "../../../utils/helper";
 import { useParams } from 'react-router-dom';
-import { editEvents, deleteEvents } from '../../../redux/actions/eventActions';
 import { useNavigate } from 'react-router-dom';
 import { resetDelete, resetUpdate } from '../../../redux/slices/lettingSlice';
 import { Link } from 'react-router-dom';

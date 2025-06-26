@@ -1,8 +1,7 @@
-import { ChevronLeftIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid'
-import { ChevronDownIcon, ChevronFirst, ChevronLast, MoreVertical } from 'lucide-react'
+import { ChevronDownIcon, ChevronFirst, ChevronLast } from 'lucide-react'
 import React, { createContext, useContext, useState, Children, isValidElement, cloneElement } from 'react'
 import logo from '../../assets/image/TCHMB-logo.png'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useIsActive } from '../../utils/helper'
 const SidebarContext = createContext()
 export default function Sidebar({ children, userDetails }) {
@@ -30,7 +29,6 @@ export default function Sidebar({ children, userDetails }) {
 
 export function SidebarItem({ icon, text, path, prefix, alert, children }) {
     const { expanded } = useContext(SidebarContext)
-    const location = useLocation();  // Get current URL
     const isActive = useIsActive(prefix)
     const hasChildren = Children.count(children) > 0;
     const [isOpen, setIsOpen] = useState(false);

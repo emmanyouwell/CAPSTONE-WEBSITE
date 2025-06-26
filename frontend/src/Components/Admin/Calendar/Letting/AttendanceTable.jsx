@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
 import {
     Button,
-    Dialog,
     Card,
-    CardHeader,
-    CardBody,
-    CardFooter,
     Typography,
     Input,
-    Checkbox,
     Drawer,
     Menu,
     MenuHandler,
@@ -18,20 +12,17 @@ import {
     MenuItem,
     IconButton
 } from "@material-tailwind/react";
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { XMarkIcon } from '@heroicons/react/24/solid';
-import { deleteAttendance, getLettingDetails, updateAttendance } from '../../../../redux/actions/lettingActions';
+import { deleteAttendance, updateAttendance } from '../../../../redux/actions/lettingActions';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../DataTables/tanstack/DataTable';
 import { formatDate } from '../../../../utils/helper';
 import DatePicker from 'react-datepicker';
-import { EllipsisVertical, Trash2, X, XSquare } from 'lucide-react';
+import { EllipsisVertical, Trash2 } from 'lucide-react';
 import { resetSuccess } from '../../../../redux/slices/lettingSlice';
 const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) => {
     const dispatch = useDispatch();
-    const { success, isUpdated } = useSelector((state) => state.lettings);
+    const { success} = useSelector((state) => state.lettings);
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
     const [name, setName] = useState('');

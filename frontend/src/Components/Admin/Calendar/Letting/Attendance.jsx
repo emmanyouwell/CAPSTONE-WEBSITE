@@ -3,20 +3,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { finalizeSession, getLettingDetails } from '../../../../redux/actions/lettingActions';
 import AttendanceTable from './AttendanceTable';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { getUser } from '../../../../utils/helper';
-import { Alert, Button, ButtonGroup, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, select, Select, Textarea, Typography } from '@material-tailwind/react';
+import { Button, ButtonGroup, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
 import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { recordPublicRecord } from '../../../../redux/actions/collectionActions';
 import { toast } from 'react-toastify';
 import { getUserDetails } from '../../../../redux/actions/userActions';
 import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { addInventory } from '../../../../redux/actions/inventoryActions';
-import { ArrowDownIcon, ArrowUpIcon, SquareCheck } from 'lucide-react';
-import { resetError, resetSuccess } from '../../../../redux/slices/lettingSlice';
+import { SquareCheck } from 'lucide-react';
 import { useBreadcrumb } from '../../../Breadcrumb/BreadcrumbContext';
 
 const Attendance = () => {
@@ -25,7 +20,7 @@ const Attendance = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const { lettingDetails, loading, error, success, isUpdated, average } = useSelector((state) => state.lettings);
+  const { lettingDetails } = useSelector((state) => state.lettings);
   const { fridges } = useSelector((state) => state.fridges);
   const { userDetails } = useSelector((state) => state.users);
   const from = location.state?.from;

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import grand from '../../../assets/image/grand.png'
 import regular from '../../../assets/image/regular.png'
-import info from '../../../assets/image/information.png'
 import { Chip } from '@material-tailwind/react'
 const EventDetails = ({ event }) => {
     const formattedDate = (date) => {

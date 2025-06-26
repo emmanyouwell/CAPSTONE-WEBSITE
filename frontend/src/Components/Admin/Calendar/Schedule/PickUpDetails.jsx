@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { getSingleSchedule, updateSchedule } from '../../../../redux/actions/scheduleActions'
-import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Option, Select, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, CardFooter,  Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Option, Select, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import BagDetails from './BagDetails'
@@ -24,7 +24,7 @@ const PickUpDetails = () => {
     const from = location.state?.from;
     const status = location.state?.status;
     const { fridges } = useSelector((state) => state.fridges);
-    const { schedule, loading, success, error } = useSelector(state => state.schedules);
+    const { schedule, success } = useSelector(state => state.schedules);
     const { users, userDetails } = useSelector(state => state.users);
     const [open, setOpen] = useState(false);
     const [complete, setComplete] = useState(false);

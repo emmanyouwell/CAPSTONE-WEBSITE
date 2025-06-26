@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Typography, Button, Carousel } from '@material-tailwind/react';
+import React, { useEffect } from 'react'
+import { Typography, Carousel } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
-import placeholder from '../../assets/image/placeholder-image.webp'
 import { EyeIcon, Pencil, Trash } from 'lucide-react';
 const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
 
@@ -21,8 +20,7 @@ const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
                     month: 'short', // "Jan"
                     day: 'numeric', // "21"
                 });
-                const imageUrl = (article?.content) ? article.content.match(/<img[^>]+src="([^">]+)"/) ? article.content.match(/<img[^>]+src="([^">]+)"/)[1] : placeholder : null;
-                // const imageUrl = placeholder;
+                
                 return (
                     <div className=" bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-96" key={article._id}>
                         <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max">
