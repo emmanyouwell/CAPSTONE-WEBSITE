@@ -5,10 +5,9 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useNavigate } from 'react-router-dom';
 const localizer = momentLocalizer(moment);
 import { useDispatch } from 'react-redux';
-import { getEventDetails } from '../../../redux/actions/eventActions';
-import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
+import { Dialog, DialogBody, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import { toast } from 'react-toastify';
+
 // Custom agenda component
 const CustomAgenda = ({ event }) => (
     <>
@@ -30,7 +29,6 @@ const CustomAgenda = ({ event }) => (
 
 const ScheduleComponent = ({ events, type }) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const [items, setItems] = useState([]);
     const [open, setOpen] = useState(false);
@@ -61,11 +59,6 @@ const ScheduleComponent = ({ events, type }) => {
         }
 
     }, [events, type])
-
-    // useEffect(() => {
-    //     console.log(items);
-    // }, [items]);
-
 
     return (
         <>

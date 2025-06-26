@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Sidebar, { SidebarItem } from './Sidebar'
 import {
     LifeBuoy,
-    Receipt,
     Boxes,
-    Package,
-    UserCircle,
     BarChart3,
     LayoutDashboard,
-    Settings,
     HeartIcon,
     UserCircleIcon,
     CalendarIcon,
@@ -18,12 +14,9 @@ import {
     ClockIcon,
     Box,
     PackageOpenIcon,
-    PlusCircleIcon,
     BadgeCheck,
     Archive,
-    FileChartColumn
 } from 'lucide-react'
-import { useLocation } from 'react-router-dom';
 
 const superAdminItems = [
     { title: "Donor Records", route: "/dashboard/donors", path: 'donor', icon: <HeartIcon className="text-secondary" size={20} />, category: "Records" },

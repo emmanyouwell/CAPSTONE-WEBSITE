@@ -3,35 +3,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getDonors } from '../../../../redux/actions/donorActions'
 
 import {
-    Menu,
-    MenuHandler,
     Button,
-    MenuList,
-    MenuItem,
     Input,
     Card,
     List,
-    ListItem,
-    CardHeader,
     CardBody,
     CardFooter,
     Typography,
 } from "@material-tailwind/react";
-import DonorCards from '../../../../Components/Admin/Donors/DonorCards'
-import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { ArrowLongLeftIcon } from '@heroicons/react/24/solid'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { markAttendance } from '../../../../redux/actions/lettingActions';
 import { resetSuccess } from '../../../../redux/slices/lettingSlice';
 import Select from 'react-select';
-import { object } from 'yup';
 import { Check, SquarePen, Trash, X } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { formatDate, getDonationDate } from '../../../../utils/helper';
-import { setDate } from 'date-fns';
 const DonationDetails = () => {
     const dispatch = useDispatch();
-    const { donors, loading, error } = useSelector((state) => state.donors);
+    const { donors} = useSelector((state) => state.donors);
     const { loading: submitLoading, success } = useSelector((state) => state.lettings);
     const [search, setSearch] = useState('');
     const navigate = useNavigate()
@@ -60,7 +51,7 @@ const DonationDetails = () => {
     const [lastDonation, setLastDonation] = useState(null);
     const [editingIndex, setEditingIndex] = useState(null); // track which row is being edited
     const [editedBag, setEditedBag] = useState({ volume: "", quantity: "" });
-    const [lastDonationDate, setLastDonationDate] = useState(null);
+    const [lastDonationDate] = useState(null);
     const handleChange = (e) => {
         setDonorType(e.target.value)
     }

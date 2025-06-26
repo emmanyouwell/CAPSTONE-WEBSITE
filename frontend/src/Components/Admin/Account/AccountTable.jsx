@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { Card, Typography } from "@material-tailwind/react";
+import React from 'react'
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../DataTables/tanstack/DataTable';
 
@@ -43,18 +42,6 @@ const AccountTable = ({ users, currentPage, totalPages }) => {
             header: 'Role',
             cell: info => info.getValue()
         }),
-        // columnHelper.display({
-        //     id: 'actions',
-        //     header: 'Actions',
-        //     cell: ({ row }) => {
-        //         const id = row.original._id
-        //         return (
-        //             <div className="flex gap-2">
-        //                 <a href="#" className="text-blue-500">Edit</a>
-        //             </div>
-        //         );
-        //     },
-        // }),
     ];
     return (
         <div className="w-full h-full">

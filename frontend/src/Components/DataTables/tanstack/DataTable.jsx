@@ -10,7 +10,6 @@ import {
     CardBody,
     Button,
     Typography,
-    CardFooter,
 } from '@material-tailwind/react';
 
 export default function DataTable({ height, data = [], columns = [], pageSize = 5, editingRowId, setEditingRowId, editedData, setEditedData }) {

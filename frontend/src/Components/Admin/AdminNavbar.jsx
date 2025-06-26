@@ -1,24 +1,16 @@
 import React, { useEffect } from "react";
 import {
   Navbar,
-  MobileNav,
   Typography,
   Button,
   Menu,
   MenuHandler,
   MenuList,
   MenuItem,
-  Avatar,
-  Card,
-  IconButton,
   Breadcrumbs,
 } from "@material-tailwind/react";
 import {
-  InboxArrowDownIcon,
-  PowerIcon,
   ArrowLeftStartOnRectangleIcon,
-  Bars2Icon,
-  Bars3Icon,
   UserIcon
 } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,8 +24,8 @@ function ProfileMenu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { isLoggedIn, userDetails } = useSelector(state => state.users);
-  const closeMenu = () => setIsMenuOpen(false);
+  const { userDetails } = useSelector(state => state.users);
+  
   const logoutHandler = () => {
     dispatch(logoutUser('logged out'));
 
@@ -107,7 +99,7 @@ function ProfileMenu() {
   );
 }
 
-export function ComplexNavbar({ pageTitle, isNavOpen, setIsNavOpen }) {
+export function ComplexNavbar({ setIsNavOpen }) {
 
   const { breadcrumb } = useBreadcrumb();
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);

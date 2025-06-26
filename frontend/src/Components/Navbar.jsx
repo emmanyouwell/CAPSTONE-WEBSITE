@@ -9,9 +9,8 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  Card,
 } from "@material-tailwind/react";
-import { Bars3Icon, InboxArrowDownIcon, PresentationChartBarIcon, ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/solid";
+import { PresentationChartBarIcon, ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser, getUser } from '../redux/actions/userActions';
@@ -23,11 +22,11 @@ function ProfileMenu() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [profileMenuItems, setProfileMenuItems] = React.useState([]);
-  const { userDetails, isLoggedIn } = useSelector(state => state.users);
+  const { userDetails } = useSelector(state => state.users);
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch])
-  const closeMenu = () => setIsMenuOpen(false);
+  
 
   const logoutHandler = () => {
 
@@ -121,9 +120,9 @@ function ProfileMenu() {
 
 const StickyNavbar = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, userDetails } = useSelector(state => state.users);
+  const { userDetails } = useSelector(state => state.users);
   const [openNav, setOpenNav] = React.useState(false);
-  const navigate = useNavigate();
+  
   const logoutHandler = () => {
 
     dispatch(logoutUser('logged out'));

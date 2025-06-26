@@ -1,4 +1,4 @@
-import { Button, Typography } from '@material-tailwind/react';
+import {Typography } from '@material-tailwind/react';
 import React, { useState, useEffect } from 'react'
 import donorRecords from '../../assets/image/donor-records.png'
 import recipientRecords from '../../assets/image/recipient-records.png'
