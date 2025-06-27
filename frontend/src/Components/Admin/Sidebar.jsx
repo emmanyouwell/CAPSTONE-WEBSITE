@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronFirst, ChevronLast } from 'lucide-react'
-import React, { createContext, useContext, useState, Children, isValidElement, cloneElement } from 'react'
+import React, { createContext, useContext, useState, Children, isValidElement, cloneElement, useMemo } from 'react'
 import logo from '../../assets/image/TCHMB-logo.png'
 import { Link } from 'react-router-dom'
 import { useIsActive } from '../../utils/helper'
@@ -7,6 +7,7 @@ const SidebarContext = createContext()
 import PropTypes from 'prop-types'
 export default function Sidebar({ children }) {
     const [expanded, setExpanded] = useState(true)
+    const value = useMemo(() => ({ expanded }), [expanded])
     return (
         <aside className="h-[100vh]">
             <nav className="h-full flex flex-col bg-white border-r shadow-sm">
@@ -19,7 +20,7 @@ export default function Sidebar({ children }) {
                     </button>
                 </div>
 
-                <SidebarContext.Provider value={{ expanded }}>
+                <SidebarContext.Provider value={value}>
                     <ul className="flex-1 px-3">{children}</ul>
                 </SidebarContext.Provider>
 
