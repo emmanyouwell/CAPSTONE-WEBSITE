@@ -317,7 +317,7 @@ const UnpasteurizedMilk = () => {
                     </div>
                 </Link>
                 {totalVolume > 0 && <div className="flex justify-center items-center gap-4">
-                    <Typography variant="h2">Selected milk: {totalVolume && totalVolume} ml</Typography>
+                    <Typography variant="h2">Selected milk: {totalVolume} ml</Typography>
                     {selectedRows.length > 0 && (
                         <Button variant="outlined" color="pink" onClick={handleOpen} size="sm">Choose fridge</Button>)}
 

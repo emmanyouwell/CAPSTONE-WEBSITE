@@ -1,7 +1,5 @@
 import { toast } from 'react-toastify';
 import { useLocation } from "react-router-dom";
-import React from 'react';
-import Loader from '../Components/Loader/Loader';
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {
 
@@ -292,3 +290,16 @@ export const formatMetric = (value, isPercentage = false) => {
     if (value == null) return '0.00%';
     return isPercentage ? `${(Number(value) * 100).toFixed(2)}%` : value;
 };
+
+export const getLatestDonationDate = (donations) => {
+    if (!Array.isArray(donations) || donations.length === 0) return null;
+
+    // Find the latest donation by comparing dates
+    return donations.reduce((latest, current) => {
+        const latestDate = getDonationDate(latest);
+        const currentDate = getDonationDate(current);
+        if (!latestDate) return current;
+        if (!currentDate) return latest;
+        return currentDate > latestDate ? current : latest;
+    }, donations[0]);
+}

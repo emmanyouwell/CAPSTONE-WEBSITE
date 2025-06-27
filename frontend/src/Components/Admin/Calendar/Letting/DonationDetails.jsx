@@ -19,7 +19,7 @@ import { resetSuccess } from '../../../../redux/slices/lettingSlice';
 import Select from 'react-select';
 import { Check, SquarePen, Trash, X } from 'lucide-react';
 import DatePicker from 'react-datepicker';
-import { formatDate, getDonationDate } from '../../../../utils/helper';
+import { formatDate, getDonationDate, getLatestDonationDate } from '../../../../utils/helper';
 
 function CustomOption({ option }) {
     return (
@@ -172,22 +172,11 @@ const DonationDetails = () => {
             const donations = selectedDonor.donations || [];
             let latestDonation;
             if (donations.length === 0) {
-
-                console.log("No donations found");
-
                 latestDonation = null;
                 setDonorType("New Donor");
                 setDateTested(null);
             } else {
-                latestDonation = donations.reduce((latest, current) => {
-                    const latestDate = getDonationDate(latest);
-                    const currentDate = getDonationDate(current);
-
-                    if (!latestDate) return current;
-                    if (!currentDate) return latest;
-
-                    return currentDate > latestDate ? current : latest;
-                }, donations[0]);
+                latestDonation = getLatestDonationDate(donations);
                 setDonorType("Old Donor");
                 setDateTested(selectedDonor.dateTested);
                 if (latestDonation.donationType === "Public") {
@@ -198,9 +187,9 @@ const DonationDetails = () => {
                 }
             }
             setLastDonation(latestDonation);
-            console.log("Latest Donation:", latestDonation);
         }
     }, [selectedDonor])
+
     const options = [
         ...donors.map((donor) => ({
             value: donor, label: `${donor.user.name.first} ${donor.user.name.last} | ${donor.user.phone}`, donor
