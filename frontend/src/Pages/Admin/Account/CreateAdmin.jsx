@@ -11,12 +11,11 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails, registerUser } from "../../../redux/actions/userActions";
 import { resetRegister } from "../../../redux/slices/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 const CreateAdmin = () => {
-  const {setBreadcrumb} = useBreadcrumb();
+  const { setBreadcrumb } = useBreadcrumb();
   const navigation = useNavigate();
   const dispatch = useDispatch();
   const { isRegistered, userDetails } = useSelector((state) => state.users);
@@ -63,13 +62,13 @@ const CreateAdmin = () => {
   useEffect(() => {
     dispatch(getUserDetails())
   }, [dispatch]);
-  useEffect(()=>{
+  useEffect(() => {
     setBreadcrumb([
       { name: "Dashboard", path: "/dashboard" },
       { name: "Account", path: "/dashboard/account" },
       { name: "Create Employee Account" }
     ])
-  },[])
+  }, [])
   return (
     <section className="w-full p-4">
       <div>

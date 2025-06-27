@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { getRequestDetails,updateRequestStatus, updateVolumeRequested } from '../../../../redux/actions/requestActions';
 import { Button, ButtonGroup, Card, CardBody, CardFooter, Dialog, DialogBody, Drawer, IconButton, Input, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Textarea, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { useNavigate } from 'react-router-dom'
 import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { toast } from 'react-toastify'
 import { getFridges } from '../../../../redux/actions/fridgeActions';

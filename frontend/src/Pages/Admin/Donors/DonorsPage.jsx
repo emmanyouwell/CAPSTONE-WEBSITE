@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDonors } from '../../../redux/actions/donorActions'
-import { Input, Button, IconButton } from '@material-tailwind/react'
+import { Input, Button, IconButton, Select, Option } from '@material-tailwind/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import { Select, Option } from '@material-tailwind/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
 import { EyeIcon } from 'lucide-react'
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 const DonorsPage = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
     const { donors, pageSize } = useSelector((state) => state.donors);
     const [search, setSearch] = useState('');
@@ -130,12 +129,12 @@ const DonorsPage = () => {
             .then((data) => console.log('Donors fetched:', data))
             .catch((err) => console.error('Error fetching donors:', err));
     }, [dispatch, search, currentPage, brgy, type])
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
-            {name: "Dashboard", path: "/dashboard"},
-            {name: "Donors", path: "/dashboard/donors"}
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Donors", path: "/dashboard/donors" }
         ])
-    },[])
+    }, [])
     return (
         <div className="p-4 flex flex-col gap-4">
             <div className="flex flex-col lg:flex-row justify-start items-center gap-4 mt-4">
