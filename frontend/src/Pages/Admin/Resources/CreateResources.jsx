@@ -150,7 +150,7 @@ const CreateResources = () => {
                 {images.map((image, index) => (
                     <div key={image.url} className="relative w-max">
                         <button
-                            onClick={() => handleRemoveImage(index, !!image.local)}
+                            onClick={() => handleRemoveImage(index)}
                             className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center z-10"
                         >
                             &times;
