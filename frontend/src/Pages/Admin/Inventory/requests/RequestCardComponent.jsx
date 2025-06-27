@@ -2,11 +2,7 @@ import React, { useState } from 'react'
 import {
     Button,
     Dialog,
-    DialogHeader,
     DialogBody,
-    DialogFooter,
-    Avatar,
-    IconButton,
     Typography,
     Card,
     CardFooter,

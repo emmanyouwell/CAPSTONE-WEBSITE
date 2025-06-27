@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMilkPerMonth, getVolumePerLocation, getDispensedMilkPerMonth, getDonorsPerMonth, getPatientsPerMonth, getRequestsPerMonth, getAvailableMilk, getExpiringMilk, getDonorLocation, getPatientHospital, getDonorAgeDemographic } from '../../redux/actions/metricActions'
 import { LifebuoyIcon, UserIcon } from '@heroicons/react/24/solid'
-
 import {
   Chart as ChartJS,
   BarElement,
@@ -14,14 +13,11 @@ import {
   Legend,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Bar, Bubble, Pie } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 import { Accordion, AccordionHeader, AccordionBody, Card, CardHeader, Typography } from '@material-tailwind/react';
 import { formatNumber } from '../../utils/helper'
 import { donorAgeDemographic, donorsPerBarangay, milkCollectedChartData, milkDonatedPerBarangay, monthlyDispensedMilkChartData, monthlyDonorsChartData, monthlyPatientsChartData, patientPerHospital } from '../../data/metricsData';
-import Loader from '../../Components/Loader/Loader'
-import HorizontalLoader from '../../Components/Loader/HorizontalLoader';
 import { useCountUp } from '../../utils/hooks/useCountUp';
-import { useBeforeUnload } from 'react-router-dom';
 import { useBreadcrumb } from '../../Components/Breadcrumb/BreadcrumbContext';
 // Register required components
 ChartJS.register(BarElement, PointElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
@@ -44,7 +40,7 @@ function Icon({ id, open }) {
 const Dashboard = () => {
   const { setBreadcrumb } = useBreadcrumb();
   const dispatch = useDispatch();
-  const { statsLoading, monthlyDonorsLoading, expiringLoading, dispensedMilkLoading, monthlyPatientsLoading, monthlyRequestsLoading, availableLoading, stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, donorAge, donorAgeLoading } = useSelector((state) => state.metrics);
+  const { statsLoading, monthlyDonorsLoading, expiringLoading, dispensedMilkLoading, monthlyPatientsLoading, monthlyRequestsLoading, availableLoading, stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, donorAge } = useSelector((state) => state.metrics);
   useEffect(() => {
     setBreadcrumb([
       { name: "Dashboard", path: "/dashboard" },

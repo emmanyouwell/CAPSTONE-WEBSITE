@@ -2,22 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Button,
-    Card,
-    CardBody,
-    CardFooter,
-    Dialog,
-    DialogBody,
-    DialogFooter,
-    DialogHeader,
     Drawer,
-    IconButton,
     Input,
     Typography,
 } from "@material-tailwind/react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLongLeftIcon, HandThumbUpIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Link, useParams } from "react-router-dom";
+import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import { getFridges, openFridge } from "../../../redux/actions/fridgeActions";
-import { CheckIcon, CheckSquare, Milk, PlusSquare, SquareCheck } from 'lucide-react'
 import { getUserDetails } from "../../../redux/actions/userActions";
 import { toast } from "react-toastify";
 import { updateBag } from "../../../redux/actions/bagActions";
@@ -26,24 +17,10 @@ import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 import DatePicker from "react-datepicker";
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
-function Icon({ id, open }) {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className={`${id === open ? "rotate-180" : ""} h-5 w-5 transition-transform`}
-        >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
-    );
-}
-const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
+
+const UnpasteurizedMilk = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const { id } = useParams()
-    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [open, setOpen] = useState(0);
     const [selectedOption, setSelectedOption] = useState('');
@@ -65,7 +42,7 @@ const UnpasteurizedMilk = ({ currentPage, totalPages }) => {
         date: false,
         bottleType: false,
     }));
-    const { fridges, fridgeContent, allBags, loading, error } = useSelector(state => state.fridges)
+    const { fridges, allBags } = useSelector(state => state.fridges)
     const { userDetails } = useSelector(state => state.users);
     const handleOpen = () => setOpen(!open);
     const handleChange = (e) => {

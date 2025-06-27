@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Dialog, IconButton, DialogHeader, DialogBody, DialogFooter, Carousel } from '@material-tailwind/react';
-import { Link, useLocation } from 'react-router-dom';
-import placeholder from '../../../assets/image/placeholder-image.webp'
-import { EyeIcon, Pencil, Trash } from 'lucide-react';
+import { Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Carousel } from '@material-tailwind/react';
+import { useLocation } from 'react-router-dom';
+import { EyeIcon } from 'lucide-react';
 const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
 
     const location = useLocation();
-    const isAdminLocation = location.pathname.includes('dashboard');
     const [open, setOpen] = useState(false);
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
     const handleOpen = (announcement) => {

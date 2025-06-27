@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import StickyNavbar from '../Components/Navbar'
-import { Typography, Button, Carousel } from '@material-tailwind/react'
-import { Link, useParams } from 'react-router-dom'
-import RelatedArticles from '../Components/RelatedArticles'
-import Announcement from '../Components/Announcements'
+import { Typography, Carousel } from '@material-tailwind/react'
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { getArticleDetails, getArticles } from '../redux/actions/articleActions'
 import ArticleList from '../Components/Articles/ArticleList'
 import { createPortal } from 'react-dom';
 const SingleArticle = () => {
     const dispatch = useDispatch();
-    const { articles, articleDetails, loading, error } = useSelector((state) => state.articles);
+    const { articles, articleDetails } = useSelector((state) => state.articles);
     const { id } = useParams();
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const [combinedHTML, setCombinedHTML] = useState('');

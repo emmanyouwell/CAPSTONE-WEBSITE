@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Card, IconButton } from '@material-tailwind/react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getFridges } from '../../../../redux/actions/fridgeActions'
+import React from 'react'
+import { IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 
-import { DoorOpen, EyeIcon, SquarePenIcon } from 'lucide-react'
+import { EyeIcon, SquarePenIcon } from 'lucide-react'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
-const PastTables = ({ currentPage, totalPages, pasteurizedFridges, handleEdit }) => {
+const PastTables = ({ pasteurizedFridges, handleEdit }) => {
     const columnHelper = createColumnHelper();
 
     const columns = [

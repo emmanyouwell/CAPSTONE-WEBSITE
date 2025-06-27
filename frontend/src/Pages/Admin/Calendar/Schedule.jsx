@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getEvents } from '../../../redux/actions/eventActions'
 
 import { Button, Typography } from '@material-tailwind/react'
 import ScheduleComponent from '../../../Components/Admin/Calendar/Calendar'
@@ -14,7 +13,7 @@ const Schedule = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
 
-    const { lettings, loading, error } = useSelector((state) => state.lettings);
+    const { lettings } = useSelector((state) => state.lettings);
     useEffect(() => {
         dispatch(getLettings());
     }, [dispatch])

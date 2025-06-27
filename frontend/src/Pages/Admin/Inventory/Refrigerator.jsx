@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFridges, getFridgeDetails, getFridges, updateFridge } from '../../../redux/actions/fridgeActions'
-import { Link } from 'react-router-dom'
 import UnpastTables from './tables/UnpastTables'
 import PastTables from './tables/PastTables'
 import {
@@ -26,14 +25,13 @@ import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 const Refrigerator = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch()
-    const { fridgeDetails, fridges, available, loading, isUpdated, error } = useSelector(state => state.fridges)
+    const { fridgeDetails, fridges, available, loading, isUpdated } = useSelector(state => state.fridges)
     useEffect(() => {
         dispatch(getFridges())
     }, [dispatch])
     const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
     const unpasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Unpasteurized') : [];
     const [open, setOpen] = useState(false)
-    const [name, setName] = useState('')
     const [openEdit, setOpenEdit] = useState(false)
     const [id, setId] = useState('');
     const handleEdit = (id) => {

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Card, Input, Select, Option, IconButton } from '@material-tailwind/react'
+import { Button, Input, Select, Option, IconButton } from '@material-tailwind/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { Link } from 'react-router-dom'
-import { MagnifyingGlassIcon, PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { getAllCollections } from '../../../../redux/actions/collectionActions'
 import { EyeIcon } from 'lucide-react'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -13,7 +12,7 @@ import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbConte
 const CollectionsTable = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch()
-    const { collections, loading, error } = useSelector(state => state.collections)
+    const { collections } = useSelector(state => state.collections)
 
     const [search, setSearch] = useState('');
     const [type, setType] = useState('');

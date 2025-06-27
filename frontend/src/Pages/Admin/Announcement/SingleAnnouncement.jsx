@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import StickyNavbar from '../../../Components/Navbar'
-import { Typography, Button } from '@material-tailwind/react'
-import { Link, useParams } from 'react-router-dom'
-import RelatedArticles from '../../../Components/RelatedArticles'
-import Announcement from '../../../Components/Announcements'
+import { Typography } from '@material-tailwind/react'
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnnouncementDetails, getAnnouncement } from '../../../redux/actions/announcementActions'
-import ArticleList from '../../../Components/Articles/ArticleList'
 import AnnouncementList from './AnnouncementList'
 const SingleAnnouncement = () => {
     const dispatch = useDispatch();
-    const { announcements, announcementDetails, loading, error } = useSelector((state) => state.announcements);
+    const { announcements, announcementDetails } = useSelector((state) => state.announcements);
     const { id } = useParams();
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const formattedDate = new Date(announcementDetails.createdAt).toLocaleDateString('en-US', {

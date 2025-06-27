@@ -49,7 +49,7 @@ const CreateResources = () => {
     const pondRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, success } = useSelector((state) => state.articles);
+    const { loading, success } = useSelector((state) => state.articles);
 
     const [title, setTitle] = useState(""); 
     const [description, setDescription] = useState(""); 

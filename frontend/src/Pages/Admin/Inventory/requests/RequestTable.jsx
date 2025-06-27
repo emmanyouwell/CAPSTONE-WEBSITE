@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Card, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getFridges } from '../../../../redux/actions/fridgeActions'
+import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { PencilIcon, PencilSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { XMarkIcon } from '@heroicons/react/24/solid'
 import { EyeIcon, CheckCheck, Trash } from 'lucide-react'
 import { formatDate, getUser } from '../../../../utils/helper'
 import { deleteRequest, inpatientDispense, outpatientDispense } from '../../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
-const RequestTable = ({ currentPage, totalPages, requests, setRefresh }) => {
+const RequestTable = ({ requests, setRefresh }) => {
     const dispatch = useDispatch();
-    const [items, setItems] = useState([
+    const [items] = useState([
         { label: "Insulated Bag w/ Ice Pack", value: "Insulated Bag w/ Ice Pack" },
         { label: "Cooler w/ Ice Pack", value: "Cooler w/ Ice Pack" },
         { label: "Styro box w/ Ice Pack", value: "Styro box w/ Ice Pack" },

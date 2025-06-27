@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecipients } from '../../../redux/actions/recipientActions'
 import { Input, Button, IconButton } from '@material-tailwind/react'
-import DonorCards from '../../../Components/Admin/Donors/DonorCards'
-import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Select, Option } from '@material-tailwind/react'
-import RecipientCards from '../../../Components/Admin/Recipients/RecipientCards'
 import { getUser } from '../../../utils/helper'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
@@ -15,7 +13,7 @@ import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 const RecipientPage = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
-    const { recipients, pageSize, totalRecipients, totalPages, loading, error } = useSelector((state) => state.recipients);
+    const { recipients, pageSize } = useSelector((state) => state.recipients);
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [brgy, setBrgy] = useState('');

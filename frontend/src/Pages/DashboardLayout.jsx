@@ -16,7 +16,7 @@ const DashboardLayout = () => {
             })
         }
     }, [location.pathname])
-    const [isNavOpen, setIsNavOpen] = useState(false)
+    const [, setIsNavOpen] = useState(false)
     return (
         <>
             <div className="flex w-[100%] flex-1 items-stretch ">

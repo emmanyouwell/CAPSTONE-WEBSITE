@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react"; // Import Textarea component
 import { useDispatch, useSelector } from "react-redux";
-import { addHTMLArticles } from "../../../redux/actions/articleActions";
 import Loader from "../../../Components/Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { resetSuccess } from "../../../redux/slices/articleSlice";
@@ -14,48 +12,16 @@ import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 registerPlugin(FilePondPluginFileEncode, FilePondPluginFileValidateType);
-const modules = {
-    toolbar: {
-        container: [
-            [{ header: [1, 2, 3, false] }],
-            [{ color: [] }, { background: [] }],
-            [{ align: [] }],
-            ["bold", "italic", "underline"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["link"],
-
-            [{ indent: "-1" }, { indent: "+1" }],
-            ["blockquote"]
-        ],
-    },
-};
-
-const formats = [
-    "header",
-    "align",
-    "bold",
-    "italic",
-    "underline",
-    "list",
-    "bullet",
-    "link",
-    "color",
-    "background",
-    "indent",
-    "blockquote"
-];
 
 const CreateAnnouncement = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const pondRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, success } = useSelector((state) => state.announcements);
+    const { loading, success } = useSelector((state) => state.announcements);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [content, setContent] = useState("");
-    const [show, setShow] = useState(false);
     const [images, setImages] = useState([]);
     const handleRemoveImage = (index) => {
         setImages((prev) => {

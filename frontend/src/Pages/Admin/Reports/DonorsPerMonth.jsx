@@ -5,7 +5,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Page, Text, View, Document, StyleSheet, pdf } from '@react-pdf/renderer';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAvailableMilk, getDispensedMilkPerMonth, getDonorsPerMonth, getMilkPerMonth, getPasteurizedMilkPerMonth, getPatientsPerMonth } from '../../../redux/actions/metricActions';
+import { getDispensedMilkPerMonth, getDonorsPerMonth, getMilkPerMonth, getPasteurizedMilkPerMonth, getPatientsPerMonth } from '../../../redux/actions/metricActions';
 import { normalizeData } from '../../../utils/helper';
 import Select from 'react-select';
 import { Typography } from '@material-tailwind/react';
@@ -186,7 +186,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
 const DonorsPerMonth = () => {
     const {setBreadcrumb} = useBreadcrumb()
     const dispatch = useDispatch();
-    const { stats, available, monthlyDonors, patientHospital, donorLocation, volumePerLocation, expiring, dispensedMilk, monthlyPatients, monthlyRequests, pastPerMonth } = useSelector((state) => state.metrics);
+    const { stats, monthlyDonors, dispensedMilk, monthlyPatients, pastPerMonth } = useSelector((state) => state.metrics);
     const [pdfUrl, setPdfUrl] = useState(null);
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [selectedYear, setSelectedYear] = useState(null);

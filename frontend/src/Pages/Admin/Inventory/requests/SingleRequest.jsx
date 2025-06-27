@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { getRequestDetails, updateRequest, updateRequestStatus, updateVolumeRequested } from '../../../../redux/actions/requestActions';
-import { Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Carousel, Dialog, DialogBody, DialogFooter, DialogHeader, Drawer, IconButton, Input, Option, Select, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Textarea, Typography } from '@material-tailwind/react'
+import { getRequestDetails,updateRequestStatus, updateVolumeRequested } from '../../../../redux/actions/requestActions';
+import { Button, ButtonGroup, Card, CardBody, CardFooter, Dialog, DialogBody, Drawer, IconButton, Input, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Textarea, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom'
@@ -70,10 +70,6 @@ const SingleRequest = () => {
                 console.log("error: ", err)
                 toast.error("Error updating volume", { position: "bottom-right" })
             })
-
-
-
-
         }
     })
 
@@ -129,8 +125,6 @@ const SingleRequest = () => {
         comment: { status: false, message: "" }
     }));
     const handleSubmit = (e) => {
-        // e.preventDefault();
-        // console.log("clicked: ")
         let startLimit = 0;
         let endLimit = 0;
 
@@ -245,7 +239,6 @@ const SingleRequest = () => {
         setVolume(0)
         const details = filteredInventories.find((inv) => inv._id === e.target.value)
         const availableBottles = details.pasteurizedDetails.bottles.filter((b) => b.status === 'Available')
-        // const totalVolume = availableBottles.length * details.pasteurizedDetails.bottleType;
         const requiredVolume = requestDetails.volumeRequested.volume * requestDetails.volumeRequested.days
         const remainingVolume = requiredVolume - selectedVolume;
         if (remainingVolume > 0) {

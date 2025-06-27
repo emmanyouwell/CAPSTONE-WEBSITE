@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Button, Card, Dialog, DialogBody, Input, Textarea, Typography } from "@material-tailwind/react"; // Import Textarea component
+import { Button, Input, Textarea, Typography } from "@material-tailwind/react"; // Import Textarea component
 import { useDispatch, useSelector } from "react-redux";
-import { addHTMLArticles, getArticleDetails, updateHTMLArticle } from "../../../redux/actions/articleActions";
+import { getArticleDetails, updateHTMLArticle } from "../../../redux/actions/articleActions";
 import Loader from "../../../Components/Loader/Loader";
 import { useNavigate, useParams } from "react-router-dom";
-import { resetSuccess, resetUpdate } from "../../../redux/slices/articleSlice";
-import placeholder from '../../../assets/image/placeholder-image.webp'
+import { resetUpdate } from "../../../redux/slices/articleSlice";
 import { FilePond, registerPlugin } from 'react-filepond';
 
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
@@ -46,16 +45,16 @@ const formats = [
 ];
 
 const EditArticle = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const pondRef = useRef(null);
     const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, isUpdated, articleDetails } = useSelector((state) => state.articles);
+    const { loading, isUpdated, articleDetails } = useSelector((state) => state.articles);
 
-    const [title, setTitle] = useState(""); 
-    const [description, setDescription] = useState(""); 
-    const [content, setContent] = useState(""); 
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [content, setContent] = useState("");
     const [images, setImages] = useState([]);
     const [imagePreview, setImagePreview] = useState([]);
 
@@ -118,7 +117,7 @@ const EditArticle = () => {
     }, [articleDetails])
     const onSave = () => {
         const allImages = [...imagePreview, ...images];
-        
+
         const req = {
             id,
             title: title,
@@ -128,13 +127,13 @@ const EditArticle = () => {
         };
         dispatch(updateHTMLArticle(req));
     };
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: "Dashboard", path: "/dashboard" },
             { name: "Articles", path: "/dashboard/resources" },
             { name: "Edit Article" }
         ])
-    },[])
+    }, [])
     return (
         <div className="p-4 space-y-4">
 

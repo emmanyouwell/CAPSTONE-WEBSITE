@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Typography, Select, Option, Input } from '@material-tailwind/react'
+import { Button, Select, Option, Input } from '@material-tailwind/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import admin from '../../../assets/image/admin-icon.png';
-import staff from '../../../assets/image/staff-icon.png';
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllUsers, getUserDetails } from '../../../redux/actions/userActions';
 import { Link } from 'react-router-dom';

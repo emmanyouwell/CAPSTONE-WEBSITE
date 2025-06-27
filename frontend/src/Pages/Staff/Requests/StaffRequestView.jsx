@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addRequest, getRequests } from '../../../redux/actions/requestActions';
 
 import StaffRequest from './StaffRequest';
-import { Button, Card, CardBody, CardHeader, Dialog, DialogBody, DialogFooter, DialogHeader, Input, ListItem, List, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography, Drawer } from '@material-tailwind/react';
-import { CheckCheck } from 'lucide-react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { Button, Card, CardBody, CardHeader, Input, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography, Drawer } from '@material-tailwind/react';
 import { getRecipients } from '../../../redux/actions/recipientActions';
 import { getUser } from '../../../utils/helper';
 import { toast } from 'react-toastify';
@@ -16,12 +14,11 @@ import Loader from '../../../Components/Loader/Loader';
 import { resetDelete } from '../../../redux/slices/requestSlice';
 const StaffRequestView = () => {
     const dispatch = useDispatch();
-    const { request, loading, error } = useSelector(state => state.requests)
-    const { loading: loadingPatients, recipients } = useSelector(state => state.recipients)
+    const { request, loading } = useSelector(state => state.requests)
+    const { recipients } = useSelector(state => state.recipients)
     const [search, setSearch] = useState('');
     const [open, setOpen] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
-    const [selectedOption, setSelectedOption] = useState('All');
     const { devices } = useSelector(state => state.devices)
     const [refresh, setRefresh] = useState(false);
     useEffect(() => {
@@ -66,7 +63,6 @@ const StaffRequestView = () => {
             !volume ||
             !days
         ) {
-            // setOpen(false);
             toast.error("Please fill in all fields", {
                 position: "bottom-right",
             });
