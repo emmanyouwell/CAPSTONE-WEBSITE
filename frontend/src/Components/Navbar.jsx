@@ -11,10 +11,9 @@ import {
   MenuItem,
 } from "@material-tailwind/react";
 import { PresentationChartBarIcon, ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser, getUser } from '../redux/actions/userActions';
-import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 
 function ProfileMenu() {
@@ -26,7 +25,7 @@ function ProfileMenu() {
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch])
-  
+
 
   const logoutHandler = () => {
 
@@ -122,11 +121,11 @@ const StickyNavbar = () => {
   const dispatch = useDispatch();
   const { userDetails } = useSelector(state => state.users);
   const [openNav, setOpenNav] = React.useState(false);
-  
+
   const logoutHandler = () => {
 
     dispatch(logoutUser('logged out'));
-    
+
 
   }
 

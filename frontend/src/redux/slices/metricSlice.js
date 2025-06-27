@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth, getDonorLocation, getPatientHospital, getPasteurizedMilkPerMonth, getDonorAgeDemographic } from '../actions/metricActions';
-import { getAvailableMilk } from '../actions/metricActions';
-import { getExpiringMilk } from '../actions/metricActions';
+import { getMilkPerMonth, getDonorsPerMonth, getDispensedMilkPerMonth, getPatientsPerMonth, getVolumePerLocation, getRequestsPerMonth, getDonorLocation, getPatientHospital, getPasteurizedMilkPerMonth, getDonorAgeDemographic, getAvailableMilk, getExpiringMilk } from '../actions/metricActions';
 export const metricSlice = createSlice({
     name: 'metric',
     initialState: {

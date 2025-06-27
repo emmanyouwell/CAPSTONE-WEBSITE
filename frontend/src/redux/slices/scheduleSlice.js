@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { approveSchedule, getDonorSchedules, requestSchedule, updateSchedule } from '../actions/scheduleActions';
-import { getAllSchedules } from '../actions/scheduleActions';
-import { getSingleSchedule } from '../actions/scheduleActions';
+import { approveSchedule, getDonorSchedules, requestSchedule, updateSchedule, getAllSchedules, getSingleSchedule } from '../actions/scheduleActions';
 
 export const lettingSlice = createSlice({
     name: 'schedule',

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useNavigate} from 'react-router-dom'
 import { finalizeSession, getLettingDetails } from '../../../../redux/actions/lettingActions';
 import AttendanceTable from './AttendanceTable';
 import { Button, ButtonGroup, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
 import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
 import { recordPublicRecord } from '../../../../redux/actions/collectionActions';
 import { toast } from 'react-toastify';
 import { getUserDetails } from '../../../../redux/actions/userActions';
