@@ -11,7 +11,7 @@ import {
     Button,
     Typography,
 } from '@material-tailwind/react';
-
+import PropTypes from 'prop-types';
 export default function DataTable({ height, data = [], columns = [], pageSize = 5, editingRowId, setEditingRowId, editedData, setEditedData }) {
     const table = useReactTable({
         data,
@@ -101,3 +101,14 @@ export default function DataTable({ height, data = [], columns = [], pageSize = 
         </Card>
     );
 }
+
+DataTable.propTypes = {
+    height: PropTypes.string,
+    data: PropTypes.array.isRequired,
+    columns: PropTypes.array.isRequired,
+    pageSize: PropTypes.number,
+    editingRowId: PropTypes.string,
+    setEditingRowId: PropTypes.func,
+    editedData: PropTypes.object,
+    setEditedData: PropTypes.func,
+};

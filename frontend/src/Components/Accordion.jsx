@@ -4,7 +4,7 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-
+import PropTypes from "prop-types";
 function Icon({ id, open }) {
   return (
     <svg
@@ -19,7 +19,10 @@ function Icon({ id, open }) {
     </svg>
   );
 }
-
+Icon.propTypes = {
+  id: PropTypes.string.isRequired,   // or PropTypes.number, depending on your use
+  open: PropTypes.string.isRequired, // same here
+};
 export function AccordionCustomIcon() {
   const [open, setOpen] = React.useState(0);
 

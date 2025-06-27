@@ -1,6 +1,7 @@
 import { Button } from '@material-tailwind/react'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 const RecipientCards = ({ recipients }) => {
     return (
 
@@ -64,5 +65,7 @@ const RecipientCards = ({ recipients }) => {
 
     )
 }
-
+RecipientCards.propTypes = {
+    recipients: PropTypes.object.isRequired
+}
 export default RecipientCards

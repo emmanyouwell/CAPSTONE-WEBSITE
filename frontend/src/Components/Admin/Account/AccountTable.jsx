@@ -1,9 +1,9 @@
 import React from 'react'
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../DataTables/tanstack/DataTable';
+import PropTypes from 'prop-types';
 
-
-const AccountTable = ({ users, currentPage, totalPages }) => {
+const AccountTable = ({ users }) => {
     const columnHelper = createColumnHelper();
 
     const columns = [
@@ -48,6 +48,21 @@ const AccountTable = ({ users, currentPage, totalPages }) => {
             <DataTable data={users} columns={columns} pageSize={10} />
         </div>
     )
+}
+AccountTable.propTypes = {
+    users: PropTypes.arrayOf(
+        PropTypes.shape({
+            employeeID: PropTypes.string.isRequired,
+            name: PropTypes.shape({
+                first: PropTypes.string.isRequired,
+                last: PropTypes.string.isRequired,
+                middle: PropTypes.string
+            }).isRequired,
+            phone: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            role: PropTypes.string.isRequired
+        })
+    ).isRequired
 }
 
 export default AccountTable

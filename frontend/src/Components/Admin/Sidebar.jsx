@@ -4,7 +4,8 @@ import logo from '../../assets/image/TCHMB-logo.png'
 import { Link } from 'react-router-dom'
 import { useIsActive } from '../../utils/helper'
 const SidebarContext = createContext()
-export default function Sidebar({ children, userDetails }) {
+import PropTypes from 'prop-types'
+export default function Sidebar({ children }) {
     const [expanded, setExpanded] = useState(true)
     return (
         <aside className="h-[100vh]">
@@ -39,6 +40,13 @@ export function SidebarItem({ icon, text, path, prefix, alert, children }) {
     const itemContent = (
         <li
             onClick={toggleDropdown}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault(); // Prevent page scroll on Space
+                    toggleDropdown();
+                }
+            }}
+            tabIndex={0}
             className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group
                 ${isActive ? "bg-gradient-to-tr from-pink-200 to-pink-100 text-pink-800" : "hover:bg-pink-50 text-black"}
             `}
@@ -89,6 +97,14 @@ export function SidebarItem({ icon, text, path, prefix, alert, children }) {
     )
 }
 
-
-
-
+SidebarItem.propTypes = {
+    icon: PropTypes.element.isRequired,
+    text: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    prefix: PropTypes.string,
+    alert: PropTypes.bool,
+    children: PropTypes.node
+}
+Sidebar.propTypes = {
+    children: PropTypes.node.isRequired,
+}

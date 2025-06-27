@@ -8,6 +8,16 @@ import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
 import { EyeIcon } from 'lucide-react'
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
+function ActionsCell({ row }) {
+    const id = row.original._id
+    return (
+        <div className="flex gap-2">
+            <Link to={`/dashboard/donors/${id}`}>
+                <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
+            </Link>
+        </div>
+    );
+}
 const DonorsPage = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
@@ -111,16 +121,9 @@ const DonorsPage = () => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const id = row.original._id
-                return (
-                    <div className="flex gap-2">
-                        <Link to={`/dashboard/donors/${id}`}>
-                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
-                        </Link>
-                    </div>
-                );
-            },
+            cell: ({ row }) => (
+                <ActionsCell row={row} />
+            ),
         }),
     ];
     useEffect(() => {
@@ -164,14 +167,14 @@ const DonorsPage = () => {
                     <div className="w-max">
                         <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
                             {locations.map((location, index) => (
-                                <Option key={index} value={location}>{location}</Option>
+                                <Option key={location} value={location}>{location}</Option>
                             ))}
                         </Select>
                     </div>
                     <div className="w-max">
                         <Select label="Filter by Donor Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
                             {donorTypes.map((donorType, index) => (
-                                <Option key={index} value={donorType}>{donorType}</Option>
+                                <Option key={donorType} value={donorType}>{donorType}</Option>
                             ))}
                         </Select>
                     </div>

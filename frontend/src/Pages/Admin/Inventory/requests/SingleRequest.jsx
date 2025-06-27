@@ -422,7 +422,7 @@ const SingleRequest = () => {
                             <div className="flex items-center justify-center md:justify-start flex-wrap gap-4">
                                 {requestDetails.images?.map((image, index) => (
                                     <Card
-                                        key={index}
+                                        key={image.url}
                                         className="w-max cursor-pointer overflow-hidden transition-opacity hover:opacity-90"
                                         onClick={() => handleOpen(image.url)}
                                     >
@@ -527,7 +527,7 @@ const SingleRequest = () => {
                     <div className="overflow-y-auto h-[calc(100vh-15rem)] pr-2">
                         <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
                             {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge, index) => (
-                                <div key={index} className="w-full">
+                                <div key={fridge._id} className="w-full">
                                     <input
                                         type="radio"
                                         id={`${fridge._id}_${fridge.name}`}
@@ -567,7 +567,7 @@ const SingleRequest = () => {
                                 const bottles = inventory.pasteurizedDetails.bottles.filter((b) => b.status === 'Available')
                                 // console.log("bottles: ", bottles)
                                 return (
-                                    <div key={index} className="min-w-max">
+                                    <div key={inventory._id} className="min-w-max">
                                         <input
                                             type="radio"
                                             id={inventory.pasteurizedDetails.batch}

@@ -18,7 +18,7 @@ import { getUser, logoutUser } from "../../redux/actions/userActions";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { useBreadcrumb } from "../Breadcrumb/BreadcrumbContext";
-
+import PropTypes from "prop-types";
 
 function ProfileMenu() {
   const dispatch = useDispatch();
@@ -117,11 +117,11 @@ export function ComplexNavbar({ setIsNavOpen }) {
           <Breadcrumbs className="bg-white">
             {breadcrumb.map((item, index) =>
               item.path && index !== breadcrumb.length - 1 ? (
-                <Link key={index} to={item.path} className="text-blue-gray-800 hover:text-secondary hover:underline">
+                <Link key={item.name} to={item.path} className="text-blue-gray-800 hover:text-secondary hover:underline">
                   {item.name}
                 </Link>
               ) : (
-                <Typography key={index} color="blue-gray" className="font-semibold text-secondary">
+                <Typography key={item.name} color="blue-gray" className="font-semibold text-secondary">
                   {item.name}
                 </Typography>
               )
@@ -134,4 +134,8 @@ export function ComplexNavbar({ setIsNavOpen }) {
 
     </Navbar>
   );
+}
+
+ComplexNavbar.propTypes= {
+  setIsNavOpen: PropTypes.func.isRequired
 }

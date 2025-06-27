@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Typography, Carousel } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { EyeIcon, Pencil, Trash } from 'lucide-react';
+import PropTypes from 'prop-types';
 const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
 
     const location = useLocation();
@@ -25,7 +26,7 @@ const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
                     <div className=" bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-96" key={article._id}>
                         <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max">
                             {article.images?.map((image, index) => (
-                                <div key={index} className="relative h-40 w-full">
+                                <div key={image.url} className="relative h-40 w-full">
                                     <img
                                         src={image.url}
                                         alt={`Article Image ${index + 1}`}
@@ -59,5 +60,9 @@ const ArticleList = ({ articles, IsLargeScreen, handleDelete }) => {
         </>
     )
 }
-
+ArticleList.propTypes = {
+    articles: PropTypes.array.isRequired,
+    IsLargeScreen: PropTypes.bool.isRequired,
+    handleDelete: PropTypes.func.isRequired
+}
 export default ArticleList

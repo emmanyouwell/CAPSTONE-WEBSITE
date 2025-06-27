@@ -9,6 +9,7 @@ import {
     Carousel,
 } from "@material-tailwind/react";
 import { formatDate } from '../../../../utils/helper';
+import PropTypes from 'prop-types';
 const RequestCardComponent = ({ request }) => {
     const [open, setOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -31,7 +32,7 @@ const RequestCardComponent = ({ request }) => {
             <Carousel>
                 {request.images.map((image, index) => (
                     <Card
-                        key={index}
+                        key={image.url}
                         className="mt-4 cursor-pointer overflow-hidden transition-opacity hover:opacity-90"
                         onClick={()=> handleOpen(image.url)}
                     >
@@ -54,5 +55,7 @@ const RequestCardComponent = ({ request }) => {
         </Card>
     )
 }
-
+RequestCardComponent.propTypes = {
+    request: PropTypes.object
+}
 export default RequestCardComponent

@@ -10,6 +10,7 @@ import { normalizeData } from '../../../utils/helper';
 import Select from 'react-select';
 import { Typography } from '@material-tailwind/react';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
+import PropTypes from 'prop-types';
 // Styles
 const styles = StyleSheet.create({
     page: {
@@ -102,7 +103,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
 
                 {/* Table Data */}
                 {page1_data.map((row, index) => (
-                    <View style={styles.row} key={index}>
+                    <View style={styles.row} key={row[index]}>
                         <Text style={[styles.cell, styles.colMonth]}>{row[0]}</Text>
                         <Text style={styles.cell}>{row[1]}</Text>
                         <Text style={styles.cell}>{row[2]}</Text>
@@ -156,7 +157,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
 
                 {/* Table Data */}
                 {page2_data.map((row, index) => (
-                    <View style={styles.row} key={index}>
+                    <View style={styles.row} key={row[index]}>
                         <Text style={[styles.cell, styles.colMonth]}>{row[0]}</Text>
                         <Text style={styles.cell}>{row[1]}</Text>
                         <Text style={styles.cell}>{row[2]}</Text>
@@ -184,12 +185,13 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
     </Document>
 );
 const DonorsPerMonth = () => {
-    const {setBreadcrumb} = useBreadcrumb()
+    const { setBreadcrumb } = useBreadcrumb()
     const dispatch = useDispatch();
     const { stats, monthlyDonors, dispensedMilk, monthlyPatients, pastPerMonth } = useSelector((state) => state.metrics);
     const [pdfUrl, setPdfUrl] = useState(null);
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [selectedYear, setSelectedYear] = useState(null);
+
     // Data rows
     const months = [
         'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
@@ -207,16 +209,22 @@ const DonorsPerMonth = () => {
         setSelectedYear(selectedOption);
 
     };
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
-            {name: "Dashboard", path: "/dashboard"},
-            {name: "Reports", path: "/dashboard/reports"},
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Reports", path: "/dashboard/reports" },
         ])
-    },[])
+    }, [])
     useEffect(() => {
         const generatePdf = async (page1_data, page1_total, page2_data, page2_total) => {
             const blob = await pdf(<MyDocument page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} />).toBlob();
             setPdfUrl(URL.createObjectURL(blob));
+        }
+        generatePdf.propTypes = {
+            page1_data: PropTypes.array.isRequired,
+            page1_total: PropTypes.array.isRequired,
+            page2_data: PropTypes.array.isRequired,
+            page2_total: PropTypes.array.isRequired,
         }
         if (monthlyDonors && monthlyPatients && stats && dispensedMilk && pastPerMonth) {
             const { page1_data, page1_total, page2_data, page2_total } = normalizeData(months, monthlyDonors, monthlyPatients, stats, dispensedMilk, pastPerMonth);

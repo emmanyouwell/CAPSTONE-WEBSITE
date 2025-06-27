@@ -34,7 +34,7 @@ const History = () => {
             {loading ? <div>Loading...</div> : <div className="w-[calc(100wh-20rem)] h-[calc(100vh-20rem)] overflow-y-auto mx-auto flex flex-col items-center gap-4">
 
                 {filteredLettings.length > 0 && filteredLettings.map((lets, index) => (
-                    <Card className='w-full border-l-8 border-secondary p-4 mx-auto mb-4 flex justify-between items-center flex-row'>
+                    <Card key={lets._id} className='w-full border-l-8 border-secondary p-4 mx-auto mb-4 flex justify-between items-center flex-row'>
                         <div>
                             <div className="text-2xl font-bold text-secondary">{lets.activity}</div>
                             <div className="text-md">Venue: {lets.venue}</div>

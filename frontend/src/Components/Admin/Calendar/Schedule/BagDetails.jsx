@@ -16,6 +16,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { updateBag } from '../../../../redux/actions/bagActions';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 const BagDetails = ({ bag, from, status, scheduleId }) => {
     const [bagDetails, setBagDetails] = useState(() => ({
         volume: "",
@@ -162,4 +163,10 @@ const BagDetails = ({ bag, from, status, scheduleId }) => {
     )
 }
 
+BagDetails.propTypes = {
+    bag: PropTypes.object.isRequired,
+    from: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    scheduleId: PropTypes.string.isRequired
+}
 export default BagDetails

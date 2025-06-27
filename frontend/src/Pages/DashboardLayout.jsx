@@ -18,19 +18,17 @@ const DashboardLayout = () => {
     }, [location.pathname])
     const [, setIsNavOpen] = useState(false)
     return (
-        <>
-            <div className="flex w-[100%] flex-1 items-stretch ">
-                <div className="min-h-[calc(100vh-2rem)] w-[100%] flex items-stretch">
-                    <SidebarComponent userDetails={userDetails} />
-                    <div className="flex flex-1 items-stretch basis-[100%] flex-col p-0">
-                        <ComplexNavbar setIsNavOpen={setIsNavOpen} />
-                        <div className="flex     flex-col h-[calc(100vh-5rem)] items-stretch justify-between overflow-y-auto">
-                            <Outlet />
-                        </div>
+        <div className="flex w-[100%] flex-1 items-stretch ">
+            <div className="min-h-[calc(100vh-2rem)] w-[100%] flex items-stretch">
+                <SidebarComponent userDetails={userDetails} />
+                <div className="flex flex-1 items-stretch basis-[100%] flex-col p-0">
+                    <ComplexNavbar setIsNavOpen={setIsNavOpen} />
+                    <div className="flex     flex-col h-[calc(100vh-5rem)] items-stretch justify-between overflow-y-auto">
+                        <Outlet />
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

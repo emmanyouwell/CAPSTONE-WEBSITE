@@ -6,6 +6,15 @@ import { EyeIcon } from 'lucide-react';
 import { IconButton } from '@material-tailwind/react';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 
+function ActionCell({ row }) {
+    return (
+        <div className="flex gap-2">
+            <Link to={row.original.route}>
+                <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
+            </Link>
+        </div>
+    );
+}
 const Archive = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const data = [
@@ -30,23 +39,15 @@ const Archive = () => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                return (
-                    <div className="flex gap-2">
-                        <Link to={row.original.route}>
-                           <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
-                        </Link>
-                    </div>
-                );
-            },
+            cell: ({ row }) => (<ActionCell row={row} />),
         }),
     ];
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: 'Dashboard', path: '/dashboard' },
             { name: 'Archive' }
         ])
-    },[])
+    }, [])
     return (
         <DataTable data={data} columns={columns} pageSize={10} height="h-[calc(70vh-8rem)]" />
     )
