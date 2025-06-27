@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 import { useLocation } from "react-router-dom";
 import React from 'react';
+import Loader from '../Components/Loader/Loader';
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {
 
@@ -286,3 +287,8 @@ export const normalizeData = (months, donors, patients, milkCollected, milkDispe
 export const toTitleCase = (str) => {
     return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
+
+export const formatMetric = (value, isPercentage = false) => {
+    if (value == null) return '0.00%';
+    return isPercentage ? `${(Number(value) * 100).toFixed(2)}%` : value;
+};

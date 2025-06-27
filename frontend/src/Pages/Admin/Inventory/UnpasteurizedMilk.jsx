@@ -240,13 +240,17 @@ const UnpasteurizedMilk = () => {
         const userInfo = [
             ...new Set(selectedBags.map(bag => bag.donor._id)) // Extract unique donor IDs
         ];
+        const bottleTypeMap = {
+            "100ml": 100,
+            "200ml": 200,
+        };
         const data = {
             fridgeId: selectedOption,
             pasteurizedDetails: {
                 batch: batchDetails.batch,
                 pool: batchDetails.pool,
                 donors: userInfo,
-                bottleType: bottleType === "100ml" ? 100 : bottleType === "200ml" ? 200 : 100,
+                bottleType: bottleTypeMap[bottleType] || 100,
                 bottleQty: 20,
                 pasteurizationDate: batchDetails.pasteurizationDate,
             },

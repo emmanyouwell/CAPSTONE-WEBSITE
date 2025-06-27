@@ -13,7 +13,7 @@ import Loader from '../../../../Components/Loader/Loader';
 import { resetDelete, resetSuccess } from '../../../../redux/slices/requestSlice';
 import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext';
 
-function CustomOption({option}) {
+function CustomOption({ option }) {
     return (
         <div className="flex flex-col text-sm">
             <span className="font-semibold">{option.value.name} ({option.value.patientType})</span>
@@ -23,6 +23,8 @@ function CustomOption({option}) {
         </div>
     )
 }
+let patientLabel = "Department/Hospital";
+
 
 const RequestView = () => {
     const { setBreadcrumb } = useBreadcrumb();
@@ -220,6 +222,53 @@ const RequestView = () => {
             console.log("Images Updated: ", formData.images);
         }
     }, [formData.images])
+    const commonUploads = [
+        "Prescription",
+        "Clinical Abstract",
+    ];
+
+    const inpatientExtras = [
+        "Waiver",
+        "Recipient Record",
+    ];
+
+    const renderUploadInput = (label) => (
+        <div key={label}>
+            <Typography variant="h6" color="blue-gray">
+                Upload {label}
+            </Typography>
+            <Input
+                type="file"
+                size="lg"
+                placeholder="Upload Images"
+                onChange={(e) => handleImageChange(e, label)}
+                className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                    className: "before:content-none after:content-none",
+                }}
+                accept=".jpg, .jpeg, .png"
+                required
+            />
+        </div>
+    );
+
+    // Rendering logic
+    let uploadsToRender = [];
+
+    if (selectedPatient?.patientType === "Inpatient") {
+        uploadsToRender = [...commonUploads, ...inpatientExtras];
+    } else if (selectedPatient?.patientType === "Outpatient") {
+        uploadsToRender = [...commonUploads];
+    }
+    if (selectedPatient) {
+        if (selectedPatient.patientType === "Inpatient") {
+            patientLabel = "Department";
+        } else if (selectedPatient.patientType === "Outpatient") {
+            patientLabel = "Hospital";
+        } else {
+            patientLabel = "";
+        }
+    }
     return (
         <div className="p-4">
             <Tabs value="Inpatient">
@@ -269,12 +318,12 @@ const RequestView = () => {
                                                 onChange={(selected) => { setFormData({ ...formData, patient: selected.value._id }); setSelectedPatient(selected.value) }}
                                                 options={options}
                                                 isSearchable
-                                                formatOptionLabel={(option) =>(<CustomOption option={option} />)}
+                                                formatOptionLabel={(option) => (<CustomOption option={option} />)}
                                             />
                                         </div>
                                     </div>
                                     <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                        {selectedPatient ? selectedPatient.patientType === "Inpatient" ? "Department" : selectedPatient.patientType === "Outpatient" ? "Hospital" : "" : "Department/Hospital"}
+                                        {patientLabel}
                                     </Typography>
                                     <Input
                                         size="lg"
@@ -357,101 +406,7 @@ const RequestView = () => {
                                         <Typography variant="h6" color="blue-gray" className="">
                                             Attachments <small className="italic text-blue-gray-700 font-sofia font-bold">(.jpg, .jpeg, .png)</small>
                                         </Typography>
-                                        {selectedPatient && selectedPatient.patientType === "Inpatient" ?
-                                            (<>
-                                                <Typography variant="h6" color="blue-gray" className="">
-                                                    Upload Prescription
-                                                </Typography>
-                                                <Input
-                                                    type="file"
-                                                    size="lg"
-                                                    placeholder="Upload Images"
-                                                    onChange={(e) => handleImageChange(e, "Prescription")}
-                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                                    labelProps={{
-                                                        className: "before:content-none after:content-none",
-                                                    }}
-                                                    accept=".jpg, .jpeg, .png"
-                                                    required
-                                                />
-                                                <Typography variant="h6" color="blue-gray" className="">
-                                                    Upload Clinical Abstract
-                                                </Typography>
-                                                <Input
-                                                    type="file"
-                                                    size="lg"
-                                                    placeholder="Upload Images"
-                                                    onChange={(e) => handleImageChange(e, "Clinical Abstract")}
-                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                                    labelProps={{
-                                                        className: "before:content-none after:content-none",
-                                                    }}
-                                                    accept=".jpg, .jpeg, .png"
-                                                    required
-                                                />
-                                                <Typography variant="h6" color="blue-gray" className="">
-                                                    Upload Waiver
-                                                </Typography>
-                                                <Input
-                                                    type="file"
-                                                    size="lg"
-                                                    placeholder="Upload Images"
-                                                    onChange={(e) => handleImageChange(e, "Waiver")}
-                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                                    labelProps={{
-                                                        className: "before:content-none after:content-none",
-                                                    }}
-                                                    accept=".jpg, .jpeg, .png"
-                                                    required
-                                                />
-                                                <Typography variant="h6" color="blue-gray" className="">
-                                                    Upload Recipient Record
-                                                </Typography>
-                                                <Input
-                                                    type="file"
-                                                    size="lg"
-                                                    placeholder="Upload Images"
-                                                    onChange={(e) => handleImageChange(e, "Recipient Record")}
-                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                                    labelProps={{
-                                                        className: "before:content-none after:content-none",
-                                                    }}
-                                                    accept=".jpg, .jpeg, .png"
-                                                    required
-                                                />
-                                            </>) : selectedPatient && selectedPatient.patientType === "Outpatient" ? (<>
-                                                <Typography variant="h6" color="blue-gray" className="">
-                                                    Upload Prescription
-                                                </Typography>
-                                                <Input
-                                                    type="file"
-                                                    size="lg"
-                                                    placeholder="Upload Images"
-                                                    onChange={(e) => handleImageChange(e, "Prescription")}
-                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                                    labelProps={{
-                                                        className: "before:content-none after:content-none",
-                                                    }}
-                                                    accept=".jpg, .jpeg, .png"
-                                                    required
-                                                />
-                                                <Typography variant="h6" color="blue-gray" className="">
-                                                    Upload Clinical Abstract
-                                                </Typography>
-                                                <Input
-                                                    type="file"
-                                                    size="lg"
-                                                    placeholder="Upload Images"
-                                                    onChange={(e) => handleImageChange(e, "Clinical Abstract")}
-                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                                    labelProps={{
-                                                        className: "before:content-none after:content-none",
-                                                    }}
-                                                    accept=".jpg, .jpeg, .png"
-                                                    required
-                                                />
-                                            </>) : ""
-                                        }
+                                        {uploadsToRender.map(renderUploadInput)}
 
                                     </div>
 

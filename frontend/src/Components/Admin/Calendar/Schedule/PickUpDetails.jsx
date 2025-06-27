@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useParams, useNavigate} from 'react-router-dom'
+import { Link, useLocation, useParams, useNavigate } from 'react-router-dom'
 import { getSingleSchedule, updateSchedule } from '../../../../redux/actions/scheduleActions'
-import { Button, Card, CardBody, CardFooter,  Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Option, Select, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, CardFooter, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input, Option, Select, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import BagDetails from './BagDetails'
@@ -15,7 +15,7 @@ import { addInventory } from '../../../../redux/actions/inventoryActions'
 import { toast } from 'react-toastify'
 import { useBreadcrumb } from '../../../Breadcrumb/BreadcrumbContext'
 const PickUpDetails = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -86,13 +86,13 @@ const PickUpDetails = () => {
     const handleCompleteOpen = () => {
         setComplete(!complete);
     }
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
-            {name: "Dashboard", path: "/dashboard"},
-            {name: "Pick-up Schedules", path: "/dashboard/schedules"},
-            {name: "Pick Up Details"}
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Pick-up Schedules", path: "/dashboard/schedules" },
+            { name: "Pick Up Details" }
         ])
-    },[])
+    }, [])
     useEffect(() => {
         dispatch(getSingleSchedule(id));
         dispatch(getAllUsers({ role: "Admin" }))
@@ -138,6 +138,53 @@ const PickUpDetails = () => {
         })
 
     }
+    let borderColorClass = 'border-green-600'; // default
+
+    if (schedule?.status === 'Pending') {
+        borderColorClass = 'border-yellow-400';
+    } else if (schedule?.status === 'Approved') {
+        borderColorClass = 'border-pink-600';
+    }
+    let actionContent = null;
+
+    if (
+        from === "RedirectDetails" &&
+        status === "Collected" &&
+        schedule?.status &&
+        schedule.status !== "Approved"
+    ) {
+        actionContent = (
+            <div className="w-full flex items-start justify-end gap-4">
+                <Button color="green" onClick={handleOpenFridge}>Confirm</Button>
+            </div>
+        );
+    } else if (from === "RedirectDetails" && status === "Stored") {
+        actionContent = (
+            <div className="w-full flex items-start justify-end gap-4">
+                <Button disabled color="blue-gray">Stored</Button>
+            </div>
+        );
+    } else if (schedule?.status === "Approved") {
+        const isFuture = new Date(schedule.dates).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0);
+        actionContent = (
+            <div className="w-full flex items-start justify-end gap-4">
+                <Button color="green" disabled={isFuture} onClick={handleCompleteOpen}>Complete</Button>
+            </div>
+        );
+    } else if (schedule?.status === "Pending") {
+        actionContent = (
+            <div className="w-full flex items-start justify-end gap-4">
+                <Button onClick={handleOpen} color="deep-orange">Change Date</Button>
+                <Button color="pink" onClick={handleApprove}>Approve</Button>
+            </div>
+        );
+    } else {
+        actionContent = (
+            <div className="w-full flex items-start justify-end gap-4">
+                <Button disabled color="blue-gray">Picked Up</Button>
+            </div>
+        );
+    }
     return (
         <div className="p-8">
             {from === "RedirectDetails" ? <Link to={`/dashboard/collections`}>
@@ -154,7 +201,7 @@ const PickUpDetails = () => {
 
             <div className="flex flex-col gap-4 justify-between items-center">
                 <div className="font-parkinsans text-2xl text-center">Pick Up Details</div>
-                <Card className='w-full border-l-8 border-accent-green' style={{ boderLeftWidth: '8px', borderColor: schedule && schedule.status === 'Pending' ? 'rgb(255 193 7)' : schedule && schedule.status === 'Approved' ? 'rgb(229 55 119)' : 'rgb(76 175 80)' }}>
+                <Card className={`w-full border-l-8 ${borderColorClass}`}>
                     <CardBody>
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center justify-between">
@@ -205,26 +252,7 @@ const PickUpDetails = () => {
                     </CardBody>
 
                     <CardFooter>
-                        {from === "RedirectDetails" && status === "Collected" && (schedule && schedule.status) && (schedule.status !== "Approved") ?
-                            <div className="w-full flex items-start justify-end gap-4">
-                                <Button color="green" onClick={handleOpenFridge}>Confirm</Button>
-                            </div> :
-                            from === "RedirectDetails" && status === "Stored" ?
-                                <div className="w-full flex items-start justify-end gap-4">
-                                    <Button disabled color="blue-gray">Stored</Button>
-                                </div> :
-                                schedule && schedule.status === 'Approved' ?
-                                    <div className="w-full flex items-start justify-end gap-4">
-                                        <Button color="green" disabled={schedule && (new Date(schedule.dates).setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0))} onClick={handleCompleteOpen}>Complete</Button>
-                                    </div> :
-                                    schedule && schedule.status === 'Pending' ?
-                                        <div className="w-full flex items-start justify-end gap-4">
-                                            <Button onClick={handleOpen} color="deep-orange">Change Date</Button>
-                                            <Button color="pink" onClick={handleApprove}>Approve</Button>
-                                        </div> :
-                                            <div className="w-full flex items-start justify-end gap-4">
-                                                <Button disabled color="blue-gray">Picked Up</Button>
-                                            </div>}
+                        {actionContent}
 
                         <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
                             <form onSubmit={formik.handleSubmit}>

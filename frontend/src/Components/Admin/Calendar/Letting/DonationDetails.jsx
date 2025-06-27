@@ -206,6 +206,17 @@ const DonationDetails = () => {
             value: donor, label: `${donor.user.name.first} ${donor.user.name.last} | ${donor.user.phone}`, donor
         }))
     ];
+    let lastDonationText;
+
+    if (lastDonation) {
+        if (lastDonation.donationType === "Public") {
+            lastDonationText = formatDate(lastDonation.milkLettingEvent.actDetails.date, "short");
+        } else {
+            lastDonationText = formatDate(lastDonation.schedule.dates);
+        }
+    } else {
+        lastDonationText = "No previous donation found";
+    }
     return (
         <div className="p-8 h-[calc(100vh-2rem)] overflow-y-auto">
             <div className="flex w-full items-center justify-between gap-4">
@@ -230,7 +241,7 @@ const DonationDetails = () => {
                                         isSearchable
                                         formatOptionLabel={(option) =>
                                         (
-                                           <CustomOption option={option} />
+                                            <CustomOption option={option} />
                                         )
                                         }
                                     />
@@ -291,7 +302,7 @@ const DonationDetails = () => {
                                                         Old donor
                                                     </Typography>
                                                     <Typography className="font-normal text-gray-600">
-                                                        Last Donation: {lastDonation ? lastDonation.donationType === "Public" ? formatDate(lastDonation.milkLettingEvent.actDetails.date, "short") : formatDate(lastDonation.schedule.dates) : "No previous donation found"}
+                                                        Last Donation: {lastDonationText}
                                                     </Typography>
 
 

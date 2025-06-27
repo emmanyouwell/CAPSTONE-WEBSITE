@@ -11,6 +11,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 import PropTypes from 'prop-types'
 
+
 function ActionsHeader({ reservedRequest, filteredRequest, dispenseInpatient }) {
     const shouldShowButton = reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length;
 
@@ -28,34 +29,43 @@ function ActionsHeader({ reservedRequest, filteredRequest, dispenseInpatient }) 
 }
 
 function ActionsCell({ request, handleTransport, handleDelete }) {
-    return (
-        <div className="flex gap-2">
-            {request.status === "Reserved" && request.patient.patientType === "Outpatient" ? (
-                <Button className="bg-secondary" onClick={() => handleTransport(request)}>
-                    <CheckCheck className="h-5 w-5" />
-                </Button>
-            ) : request.status === "Canceled" ? (
-                <div className="flex items-center gap-4">
-                    <Link to={`/dashboard/request/${request._id}`}>
-                        <IconButton variant="text" className="text-secondary rounded-full">
-                            <EyeIcon size={25} />
-                        </IconButton>
-                    </Link>
-                    <IconButton
-                        variant="text"
-                        className="text-secondary rounded-full"
-                        onClick={() => handleDelete(request._id)}
-                    >
-                        <Trash size={22} className="text-secondary cursor-pointer" />
-                    </IconButton>
-                </div>
-            ) : (
+    let actionContent;
+
+    if (request.status === "Reserved" && request.patient.patientType === "Outpatient") {
+        actionContent = (
+            <Button className="bg-secondary" onClick={() => handleTransport(request)}>
+                <CheckCheck className="h-5 w-5" />
+            </Button>
+        );
+    } else if (request.status === "Canceled") {
+        actionContent = (
+            <div className="flex items-center gap-4">
                 <Link to={`/dashboard/request/${request._id}`}>
                     <IconButton variant="text" className="text-secondary rounded-full">
                         <EyeIcon size={25} />
                     </IconButton>
                 </Link>
-            )}
+                <IconButton
+                    variant="text"
+                    className="text-secondary rounded-full"
+                    onClick={() => handleDelete(request._id)}
+                >
+                    <Trash size={22} className="text-secondary cursor-pointer" />
+                </IconButton>
+            </div>
+        );
+    } else {
+        actionContent = (
+            <Link to={`/dashboard/request/${request._id}`}>
+                <IconButton variant="text" className="text-secondary rounded-full">
+                    <EyeIcon size={25} />
+                </IconButton>
+            </Link>
+        );
+    }
+    return (
+        <div className="flex gap-2">
+            {actionContent}
         </div>
     );
 }

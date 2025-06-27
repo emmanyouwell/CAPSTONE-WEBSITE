@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams, useNavigate} from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { getRequestDetails,updateRequestStatus, updateVolumeRequested } from '../../../../redux/actions/requestActions';
+import { getRequestDetails, updateRequestStatus, updateVolumeRequested } from '../../../../redux/actions/requestActions';
 import { Button, ButtonGroup, Card, CardBody, CardFooter, Dialog, DialogBody, Drawer, IconButton, Input, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Textarea, Typography } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -13,9 +13,10 @@ import { formatDate, getUser } from '../../../../utils/helper';
 import placeholder from '../../../../assets/image/placeholder-image.webp'
 import { resetUpdate } from '../../../../redux/slices/requestSlice';
 import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext';
+import InventoryCardComponent from '../../../../Components/Admin/Inventory/InventoryCardComponent';
 
 const SingleRequest = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
     const { requestDetails, isUpdated } = useSelector(state => state.requests)
     const { fridges } = useSelector(state => state.fridges)
@@ -315,7 +316,7 @@ const SingleRequest = () => {
             userID: getUser()?._id,
             comment: comment
         }
-        dispatch(updateRequestStatus(data)).then(()=>{
+        dispatch(updateRequestStatus(data)).then(() => {
             handleComment();
             toast.success("Request Denied", { position: "bottom-right" });
             dispatch(getRequestDetails(id))
@@ -328,13 +329,23 @@ const SingleRequest = () => {
             dispatch(resetUpdate())
         }
     }, [isUpdated])
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
-            {"name": "Dashboard", "path": "/dashboard"},
-            {"name": "Requests", "path": "/dashboard/requests"},
-            {"name": `Request Details`}
+            { "name": "Dashboard", "path": "/dashboard" },
+            { "name": "Requests", "path": "/dashboard/requests" },
+            { "name": `Request Details` }
         ])
-    },[])
+    }, [])
+    // Define this at the top or in a config file
+    const statusColors = {
+        Pending: 'rgb(255, 193, 7)',
+        Approved: 'rgb(229, 55, 119)',
+        Completed: 'rgb(76, 175, 80)',
+        default: 'rgb(255, 51, 85)', // fallback for other statuses
+    };
+
+    // Determine border color based on request status
+    const borderColor = statusColors[requestDetails?.status] || statusColors.default;
     return (
         <div className="p-8">
             <div className="flex flex-col gap-4 justify-between items-center">
@@ -358,7 +369,7 @@ const SingleRequest = () => {
                     </TabsHeader>
                     <TabsBody animate={{ initial: { visibility: 'visible' }, mount: { visibility: 'visible' }, unmount: { visibility: 'hidden' } }} className="h-full">
                         <TabPanel value="requestDetails" className="h-full">
-                            <Card className='w-full border-l-8 border-accent-green' style={{ boderLeftWidth: '8px', borderColor: requestDetails && requestDetails.status === 'Pending' ? 'rgb(255 193 7)' : requestDetails && requestDetails.status === 'Approved' ? 'rgb(229 55 119)' : requestDetails && requestDetails.status === 'Completed' ? 'rgb(76 175 80)' : 'rgb(255 51 85)' }}>
+                            <Card className='w-full border-l-8 border-accent-green' style={{ boderLeftWidth: '8px', borderColor }}>
                                 <CardBody>
                                     <div className="flex flex-col gap-4">
                                         <div className="flex items-center justify-between">
@@ -443,7 +454,7 @@ const SingleRequest = () => {
                         <Textarea
                             label="Comment"
                             name="comment"
-                            onChange={(e) => {setFormError((prev)=>({...prev, comment: {status: false, message: ""}}));setComment(e.target.value)}}
+                            onChange={(e) => { setFormError((prev) => ({ ...prev, comment: { status: false, message: "" } })); setComment(e.target.value) }}
                             value={comment}
                         />
                         {formError?.comment?.status && <Typography color="red" variant="small">
@@ -563,39 +574,25 @@ const SingleRequest = () => {
                         </span>
 
                         <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
-                            {filteredInventories?.length > 0 ? filteredInventories.map((inventory, index) => {
-                                const bottles = inventory.pasteurizedDetails.bottles.filter((b) => b.status === 'Available')
-                                // console.log("bottles: ", bottles)
-                                return (
-                                    <div key={inventory._id} className="min-w-max">
-                                        <input
-                                            type="radio"
-                                            id={inventory.pasteurizedDetails.batch}
-                                            name={inventory.pasteurizedDetails.batch}
-                                            value={inventory._id}
-                                            className="peer hidden"
-                                            required
-                                            checked={selectedInventory === inventory._id}
-                                            onChange={handleChangeInventory}
-                                            disabled={ebm.some((inv) => inv.invId === inventory._id) ? true : false}
-                                        />
-                                        <label
-                                            htmlFor={inventory.pasteurizedDetails.batch}
-                                            className={`block w-full cursor-pointer rounded-lg border border-gray-300 p-4 ${ebm.some((inv) => inv.invId === inventory._id) ? 'text-gray-500' : 'text-gray-900'} ring-1 ring-transparent peer-checked:border-gray-900 peer-checked:ring-gray-900`}
-                                        >
-                                            <div className="relative w-96 bg-white rounded-lg flex flex-col h-full">
-                                                <div className="flex items-center justify-between">
-                                                    <Typography variant="lead" className="font-varela font-bold">Batch #: {inventory.pasteurizedDetails.batch}</Typography>
-                                                    <Typography variant="small" className={`${ebm.some((inv) => inv.invId === inventory._id) ? 'text-gray-500' : 'text-secondary '}font-varela font-bold`}>{inventory.pasteurizedDetails.bottleType} ml</Typography>
-                                                </div>
-                                                <Typography variant="lead" className="font-varela font-bold">Pool #: {inventory.pasteurizedDetails.pool}</Typography>
-                                                <Typography variant="lead" className="font-varela font-bold">Bottle #: {`${bottles[0].bottleNumber} - ${bottles[bottles.length - 1].bottleNumber}`}</Typography>
-                                                <Typography variant="small" className="font-varela ">Expiry Date: {formatDate(inventory.pasteurizedDetails.expiration)}</Typography>
-                                                <Typography variant="small" className="font-varela ">Pasteurization Date: {formatDate(inventory.pasteurizedDetails.pasteurizationDate)}</Typography>
-                                            </div>
-                                        </label>
-                                    </div>)
-                            }) : selectedOption ? <Typography color="red" variant="small">Fridge is empty. Choose another one.</Typography> : <Typography color="blue-gray" variant="small">No fridge selected</Typography>}
+                            {filteredInventories?.length > 0 ? (
+                                filteredInventories.map((inventory) => (
+                                    <InventoryCardComponent
+                                        key={inventory._id}
+                                        inventory={inventory}
+                                        selectedInventory={selectedInventory}
+                                        handleChangeInventory={handleChangeInventory}
+                                        ebm={ebm}
+                                    />
+                                ))
+                            ) : selectedOption ? (
+                                <Typography color="red" variant="small">
+                                    Fridge is empty. Choose another one.
+                                </Typography>
+                            ) : (
+                                <Typography color="blue-gray" variant="small">
+                                    No fridge selected
+                                </Typography>
+                            )}
 
                         </div>
 

@@ -44,12 +44,14 @@ const staffItems = [
 const SidebarComponent = ({ userDetails }) => {
 
 
-    const sidebarItems =
-        userDetails?.role === "Admin" || userDetails?.role === "SuperAdmin"
-            ? superAdminItems
-            : userDetails?.role === "Staff"
-                ? staffItems
-                : [];
+    const roleMap = {
+        Admin: superAdminItems,
+        SuperAdmin: superAdminItems,
+        Staff: staffItems,
+    };
+
+    const sidebarItems = roleMap[userDetails?.role] || [];
+
 
     const groupedItems = sidebarItems.reduce((acc, item) => {
         if (!item.category) return acc;
