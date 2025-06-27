@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk(
       }
       const response = await axios.post(url, credentials, config);
 
-      await authenticate(response.data, () => { });
+      authenticate(response.data, () => { });
       return response.data;
 
     } catch (error) {
@@ -47,7 +47,7 @@ export const logoutUser = createAsyncThunk(
           skipAuthInterceptor: true,
         }
       );
-      await logout(msg);
+      logout(msg);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

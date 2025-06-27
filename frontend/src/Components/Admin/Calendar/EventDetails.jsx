@@ -20,18 +20,24 @@ const EventDetails = ({ event }) => {
 
         return `${new Date(date).toLocaleDateString('en-US', options)} ${new Date(date).toLocaleTimeString('en-US', timeOptions)}`;
     };
+    let imageSrc;
+    let imageAlt;
 
+    if (event.eventType === "Grand Milk Letting") {
+        imageSrc = grand;
+        imageAlt = "grand milk letting";
+    } else if (event.eventType === "Regular Milk Letting") {
+        imageSrc = regular;
+        imageAlt = "regular milk letting";
+    } else {
+        imageSrc = regular;
+        imageAlt = "other information";
+    }
     return (
         <div className="w-96 p-4 bg-white rounded-lg shadow-md border flex flex-col h-100">
             <div className="flex items-center justify-center gap-4">
                 <div className="w-full h-auto bg-secondary rounded-lg flex justify-center items-center">
-                    {event.eventType === "Grand Milk Letting" ? (
-                        <img src={grand} alt="grand milk letting" />
-                    ) : event.eventType === "Regular Milk Letting" ? (
-                        <img src={regular} alt="regular milk letting" />
-                    ) : (
-                        <img src={regular} alt="other information" />
-                    )}
+                    <img src={imageSrc} alt={imageAlt} />
                 </div>
                 <div className="w-full">
                     {/* Title */}

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getModelReport, getSubmissions, updateDonor } from '../../../redux/actions/donorActions';
 import { Button, Card, CardBody, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
 import { EyeIcon, SquarePenIcon } from 'lucide-react';
-import { formatDate } from '../../../utils/helper';
+import { formatDate, formatMetric } from '../../../utils/helper';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
 import { resetUpdate } from '../../../redux/slices/donorSlice';
@@ -100,6 +100,15 @@ const Submissions = () => {
             ),
         }),
     ];
+    let precisionText;
+
+    if (pythonLoading) {
+        precisionText = <Loader />;
+    } else if (model?.precision?.Overall) {
+        precisionText = `${(Number(model.precision.Overall) * 100).toFixed(2)}%`;
+    } else {
+        precisionText = '0.00%';
+    }
     return (
         <div className="relative w-full h-full">
             <Link to="/dashboard" className="absolute top-4 left-4">
@@ -113,7 +122,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {pythonLoading ? <Loader /> : model?.accuracy ? model.accuracy : '0.00%'}
+                                {pythonLoading ? <Loader /> : formatMetric(model?.accuracy)}
                             </Typography>
                             <Typography variant="h5" color="gray" className="mb-2">
                                 Accuracy
@@ -127,10 +136,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {pythonLoading ? <Loader /> : model?.precision?.Overall
-                                    ? `${(Number(model.precision.Overall) * 100).toFixed(2)}%`
-                                    : '0.00%'}
-
+                                {pythonLoading ? <Loader /> : formatMetric(model?.precision?.Overall, true)}
                             </Typography>
                             <Typography variant="h5" color="gray" className="mb-2">
                                 Precision
@@ -143,10 +149,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {pythonLoading ? <Loader /> : model?.recall?.Overall
-                                    ? `${(Number(model.recall.Overall) * 100).toFixed(2)}%`
-                                    : '0.00%'}
-
+                                {pythonLoading ? <Loader /> : formatMetric(model?.recall?.Overall, true)}
                             </Typography>
                             <Typography variant="h5" color="gray" className="mb-2">
                                 Recall
@@ -159,10 +162,7 @@ const Submissions = () => {
                     <Card className="flex-1">
                         <CardBody>
                             <Typography variant="h3" color="blue-gray" className="mb-2 font-parkinsans text-primary">
-                                {pythonLoading ? <Loader /> : model?.f1_score?.Overall
-                                    ? `${(Number(model.f1_score.Overall) * 100).toFixed(2)}%`
-                                    : '0.00%'}
-
+                                {pythonLoading ? <Loader /> : formatMetric(model?.f1_score?.Overall, true)}
                             </Typography>
                             <Typography variant="h5" color="gray" className="mb-2">
                                 F1 Score
