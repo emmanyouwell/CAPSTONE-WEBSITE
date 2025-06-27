@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { getUser } from '../utils/helper';
 import PropTypes from 'prop-types';
 const ProtectedRoute = ({ children, isAuthorized = false, isAdmin = false, isStaff = false }) => {
-    const [loading] = useState(getUser() === false && false)
+    const [loading] = useState(getUser() === false)
     const [user] = useState(getUser())
 
     if (!loading) {
