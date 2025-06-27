@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { addRequest, getRequests } from '../../../../redux/actions/requestActions';
-import RequestCardComponent from './RequestCardComponent';
 import RequestTable from './RequestTable';
 import { Button, Card, CardBody, CardHeader, Drawer, Input, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from '@material-tailwind/react';
 import { getDevices, sendNotification } from '../../../../redux/actions/notifActions';
@@ -16,12 +15,11 @@ import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbConte
 const RequestView = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
-    const { request, loading, error, success } = useSelector(state => state.requests)
-    const { loading: loadingPatients, recipients } = useSelector(state => state.recipients)
+    const { request, loading, success } = useSelector(state => state.requests)
+    const { recipients } = useSelector(state => state.recipients)
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState('');
     const [selectedPatient, setSelectedPatient] = useState(null);
-    const [selectedOption, setSelectedOption] = useState('All');
     const { devices } = useSelector(state => state.devices)
     const [refresh, setRefresh] = useState(false);
     const [formData, setFormData] = useState(() => ({

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import StickyNavbar from '../Components/Navbar'
 import { Button, Typography } from '@material-tailwind/react'
@@ -7,13 +7,10 @@ import donate from '../assets/image/donate.png'
 import screening from '../assets/image/screening.png'
 import signup from '../assets/image/signup.png'
 import { AccordionCustomIcon } from '../Components/Accordion'
-import Schedule from './Admin/Calendar/Schedule'
 import UpcomingEvents from '../Components/Admin/Calendar/UpcomingEvents'
 import { useDispatch, useSelector } from 'react-redux'
-import { getEvents, getUpcomingEvents } from '../redux/actions/eventActions'
 import { getUpcomingLettings } from '../redux/actions/lettingActions'
 import Announcements from '../Components/Admin/Announcements/Announcements'
-import { getAnnouncement } from '../redux/actions/announcementActions'
 
 const Home = () => {
   const dispatch = useDispatch();

@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
+import { Button, Input, IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
-import { MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteArticle, getArticles, softDeleteArticle } from '../../../redux/actions/articleActions';
-import ArticleList from '../../../Components/Articles/ArticleList';
+import {  getArticles, softDeleteArticle } from '../../../redux/actions/articleActions';
 import { resetDelete } from '../../../redux/slices/articleSlice';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
-import { Archive, EyeIcon, Pencil, SquarePenIcon, Trash } from 'lucide-react';
+import { Archive, EyeIcon, SquarePenIcon} from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 const Resources = () => {
     const {setBreadcrumb} = useBreadcrumb();
-    const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
-    const { articles, isDeleted, loading, error } = useSelector((state) => state.articles);
+    const { articles, isDeleted } = useSelector((state) => state.articles);
     const [search, setSearch] = useState('');
 
 
@@ -32,18 +30,7 @@ const Resources = () => {
     const handleSubmit = () => {
         dispatch(getArticles(search));
     }
-    useEffect(() => {
-
-        const handleResize = () => {
-            setIsLargeScreen(window.innerWidth >= 768); // Tailwind's md breakpoint is 768px
-        };
-
-        // Set initial screen size and add event listener
-        handleResize();
-        window.addEventListener("resize", handleResize);
-
-        return () => window.removeEventListener("resize", handleResize);
-    }, [])
+   
 
     useEffect(() => {
         dispatch(getArticles());

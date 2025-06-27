@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react"; // Import Textarea component
 import { useDispatch, useSelector } from "react-redux";
@@ -14,36 +13,6 @@ import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 registerPlugin(FilePondPluginFileEncode, FilePondPluginFileValidateType);
-const modules = {
-    toolbar: {
-        container: [
-            [{ header: [1, 2, 3, false] }],
-            [{ color: [] }, { background: [] }],
-            [{ align: [] }],
-            ["bold", "italic", "underline"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["link"],
-
-            [{ indent: "-1" }, { indent: "+1" }],
-            ["blockquote"]
-        ],
-    },
-};
-
-const formats = [
-    "header",
-    "align",
-    "bold",
-    "italic",
-    "underline",
-    "list",
-    "bullet",
-    "link",
-    "color",
-    "background",
-    "indent",
-    "blockquote"
-];
 
 const EditAnnouncement = () => {
     const {setBreadcrumb} = useBreadcrumb();
@@ -51,12 +20,11 @@ const EditAnnouncement = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, isUpdated, announcementDetails } = useSelector((state) => state.announcements);
+    const { loading, isUpdated, announcementDetails } = useSelector((state) => state.announcements);
 
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [content, setContent] = useState("");
     const [images, setImages] = useState([]);
     const [imagePreview, setImagePreview] = useState([]);
 
@@ -98,7 +66,6 @@ const EditAnnouncement = () => {
     };
     const allImages = [...imagePreview, ...images];
     const onSave = () => {
-        console.log({ title, description, content });
         const req = {
             title: title,
             description: description,
@@ -124,7 +91,6 @@ const EditAnnouncement = () => {
             console.log("Article Details: ", announcementDetails);
             setTitle(announcementDetails.title);
             setDescription(announcementDetails.description);
-            setContent(announcementDetails.content);
             setImagePreview(announcementDetails.images || []);
         }
     }, [announcementDetails])

@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from '../../../redux/actions/userActions';
-import { Link } from 'react-router-dom';
-import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 import { Chip, Typography } from '@material-tailwind/react';
-import DonationList from '../../../Components/Admin/Donors/DonationList';
-import { formatDate } from '../../../utils/helper';
 
 const Profile = () => {
     const dispatch = useDispatch();
-    const { userDetails, loading, error } = useSelector(state => state.users);
+    const { userDetails} = useSelector(state => state.users);
     useEffect(() => {
         dispatch(getUser());
     }, [dispatch])
@@ -17,11 +13,6 @@ const Profile = () => {
         <section className="w-full p-4">
 
             <div className=" w-full h-full p-4">
-                {/* <Link to="/dashboard">
-                    <div className="mb-4 h-10 w-max bg-gray-200 rounded-lg p-4 flex justify-start items-center text-gray-700/50 hover:text-gray-700 transition-all hover:cursor-pointer">
-                        <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
-                    </div>
-                </Link> */}
                 <div className="flex flex-col h-max gap-10">
                     <div className="w-full flex flex-col gap-4">
                         <Typography color="black" variant="h1">{userDetails && <div className='flex items-center gap-4'>{userDetails.name.first} {userDetails.name.last} <Chip color="blue-gray" value={userDetails.role}/></div>}</Typography>

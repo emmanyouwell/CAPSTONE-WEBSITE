@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
+import { Input, IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { ArrowLongLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
-import ArticleList from '../../../Components/Articles/ArticleList';
-import { resetDelete } from '../../../redux/slices/articleSlice';
-import { deleteAnnouncement, getAnnouncement, getArchivedAnnouncements, restoreAnnouncement } from '../../../redux/actions/announcementActions';
+import { getArchivedAnnouncements, restoreAnnouncement } from '../../../redux/actions/announcementActions';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
-import { ArrowRightToLine, EyeIcon, RotateCcw, SquarePenIcon, Trash } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 import { resetSuccess } from '../../../redux/slices/announcementSlice';
 const AnnouncementArchive = () => {
   const { setBreadcrumb } = useBreadcrumb();
-  const [IsLargeScreen, setIsLargeScreen] = useState(false);
   const dispatch = useDispatch();
-  const { announcements, isDeleted, loading, success, error } = useSelector((state) => state.announcements)
+  const { announcements, success } = useSelector((state) => state.announcements)
   const [search, setSearch] = useState('');
 
 
@@ -31,18 +27,7 @@ const AnnouncementArchive = () => {
   const handleSubmit = () => {
     dispatch(getArchivedAnnouncements(search));
   }
-  useEffect(() => {
-
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 768); // Tailwind's md breakpoint is 768px
-    };
-
-    // Set initial screen size and add event listener
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [])
+  
   useEffect(()=>{
     setBreadcrumb([
       { name: "Dashboard", path: "/dashboard" },

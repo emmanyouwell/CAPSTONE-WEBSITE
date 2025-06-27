@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
+import { Input, IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
-import { ArrowLongLeftIcon, MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+import { ArrowLongLeftIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteArticle, getArchivedArticles, getArticles, restoreArticle } from '../../../redux/actions/articleActions';
-import ArticleList from '../../../Components/Articles/ArticleList';
-import { resetDelete, resetSuccess } from '../../../redux/slices/articleSlice';
+import { getArchivedArticles, restoreArticle } from '../../../redux/actions/articleActions';
+import { resetSuccess } from '../../../redux/slices/articleSlice';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
-import { EyeIcon, Pencil, RotateCcw, SquarePenIcon, Trash } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 const ArticleArchive = () => {
   const {setBreadcrumb} = useBreadcrumb();
-  const [IsLargeScreen, setIsLargeScreen] = useState(false);
   const dispatch = useDispatch();
-  const { articles, isDeleted, loading, error, success } = useSelector((state) => state.articles);
+  const { articles, success } = useSelector((state) => state.articles);
   const [search, setSearch] = useState('');
 
 
@@ -36,18 +34,6 @@ const ArticleArchive = () => {
       { name: "Articles", path: "/dashboard/archive/articles" }
     ])
   },[])
-  useEffect(() => {
-
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 768); // Tailwind's md breakpoint is 768px
-    };
-
-    // Set initial screen size and add event listener
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [])
 
   useEffect(() => {
     dispatch(getArchivedArticles());

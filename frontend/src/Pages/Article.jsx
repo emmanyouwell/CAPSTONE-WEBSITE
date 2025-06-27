@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Input } from '@material-tailwind/react'
-import { Link } from 'react-router-dom'
 import StickyNavbar from '../Components/Navbar'
 import { useDispatch, useSelector } from 'react-redux';
 import { getArticles } from '../redux/actions/articleActions';
@@ -8,7 +7,7 @@ import ArticleList from '../Components/Articles/ArticleList';
 const Article = () => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
-    const { articles, loading, error } = useSelector((state) => state.articles);
+    const { articles } = useSelector((state) => state.articles);
     const [search, setSearch] = useState('')
     useEffect(() => {
         const handleResize = () => {

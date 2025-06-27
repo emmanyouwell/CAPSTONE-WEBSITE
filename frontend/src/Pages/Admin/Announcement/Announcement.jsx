@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Button, Input, IconButton } from '@material-tailwind/react'
+import { Button, Input, IconButton } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteArticle, getArticles } from '../../../redux/actions/articleActions';
-import ArticleList from '../../../Components/Articles/ArticleList';
 import { resetDelete } from '../../../redux/slices/announcementSlice';
-import { deleteAnnouncement, getAnnouncement, softDeleteAnnouncement } from '../../../redux/actions/announcementActions';
+import { getAnnouncement, softDeleteAnnouncement } from '../../../redux/actions/announcementActions';
 import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { formatDate } from '../../../utils/helper';
-import { Archive, EyeIcon, SquarePenIcon, Trash } from 'lucide-react';
+import { Archive, SquarePenIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 const Announcement = () => {
     const { setBreadcrumb } = useBreadcrumb();
-    const [IsLargeScreen, setIsLargeScreen] = useState(false);
+    const [,setIsLargeScreen] = useState(false);
     const dispatch = useDispatch();
-    const { announcements, isDeleted, loading, error } = useSelector((state) => state.announcements)
+    const { announcements, isDeleted } = useSelector((state) => state.announcements)
     const [search, setSearch] = useState('');
 
 

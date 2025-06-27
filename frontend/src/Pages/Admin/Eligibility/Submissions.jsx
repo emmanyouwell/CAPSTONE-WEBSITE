@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getModelReport, getSubmissions, updateDonor } from '../../../redux/actions/donorActions';
-import { Button, Card, CardBody, CardFooter, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
-import { EyeIcon, PencilLine, SquarePenIcon } from 'lucide-react';
+import { Button, Card, CardBody, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
+import { EyeIcon, SquarePenIcon } from 'lucide-react';
 import { formatDate } from '../../../utils/helper';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -11,14 +11,13 @@ import { createColumnHelper } from '@tanstack/react-table';
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { Link } from 'react-router-dom';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
-import HorizontalLoader from '../../../Components/Loader/HorizontalLoader';
 import Loader from '../../../Components/Loader/Loader';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 
 const Submissions = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
-    const { submissions, isUpdated, model, loading, pythonLoading } = useSelector((state) => state.donors);
+    const { submissions, isUpdated, model, pythonLoading } = useSelector((state) => state.donors);
     useEffect(() => {
         setBreadcrumb([
             { name: "Dashboard", path: "/dashboard" },

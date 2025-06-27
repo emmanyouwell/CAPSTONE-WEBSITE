@@ -2,26 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Button,
-    Card,
-    CardBody,
-    CardFooter,
     Dialog,
     DialogBody,
     DialogFooter,
     DialogHeader,
     IconButton,
-    Input,
     Typography,
 } from "@material-tailwind/react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLongLeftIcon, HandThumbUpIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Link, useParams } from "react-router-dom";
+import { ArrowLongLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { getFridges, openFridge } from "../../../redux/actions/fridgeActions";
-import { CheckIcon, CheckSquare, EyeIcon, Milk, PlusSquare, SquareCheck } from 'lucide-react'
+import { EyeIcon, SquareCheck } from 'lucide-react'
 import { getUserDetails } from "../../../redux/actions/userActions";
-import { toast } from "react-toastify";
-import { updateBag } from "../../../redux/actions/bagActions";
-import { addInventory } from "../../../redux/actions/inventoryActions";
-import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 import { formatDate } from "../../../utils/helper";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
@@ -40,69 +32,19 @@ function Icon({ id, open }) {
         </svg>
     );
 }
-const PasteurizedMilk = ({ currentPage, totalPages }) => {
+const PasteurizedMilk = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const { id } = useParams()
-    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [open, setOpen] = useState(0);
-    const [selectedOption, setSelectedOption] = useState('');
-    const [selectedRows, setSelectedRows] = useState([]);
-    const [totalVolume, setTotalVolume] = useState(0);
-    const [selectedBags, setSelectedBags] = useState([]);
     const [inventory, setInventory] = useState({})
-    const [batchDetails, setBatchDetails] = useState(() => ({
-        batch: "",
-        pool: "",
-        pasteurizationDate: "",
-        qty: 0,
-    }))
-    const [formError, setFormError] = useState(() => ({
-        batch: false,
-        pool: false,
-        fridge: false,
-        qty: false,
-        date: false
-    }));
-    const { fridges, fridgeContent, allBags, loading, error } = useSelector(state => state.fridges)
-    const { userDetails } = useSelector(state => state.users);
+    
+    const { fridgeContent } = useSelector(state => state.fridges)
+    
     const handleOpen = (id) => {
         setInventory(id)
         setOpen(!open)
     };
-    const handleChange = (e) => {
-        setFormError((prev) => ({
-            ...prev,
-            fridge: false
-        }))
-        setSelectedOption(e.target.value)
-    }
-
-    const pasteurizedFridges = fridges ? fridges.filter((f) => f.fridgeType === 'Pasteurized') : [];
-
-
-    const resetStates = () => {
-        setBatchDetails(() => ({
-            batch: "",
-            pool: "",
-            qty: 0,
-        }))
-        setTotalVolume(0)
-        setSelectedRows([])
-        setSelectedBags([])
-        setSelectedOption('')
-        setFormError(() => ({
-            batch: false,
-            pool: false,
-            fridge: false,
-            qty: false,
-        }))
-        setOpen(false)
-
-
-    }
-
-
 
     useEffect(() => {
         dispatch(openFridge(id));
@@ -136,7 +78,7 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
             id: 'available',
             header: 'Available Volume (ml)',
             cell: ({ row }) => {
-                const id = row.original._id
+                
                 const availableVolume = row.original.pasteurizedDetails.bottles.map(b => b.status).filter(b => b === "Available").length * row.original.pasteurizedDetails.bottleType;
                 return (
                     <div className="flex gap-2">
@@ -149,7 +91,7 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
             id: 'actions',
             header: 'Actions',
             cell: ({ row }) => {
-                const id = row.original._id
+                
                 return (
                     <div className="bg-secondary w-max p-3 rounded-lg hover:cursor-pointer" onClick={() => handleOpen(row.original)}> 
                         <EyeIcon className="h-5 w-5 text-white " />
@@ -174,11 +116,6 @@ const PasteurizedMilk = ({ currentPage, totalPages }) => {
                         <ArrowLongLeftIcon className="h-8 w-8" /> <span className="font-semibold text-md ml-2">Back</span>
                     </div>
                 </Link>
-                {totalVolume > 0 && <div className="flex justify-center items-center gap-4">
-                    <Typography variant="h2">Selected milk: {totalVolume && totalVolume} ml</Typography>
-                    {selectedRows.length > 0 && (<SquareCheck onClick={handleOpen} className="h-10 w-10 font-semibold hover:text-green-500 hover:cursor-pointer" />)}
-
-                </div>}
 
                 <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
                     <DialogHeader className="relative m-0 block">

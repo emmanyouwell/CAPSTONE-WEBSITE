@@ -19,7 +19,7 @@ const CreateAdmin = () => {
   const {setBreadcrumb} = useBreadcrumb();
   const navigation = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, isRegistered, userDetails, user } = useSelector((state) => state.users);
+  const { isRegistered, userDetails } = useSelector((state) => state.users);
   const phoneRegExp = /^(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\d{10,14}$/;
   const validationSchema = Yup.object({
     employeeID: Yup.string()

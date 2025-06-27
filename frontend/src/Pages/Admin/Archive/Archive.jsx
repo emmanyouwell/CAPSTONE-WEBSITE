@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable';
 import { Link } from 'react-router-dom';
 import { EyeIcon } from 'lucide-react';
-import { Button, IconButton } from '@material-tailwind/react';
+import { IconButton } from '@material-tailwind/react';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 
 const Archive = () => {

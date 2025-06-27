@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getDonors } from '../../../redux/actions/donorActions'
 import { Input, Button, IconButton } from '@material-tailwind/react'
-import DonorCards from '../../../Components/Admin/Donors/DonorCards'
-import { ArrowLongLeftIcon, ArrowLongRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Select, Option } from '@material-tailwind/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
@@ -13,7 +12,7 @@ import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
 const DonorsPage = () => {
     const {setBreadcrumb} = useBreadcrumb();
     const dispatch = useDispatch();
-    const { donors, pageSize, totalDonors, totalPages, loading, error } = useSelector((state) => state.donors);
+    const { donors, pageSize } = useSelector((state) => state.donors);
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [brgy, setBrgy] = useState('');

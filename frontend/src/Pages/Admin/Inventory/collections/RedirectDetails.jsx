@@ -7,7 +7,6 @@ const RedirectDetails = () => {
     const location = useLocation();
     const type = location.state?.type
     const collectionId = location.state?.collectionId
-    const details = location.state?.details
     const status = location.state?.status
     useEffect(() => {
         if (type) {
