@@ -1,6 +1,5 @@
 import { toast } from 'react-toastify';
 import { useLocation } from "react-router-dom";
-import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react';
 import React from 'react';
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {

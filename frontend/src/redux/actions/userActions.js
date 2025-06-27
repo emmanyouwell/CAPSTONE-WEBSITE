@@ -20,8 +20,6 @@ export const loginUser = createAsyncThunk(
       if (credentials.get('isEmp')) {
         url = `${VITE_APP_URL}/api/v1/login/?emp=true`
       }
-
-      // console.log(credentials);
       const response = await axios.post(url, credentials, config);
 
       await authenticate(response.data, () => { });

@@ -1,6 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { authenticate, logout } from '../../utils/helper';
 import api from '../../api/axiosInstance'
 const VITE_APP_URL = import.meta.env.VITE_APP_URL;
 
