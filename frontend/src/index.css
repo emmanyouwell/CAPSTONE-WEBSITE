@@ -21,7 +21,6 @@ html, body, #root {
 }
 .hero {
     position: relative;
-    /* background-color: #666666; */
     background-image: url('./assets/image/landing-banner-6.jpg');
     background-position: center;
     background-size: cover;
