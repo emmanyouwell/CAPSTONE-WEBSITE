@@ -12,6 +12,18 @@ import { getDevices, sendNotification } from '../../../redux/actions/notifAction
 import Select from 'react-select'
 import Loader from '../../../Components/Loader/Loader';
 import { resetDelete } from '../../../redux/slices/requestSlice';
+
+function CustomOption({ option }) {
+    return (
+        <div className="flex flex-col text-sm">
+            <span className="font-semibold">{option.value.name} ({option.value.patientType})</span>
+            <span className="text-xs">
+                {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city} | {option.value.phone}
+            </span>
+        </div>
+    )
+}
+
 const StaffRequestView = () => {
     const dispatch = useDispatch();
     const { request, loading } = useSelector(state => state.requests)
@@ -212,16 +224,7 @@ const StaffRequestView = () => {
                                                 onChange={(selected) => { setFormData({ ...formData, patient: selected.value._id }); setSelectedPatient(selected.value) }}
                                                 options={options}
                                                 isSearchable
-                                                formatOptionLabel={(option) =>
-                                                ((
-                                                    <div className="flex flex-col text-sm">
-                                                        <span className="font-semibold">{option.value.name} ({option.value.patientType})</span>
-                                                        <span className="text-xs">
-                                                            {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city} | {option.value.phone}
-                                                        </span>
-                                                    </div>
-                                                ))
-                                                }
+                                                formatOptionLabel={(option) => (<CustomOption option={option} />)}
                                             />
                                         </div>
                                     </div>

@@ -113,7 +113,7 @@ const Accounts = () => {
                                 <div className="w-max">
                                     <Select label="Sort by" color="pink" variant="standard" value={sort} onChange={(value) => handleSort(value)}>
                                         {sortTypes.map((types, index) => (
-                                            <Option key={index} value={types}>{types}</Option>
+                                            <Option key={types} value={types}>{types}</Option>
                                         ))}
                                     </Select>
                                 </div>
@@ -121,7 +121,7 @@ const Accounts = () => {
                                     <div className="w-max">
                                         <Select label="Role" color="pink" variant="standard" value={role} onChange={(value) => handleRole(value)}>
                                             {roleTypes.map((types, index) => (
-                                                <Option key={index} value={types}>{types}</Option>
+                                                <Option key={types} value={types}>{types}</Option>
                                             ))}
                                         </Select>
                                     </div>

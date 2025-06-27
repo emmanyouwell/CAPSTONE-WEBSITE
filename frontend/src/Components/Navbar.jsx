@@ -228,8 +228,7 @@ const StickyNavbar = () => {
       <Collapse open={openNav}>
         {navList}
         <div className="flex items-center gap-x-1">
-          {userDetails ? (<>
-
+          {userDetails ? (
             <Button
               variant="gradient"
               size="sm"
@@ -238,7 +237,7 @@ const StickyNavbar = () => {
               onClick={logoutHandler}
             >
               <span>Log out</span>
-            </Button></>) : (<Link to="/login">
+            </Button>) : (<Link to="/login">
               <Button
                 variant="gradient"
                 size="sm"

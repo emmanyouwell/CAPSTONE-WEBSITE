@@ -9,6 +9,57 @@ import { deleteRequest, inpatientDispense, outpatientDispense } from '../../../.
 import { toast } from 'react-toastify'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
+import PropTypes from 'prop-types'
+
+function ActionsHeader({ reservedRequest, filteredRequest, dispenseInpatient }) {
+    const shouldShowButton = reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length;
+
+    return (
+        <th>
+            {shouldShowButton ? (
+                <Button color="green" onClick={dispenseInpatient}>
+                    <CheckCheck className="h-5 w-5" />
+                </Button>
+            ) : (
+                'View Details'
+            )}
+        </th>
+    );
+}
+
+function ActionsCell({ request, handleTransport, handleDelete }) {
+    return (
+        <div className="flex gap-2">
+            {request.status === "Reserved" && request.patient.patientType === "Outpatient" ? (
+                <Button className="bg-secondary" onClick={() => handleTransport(request)}>
+                    <CheckCheck className="h-5 w-5" />
+                </Button>
+            ) : request.status === "Canceled" ? (
+                <div className="flex items-center gap-4">
+                    <Link to={`/dashboard/request/${request._id}`}>
+                        <IconButton variant="text" className="text-secondary rounded-full">
+                            <EyeIcon size={25} />
+                        </IconButton>
+                    </Link>
+                    <IconButton
+                        variant="text"
+                        className="text-secondary rounded-full"
+                        onClick={() => handleDelete(request._id)}
+                    >
+                        <Trash size={22} className="text-secondary cursor-pointer" />
+                    </IconButton>
+                </div>
+            ) : (
+                <Link to={`/dashboard/request/${request._id}`}>
+                    <IconButton variant="text" className="text-secondary rounded-full">
+                        <EyeIcon size={25} />
+                    </IconButton>
+                </Link>
+            )}
+        </div>
+    );
+}
+
 const RequestTable = ({ requests, setRefresh }) => {
     const dispatch = useDispatch();
     const [items] = useState([
@@ -143,27 +194,20 @@ const RequestTable = ({ requests, setRefresh }) => {
         }),
         columnHelper.display({
             id: 'actions',
-            header: () => (<th>  {reservedRequest.length > 0 && reservedRequest.length === filteredRequest.length ? <Button color="green" onClick={dispenseInpatient}>
-                <CheckCheck className="h-5 w-5" />
-            </Button> : 'View Details'}</th>),
-            cell: ({ row }) => {
-                const request = row.original
-                return (
-                    <div className="flex gap-2">
-                        {request.status === "Reserved" && request.patient.patientType === "Outpatient" ?
-                            <Button className="bg-secondary" onClick={() => handleTransport(request)}><CheckCheck className="h-5 w-5" /></Button>
-                            : request.status === "Canceled" ?
-                                <div className="flex items-center gap-4">
-                                    <Link to={`/dashboard/request/${request._id}`}>
-                                        <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
-                                    </Link>
-                                    <IconButton variant="text" className="text-secondary rounded-full"><Trash size={22} className="text-secondary cursor-pointer" onClick={() => handleDelete(request._id)} /></IconButton>
-                                </div> : <Link to={`/dashboard/request/${request._id}`}>
-                                    <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
-                                </Link>}
-                    </div>
-                );
-            },
+            header: () => (
+                <ActionsHeader
+                    reservedRequest={reservedRequest}
+                    filteredRequest={filteredRequest}
+                    dispenseInpatient={dispenseInpatient}
+                />
+            ),
+            cell: ({ row }) => (
+                <ActionsCell
+                    request={row.original}
+                    handleTransport={handleTransport}
+                    handleDelete={handleDelete}
+                />
+            ),
         }),
     ];
     return (
@@ -191,7 +235,7 @@ const RequestTable = ({ requests, setRefresh }) => {
                     <div className="space-y-4">
 
                         {items?.length > 0 && items.map((item, index) => (
-                            <div key={index}>
+                            <div key={item.value}>
                                 <input
                                     type="radio"
                                     id={item.label}
@@ -231,6 +275,11 @@ const RequestTable = ({ requests, setRefresh }) => {
 
         </div>
     )
+}
+
+RequestTable.propTypes = {
+    requests: PropTypes.array.isRequired,
+    setRefresh: PropTypes.func.isRequired
 }
 
 export default RequestTable

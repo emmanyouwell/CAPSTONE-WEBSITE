@@ -111,7 +111,7 @@ const CreateAnnouncement = () => {
             />
             <div className="flex items-center flex-wrap gap-4 mt-4">
                 {images.map((image, index) => (
-                    <div key={index} className="relative w-max">
+                    <div key={image.url} className="relative w-max">
                         <button
                             onClick={() => handleRemoveImage(index, !!image.local)}
                             className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center z-10"

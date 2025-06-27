@@ -12,8 +12,20 @@ import Select from 'react-select'
 import Loader from '../../../../Components/Loader/Loader';
 import { resetDelete, resetSuccess } from '../../../../redux/slices/requestSlice';
 import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext';
+
+function CustomOption({option}) {
+    return (
+        <div className="flex flex-col text-sm">
+            <span className="font-semibold">{option.value.name} ({option.value.patientType})</span>
+            <span className="text-xs">
+                {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city} | {option.value.phone}
+            </span>
+        </div>
+    )
+}
+
 const RequestView = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
     const { request, loading, success } = useSelector(state => state.requests)
     const { recipients } = useSelector(state => state.recipients)
@@ -33,12 +45,12 @@ const RequestView = () => {
         images: []
     }));
 
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: 'Dashboard', path: '/dashboard' },
             { name: 'Requests' }
         ])
-    },[])
+    }, [])
     useEffect(() => {
         dispatch(getDevices())
         dispatch(getRequests())
@@ -99,7 +111,7 @@ const RequestView = () => {
             toast.error("Invalid Days")
             return;
         }
-        
+
         const requestedBy = getUser()?._id;
         const imageUrls = images.map(img => img.url);
         const requestData = {
@@ -172,7 +184,7 @@ const RequestView = () => {
             )
         }));
     };
-   
+
     const handleImageChange = async (e, id) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -203,11 +215,11 @@ const RequestView = () => {
             setFormData(prev => ({ ...prev, images: [] }));
         }
     }, [selectedPatient]);
-    useEffect(()=>{
-        if (formData.images){
+    useEffect(() => {
+        if (formData.images) {
             console.log("Images Updated: ", formData.images);
         }
-    },[formData.images])
+    }, [formData.images])
     return (
         <div className="p-4">
             <Tabs value="Inpatient">
@@ -257,16 +269,7 @@ const RequestView = () => {
                                                 onChange={(selected) => { setFormData({ ...formData, patient: selected.value._id }); setSelectedPatient(selected.value) }}
                                                 options={options}
                                                 isSearchable
-                                                formatOptionLabel={(option) =>
-                                                ((
-                                                    <div className="flex flex-col text-sm">
-                                                        <span className="font-semibold">{option.value.name} ({option.value.patientType})</span>
-                                                        <span className="text-xs">
-                                                            {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city} | {option.value.phone}
-                                                        </span>
-                                                    </div>
-                                                ))
-                                                }
+                                                formatOptionLabel={(option) =>(<CustomOption option={option} />)}
                                             />
                                         </div>
                                     </div>
@@ -433,13 +436,13 @@ const RequestView = () => {
                                                     required
                                                 />
                                                 <Typography variant="h6" color="blue-gray" className="">
-                                                  Upload Clinical Abstract
+                                                    Upload Clinical Abstract
                                                 </Typography>
                                                 <Input
                                                     type="file"
                                                     size="lg"
                                                     placeholder="Upload Images"
-                                                    onChange={(e)=>handleImageChange(e, "Clinical Abstract")}
+                                                    onChange={(e) => handleImageChange(e, "Clinical Abstract")}
                                                     className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                     labelProps={{
                                                         className: "before:content-none after:content-none",

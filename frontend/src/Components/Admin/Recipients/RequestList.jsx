@@ -1,6 +1,7 @@
 import React from 'react'
 import { formatDate } from '../../../utils/helper'
 import { Typography } from '@material-tailwind/react'
+import PropTypes from 'prop-types'
 const RequestList = ({ requests }) => {
     
     return (
@@ -11,7 +12,7 @@ const RequestList = ({ requests }) => {
 
             <ul className="mt-4 space-y-2">
                 {requests.map((request, index) => (
-                        <li key={index}>
+                        <li key={request._id}>
                         <p className="block h-full rounded-lg border border-gray-500 p-4">
                             <strong className="font-medium text-lg text-black">Date: {formatDate(request.date)}</strong>
                             <p className="mt-1 text-lg font-medium text-gray-800">Requested Volume: {request.volumeRequested.volume} mL/day</p>
@@ -29,5 +30,7 @@ const RequestList = ({ requests }) => {
         </article>
     )
 }
-
+RequestList.propTypes = {
+    requests: PropTypes.array.isRequired
+}
 export default RequestList

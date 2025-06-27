@@ -20,9 +20,24 @@ import Select from 'react-select';
 import { Check, SquarePen, Trash, X } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import { formatDate, getDonationDate } from '../../../../utils/helper';
+
+function CustomOption({ option }) {
+    return (
+        <div className="flex flex-col text-lg">
+            <span className="font-semibold">
+                {option.value.user.name.first} {option.value.user.name.last} | {option.value.user.phone}
+            </span>
+            <span className="text-md">
+                {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
+            </span>
+        </div>
+    )
+}
+
+
 const DonationDetails = () => {
     const dispatch = useDispatch();
-    const { donors} = useSelector((state) => state.donors);
+    const { donors } = useSelector((state) => state.donors);
     const { loading: submitLoading, success } = useSelector((state) => state.lettings);
     const [search, setSearch] = useState('');
     const navigate = useNavigate()
@@ -210,19 +225,12 @@ const DonationDetails = () => {
                                     <Select
                                         className="w-full select-border-black"
                                         value={selectedDonor ? options.find(opt => opt.value._id === selectedDonor._id) : null}
-                                        onChange={(selected) => {setSelectedDonor(selected.value)}}
+                                        onChange={(selected) => { setSelectedDonor(selected.value) }}
                                         options={options}
                                         isSearchable
                                         formatOptionLabel={(option) =>
                                         (
-                                            <div className="flex flex-col text-lg">
-                                                <span className="font-semibold">
-                                                    {option.value.user.name.first} {option.value.user.name.last} | {option.value.user.phone}
-                                                </span>
-                                                <span className="text-md">
-                                                    {option.value.home_address.street}, {option.value.home_address.brgy}, {option.value.home_address.city}
-                                                </span>
-                                            </div>
+                                           <CustomOption option={option} />
                                         )
                                         }
                                     />
@@ -378,7 +386,7 @@ const DonationDetails = () => {
                             </thead>
                             <tbody>
                                 {bags.map((bag, index) => (
-                                    <tr key={index} className="border-b border-blue-gray-50">
+                                    <tr key={bag._id} className="border-b border-blue-gray-50">
                                         {editingIndex === index ? (
                                             <>
                                                 <td className="px-4 py-2 text-md text-blue-gray-900">

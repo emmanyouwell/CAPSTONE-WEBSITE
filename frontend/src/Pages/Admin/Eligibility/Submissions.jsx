@@ -14,6 +14,19 @@ import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 import Loader from '../../../Components/Loader/Loader';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 
+function ActionsCell({ row, handleOpen }) {
+    const submissionID = row.original.submissionID;
+    const _id = row.original._id;
+    return (
+        <div className="flex gap-2">
+            <a target="_blank" href={`https://script.google.com/macros/s/AKfycbwYOc13QaEjdGoJvdlFEHZ2pSsIlUmx0zksazMKD3qfXYGnYG70eNSB7M5ZX0aOiU1y/exec?submissionId=${submissionID}`}>
+                <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
+            </a>
+            <IconButton variant="text" className="text-secondary rounded-full" onClick={() => handleOpen(_id)}><SquarePenIcon size={22} className="text-secondary" /></IconButton>
+
+        </div>
+    );
+}
 const Submissions = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
@@ -82,19 +95,9 @@ const Submissions = () => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const submissionID = row.original.submissionID;
-                const _id = row.original._id;
-                return (
-                    <div className="flex gap-2">
-                        <a target="_blank" href={`https://script.google.com/macros/s/AKfycbwYOc13QaEjdGoJvdlFEHZ2pSsIlUmx0zksazMKD3qfXYGnYG70eNSB7M5ZX0aOiU1y/exec?submissionId=${submissionID}`}>
-                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
-                        </a>
-                        <IconButton variant="text" className="text-secondary rounded-full" onClick={() => handleOpen(_id)}><SquarePenIcon size={22} className="text-secondary" /></IconButton>
-
-                    </div>
-                );
-            },
+            cell: ({ row }) => (
+                <ActionsCell row={row} handleOpen={handleOpen} />
+            ),
         }),
     ];
     return (
@@ -194,7 +197,7 @@ const Submissions = () => {
                     <div className="space-y-4">
 
                         {eligibilityOptions?.length > 0 && eligibilityOptions.map((type, index) => (
-                            <div key={index}>
+                            <div key={type}>
                                 <input
                                     type="radio"
                                     id={type}

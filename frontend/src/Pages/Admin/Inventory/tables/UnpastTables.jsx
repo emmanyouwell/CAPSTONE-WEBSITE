@@ -4,12 +4,20 @@ import { Link } from 'react-router-dom'
 import { EyeIcon, SquarePenIcon } from 'lucide-react'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
+import PropTypes from 'prop-types'
 
-
+function ActionCell({ row, handleEdit }) {
+    const _id = row.original._id
+    return (
+        <div className="flex gap-2">
+            <Link to={`/dashboard/inventory/fridge/unpasteurized/${_id}`}>
+                <IconButton className="text-secondary rounded-full" variant="text"><EyeIcon size={25} /></IconButton>
+            </Link>
+            <IconButton className="text-secondary rounded-full" variant="text" onClick={() => handleEdit(_id)}><SquarePenIcon size={22} /></IconButton>
+        </div>
+    );
+}
 const UnpastTables = ({ unpasteurizedFridges, handleEdit }) => {
-
-
-
     const columnHelper = createColumnHelper();
     const columns = [
         columnHelper.accessor(row => row.name, {
@@ -30,17 +38,7 @@ const UnpastTables = ({ unpasteurizedFridges, handleEdit }) => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const _id = row.original._id
-                return (
-                    <div className="flex gap-2">
-                        <Link to={`/dashboard/inventory/fridge/unpasteurized/${_id}`}>
-                            <IconButton className="text-secondary rounded-full" variant="text"><EyeIcon size={25} /></IconButton>
-                        </Link>
-                        <IconButton className="text-secondary rounded-full" variant="text" onClick={() => handleEdit(_id)}><SquarePenIcon size={22} /></IconButton>
-                    </div>
-                );
-            },
+            cell: ({ row }) => (<ActionCell row={row} handleEdit={handleEdit} />),
         }),
     ];
 
@@ -52,4 +50,8 @@ const UnpastTables = ({ unpasteurizedFridges, handleEdit }) => {
     )
 }
 
+UnpastTables.propTypes = {
+    unpasteurizedFridges: PropTypes.array.isRequired,
+    handleEdit: PropTypes.func.isRequired
+}
 export default UnpastTables

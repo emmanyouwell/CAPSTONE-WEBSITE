@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Carousel } from '@material-tailwind/react';
 import { useLocation } from 'react-router-dom';
 import { EyeIcon } from 'lucide-react';
-const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
+import PropTypes from 'prop-types';
+const AnnouncementList = ({ announcements }) => {
 
     const location = useLocation();
     const [open, setOpen] = useState(false);
@@ -26,10 +27,10 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
                     day: 'numeric', // "21"
                 });
                 return (
-                    <div className="bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-full max-w-sm h-96">
+                    <div key={announcement._id} className="bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-full max-w-sm h-96">
                         <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max  overflow-hidden">
                             {announcement?.images?.map((image, index) => (
-                                <div key={index} className="relative h-40 w-full">
+                                <div key={image.url} className="relative h-40 w-full">
                                     <img
                                         src={image.url}
                                         alt={`Announcement Image ${index + 1}`}
@@ -74,7 +75,7 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
                 <DialogBody className="overflow-y-auto max-h-[70vh]">
                     <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max">
                         {selectedAnnouncement?.images?.map((image, index) => (
-                            <div key={index} className="relative h-96 w-full">
+                            <div key={image.url} className="relative h-96 w-full">
                                 <img
                                     src={image.url}
                                     alt={`Article Image ${index + 1}`}
@@ -96,5 +97,7 @@ const AnnouncementList = ({ announcements, IsLargeScreen, handleDelete }) => {
         </>
     )
 }
-
+AnnouncementList.propTypes = {
+    announcements: PropTypes.array.isRequired
+}
 export default AnnouncementList

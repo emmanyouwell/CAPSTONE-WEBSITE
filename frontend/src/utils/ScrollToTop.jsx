@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router";
-
+import PropTypes from "prop-types";
 const ScrollToTop = (props) => {
   const location = useLocation();
   useEffect(() => {
@@ -10,4 +10,7 @@ const ScrollToTop = (props) => {
   return <>{props.children}</>
 };
 
+ScrollToTop.propTypes = {
+  props: PropTypes.object.isRequired,
+};
 export default ScrollToTop;

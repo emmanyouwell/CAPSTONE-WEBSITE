@@ -269,7 +269,7 @@ const PickUpDetails = () => {
                                     >
 
                                         {users && users.map((user, index) => (
-                                            <Option key={index} value={user._id}>{user.name.first} {user.name.middle} {user.name.last}</Option>
+                                            <Option key={user._id} value={user._id}>{user.name.first} {user.name.middle} {user.name.last}</Option>
                                         ))}
 
                                     </Select>
@@ -308,7 +308,7 @@ const PickUpDetails = () => {
                                 <div className="space-y-4">
 
                                     {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge, index) => (
-                                        <div key={index}>
+                                        <div key={fridge._id}>
                                             <input
                                                 type="radio"
                                                 id={fridge.name}
@@ -350,7 +350,7 @@ const PickUpDetails = () => {
 
                 <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
                     {schedule?.donorDetails?.bags?.map((bag, index) => (
-                        <div key={index} className="min-w-max">
+                        <div key={bag._id} className="min-w-max">
                             <BagDetails bag={bag} status={status} from={from} scheduleId={id} />
                         </div>
                     ))}

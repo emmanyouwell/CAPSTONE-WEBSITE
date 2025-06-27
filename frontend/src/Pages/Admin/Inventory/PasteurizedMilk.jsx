@@ -18,29 +18,40 @@ import { formatDate } from "../../../utils/helper";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
-function Icon({ id, open }) {
+
+function AvailableVolume({ row }) {
+    const availableVolume = row.original.pasteurizedDetails.bottles.map(b => b.status).filter(b => b === "Available").length * row.original.pasteurizedDetails.bottleType;
     return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className={`${id === open ? "rotate-180" : ""} h-5 w-5 transition-transform`}
-        >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
+        <div className="flex gap-2">
+            <p>{availableVolume} ml</p>
+        </div>
+    );
+}
+function ActionsCell({ row, handleOpen }) {
+
+    return (
+        <div className="bg-secondary w-max p-3 rounded-lg hover:cursor-pointer"
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault(); // Prevent page scroll on Space
+                    handleOpen(row.original);
+                }
+            }}
+            tabIndex={0}
+            onClick={() => handleOpen(row.original)}>
+            <EyeIcon className="h-5 w-5 text-white " />
+        </div>
     );
 }
 const PasteurizedMilk = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const { id } = useParams()
     const dispatch = useDispatch()
     const [open, setOpen] = useState(0);
     const [inventory, setInventory] = useState({})
-    
+
     const { fridgeContent } = useSelector(state => state.fridges)
-    
+
     const handleOpen = (id) => {
         setInventory(id)
         setOpen(!open)
@@ -77,37 +88,26 @@ const PasteurizedMilk = () => {
         columnHelper.display({
             id: 'available',
             header: 'Available Volume (ml)',
-            cell: ({ row }) => {
-                
-                const availableVolume = row.original.pasteurizedDetails.bottles.map(b => b.status).filter(b => b === "Available").length * row.original.pasteurizedDetails.bottleType;
-                return (
-                    <div className="flex gap-2">
-                        <p>{availableVolume} ml</p>
-                    </div>
-                );
-            },
+            cell: ({ row }) => (
+                <AvailableVolume row={row} />
+            ),
         }),
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                
-                return (
-                    <div className="bg-secondary w-max p-3 rounded-lg hover:cursor-pointer" onClick={() => handleOpen(row.original)}> 
-                        <EyeIcon className="h-5 w-5 text-white " />
-                    </div>
-                );
-            },
+            cell: ({ row }) => (
+                <ActionsCell row={row} handleOpen={handleOpen} />
+            ),
         }),
     ];
     const items = fridgeContent.filter((f) => f.status === "Available");
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: 'Dashboard', path: '/dashboard' },
             { name: 'Refrigerator', path: '/dashboard/inventory/refrigerator' },
             { name: 'Pasteurized Milk' }
         ])
-    },[])
+    }, [])
     return (
         <div className="w-full h-[calc(100vh-2rem)] overflow-y-scroll p-8" >
             <div className="flex justify-between items-center mb-4">
@@ -203,7 +203,7 @@ const PasteurizedMilk = () => {
                             </Typography>
                             <div className="grid grid-cols-3 gap-4">
                                 {inventory?.pasteurizedDetails?.donors.map((donor, index) => (
-                                    <div key={index} className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-md">
+                                    <div key={donor._id} className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-md">
                                         <div className="flex items-center space-x-2">
 
                                             <Typography variant="h6" color="blue-gray" className="font-medium">{`${donor.user.name.first} ${donor.user.name.last}`}</Typography>
@@ -223,7 +223,7 @@ const PasteurizedMilk = () => {
 
             </div>
             <DataTable data={items} columns={columns} pageSize={10} />
-            
+
 
 
         </div >

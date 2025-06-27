@@ -22,8 +22,15 @@ import Select from 'react-select';
 import { toast } from 'react-toastify'
 import { resetUpdate } from '../../../redux/slices/fridgeSlice'
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
+function CustomOption({ option }) {
+    return (
+        <div className="flex flex-col text-sm">
+            <span className="font-semibold">{option.value}</span>
+        </div>
+    )
+}
 const Refrigerator = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch()
     const { fridgeDetails, fridges, available, loading, isUpdated } = useSelector(state => state.fridges)
     useEffect(() => {
@@ -44,12 +51,12 @@ const Refrigerator = () => {
         name: '',
         fridgeType: ''
     }));
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: 'Dashboard', path: '/dashboard' },
             { name: 'Refrigerators' }
         ])
-    },[])
+    }, [])
     useEffect(() => {
         setFormData({
             name: fridgeDetails.name,
@@ -98,12 +105,12 @@ const Refrigerator = () => {
         { value: 'Unpasteurized', label: 'Unpasteurized' },
         { value: 'Pasteurized', label: 'Pasteurized' }
     ]
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getFridges())
-        if (isUpdated){
+        if (isUpdated) {
             dispatch(resetUpdate());
         }
-    },[isUpdated])
+    }, [isUpdated])
     return (
         <div className="p-4">
             <Tabs value="Unpasteurized">
@@ -164,14 +171,7 @@ const Refrigerator = () => {
                                         value={options.find(opt => opt.value === selectedOption)}
                                         onChange={(selected) => { setFormData({ ...formData, fridgeType: selected.value }); setSelectedOption(selected.value) }}
                                         isSearchable
-                                        formatOptionLabel={(option) =>
-                                        ((
-                                            <div className="flex flex-col text-sm">
-                                                <span className="font-semibold">{option.value}</span>
-
-                                            </div>
-                                        ))
-                                        }
+                                        formatOptionLabel={(option) => (<CustomOption option={option} />)}
                                     />
 
                                 </div>
@@ -228,14 +228,7 @@ const Refrigerator = () => {
                                         value={options.find(opt => opt.value === selectedOption)}
                                         onChange={(selected) => { setFormData({ ...formData, fridgeType: selected.value }); setSelectedOption(selected.value) }}
                                         isSearchable
-                                        formatOptionLabel={(option) =>
-                                        ((
-                                            <div className="flex flex-col text-sm">
-                                                <span className="font-semibold">{option.value}</span>
-
-                                            </div>
-                                        ))
-                                        }
+                                        formatOptionLabel={(option) => (<CustomOption option={option} />)}
                                     />
 
                                 </div>

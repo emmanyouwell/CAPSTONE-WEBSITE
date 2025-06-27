@@ -17,7 +17,7 @@ import {
     BadgeCheck,
     Archive,
 } from 'lucide-react'
-
+import PropTypes from 'prop-types'
 const superAdminItems = [
     { title: "Donor Records", route: "/dashboard/donors", path: 'donor', icon: <HeartIcon className="text-secondary" size={20} />, category: "Records" },
     { title: "Recipient Records", route: "/dashboard/recipients", path: 'recipient', icon: <UserCircleIcon className="text-secondary" size={20} />, category: "Records" },
@@ -103,5 +103,7 @@ const SidebarComponent = ({ userDetails }) => {
         </main>
     )
 }
-
+SidebarComponent.propTypes = {
+    userDetails: PropTypes.object.isRequired
+}
 export default SidebarComponent

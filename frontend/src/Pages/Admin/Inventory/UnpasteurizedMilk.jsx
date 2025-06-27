@@ -18,8 +18,20 @@ import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 import DatePicker from "react-datepicker";
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
 
+function SelectMilkCheckbox({ row, selectedRows, handleCheckboxChange }) {
+    const id = row.original._id
+    return (
+        <div className="flex gap-2">
+            <input
+                type="checkbox"
+                checked={selectedRows.some((item) => item === id)}
+                onChange={() => handleCheckboxChange(row.original)}
+            />
+        </div>
+    );
+}
 const UnpasteurizedMilk = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const { id } = useParams()
     const dispatch = useDispatch()
     const [open, setOpen] = useState(0);
@@ -193,7 +205,7 @@ const UnpasteurizedMilk = () => {
             }))
 
         }
-        if (!bottleType || bottleType === ""){
+        if (!bottleType || bottleType === "") {
             setFormError((prev) => ({
                 ...prev,
                 bottleType: true
@@ -215,14 +227,14 @@ const UnpasteurizedMilk = () => {
             }))
 
         }
-       
+
         if (!batchDetails.pasteurizationDate || batchDetails.pasteurizationDate === "") {
             setFormError((prev) => ({
                 ...prev,
                 date: true
             }))
         }
-        if (!selectedOption || !bottleType || !batchDetails.pasteurizationDate || !batchDetails.batch || !batchDetails.pool || totalVolume <= 0 || totalVolume > 4000 ) {
+        if (!selectedOption || !bottleType || !batchDetails.pasteurizationDate || !batchDetails.batch || !batchDetails.pool || totalVolume <= 0 || totalVolume > 4000) {
             return;
         }
         const userInfo = [
@@ -255,13 +267,13 @@ const UnpasteurizedMilk = () => {
         console.log("donors: ", selectedBags);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: 'Dashboard', path: '/dashboard' },
             { name: 'Refrigerators', path: '/dashboard/inventory/refrigerator' },
             { name: 'Unpasteurized Milk' }
         ])
-    },[])
+    }, [])
     useEffect(() => {
         dispatch(openFridge(id));
         dispatch(getFridges())
@@ -289,18 +301,7 @@ const UnpasteurizedMilk = () => {
         columnHelper.display({
             id: 'actions',
             header: 'Select Milk',
-            cell: ({ row }) => {
-                const id = row.original._id
-                return (
-                    <div className="flex gap-2">
-                        <input
-                            type="checkbox"
-                            checked={selectedRows.some((item) => item === id)}
-                            onChange={() => handleCheckboxChange(row.original)}
-                        />
-                    </div>
-                );
-            },
+            cell: ({ row }) => (<SelectMilkCheckbox row={row} selectedRows={selectedRows} handleCheckboxChange={handleCheckboxChange} />),
         }),
     ];
     return (
@@ -327,7 +328,7 @@ const UnpasteurizedMilk = () => {
                         </Typography>
                         <div className="space-y-4">
                             {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge, index) => (
-                                <div key={index}>
+                                <div key={fridge._id}>
                                     <input
                                         type="radio"
                                         id={fridge.name}
@@ -434,9 +435,9 @@ const UnpasteurizedMilk = () => {
                                         min="0"
                                         max="20"
                                     />
-                                    
+
                                 </div>
-                               
+
                             </div>
                             <div className="w-full">
                                 <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
@@ -453,7 +454,7 @@ const UnpasteurizedMilk = () => {
                                             className="peer hidden"
                                             required
                                             checked={bottleType === "100ml"}
-                                            onChange={()=> {setFormError((prev)=>({...prev, bottleType: false})); setBottleType("100ml")}}
+                                            onChange={() => { setFormError((prev) => ({ ...prev, bottleType: false })); setBottleType("100ml") }}
                                         />
                                         <label
                                             htmlFor="100ml"
@@ -478,7 +479,7 @@ const UnpasteurizedMilk = () => {
                                             className="peer hidden"
                                             required
                                             checked={bottleType === "200ml"}
-                                            onChange={()=> {setFormError((prev)=>({...prev, bottleType: false})); setBottleType("200ml")}}
+                                            onChange={() => { setFormError((prev) => ({ ...prev, bottleType: false })); setBottleType("200ml") }}
                                         />
                                         <label
                                             htmlFor="200ml"
@@ -497,7 +498,7 @@ const UnpasteurizedMilk = () => {
 
                                     {formError.bottleType && <span className="text-sm text-red-500 p-4">Please choose a bottle type</span>}
                                 </div>
-                                
+
 
                             </div>
                         </div>

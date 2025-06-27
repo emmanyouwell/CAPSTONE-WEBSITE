@@ -190,12 +190,10 @@ function MainContent() {
 
 function App() {
   return (
-    <>
       <BrowserRouter>
         <InactivityHandler />
         <MainContent />
       </BrowserRouter>
-    </>
   );
 }
 

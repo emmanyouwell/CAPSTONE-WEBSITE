@@ -61,7 +61,7 @@ const SingleArticle = () => {
                                 <Typography variant="h2" className="text-center font-parkinsans">{articleDetails?.title}</Typography>
                                 <Carousel className="rounded-xl my-4 bg-gray-400/75">
                                     {articleDetails.images?.map((image, index) => (
-                                        <div key={index} className="relative h-[calc(50vh-3rem)] w-full">
+                                        <div key={image.url} className="relative h-[calc(50vh-3rem)] w-full">
                                             <img
                                                 src={image.url}
                                                 alt={`Article Image ${index + 1}`}

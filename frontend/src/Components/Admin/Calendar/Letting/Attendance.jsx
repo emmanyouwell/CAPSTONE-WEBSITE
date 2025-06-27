@@ -197,7 +197,7 @@ const Attendance = () => {
           <div className="space-y-4">
 
             {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge, index) => (
-              <div key={index}>
+              <div key={fridge._id}>
                 <input
                   type="radio"
                   id={`${fridge.name}_${fridge._id}`}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecipients } from '../../../redux/actions/recipientActions'
-import { Input, Button, IconButton, Select, Option  } from '@material-tailwind/react'
+import { Input, Button, IconButton, Select, Option } from '@material-tailwind/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { getUser } from '../../../utils/helper'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -9,8 +9,20 @@ import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
 import { EyeIcon } from 'lucide-react'
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
+
+function ActionsCell({ row }) {
+    const id = row.original._id
+    return (
+        <div className="flex gap-2">
+            <Link to={`/dashboard/recipient/${id}`}>
+                <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
+            </Link>
+        </div>
+    );
+}
+
 const RecipientPage = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
     const { recipients, pageSize } = useSelector((state) => state.recipients);
     const [search, setSearch] = useState('');
@@ -114,16 +126,7 @@ const RecipientPage = () => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const id = row.original._id
-                return (
-                    <div className="flex gap-2">
-                        <Link to={`/dashboard/recipient/${id}`}>
-                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
-                        </Link>
-                    </div>
-                );
-            },
+            cell: ({ row }) => (<ActionsCell row={row} />),
         }),
     ];
     useEffect(() => {
@@ -132,12 +135,12 @@ const RecipientPage = () => {
             .then((data) => console.log('Recipients fetched:', data))
             .catch((err) => console.error('Error fetching Recipients:', err));
     }, [dispatch, search, currentPage, brgy, type])
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
-            {name: "Dashboard", path: "/dashboard"},
-            {name: "Recipients", path: "/dashboard/recipients"}
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Recipients", path: "/dashboard/recipients" }
         ])
-    },[])
+    }, [])
     useEffect(() => {
         // Load the Tally embed script
         const script = document.createElement("script");
@@ -186,14 +189,14 @@ const RecipientPage = () => {
                         <div className="w-max">
                             <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
                                 {locations.map((location, index) => (
-                                    <Option key={index} value={location}>{location}</Option>
+                                    <Option key={location} value={location}>{location}</Option>
                                 ))}
                             </Select>
                         </div>
                         <div className="w-max">
                             <Select label="Filter by Patient Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
                                 {patientTypes.map((donorType, index) => (
-                                    <Option key={index} value={donorType}>{donorType}</Option>
+                                    <Option key={donorType} value={donorType}>{donorType}</Option>
                                 ))}
                             </Select>
                         </div>

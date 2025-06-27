@@ -9,8 +9,18 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { formatDate } from '../../../../utils/helper'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext'
+function ActionsCell({ row }) {
+    const { _id, collectionType, status, pubDetails, privDetails } = row.original;
+    return (
+        <div className="flex gap-2">
+            <Link to={`/dashboard/collections/details/${pubDetails?._id || privDetails?._id}`} state={{ type: collectionType, collectionId: _id, status: status }} className="text-blue-500">
+                <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
+            </Link>
+        </div>
+    );
+}
 const CollectionsTable = () => {
-    const {setBreadcrumb} = useBreadcrumb();
+    const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch()
     const { collections } = useSelector(state => state.collections)
 
@@ -65,24 +75,15 @@ const CollectionsTable = () => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const { _id, collectionType, status, pubDetails, privDetails } = row.original;
-                return (
-                    <div className="flex gap-2">
-                        <Link to={`/dashboard/collections/details/${pubDetails?._id || privDetails?._id}`} state={{ type: collectionType, collectionId: _id, status: status }} className="text-blue-500">
-                            <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
-                        </Link>
-                    </div>
-                );
-            },
+            cell: ({ row }) => (<ActionsCell row={row} />),
         }),
     ];
-    useEffect(()=>{
+    useEffect(() => {
         setBreadcrumb([
             { name: 'Dashboard', path: '/dashboard' },
             { name: 'Collections' }
         ])
-    },[])
+    }, [])
     useEffect(() => {
         dispatch(getAllCollections({ search: search, type: type }))
     }, [dispatch, search, type])
@@ -115,7 +116,7 @@ const CollectionsTable = () => {
                     <div className="w-max">
                         <Select label="Filter by Collection Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
                             {collectionTypes.map((collectionType, index) => (
-                                <Option key={index} value={collectionType}>{collectionType}</Option>
+                                <Option key={collectionType} value={collectionType}>{collectionType}</Option>
                             ))}
                         </Select>
                     </div>

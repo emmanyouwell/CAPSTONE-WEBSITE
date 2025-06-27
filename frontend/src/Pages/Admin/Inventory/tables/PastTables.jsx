@@ -5,6 +5,20 @@ import { Link } from 'react-router-dom'
 import { EyeIcon, SquarePenIcon } from 'lucide-react'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 import { createColumnHelper } from '@tanstack/react-table'
+import PropTypes from 'prop-types'
+
+function ActionsCell({ row, handleEdit }) {
+    const _id = row.original._id
+    return (
+        <div className="flex gap-2">
+            <Link to={`/dashboard/inventory/fridge/pasteurized/${_id}`}>
+                <IconButton className="text-secondary rounded-full" variant="text"><EyeIcon size={25} /></IconButton>
+            </Link>
+            <IconButton className="text-secondary rounded-full" variant="text"><SquarePenIcon size={22} onClick={() => handleEdit(_id)} /></IconButton>
+        </div>
+    );
+}
+
 const PastTables = ({ pasteurizedFridges, handleEdit }) => {
     const columnHelper = createColumnHelper();
 
@@ -27,17 +41,7 @@ const PastTables = ({ pasteurizedFridges, handleEdit }) => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const _id = row.original._id
-                return (
-                    <div className="flex gap-2">
-                        <Link to={`/dashboard/inventory/fridge/pasteurized/${_id}`}>
-                            <IconButton className="text-secondary rounded-full" variant="text"><EyeIcon size={25} /></IconButton>
-                        </Link>
-                        <IconButton className="text-secondary rounded-full" variant="text"><SquarePenIcon size={22} onClick={()=>handleEdit(_id)}/></IconButton>
-                    </div>
-                );
-            },
+            cell: ({ row }) => (<ActionsCell row={row} handleEdit={handleEdit} />),
         }),
     ];
     return (
@@ -45,6 +49,11 @@ const PastTables = ({ pasteurizedFridges, handleEdit }) => {
             <DataTable data={pasteurizedFridges} columns={columns} pageSize={10} />
         </div>
     )
+}
+
+PastTables.propTypes = {
+    pasteurizedFridges: PropTypes.array.isRequired,
+    handleEdit: PropTypes.func.isRequired
 }
 
 export default PastTables

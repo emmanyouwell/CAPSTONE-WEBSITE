@@ -5,6 +5,7 @@ import {
     Typography,
     Button,
 } from "@material-tailwind/react";
+import PropTypes from 'prop-types';
 const RelatedArticles = ({ articles }) => {
     const [IsLargeScreen, setIsLargeScreen] = useState(false);
     useEffect(() => {
@@ -30,7 +31,7 @@ const RelatedArticles = ({ articles }) => {
                         day: 'numeric', // "21"
                     });
                     return (
-                        <div key={index} className="max-h-96 w-72 bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col">
+                        <div key={article._id} className="max-h-96 w-72 bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col">
                             <img src={article.images[0].url} alt="" className="object-cover h-40" />
                             <Typography variant={IsLargeScreen ? "h3" : "h4"} className="mt-2 text-primary">
                                 {article.title}
@@ -51,5 +52,7 @@ const RelatedArticles = ({ articles }) => {
         </Card>
     )
 }
-
+RelatedArticles.propTypes = {
+    articles: PropTypes.array.isRequired
+}
 export default RelatedArticles

@@ -20,9 +20,43 @@ import { formatDate } from '../../../../utils/helper';
 import DatePicker from 'react-datepicker';
 import { EllipsisVertical, Trash2 } from 'lucide-react';
 import { resetSuccess } from '../../../../redux/slices/lettingSlice';
+import PropTypes from 'prop-types';
+
+function ActionsCell({ row, from, lettingId, handleOpen, handleDelete, status }) {
+    const attendees = row.original;
+    const attendanceId = row.original._id;
+    const name = `${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`;
+
+    let isDisabled = true;
+    if (from === "RedirectDetails") {
+        if (status === "Stored") isDisabled = true;
+    } else if (from === "host") {
+        isDisabled = false;
+    }
+
+    return (
+        <div className="flex justify-center items-center gap-2">
+            <Menu>
+                <MenuHandler>
+                    <IconButton disabled={isDisabled} className="rounded-full" variant="text">
+                        <EllipsisVertical size={20} />
+                    </IconButton>
+                </MenuHandler>
+                <MenuList>
+                    <MenuItem onClick={() => handleOpen(attendees.donor._id, name)}>Add bags</MenuItem>
+                    {from !== "RedirectDetails" && (
+                        <MenuItem onClick={() => handleDelete(attendanceId, lettingId)}>Delete</MenuItem>
+                    )}
+                </MenuList>
+            </Menu>
+        </div>
+    );
+}
+
+
 const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) => {
     const dispatch = useDispatch();
-    const { success} = useSelector((state) => state.lettings);
+    const { success } = useSelector((state) => state.lettings);
     const [open, setOpen] = useState(false);
     const [id, setId] = useState('');
     const [name, setName] = useState('');
@@ -31,7 +65,7 @@ const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) =>
         volume: "",
         expressDate: null
     }))
-    
+
     const handleDelete = (attendanceId, lettingId) => {
         dispatch(deleteAttendance({ lettingId, attendanceId })).then(() => {
             toast.success("Successfully deleted")
@@ -150,43 +184,20 @@ const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) =>
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const attendees = row.original;
-                const attendanceId = row.original._id
-                const name = `${attendees.donor.user.name.first} ${attendees.donor.user.name.middle} ${attendees.donor.user.name.last}`
-                let isDisabled
-                if (from === "RedirectDetails") {
-                    if (status === "Stored") {
-                        isDisabled = true;
-                    }
-                }
-                else if (from === "host") {
-                    isDisabled = false;
-                }
-                else {
-                    isDisabled = true;
-                }
-                return (
-                    <div className="flex justify-center items-center gap-2">
-                        <Menu>
-                            <MenuHandler>
-                                <IconButton disabled={isDisabled} className="rounded-full" variant='text'>
-                                    <EllipsisVertical size={20} />
-                                </IconButton>
-                            </MenuHandler>
-                            <MenuList>
-                                <MenuItem onClick={() => handleOpen(attendees.donor._id, name)}>Add bags</MenuItem>
-                                {from !== "RedirectDetails" && <MenuItem onClick={() => handleDelete(attendanceId, lettingId)}>Delete</MenuItem>}
-                            </MenuList>
-                        </Menu>
-
-                    </div>
-                );
-            },
+            cell: ({ row }) => (
+                <ActionsCell
+                    row={row}
+                    from={from}
+                    lettingId={lettingId}
+                    handleOpen={handleOpen}
+                    handleDelete={handleDelete}
+                    status={status}
+                />
+            ),
         }),
     ];
     useEffect(() => {
-        
+
         if (success) {
             setRefresh(true)
             dispatch(resetSuccess());
@@ -264,7 +275,7 @@ const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) =>
                             </thead>
                             <tbody>
                                 {bags.length > 0 && bags.map((bag, index) => (
-                                    <tr key={index} >
+                                    <tr key={bag._id} >
                                         <td className="p-4 border-b border-blue-gray-50">
                                             <Typography variant="small" color="blue-gray" className="font-normal">
                                                 {index + 1}
@@ -311,5 +322,11 @@ const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) =>
         </div >
     )
 }
-
+AttendanceTable.propTypes = {
+    setRefresh: PropTypes.func.isRequired,
+    attendance: PropTypes.array.isRequired,
+    status: PropTypes.string.isRequired,
+    from: PropTypes.string.isRequired,
+    lettingId: PropTypes.string.isRequired
+}
 export default AttendanceTable

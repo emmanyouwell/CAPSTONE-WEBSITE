@@ -8,6 +8,25 @@ import { deleteRequest } from '../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
+
+import PropTypes from 'prop-types'
+
+function ActionsCell({ row, handleDelete }) {
+    const request = row.original
+    return (
+        <div className="flex gap-2">
+            {request.status === "Canceled" ? <div className="flex gap-4 items-center">
+                <Link to={`/dashboard/request/${request._id}`}>
+                    <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                </Link>
+                <Button className="bg-secondary" size="sm"><TrashIcon className="h-5 w-5" onClick={() => handleDelete(request._id)} /></Button>
+            </div> :
+                <Link to={`/dashboard/request/${request._id}`}>
+                    <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
+                </Link>}
+        </div>
+    );
+}
 const StaffRequest = ({ setRefresh, requests }) => {
     const handleDelete = (id) => {
         dispatch(deleteRequest(id)).then(() => {
@@ -56,33 +75,19 @@ const StaffRequest = ({ setRefresh, requests }) => {
         columnHelper.display({
             id: 'actions',
             header: 'Actions',
-            cell: ({ row }) => {
-                const request = row.original
-                return (
-                    <div className="flex gap-2">
-                        {request.status === "Canceled" ? <div className="flex gap-4 items-center">
-                            <Link to={`/dashboard/request/${request._id}`}>
-                                <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
-                            </Link>
-                            <Button className="bg-secondary" size="sm"><TrashIcon className="h-5 w-5" onClick={() => handleDelete(request._id)} /></Button>
-                        </div> :
-                            <Link to={`/dashboard/request/${request._id}`}>
-                                <Button className="bg-secondary" size="sm"><EyeIcon className="h-5 w-5" /></Button>
-                            </Link>}
-                    </div>
-                );
-            },
+            cell: ({ row }) => (<ActionsCell row={row} handleDelete={handleDelete} />),
         }),
     ];
 
     return (
-        <>
-
-            <div className="w-full h-full">
-                <DataTable data={requests} columns={columns} pageSize={10} />
-            </div>
-        </>
+        <div className="w-full h-full">
+            <DataTable data={requests} columns={columns} pageSize={10} />
+        </div>
     )
 }
 
+StaffRequest.propTypes = {
+    setRefresh: PropTypes.func.isRequired,
+    requests: PropTypes.array.isRequired,
+}
 export default StaffRequest

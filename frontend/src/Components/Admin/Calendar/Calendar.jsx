@@ -4,10 +4,9 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useNavigate } from 'react-router-dom';
 const localizer = momentLocalizer(moment);
-import { useDispatch } from 'react-redux';
 import { Dialog, DialogBody, DialogHeader, IconButton, Typography } from '@material-tailwind/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-
+import PropTypes from 'prop-types';
 // Custom agenda component
 const CustomAgenda = ({ event }) => (
     <>
@@ -26,6 +25,14 @@ const CustomAgenda = ({ event }) => (
 
     </>
 );
+CustomAgenda.propTypes = {
+    event: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        totalVolume: PropTypes.number,
+        bags: PropTypes.arrayOf(PropTypes.object),
+    })
+};
 
 const ScheduleComponent = ({ events, type }) => {
     const navigate = useNavigate();
@@ -36,7 +43,7 @@ const ScheduleComponent = ({ events, type }) => {
     const handleOpen = async (event, type) => {
 
         if (event.status === "Done") {
-            navigate(`/dashboard/events/attendance/${event.id}`, {state: {eventStatus: event.status}});
+            navigate(`/dashboard/events/attendance/${event.id}`, { state: { eventStatus: event.status } });
         }
         if (type === "events") {
             console.log("events: ", event);
@@ -61,133 +68,133 @@ const ScheduleComponent = ({ events, type }) => {
     }, [events, type])
 
     return (
-        <>
-
-            <div style={{ height: 500 }} className="mb-8">
-                <Calendar
-                    localizer={localizer}
-                    events={items}
-                    startAccessor="start"
-                    endAccessor="end"
-                    views={['month', 'agenda']}
-                    defaultView="month"
-                    components={
-                        {
-                            agenda: {
-                                event: CustomAgenda
-                            }
+        <div style={{ height: 500 }} className="mb-8">
+            <Calendar
+                localizer={localizer}
+                events={items}
+                startAccessor="start"
+                endAccessor="end"
+                views={['month', 'agenda']}
+                defaultView="month"
+                components={
+                    {
+                        agenda: {
+                            event: CustomAgenda
                         }
                     }
-                    onSelectEvent={event => { handleOpen(event, type) }}
-                    eventPropGetter={(event) => {
-                        let backgroundColor = 'blue'; // Default color
+                }
+                onSelectEvent={event => { handleOpen(event, type) }}
+                eventPropGetter={(event) => {
+                    let backgroundColor = 'blue'; // Default color
 
-                        // Ensure event has a status property
-                        if (event.status) {
-                            if (type === "events") {
-                                if (event.status === 'Not-Due') backgroundColor = '#7A7A7A';
-                                else if (event.status === 'On-Going') backgroundColor = '#E53777';
-                                else if (event.status === 'Done') backgroundColor = '#4CAF50';
-                            }
-                            else if (type === "pickup") {
-                                if (event.status === 'Pending') backgroundColor = '#FFC107';
-                                else if (event.status === 'Approved') backgroundColor = '#E53777';
-                                else if (event.status === 'Completed') backgroundColor = '#4CAF50';
-                            }
+                    // Ensure event has a status property
+                    if (event.status) {
+                        if (type === "events") {
+                            if (event.status === 'Not-Due') backgroundColor = '#7A7A7A';
+                            else if (event.status === 'On-Going') backgroundColor = '#E53777';
+                            else if (event.status === 'Done') backgroundColor = '#4CAF50';
                         }
-                        return {
-                            style: {
-                                backgroundColor,
-                                color: 'white', // Text color
-                                borderRadius: '5px',
-                                padding: '5px',
-                            },
-                        };
-                    }}
-                />
-                <Dialog size="sm" open={open} handler={() => handleOpen(events, type)} className="p-4">
-                    <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
-                        <DialogHeader className="relative m-0 block">
-                            <Typography variant="h4" color="blue-gray">
-                                Choose an action
-                            </Typography>
-                            <Typography className="mt-1 font-normal text-gray-600">
-                                Please select your desired action for this event.
-                            </Typography>
-                            <IconButton
-                                size="sm"
-                                variant="text"
-                                className="!absolute right-3.5 top-3.5"
-                                onClick={() => handleOpen(events, type)}
-                            >
-                                <XMarkIcon className="h-4 w-4 stroke-2" />
-                            </IconButton>
-                        </DialogHeader>
-                        <DialogBody>
-                            <div className="space-y-4">
-                                <div>
-                                    <input
-                                        type="button"
-                                        id="edit"
-                                        name="edit"
-                                        value="edit"
-                                        className="peer hidden"
-                                        required
+                        else if (type === "pickup") {
+                            if (event.status === 'Pending') backgroundColor = '#FFC107';
+                            else if (event.status === 'Approved') backgroundColor = '#E53777';
+                            else if (event.status === 'Completed') backgroundColor = '#4CAF50';
+                        }
+                    }
+                    return {
+                        style: {
+                            backgroundColor,
+                            color: 'white', // Text color
+                            borderRadius: '5px',
+                            padding: '5px',
+                        },
+                    };
+                }}
+            />
+            <Dialog size="sm" open={open} handler={() => handleOpen(events, type)} className="p-4">
+                <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
+                    <DialogHeader className="relative m-0 block">
+                        <Typography variant="h4" color="blue-gray">
+                            Choose an action
+                        </Typography>
+                        <Typography className="mt-1 font-normal text-gray-600">
+                            Please select your desired action for this event.
+                        </Typography>
+                        <IconButton
+                            size="sm"
+                            variant="text"
+                            className="!absolute right-3.5 top-3.5"
+                            onClick={() => handleOpen(events, type)}
+                        >
+                            <XMarkIcon className="h-4 w-4 stroke-2" />
+                        </IconButton>
+                    </DialogHeader>
+                    <DialogBody>
+                        <div className="space-y-4">
+                            <div>
+                                <input
+                                    type="button"
+                                    id="edit"
+                                    name="edit"
+                                    value="edit"
+                                    className="peer hidden"
+                                    required
 
-                                        onClick={() => navigate(`/dashboard/events/${event.id}`)}
-                                    />
-                                    <label
-                                        htmlFor="edit"
-                                        className="block w-full cursor-pointer rounded-lg border border-gray-400 p-4 text-gray-900 hover:border-secondary-light hover:bg-secondary hover:text-white group"
-                                    >
-                                        <div className="block">
-                                            <Typography className="font-semibold">
-                                                Edit Event
-                                            </Typography>
-                                            <Typography className="font-normal text-gray-600 group-hover:text-white">
-                                                Edit the title, description, venue, dates, and status.
+                                    onClick={() => navigate(`/dashboard/events/${event.id}`)}
+                                />
+                                <label
+                                    htmlFor="edit"
+                                    className="block w-full cursor-pointer rounded-lg border border-gray-400 p-4 text-gray-900 hover:border-secondary-light hover:bg-secondary hover:text-white group"
+                                >
+                                    <div className="block">
+                                        <Typography className="font-semibold">
+                                            Edit Event
+                                        </Typography>
+                                        <Typography className="font-normal text-gray-600 group-hover:text-white">
+                                            Edit the title, description, venue, dates, and status.
 
-                                            </Typography>
-                                        </div>
-                                    </label>
-                                </div>
-
-                                <div>
-                                    <input
-                                        type="button"
-                                        disabled={event && event.status !== "On-Going"}
-                                        id="host"
-                                        name="host"
-                                        value="host"
-                                        className="peer hidden"
-                                        required
-
-                                        onClick={() => navigate(`/dashboard/events/attendance/${event.id}`, { state: { from: "host" } })}
-                                    />
-                                    <label
-                                        htmlFor="host"
-                                        className={`block w-full rounded-lg border border-gray-400 p-4 text-gray-900 ${event && event.status === "On-Going" ? 'hover:cursor-pointer hover:border-secondary-light hover:bg-secondary hover:text-white group' : ''}`}
-                                    >
-                                        <div className="block">
-                                            <Typography className="font-semibold">
-                                                Host Event {event && event.status !== "On-Going" && <span className=" text-sm text-neutral-dark">(Event must be On-Going)</span>}
-                                            </Typography>
-                                            <Typography className="font-normal text-gray-600 group-hover:text-white">
-                                                List the attendance of donors and track their donated milk bags.
-                                            </Typography>
-                                        </div>
-                                    </label>
-                                </div>
-
+                                        </Typography>
+                                    </div>
+                                </label>
                             </div>
-                        </DialogBody>
 
-                    </Dialog>
+                            <div>
+                                <input
+                                    type="button"
+                                    disabled={event && event.status !== "On-Going"}
+                                    id="host"
+                                    name="host"
+                                    value="host"
+                                    className="peer hidden"
+                                    required
+
+                                    onClick={() => navigate(`/dashboard/events/attendance/${event.id}`, { state: { from: "host" } })}
+                                />
+                                <label
+                                    htmlFor="host"
+                                    className={`block w-full rounded-lg border border-gray-400 p-4 text-gray-900 ${event && event.status === "On-Going" ? 'hover:cursor-pointer hover:border-secondary-light hover:bg-secondary hover:text-white group' : ''}`}
+                                >
+                                    <div className="block">
+                                        <Typography className="font-semibold">
+                                            Host Event {event && event.status !== "On-Going" && <span className=" text-sm text-neutral-dark">(Event must be On-Going)</span>}
+                                        </Typography>
+                                        <Typography className="font-normal text-gray-600 group-hover:text-white">
+                                            List the attendance of donors and track their donated milk bags.
+                                        </Typography>
+                                    </div>
+                                </label>
+                            </div>
+
+                        </div>
+                    </DialogBody>
+
                 </Dialog>
-            </div>
-
-        </>
+            </Dialog>
+        </div>
     )
+}
+ScheduleComponent.propTypes = {
+    events: PropTypes.array.isRequired,
+    type: PropTypes.string.isRequired,
 }
 
 export default ScheduleComponent
