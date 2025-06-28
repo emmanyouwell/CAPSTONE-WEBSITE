@@ -3,18 +3,24 @@ import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import { Page, Text, View, Document, StyleSheet, pdf } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image, pdf } from '@react-pdf/renderer';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDispensedMilkPerMonth, getDonorsPerMonth, getMilkPerMonth, getPasteurizedMilkPerMonth, getPatientsPerMonth } from '../../../redux/actions/metricActions';
 import { normalizeData } from '../../../utils/helper';
 import Select from 'react-select';
-import { Typography } from '@material-tailwind/react';
+import { Typography, Drawer, Button, IconButton, Input } from '@material-tailwind/react';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 import PropTypes from 'prop-types';
+import header from '../../../assets/image/report_header.png'
+import { CogIcon } from 'lucide-react';
+import { getSignatories, updateSignatories } from '../../../redux/actions/signActions';
+import Loader from '../../../Components/Loader/Loader';
+import { resetUpdate } from '../../../redux/slices/signSlice';
 // Styles
 const styles = StyleSheet.create({
     page: {
-        padding: 10,
+        padding: 40,
+        paddingTop: 20,
         fontSize: 10,
         flexDirection: 'column',
     },
@@ -76,16 +82,16 @@ const styles = StyleSheet.create({
     },
 });
 
-const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
+const MyDocument = ({ page1_data, page1_total, page2_data, page2_total, signs }) => (
     <Document>
-        <Page size="A4" orientation="landscape" style={styles.page}>
+        <Page size="LEGAL" orientation="landscape" style={styles.page}>
+            <View>
+                <Image src={header} style={{ width: '300px', height: 100, marginHorizontal: 'auto' }} />
+            </View>
             <View style={styles.table}>
                 {/* Header Row 1 */}
                 <View style={styles.row}>
                     <Text style={[styles.cell, styles.colMonth, styles.header]} >MONTH</Text>
-
-
-
                     <View style={styles.multiCol}>
                         <Text style={[styles.col, styles.header, { borderRightWidth: 0, borderBottomWidth: 1 }]}>BREASTMILK DONORS</Text>
                         <View style={styles.innerCol}>
@@ -93,7 +99,6 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
                             <Text style={[styles.col, styles.header, { flex: 1 }]}>Private</Text>
                             <Text style={[styles.col, styles.header, { borderRightWidth: 0, flex: 1 }]}>Total</Text>
                         </View>
-
                     </View>
 
                     <Text style={[styles.cell, styles.header]} hyphenationCallback={(word) => [word]}>INPATIENT RECIPIENT</Text>
@@ -125,8 +130,26 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
                     <Text style={styles.cell}>{page1_total[6]}</Text>
                 </View>
             </View>
+            <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, marginBottom: 20 }}>
+                <Text style={{ fontSize: 11, width: '100%' }}>Prepared by:</Text>
+                <Text style={{ fontSize: 11, width: '100%' }}>Checked by:</Text>
+                <Text style={{ fontSize: 11, width: '100%' }}>Noted by:</Text>
+            </View>
+            <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                <Text style={{ fontSize: 9, width: '100%', fontWeight: 'bold' }}>{signs?.preparedBy?.name}</Text>
+                <Text style={{ fontSize: 9, width: '100%', fontWeight: 'bold' }}>{signs?.checkedBy?.name}</Text>
+                <Text style={{ fontSize: 9, width: '100%', fontWeight: 'bold' }}>{signs?.notedBy?.name}</Text>
+            </View>
+            <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                <Text style={{ fontSize: 9, width: '100%' }}>{signs?.preparedBy?.position}</Text>
+                <Text style={{ fontSize: 9, width: '100%' }}>{signs?.checkedBy?.position}</Text>
+                <Text style={{ fontSize: 9, width: '100%' }}>{signs?.notedBy?.position}</Text>
+            </View>
         </Page>
-        <Page size="A4" orientation="landscape" style={styles.page}>
+        <Page size="LEGAL" orientation="landscape" style={styles.page}>
+            <View>
+                <Image src={header} style={{ width: '300px', height: 100, marginHorizontal: 'auto' }} />
+            </View>
             <View style={styles.table}>
                 {/* Header Row 1 */}
                 <View style={styles.row}>
@@ -181,6 +204,21 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total }) => (
                     <Text style={styles.cell}>{page2_total[7]}</Text>
                 </View>
             </View>
+            <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, marginBottom: 20 }}>
+                <Text style={{ fontSize: 11, width: '100%' }}>Prepared by:</Text>
+                <Text style={{ fontSize: 11, width: '100%' }}>Checked by:</Text>
+                <Text style={{ fontSize: 11, width: '100%' }}>Noted by:</Text>
+            </View>
+            <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                <Text style={{ fontSize: 9, width: '100%', fontWeight: 'bold' }}>{signs?.preparedBy?.name}</Text>
+                <Text style={{ fontSize: 9, width: '100%', fontWeight: 'bold' }}>{signs?.checkedBy?.name}</Text>
+                <Text style={{ fontSize: 9, width: '100%', fontWeight: 'bold' }}>{signs?.notedBy?.name}</Text>
+            </View>
+            <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                <Text style={{ fontSize: 9, width: '100%' }}>{signs?.preparedBy?.position}</Text>
+                <Text style={{ fontSize: 9, width: '100%' }}>{signs?.checkedBy?.position}</Text>
+                <Text style={{ fontSize: 9, width: '100%' }}>{signs?.notedBy?.position}</Text>
+            </View>
         </Page>
     </Document>
 );
@@ -191,7 +229,7 @@ const DonorsPerMonth = () => {
     const [pdfUrl, setPdfUrl] = useState(null);
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [selectedYear, setSelectedYear] = useState(null);
-
+    const { signs, loading, isUpdated } = useSelector((state) => state.signs);
     // Data rows
     const months = [
         'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
@@ -216,8 +254,8 @@ const DonorsPerMonth = () => {
         ])
     }, [])
     useEffect(() => {
-        const generatePdf = async (page1_data, page1_total, page2_data, page2_total) => {
-            const blob = await pdf(<MyDocument page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} />).toBlob();
+        const generatePdf = async (page1_data, page1_total, page2_data, page2_total, signs) => {
+            const blob = await pdf(<MyDocument page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} signs={signs[0]} />).toBlob();
             setPdfUrl(URL.createObjectURL(blob));
         }
         generatePdf.propTypes = {
@@ -225,20 +263,22 @@ const DonorsPerMonth = () => {
             page1_total: PropTypes.array.isRequired,
             page2_data: PropTypes.array.isRequired,
             page2_total: PropTypes.array.isRequired,
+            signs: PropTypes.array.isRequired,
         }
-        if (monthlyDonors && monthlyPatients && stats && dispensedMilk && pastPerMonth) {
+        if (monthlyDonors && monthlyPatients && stats && dispensedMilk && pastPerMonth && signs) {
             const { page1_data, page1_total, page2_data, page2_total } = normalizeData(months, monthlyDonors, monthlyPatients, stats, dispensedMilk, pastPerMonth);
 
-            generatePdf(page1_data, page1_total, page2_data, page2_total);
+            generatePdf(page1_data, page1_total, page2_data, page2_total, signs);
         }
 
-    }, [monthlyDonors, monthlyPatients, stats, dispensedMilk, pastPerMonth])
+    }, [monthlyDonors, monthlyPatients, stats, dispensedMilk, pastPerMonth, signs])
     useEffect(() => {
         dispatch(getDonorsPerMonth());
         dispatch(getPatientsPerMonth());
         dispatch(getMilkPerMonth());
         dispatch(getDispensedMilkPerMonth());
         dispatch(getPasteurizedMilkPerMonth());
+        dispatch(getSignatories());
         setSelectedYear({ value: currentYear, label: currentYear.toString() })
     }, [dispatch])
     useEffect(() => {
@@ -251,6 +291,64 @@ const DonorsPerMonth = () => {
         }
 
     }, [dispatch, selectedYear])
+    const [open, setOpen] = useState(false);
+    const closeDrawer = () => {
+        setOpen(!open);
+    }
+    const [formData, setFormData] = useState(() => ({
+        preparedBy: { name: '', position: '' },
+        checkedBy: { name: '', position: '' },
+        notedBy: { name: '', position: '' }
+    }))
+    const handleNameChange = (e, role) => {
+        setFormData((prev) => ({
+            ...prev,
+            [role]: { ...prev[role], name: e.target.value }
+        }));
+    }
+    const handlePositionChange = (e, role) => {
+        setFormData((prev) => ({
+            ...prev,
+            [role]: { ...prev[role], position: e.target.value }
+        }));
+    }
+    const onSave = (e) => {
+        e.preventDefault();
+        const data = {
+            id: signs[0]._id,
+            newSignatories: {
+                preparedBy: {
+                    name: formData.preparedBy.name || signs[0].preparedBy.name,
+                    position: formData.preparedBy.position || signs[0].preparedBy.position
+                },
+                checkedBy: {
+                    name: formData.checkedBy.name || signs[0].checkedBy.name,
+                    position: formData.checkedBy.position || signs[0].checkedBy.position
+                },
+                notedBy: {
+                    name: formData.notedBy.name || signs[0].notedBy.name,
+                    position: formData.notedBy.position || signs[0].notedBy.position
+                }
+            }
+        }
+        dispatch(updateSignatories(data))
+    }
+    useEffect(() => {
+        if (signs && signs.length > 0) {
+            setFormData({
+                preparedBy: { name: signs[0].preparedBy.name, position: signs[0].preparedBy.position },
+                checkedBy: { name: signs[0].checkedBy.name, position: signs[0].checkedBy.position },
+                notedBy: { name: signs[0].notedBy.name, position: signs[0].notedBy.position }
+            })
+        }
+    }, [signs])
+    useEffect(()=>{
+        if (isUpdated) {
+            dispatch(getSignatories());
+            setOpen(false);
+            dispatch(resetUpdate());
+        }
+    },[isUpdated])
     return (
         <>
             <div className="flex gap-4 items-center mb-4">
@@ -262,6 +360,9 @@ const DonorsPerMonth = () => {
                     placeholder="Select year"
                     className="w-max z-20"
                 />
+                <IconButton color="pink" className="ml-auto" onClick={closeDrawer}>
+                    <CogIcon className="h-6 w-6" />
+                </IconButton>
             </div>
 
             <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
@@ -269,6 +370,74 @@ const DonorsPerMonth = () => {
                     {pdfUrl ? <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} /> : <p>Loading...</p>}
                 </div>
             </Worker>
+            <Drawer open={open} onClose={closeDrawer} size={400} className="p-4">
+                <div className="mb-2 flex items-center justify-between">
+                    <Typography variant="h5" color="blue-gray">
+                        Settings
+                    </Typography>
+                    <IconButton variant="text" color="blue-gray" onClick={closeDrawer}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="h-5 w-5"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </IconButton>
+                </div>
+                <Typography variant="paragraph" className="pr-16" color="blue-gray">
+                    Change the name of signatories and their positions.
+                </Typography>
+                <span className="flex items-center my-4">
+                    <span className="h-px flex-1 bg-gray-500"></span>
+                </span>
+                <form onSubmit={onSave}>
+                    <div className="mb-4">
+                        <Typography variant="h5" color="gray" className="mb-2 pr-4 font-normal">
+                            Prepared by:
+                        </Typography>
+                        <div className="mb-4">
+                            <Input value={formData?.preparedBy?.name} type="text" label="Name" onChange={(e) => handleNameChange(e, 'preparedBy')} />
+                        </div>
+                        <div className="mb-4">
+                            <Input value={formData?.preparedBy?.position} type="text" label="Position" onChange={(e) => handlePositionChange(e, 'preparedBy')} />
+                        </div>
+                    </div>
+                    <div className="mb-4">
+                        <Typography variant="h5" color="gray" className="mb-2 pr-4 font-normal">
+                            Checked by:
+                        </Typography>
+                        <div className="mb-4">
+                            <Input type="text" value={formData?.checkedBy?.name} label="Name" onChange={(e) => handleNameChange(e, 'checkedBy')} />
+                        </div>
+                        <div className="mb-4">
+                            <Input type="text" value={formData?.checkedBy?.position} label="Position" onChange={(e) => handlePositionChange(e, 'checkedBy')} />
+                        </div>
+                    </div>
+                    <div className="mb-4">
+                        <Typography variant="h5" color="gray" className="mb-2 pr-4 font-normal">
+                            Noted by:
+                        </Typography>
+                        <div className="mb-4">
+                            <Input type="text" value={formData?.notedBy?.name} label="Name" onChange={(e) => handleNameChange(e, 'notedBy')} />
+                        </div>
+                        <div className="mb-4">
+                            <Input type="text" value={formData?.notedBy?.position} label="Position" onChange={(e) => handlePositionChange(e, 'notedBy')} />
+                        </div>
+                    </div>
+                    
+                    <Button variant="gradient" color="pink" type="submit" className="w-full">
+                        {loading ? <div className="w-full flex items-center justify-center"><Loader/></div> : 'Save'}
+                    </Button>
+                </form>
+            </Drawer>
         </>
     )
 }

@@ -15,6 +15,7 @@ import requestReducer from './slices/requestSlice';
 import notifReducer from './slices/notifSlice';
 import metricReducer from './slices/metricSlice';
 import announcementReducer from './slices/announcementSlice';
+import signReducer from './slices/signSlice';
 const store = configureStore({
   reducer: {
     users: userReducer,// Add your reducers here
@@ -32,6 +33,7 @@ const store = configureStore({
     devices: notifReducer,
     metrics: metricReducer,
     announcements: announcementReducer,
+    signs: signReducer
   },
 });
 
