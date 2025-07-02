@@ -14,6 +14,7 @@ import { getFridges } from '../../../../redux/actions/fridgeActions'
 import { addInventory } from '../../../../redux/actions/inventoryActions'
 import { toast } from 'react-toastify'
 import { useBreadcrumb } from '../../../Breadcrumb/BreadcrumbContext'
+import { sendNotifications } from '../../../../redux/actions/notifActions'
 const PickUpDetails = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
@@ -45,7 +46,22 @@ const PickUpDetails = () => {
             id,
             status: 'Approved'
         }
-        dispatch(updateSchedule(data))
+
+        dispatch(updateSchedule(data)).then((res) => {
+            const notifData = {
+                role: "User",
+                title: "Scheduled request update",
+                body: `Your scheduled request is approved.`,
+            };
+            dispatch(sendNotifications(notifData)).catch((error) => {
+                console.error("Error sending notification:", error);
+                toast.error("Error in sending notification");
+            });
+            toast.success("Notified donor successfully");
+        }).catch((error) => {
+            console.error("Error adding request:", error);
+            toast.error("Failed to add request.");
+        });
     }
 
     const formik = useFormik({
