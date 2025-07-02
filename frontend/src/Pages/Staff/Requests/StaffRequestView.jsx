@@ -8,7 +8,7 @@ import { Button, Card, CardBody, CardHeader, Input, Tab, TabPanel, Tabs, TabsBod
 import { getRecipients } from '../../../redux/actions/recipientActions';
 import { getUser } from '../../../utils/helper';
 import { toast } from 'react-toastify';
-import { getDevices, sendNotification } from '../../../redux/actions/notifActions';
+import { sendNotifications } from '../../../redux/actions/notifActions';
 import Select from 'react-select'
 import Loader from '../../../Components/Loader/Loader';
 import { resetDelete } from '../../../redux/slices/requestSlice';
@@ -31,10 +31,8 @@ const StaffRequestView = () => {
     const [search, setSearch] = useState('');
     const [open, setOpen] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
-    const { devices } = useSelector(state => state.devices)
     const [refresh, setRefresh] = useState(false);
     useEffect(() => {
-        dispatch(getDevices())
         dispatch(getRequests())
         dispatch(getRecipients({ search: search, page: 1, pageSize: 100 }))
     }, [dispatch])
@@ -105,31 +103,6 @@ const StaffRequestView = () => {
 
         dispatch(addRequest(requestData))
             .then((res) => {
-                if (devices) {
-                    for (const device of devices) {
-                        if (
-                            (device.token && device.user.role === "Admin") ||
-                            device.user.role === "SuperAdmin"
-                        ) {
-                            const notifData = {
-                                token: device.token,
-                                title: "New Request for Milk",
-                                body: `A nurse issued a new request for milk with the volume of ${res.payload.request.volumeRequested.volume} mL per day for ${res.payload.request.volumeRequested.days} days. Open TCHMB Portal App to see more details`,
-                            };
-                            dispatch(sendNotification(notifData))
-                                .then((response) => {
-                                    console.log(
-                                        "Notification Status: ",
-                                        response.payload.data.status
-                                    );
-                                })
-                                .catch((error) => {
-                                    console.error("Error sending notification:", error);
-                                    Alert.alert("Error", "Sending Notification");
-                                });
-                        }
-                    }
-                }
                 toast.success("Request added successfully!", { position: "bottom-right" });
                 setOpen(false);
                 setFormData({
