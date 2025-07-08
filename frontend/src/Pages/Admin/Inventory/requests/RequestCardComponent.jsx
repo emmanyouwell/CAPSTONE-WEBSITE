@@ -30,7 +30,7 @@ const RequestCardComponent = ({ request }) => {
                 <li>Prescribed by: {request.doctor}</li>
             </ul>
             <Carousel>
-                {request.images.map((image, index) => (
+                {request.images.map((image) => (
                     <Card
                         key={image.url}
                         className="mt-4 cursor-pointer overflow-hidden transition-opacity hover:opacity-90"

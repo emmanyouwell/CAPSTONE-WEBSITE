@@ -11,7 +11,7 @@ import { RotateCcw } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
 import { resetSuccess } from '../../../redux/slices/announcementSlice';
-
+import PropTypes from 'prop-types';
 function RestoreCell({ row, handleRestore}) {
   const announcement = row.original
   return (
@@ -20,7 +20,10 @@ function RestoreCell({ row, handleRestore}) {
     </div>
   );
 }
-
+RestoreCell.propTypes = {
+  row: PropTypes.object.isRequired,
+  handleRestore: PropTypes.func.isRequired
+}
 
 const AnnouncementArchive = () => {
   const { setBreadcrumb } = useBreadcrumb();

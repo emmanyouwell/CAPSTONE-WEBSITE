@@ -11,7 +11,7 @@ import { formatDate } from '../../../utils/helper';
 import { RotateCcw } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
-
+import PropTypes from 'prop-types'
 function RestoreCell({ row , handleRestore}) {
   const article = row.original
   return (
@@ -20,7 +20,10 @@ function RestoreCell({ row , handleRestore}) {
     </div>
   );
 }
-
+RestoreCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleRestore: PropTypes.func.isRequired,
+}
 const ArticleArchive = () => {
   const { setBreadcrumb } = useBreadcrumb();
   const dispatch = useDispatch();

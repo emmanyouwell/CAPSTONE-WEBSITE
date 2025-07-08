@@ -17,6 +17,10 @@ function ActionCell({ row, handleEdit }) {
         </div>
     );
 }
+ActionCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleEdit: PropTypes.func.isRequired,
+}
 const UnpastTables = ({ unpasteurizedFridges, handleEdit }) => {
     const columnHelper = createColumnHelper();
     const columns = [

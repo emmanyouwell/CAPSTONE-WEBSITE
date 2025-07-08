@@ -11,6 +11,7 @@ import { formatDate } from '../../../utils/helper';
 import { Archive, EyeIcon, SquarePenIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
+import PropTypes from 'prop-types';
 
 function ActionsCell({ row, handleDelete }) {
     const article = row.original
@@ -22,6 +23,10 @@ function ActionsCell({ row, handleDelete }) {
 
         </div>
     );
+}
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleDelete: PropTypes.func.isRequired,
 }
 
 const Resources = () => {

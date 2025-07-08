@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { EyeIcon } from 'lucide-react';
 import { IconButton } from '@material-tailwind/react';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
-
+import PropTypes from 'prop-types'
 function ActionCell({ row }) {
     return (
         <div className="flex gap-2">
@@ -14,6 +14,9 @@ function ActionCell({ row }) {
             </Link>
         </div>
     );
+}
+ActionCell.propTypes = {
+    row: PropTypes.object.isRequired,
 }
 const Archive = () => {
     const { setBreadcrumb } = useBreadcrumb();

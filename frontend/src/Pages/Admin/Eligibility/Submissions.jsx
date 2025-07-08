@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 import Loader from '../../../Components/Loader/Loader';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
+import PropTypes from 'prop-types';
 
 function ActionsCell({ row, handleOpen }) {
     const submissionID = row.original.submissionID;
@@ -26,6 +27,10 @@ function ActionsCell({ row, handleOpen }) {
 
         </div>
     );
+}
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleOpen: PropTypes.func.isRequired,
 }
 const Submissions = () => {
     const { setBreadcrumb } = useBreadcrumb();
@@ -100,15 +105,7 @@ const Submissions = () => {
             ),
         }),
     ];
-    let precisionText;
-
-    if (pythonLoading) {
-        precisionText = <Loader />;
-    } else if (model?.precision?.Overall) {
-        precisionText = `${(Number(model.precision.Overall) * 100).toFixed(2)}%`;
-    } else {
-        precisionText = '0.00%';
-    }
+   
     return (
         <div className="relative w-full h-full">
             <Link to="/dashboard" className="absolute top-4 left-4">
@@ -196,7 +193,7 @@ const Submissions = () => {
                 <DialogBody>
                     <div className="space-y-4">
 
-                        {eligibilityOptions?.length > 0 && eligibilityOptions.map((type, index) => (
+                        {eligibilityOptions?.length > 0 && eligibilityOptions.map((type) => (
                             <div key={type}>
                                 <input
                                     type="radio"

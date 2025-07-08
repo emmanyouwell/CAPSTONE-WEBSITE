@@ -13,7 +13,7 @@ import { Eye, EyeOff } from 'lucide-react'
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoggedIn, userDetails, loading, error } = useSelector(state => state.users)
+  const { isLoggedIn, userDetails, error } = useSelector(state => state.users)
   const [load, setLoad] = useState(true)
   const [showPassword, setShowPassword] = useState(false);
   const formik = useFormik({

@@ -11,6 +11,7 @@ import { formatDate } from '../../../utils/helper';
 import { Archive, SquarePenIcon } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
+import PropTypes from 'prop-types';
 function ActionsCell({ row, handleArchive }) {
     const announcement = row.original
     return (
@@ -19,6 +20,10 @@ function ActionsCell({ row, handleArchive }) {
             <IconButton variant="text" className="text-secondary rounded-full"><Archive size={22} className="text-secondary cursor-pointer" onClick={() => handleArchive(announcement._id)} /></IconButton>
         </div>
     );
+}
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleArchive: PropTypes.func.isRequired,
 }
 const Announcement = () => {
     const { setBreadcrumb } = useBreadcrumb();

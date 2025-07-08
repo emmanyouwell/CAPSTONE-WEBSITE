@@ -222,6 +222,13 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total, signs })
         </Page>
     </Document>
 );
+MyDocument.propTypes = {
+    page1_data: PropTypes.array,
+    page1_total: PropTypes.array,
+    page2_data: PropTypes.array,
+    page2_total: PropTypes.array,
+    signs: PropTypes.object
+}
 const DonorsPerMonth = () => {
     const { setBreadcrumb } = useBreadcrumb()
     const dispatch = useDispatch();

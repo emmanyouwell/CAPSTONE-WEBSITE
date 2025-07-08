@@ -9,7 +9,7 @@ import { ArrowLongLeftIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { toast } from 'react-toastify'
 import { getFridges } from '../../../../redux/actions/fridgeActions';
 import { getInventories, reserveInventory } from '../../../../redux/actions/inventoryActions';
-import { formatDate, getUser } from '../../../../utils/helper';
+import { getUser } from '../../../../utils/helper';
 import placeholder from '../../../../assets/image/placeholder-image.webp'
 import { resetUpdate } from '../../../../redux/slices/requestSlice';
 import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext';
@@ -124,7 +124,8 @@ const SingleRequest = () => {
         addEbm: { status: false, message: "" },
         comment: { status: false, message: "" }
     }));
-    const handleSubmit = (e) => {
+    const handleSubmit = () => {
+        
         let startLimit = 0;
         let endLimit = 0;
 
@@ -247,7 +248,7 @@ const SingleRequest = () => {
             const newStart = bottlesToUse[0].bottleNumber;
             const newEnd = bottlesToUse[bottlesToUse.length - 1].bottleNumber;
             const newVolume = bottlesToUse.length * details.pasteurizedDetails.bottleType;
-            setData((prev) => ({
+            setData(() => ({
                 start: newStart,
                 end: newEnd
             }))
@@ -431,7 +432,7 @@ const SingleRequest = () => {
                         </TabPanel>
                         <TabPanel value="attachments" className="h-full">
                             <div className="flex items-center justify-center md:justify-start flex-wrap gap-4">
-                                {requestDetails.images?.map((image, index) => (
+                                {requestDetails.images?.map((image) => (
                                     <Card
                                         key={image.url}
                                         className="w-max cursor-pointer overflow-hidden transition-opacity hover:opacity-90"
@@ -537,7 +538,7 @@ const SingleRequest = () => {
                     </div>
                     <div className="overflow-y-auto h-[calc(100vh-15rem)] pr-2">
                         <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
-                            {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge, index) => (
+                            {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge) => (
                                 <div key={fridge._id} className="w-full">
                                     <input
                                         type="radio"

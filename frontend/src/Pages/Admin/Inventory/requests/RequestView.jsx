@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addRequest, getRequests } from '../../../../redux/actions/requestActions';
 import RequestTable from './RequestTable';
 import { Button, Card, CardBody, CardHeader, Drawer, Input, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from '@material-tailwind/react';
-import { sendNotifications } from '../../../../redux/actions/notifActions';
 import { getRecipients } from '../../../../redux/actions/recipientActions';
 import { toast } from 'react-toastify';
 import { getUser } from '../../../../utils/helper';
@@ -12,6 +11,7 @@ import Select from 'react-select'
 import Loader from '../../../../Components/Loader/Loader';
 import { resetDelete, resetSuccess } from '../../../../redux/slices/requestSlice';
 import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext';
+import PropTypes from 'prop-types';
 
 function CustomOption({ option }) {
     return (
@@ -22,6 +22,9 @@ function CustomOption({ option }) {
             </span>
         </div>
     )
+}
+CustomOption.propTypes = {
+    option: PropTypes.object.isRequired,
 }
 let patientLabel = "Department/Hospital";
 
@@ -34,7 +37,6 @@ const RequestView = () => {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState('');
     const [selectedPatient, setSelectedPatient] = useState(null);
-    const { devices } = useSelector(state => state.devices)
     const [refresh, setRefresh] = useState(false);
     const [formData, setFormData] = useState(() => ({
         patient: '',
@@ -130,7 +132,7 @@ const RequestView = () => {
         };
 
         dispatch(addRequest(requestData))
-            .then((res) => {
+            .then(() => {
                 
                 toast.success("Request added successfully!", { position: "bottom-right" });
                 setOpen(false);

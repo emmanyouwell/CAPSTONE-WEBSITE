@@ -112,7 +112,7 @@ const Accounts = () => {
                             <div className="flex items-center justify-center gap-4">
                                 <div className="w-max">
                                     <Select label="Sort by" color="pink" variant="standard" value={sort} onChange={(value) => handleSort(value)}>
-                                        {sortTypes.map((types, index) => (
+                                        {sortTypes.map((types) => (
                                             <Option key={types} value={types}>{types}</Option>
                                         ))}
                                     </Select>
@@ -120,7 +120,7 @@ const Accounts = () => {
                                 {userDetails?.role === "SuperAdmin" &&
                                     <div className="w-max">
                                         <Select label="Role" color="pink" variant="standard" value={role} onChange={(value) => handleRole(value)}>
-                                            {roleTypes.map((types, index) => (
+                                            {roleTypes.map((types) => (
                                                 <Option key={types} value={types}>{types}</Option>
                                             ))}
                                         </Select>
