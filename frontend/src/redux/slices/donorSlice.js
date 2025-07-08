@@ -27,7 +27,7 @@ export const donorSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      .addCase(getDonors.pending, (state, action) => {
+      .addCase(getDonors.pending, (state) => {
         state.loading = true;
       })
       .addCase(getDonors.fulfilled, (state, action) => {
@@ -42,7 +42,7 @@ export const donorSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(updateDonor.pending, (state, action) => {
+      .addCase(updateDonor.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateDonor.fulfilled, (state, action) => {
@@ -53,7 +53,7 @@ export const donorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getSingleDonor.pending, (state, action) => {
+      .addCase(getSingleDonor.pending, (state) => {
         state.loading = true;
       })
       .addCase(getSingleDonor.fulfilled, (state, action) => {
@@ -64,7 +64,7 @@ export const donorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(checkEligibility.pending, (state, action) => {
+      .addCase(checkEligibility.pending, (state) => {
         state.loading = true;
         state.isEligible = false;
       })
@@ -76,7 +76,7 @@ export const donorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getSubmissions.pending, (state, action) => {
+      .addCase(getSubmissions.pending, (state) => {
         state.loading = true;
       })
       .addCase(getSubmissions.fulfilled, (state, action) => {
@@ -87,7 +87,7 @@ export const donorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getModelReport.pending, (state, action) => {
+      .addCase(getModelReport.pending, (state) => {
         state.pythonLoading = true;
       })
       .addCase(getModelReport.fulfilled, (state, action) => {

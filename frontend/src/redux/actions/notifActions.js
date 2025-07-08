@@ -5,17 +5,10 @@ import api from '../../api/axiosInstance';
 export const notifChecker = createAsyncThunk(
     'notifications/notifChecker',
     async (data, thunkAPI) => {
-        
-        const token = await getToken();
-
-        if (!token) {
-            throw new Error('No token available');
-        }
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
@@ -38,7 +31,6 @@ export const getUserNotifications = createAsyncThunk(
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
@@ -84,7 +76,6 @@ export const sendSingleUserNotif = createAsyncThunk('notifications/sendSingleUse
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
@@ -108,7 +99,6 @@ export const markAsSeen = createAsyncThunk(
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }
@@ -133,7 +123,6 @@ export const deleteNotif = createAsyncThunk(
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         }

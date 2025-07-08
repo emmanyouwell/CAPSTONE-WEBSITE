@@ -35,7 +35,7 @@ export const requestSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      .addCase(getRequests.pending, (state, action) => {
+      .addCase(getRequests.pending, (state) => {
         state.loading = true;
       })
       .addCase(getRequests.fulfilled, (state, action) => {
@@ -49,7 +49,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(addRequest.pending, (state, action) => {
+      .addCase(addRequest.pending, (state) => {
         state.loading = true;
       })
       .addCase(addRequest.fulfilled, (state, action) => {
@@ -61,7 +61,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(updateRequest.pending, (state, action) => {
+      .addCase(updateRequest.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateRequest.fulfilled, (state, action) => {
@@ -73,7 +73,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(getRequestDetails.pending, (state, action) => {
+      .addCase(getRequestDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(getRequestDetails.fulfilled, (state, action) => {
@@ -85,7 +85,7 @@ export const requestSlice = createSlice({
         state.error = action.payload
       })
 
-      .addCase(deleteRequest.pending, (state, action) => {
+      .addCase(deleteRequest.pending, (state) => {
         state.loading = true;
       })
       .addCase(deleteRequest.fulfilled, (state, action) => {
@@ -97,7 +97,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(getStaffRequests.pending, (state, action) => {
+      .addCase(getStaffRequests.pending, (state) => {
         state.loading = true;
       })
       .addCase(getStaffRequests.fulfilled, (state, action) => {
@@ -110,7 +110,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(updateVolumeRequested.pending, (state, action) => {
+      .addCase(updateVolumeRequested.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateVolumeRequested.fulfilled, (state, action) => {
@@ -122,7 +122,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(inpatientDispense.pending, (state, action) => {
+      .addCase(inpatientDispense.pending, (state) => {
         state.loading = true;
       })
       .addCase(inpatientDispense.fulfilled, (state, action) => {
@@ -134,7 +134,7 @@ export const requestSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(outpatientDispense.pending, (state, action) => {
+      .addCase(outpatientDispense.pending, (state) => {
         state.loading = true;
       })
       .addCase(outpatientDispense.fulfilled, (state, action) => {

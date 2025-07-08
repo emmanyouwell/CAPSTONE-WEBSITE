@@ -33,7 +33,7 @@ export const metricSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getMilkPerMonth.pending, (state, action) => {
+            .addCase(getMilkPerMonth.pending, (state) => {
                 state.statsLoading = true;
             })
             .addCase(getMilkPerMonth.fulfilled, (state, action) => {
@@ -45,7 +45,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getDonorsPerMonth.pending, (state, action) => {
+            .addCase(getDonorsPerMonth.pending, (state) => {
                 state.monthlyDonorsLoading = true;
             })
             .addCase(getDonorsPerMonth.fulfilled, (state, action) => {
@@ -57,7 +57,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getDispensedMilkPerMonth.pending, (state, action) => {
+            .addCase(getDispensedMilkPerMonth.pending, (state) => {
                 state.dispensedMilkLoading = true;
             })
             .addCase(getDispensedMilkPerMonth.fulfilled, (state, action) => {
@@ -69,7 +69,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getPatientsPerMonth.pending, (state, action) => {
+            .addCase(getPatientsPerMonth.pending, (state) => {
                 state.monthlyPatientsLoading = true;
             })
             .addCase(getPatientsPerMonth.fulfilled, (state, action) => {
@@ -81,7 +81,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getRequestsPerMonth.pending, (state, action) => {
+            .addCase(getRequestsPerMonth.pending, (state) => {
                 state.monthlyRequestsLoading = true;
             })
             .addCase(getRequestsPerMonth.fulfilled, (state, action) => {
@@ -93,7 +93,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getAvailableMilk.pending, (state, action) => {
+            .addCase(getAvailableMilk.pending, (state) => {
                 state.availableLoading = true;
             })
             .addCase(getAvailableMilk.fulfilled, (state, action) => {
@@ -105,7 +105,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getExpiringMilk.pending, (state, action) => {
+            .addCase(getExpiringMilk.pending, (state) => {
                 state.expiringLoading = true;
             })
             .addCase(getExpiringMilk.fulfilled, (state, action) => {
@@ -117,7 +117,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getVolumePerLocation.pending, (state, action) => {
+            .addCase(getVolumePerLocation.pending, (state) => {
                 state.volumePerLocationLoading = true;
             })
             .addCase(getVolumePerLocation.fulfilled, (state, action) => {
@@ -129,7 +129,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getDonorLocation.pending, (state, action) => {
+            .addCase(getDonorLocation.pending, (state) => {
                 state.donorLocationLoading = true;
             })
             .addCase(getDonorLocation.fulfilled, (state, action) => {
@@ -141,7 +141,7 @@ export const metricSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getPatientHospital.pending, (state, action) => {
+            .addCase(getPatientHospital.pending, (state) => {
                 state.patientHospitalLoading = true;
             })
             .addCase(getPatientHospital.fulfilled, (state, action) => {
@@ -152,7 +152,7 @@ export const metricSlice = createSlice({
                 state.patientHospitalLoading = false;
                 state.error = action.payload;
             })
-            .addCase(getPasteurizedMilkPerMonth.pending, (state, action) => {
+            .addCase(getPasteurizedMilkPerMonth.pending, (state) => {
                 state.pastPerMonthLoading = true;
             })
             .addCase(getPasteurizedMilkPerMonth.fulfilled, (state, action) => {
@@ -163,7 +163,7 @@ export const metricSlice = createSlice({
                 state.pastPerMonthLoading = false;
                 state.error = action.payload;
             })
-            .addCase(getDonorAgeDemographic.pending, (state, action) => {
+            .addCase(getDonorAgeDemographic.pending, (state) => {
                 state.donorAgeLoading = true;
             })
             .addCase(getDonorAgeDemographic.fulfilled, (state, action) => {

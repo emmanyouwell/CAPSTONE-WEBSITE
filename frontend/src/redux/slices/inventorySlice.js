@@ -17,7 +17,7 @@ export const inventorySlice = createSlice({
   extraReducers: (builder) => {
     builder
       
-      .addCase(getInventories.pending, (state, action) => {
+      .addCase(getInventories.pending, (state) => {
         state.loading = true;
       })
       .addCase(getInventories.fulfilled, (state, action) => {
@@ -31,7 +31,7 @@ export const inventorySlice = createSlice({
         state.error = action.payload; 
       })
 
-      .addCase(addInventory.pending, (state, action) => {
+      .addCase(addInventory.pending, (state) => {
         state.loading = true;
       })
       .addCase(addInventory.fulfilled, (state, action) => {
@@ -43,7 +43,7 @@ export const inventorySlice = createSlice({
         state.error = action.payload;
       })
 
-       .addCase(updateInventory.pending, (state, action) => {
+       .addCase(updateInventory.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateInventory.fulfilled, (state, action) => {
@@ -55,7 +55,7 @@ export const inventorySlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(getInventoryDetails.pending, (state, action) => {
+      .addCase(getInventoryDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(getInventoryDetails.fulfilled, (state, action) => {
@@ -67,7 +67,7 @@ export const inventorySlice = createSlice({
         state.error = action.payload
       })
 
-      .addCase(deleteInventory.pending, (state, action) => {
+      .addCase(deleteInventory.pending, (state) => {
         state.loading = true;
       })
       .addCase(deleteInventory.fulfilled, (state, action) => {

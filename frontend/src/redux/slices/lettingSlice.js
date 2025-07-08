@@ -44,7 +44,7 @@ export const lettingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createLetting.pending, (state, action) => {
+      .addCase(createLetting.pending, (state) => {
         state.loading = true;
       })
       .addCase(createLetting.fulfilled, (state, action) => {
@@ -57,7 +57,7 @@ export const lettingSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(newPublicDonor.pending, (state, action) => {
+      .addCase(newPublicDonor.pending, (state) => {
         state.loading = true;
       })
       .addCase(newPublicDonor.fulfilled, (state, action) => {
@@ -71,7 +71,7 @@ export const lettingSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(markAttendance.pending, (state, action) => {
+      .addCase(markAttendance.pending, (state) => {
         state.loading = true;
       })
       .addCase(markAttendance.fulfilled, (state, action) => {
@@ -84,7 +84,7 @@ export const lettingSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(finalizeSession.pending, (state, action) => {
+      .addCase(finalizeSession.pending, (state) => {
         state.loading = true;
       })
       .addCase(finalizeSession.fulfilled, (state, action) => {
@@ -97,7 +97,7 @@ export const lettingSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(getLettings.pending, (state, action) => {
+      .addCase(getLettings.pending, (state) => {
         state.loading = true;
       })
       .addCase(getLettings.fulfilled, (state, action) => {
@@ -108,7 +108,7 @@ export const lettingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getUpcomingLettings.pending, (state, action) => {
+      .addCase(getUpcomingLettings.pending, (state) => {
         state.loading = true;
       })
       .addCase(getUpcomingLettings.fulfilled, (state, action) => {
@@ -119,7 +119,7 @@ export const lettingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getLettingDetails.pending, (state, action) => {
+      .addCase(getLettingDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(getLettingDetails.fulfilled, (state, action) => {
@@ -131,7 +131,7 @@ export const lettingSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(deleteLetting.pending, (state, action) => {
+      .addCase(deleteLetting.pending, (state) => {
         state.loading = true;
       })
       .addCase(deleteLetting.fulfilled, (state, action) => {
@@ -143,7 +143,7 @@ export const lettingSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(updateLetting.pending, (state, action) => {
+      .addCase(updateLetting.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateLetting.fulfilled, (state, action) => {
@@ -154,7 +154,7 @@ export const lettingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(updateAttendance.pending, (state, action) => {
+      .addCase(updateAttendance.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateAttendance.fulfilled, (state, action) => {
@@ -166,7 +166,7 @@ export const lettingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getAverageLettingVolume.pending, (state, action) => {
+      .addCase(getAverageLettingVolume.pending, (state) => {
         state.loading = true;
       })
       .addCase(getAverageLettingVolume.fulfilled, (state, action) => {
@@ -177,10 +177,10 @@ export const lettingSlice = createSlice({
         state.loading = false;
         state.error = action.payload
       })
-      .addCase(deleteAttendance.pending, (state, action) => {
+      .addCase(deleteAttendance.pending, (state) => {
         state.loading = false;
       })
-      .addCase(deleteAttendance.fulfilled, (state, action) => {
+      .addCase(deleteAttendance.fulfilled, (state) => {
         state.success = true,
         state.loading = false;
       })

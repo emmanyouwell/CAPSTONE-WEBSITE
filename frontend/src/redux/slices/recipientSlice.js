@@ -26,7 +26,7 @@ export const recipientSlice = createSlice({
   extraReducers: (builder) => {
     builder
       
-      .addCase(getRecipients.pending, (state, action) => {
+      .addCase(getRecipients.pending, (state) => {
         state.loading = true;
       })
       .addCase(getRecipients.fulfilled, (state, action) => {
@@ -41,7 +41,7 @@ export const recipientSlice = createSlice({
         state.error = action.payload; // The error message passed in rejectWithValue
       })
 
-      .addCase(addPatient.pending, (state, action) => {
+      .addCase(addPatient.pending, (state) => {
         state.loading = true;
       })
       .addCase(addPatient.fulfilled, (state, action) => {
@@ -54,7 +54,7 @@ export const recipientSlice = createSlice({
         state.error = action.payload;
       })
 
-       .addCase(updatePatient.pending, (state, action) => {
+       .addCase(updatePatient.pending, (state) => {
         state.loading = true;
       })
       .addCase(updatePatient.fulfilled, (state, action) => {
@@ -66,7 +66,7 @@ export const recipientSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(getPatientDetails.pending, (state, action) => {
+      .addCase(getPatientDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(getPatientDetails.fulfilled, (state, action) => {
@@ -78,7 +78,7 @@ export const recipientSlice = createSlice({
         state.error = action.payload
       })
 
-      .addCase(deletePatient.pending, (state, action) => {
+      .addCase(deletePatient.pending, (state) => {
         state.loading = true;
       })
       .addCase(deletePatient.fulfilled, (state, action) => {

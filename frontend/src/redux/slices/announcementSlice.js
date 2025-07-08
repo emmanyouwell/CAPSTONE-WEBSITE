@@ -28,7 +28,7 @@ export const announcementSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getAnnouncement.pending, (state, action) => {
+            .addCase(getAnnouncement.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getAnnouncement.fulfilled, (state, action) => {
@@ -39,7 +39,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getArchivedAnnouncements.pending, (state, action) => {
+            .addCase(getArchivedAnnouncements.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getArchivedAnnouncements.fulfilled, (state, action) => {
@@ -50,7 +50,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(addAnnouncements.pending, (state, action) => {
+            .addCase(addAnnouncements.pending, (state) => {
                 state.loading = true;
             })
             .addCase(addAnnouncements.fulfilled, (state, action) => {
@@ -61,7 +61,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(updateAnnouncements.pending, (state, action) => {
+            .addCase(updateAnnouncements.pending, (state) => {
                 state.loading = true;
             })
             .addCase(updateAnnouncements.fulfilled, (state, action) => {
@@ -72,7 +72,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getAnnouncementDetails.pending, (state, action) => {
+            .addCase(getAnnouncementDetails.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getAnnouncementDetails.fulfilled, (state, action) => {
@@ -83,7 +83,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(deleteAnnouncement.pending, (state, action) => {
+            .addCase(deleteAnnouncement.pending, (state) => {
                 state.loading = true;
             })
             .addCase(deleteAnnouncement.fulfilled, (state, action) => {
@@ -94,7 +94,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(addHTMLAnnouncements.pending, (state, action) => {
+            .addCase(addHTMLAnnouncements.pending, (state) => {
                 state.loading = true;
             })
             .addCase(addHTMLAnnouncements.fulfilled, (state, action) => {
@@ -105,7 +105,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(updateHTMLAnnouncement.pending, (state, action) => {
+            .addCase(updateHTMLAnnouncement.pending, (state) => {
                 state.loading = true;
             })
             .addCase(updateHTMLAnnouncement.fulfilled, (state, action) => {
@@ -116,7 +116,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(softDeleteAnnouncement.pending, (state, action) => {
+            .addCase(softDeleteAnnouncement.pending, (state) => {
                 state.loading = true;
             })
             .addCase(softDeleteAnnouncement.fulfilled, (state, action) => {
@@ -127,7 +127,7 @@ export const announcementSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(restoreAnnouncement.pending, (state, action) => {
+            .addCase(restoreAnnouncement.pending, (state) => {
                 state.loading = true;
             })
             .addCase(restoreAnnouncement.fulfilled, (state, action) => {
