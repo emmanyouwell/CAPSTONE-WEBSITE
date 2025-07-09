@@ -66,7 +66,7 @@ export const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         
         state.loading = false;
         state.isRegistered = true;
@@ -75,7 +75,7 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getUser.pending, (state, action)=>{
+      .addCase(getUser.pending, (state)=>{
         state.loading = true;
         state.error = null;
       })
@@ -88,7 +88,7 @@ export const userSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(getAllUsers.pending, (state, action)=>{
+      .addCase(getAllUsers.pending, (state)=>{
         state.loading = true;
         state.error = null;
       })

@@ -1,5 +1,6 @@
 import { Typography } from "@material-tailwind/react";
 import { formatDate } from "../../../utils/helper";
+import PropTypes from "prop-types";
 
 const InventoryCardComponent = ({ inventory, selectedInventory, handleChangeInventory, ebm }) => {
   const isDisabled = ebm.some((inv) => inv.invId === inventory._id);
@@ -51,5 +52,10 @@ const InventoryCardComponent = ({ inventory, selectedInventory, handleChangeInve
     </div>
   );
 };
-
+InventoryCardComponent.propTypes = {
+    inventory: PropTypes.object.isRequired,
+    selectedInventory: PropTypes.string.isRequired,
+    handleChangeInventory: PropTypes.func.isRequired,
+    ebm: PropTypes.array.isRequired,
+}
 export default InventoryCardComponent;

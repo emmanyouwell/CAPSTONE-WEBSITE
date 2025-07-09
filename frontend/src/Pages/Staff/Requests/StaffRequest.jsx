@@ -8,7 +8,7 @@ import { deleteRequest } from '../../../redux/actions/requestActions'
 import { toast } from 'react-toastify'
 import { createColumnHelper } from '@tanstack/react-table'
 import DataTable from '../../../Components/DataTables/tanstack/DataTable'
-
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
 function ActionsCell({ row, handleDelete }) {
@@ -27,7 +27,12 @@ function ActionsCell({ row, handleDelete }) {
         </div>
     );
 }
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+}
 const StaffRequest = ({ setRefresh, requests }) => {
+    const dispatch = useDispatch();
     const handleDelete = (id) => {
         dispatch(deleteRequest(id)).then(() => {
             toast.success("Request deleted successfully", { position: 'bottom-right' });

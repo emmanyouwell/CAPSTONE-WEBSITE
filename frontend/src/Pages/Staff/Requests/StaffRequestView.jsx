@@ -8,10 +8,10 @@ import { Button, Card, CardBody, CardHeader, Input, Tab, TabPanel, Tabs, TabsBod
 import { getRecipients } from '../../../redux/actions/recipientActions';
 import { getUser } from '../../../utils/helper';
 import { toast } from 'react-toastify';
-import { sendNotifications } from '../../../redux/actions/notifActions';
 import Select from 'react-select'
 import Loader from '../../../Components/Loader/Loader';
 import { resetDelete } from '../../../redux/slices/requestSlice';
+import PropTypes from 'prop-types';
 
 function CustomOption({ option }) {
     return (
@@ -23,7 +23,9 @@ function CustomOption({ option }) {
         </div>
     )
 }
-
+CustomOption.propTypes = {
+    option: PropTypes.object.isRequired,
+}
 const StaffRequestView = () => {
     const dispatch = useDispatch();
     const { request, loading } = useSelector(state => state.requests)
@@ -102,7 +104,7 @@ const StaffRequestView = () => {
         };
 
         dispatch(addRequest(requestData))
-            .then((res) => {
+            .then(() => {
                 toast.success("Request added successfully!", { position: "bottom-right" });
                 setOpen(false);
                 setFormData({

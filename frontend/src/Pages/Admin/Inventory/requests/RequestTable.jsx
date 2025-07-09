@@ -27,7 +27,11 @@ function ActionsHeader({ reservedRequest, filteredRequest, dispenseInpatient }) 
         </th>
     );
 }
-
+ActionsHeader.propTypes = {
+    reservedRequest: PropTypes.array.isRequired,
+    filteredRequest: PropTypes.array.isRequired,
+    dispenseInpatient: PropTypes.func.isRequired,
+}
 function ActionsCell({ request, handleTransport, handleDelete }) {
     let actionContent;
 
@@ -69,7 +73,11 @@ function ActionsCell({ request, handleTransport, handleDelete }) {
         </div>
     );
 }
-
+ActionsCell.propTypes = {
+    request: PropTypes.object.isRequired,
+    handleTransport: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+}
 const RequestTable = ({ requests, setRefresh }) => {
     const dispatch = useDispatch();
     const [items] = useState([
@@ -244,7 +252,7 @@ const RequestTable = ({ requests, setRefresh }) => {
                 <DialogBody>
                     <div className="space-y-4">
 
-                        {items?.length > 0 && items.map((item, index) => (
+                        {items?.length > 0 && items.map((item) => (
                             <div key={item.value}>
                                 <input
                                     type="radio"

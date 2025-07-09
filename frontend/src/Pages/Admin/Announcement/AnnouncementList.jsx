@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Carousel } from '@material-tailwind/react';
-import { useLocation } from 'react-router-dom';
 import { EyeIcon } from 'lucide-react';
 import PropTypes from 'prop-types';
 const AnnouncementList = ({ announcements }) => {
-
-    const location = useLocation();
     const [open, setOpen] = useState(false);
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
     const handleOpen = (announcement) => {

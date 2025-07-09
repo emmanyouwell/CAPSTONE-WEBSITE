@@ -112,7 +112,7 @@ const SingleDonor = () => {
                             contentStyle={{ backgroundColor: '#333', borderRadius: '8px', border: 'none' }}
                             labelStyle={{ color: 'white' }}
                             itemStyle={{ color: 'white' }}
-                            formatter={(value, name) => [`${value} ml`, "Total Volume"]}
+                            formatter={(value) => [`${value} ml`, "Total Volume"]}
                             labelFormatter={(label) => `Date: ${label}`}
                         />
                         <Area type="monotone" dataKey="totalVolume" stroke="#FFF" fill="#fff" />

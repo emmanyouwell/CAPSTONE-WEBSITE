@@ -9,6 +9,7 @@ import DataTable from '../../../Components/DataTables/tanstack/DataTable'
 import { Link } from 'react-router-dom'
 import { EyeIcon } from 'lucide-react'
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
+import PropTypes from 'prop-types'
 
 function ActionsCell({ row }) {
     const id = row.original._id
@@ -20,7 +21,9 @@ function ActionsCell({ row }) {
         </div>
     );
 }
-
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+}
 const RecipientPage = () => {
     const { setBreadcrumb } = useBreadcrumb();
     const dispatch = useDispatch();
@@ -188,14 +191,14 @@ const RecipientPage = () => {
                     <div className="flex items-center gap-4 justify-center flex-wrap">
                         <div className="w-max">
                             <Select label="Filter by Barangay" color="pink" variant="standard" value={brgy} onChange={(value) => handleBrgy(value)}>
-                                {locations.map((location, index) => (
+                                {locations.map((location) => (
                                     <Option key={location} value={location}>{location}</Option>
                                 ))}
                             </Select>
                         </div>
                         <div className="w-max">
                             <Select label="Filter by Patient Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
-                                {patientTypes.map((donorType, index) => (
+                                {patientTypes.map((donorType) => (
                                     <Option key={donorType} value={donorType}>{donorType}</Option>
                                 ))}
                             </Select>

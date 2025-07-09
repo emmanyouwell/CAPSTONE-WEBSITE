@@ -17,6 +17,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 import DatePicker from "react-datepicker";
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
+import PropTypes from "prop-types";
 
 function SelectMilkCheckbox({ row, selectedRows, handleCheckboxChange }) {
     const id = row.original._id
@@ -29,6 +30,11 @@ function SelectMilkCheckbox({ row, selectedRows, handleCheckboxChange }) {
             />
         </div>
     );
+}
+SelectMilkCheckbox.propTypes = {
+    row: PropTypes.object.isRequired,
+    selectedRows: PropTypes.array.isRequired,
+    handleCheckboxChange: PropTypes.func.isRequired,
 }
 const UnpasteurizedMilk = () => {
     const { setBreadcrumb } = useBreadcrumb();
@@ -331,7 +337,7 @@ const UnpasteurizedMilk = () => {
                             Please select the fridge you would like to store the milk in.
                         </Typography>
                         <div className="space-y-4">
-                            {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge, index) => (
+                            {pasteurizedFridges?.length > 0 && pasteurizedFridges.map((fridge) => (
                                 <div key={fridge._id}>
                                     <input
                                         type="radio"

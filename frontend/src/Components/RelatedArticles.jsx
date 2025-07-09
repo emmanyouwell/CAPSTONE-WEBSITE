@@ -23,7 +23,7 @@ const RelatedArticles = ({ articles }) => {
         <Card className="h-[calc(100vh-2rem)] w-full p-4 " color="transparent">
             <Typography variant="h2" className="text-primary mb-4">Other Articles</Typography>
             <div className="overflow-y-auto gap-2 flex flex-col items-center">
-                {articles.map((article,index) => {
+                {articles.map((article) => {
                     const formattedDate = new Date(article.createdAt).toLocaleDateString('en-US', {
                         weekday: 'short', // "Mon"
                         year: 'numeric', // "2025"

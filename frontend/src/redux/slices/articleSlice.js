@@ -25,7 +25,7 @@ export const articleSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getArticles.pending, (state, action) => {
+            .addCase(getArticles.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getArticles.fulfilled, (state, action) => {
@@ -36,7 +36,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getArchivedArticles.pending, (state, action) => {
+            .addCase(getArchivedArticles.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getArchivedArticles.fulfilled, (state, action) => {
@@ -47,7 +47,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(addArticles.pending, (state, action) => {
+            .addCase(addArticles.pending, (state) => {
                 state.loading = true;
             })
             .addCase(addArticles.fulfilled, (state, action) => {
@@ -58,7 +58,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(addHTMLArticles.pending, (state, action) => {
+            .addCase(addHTMLArticles.pending, (state) => {
                 state.loading = true;
             })
             .addCase(addHTMLArticles.fulfilled, (state, action) => {
@@ -69,7 +69,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(updateArticle.pending, (state, action) => {
+            .addCase(updateArticle.pending, (state) => {
                 state.loading = true;
             })
             .addCase(updateArticle.fulfilled, (state, action) => {
@@ -80,7 +80,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(updateHTMLArticle.pending, (state, action) => {
+            .addCase(updateHTMLArticle.pending, (state) => {
                 state.loading = true;
             })
             .addCase(updateHTMLArticle.fulfilled, (state, action) => {
@@ -91,7 +91,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getArticleDetails.pending, (state, action) => {
+            .addCase(getArticleDetails.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getArticleDetails.fulfilled, (state, action) => {
@@ -102,7 +102,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(deleteArticle.pending, (state, action) => {
+            .addCase(deleteArticle.pending, (state) => {
                 state.loading = true;
             })
             .addCase(deleteArticle.fulfilled, (state, action) => {
@@ -113,7 +113,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(softDeleteArticle.pending, (state, action) => {
+            .addCase(softDeleteArticle.pending, (state) => {
                 state.loading = true;
             })
             .addCase(softDeleteArticle.fulfilled, (state, action) => {
@@ -124,7 +124,7 @@ export const articleSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(restoreArticle.pending, (state, action) => {
+            .addCase(restoreArticle.pending, (state) => {
                 state.loading = true;
             })
             .addCase(restoreArticle.fulfilled, (state, action) => {

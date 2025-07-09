@@ -28,7 +28,7 @@ export const fridgeSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      .addCase(getFridges.pending, (state, action) => {
+      .addCase(getFridges.pending, (state) => {
         state.loading = true;
       })
       .addCase(getFridges.fulfilled, (state, action) => {
@@ -41,7 +41,7 @@ export const fridgeSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(addFridges.pending, (state, action) => {
+      .addCase(addFridges.pending, (state) => {
         state.loading = true;
       })
       .addCase(addFridges.fulfilled, (state, action) => {
@@ -53,7 +53,7 @@ export const fridgeSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(updateFridge.pending, (state, action) => {
+      .addCase(updateFridge.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateFridge.fulfilled, (state, action) => {
@@ -65,7 +65,7 @@ export const fridgeSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(getFridgeDetails.pending, (state, action) => {
+      .addCase(getFridgeDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(getFridgeDetails.fulfilled, (state, action) => {
@@ -77,7 +77,7 @@ export const fridgeSlice = createSlice({
         state.error = action.payload
       })
 
-      .addCase(deleteFridges.pending, (state, action) => {
+      .addCase(deleteFridges.pending, (state) => {
         state.loading = true;
       })
       .addCase(deleteFridges.fulfilled, (state, action) => {
@@ -88,7 +88,7 @@ export const fridgeSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(openFridge.pending, (state, action) => {
+      .addCase(openFridge.pending, (state) => {
         state.loading = true;
       })
       .addCase(openFridge.fulfilled, (state, action) => {

@@ -9,6 +9,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { formatDate } from '../../../../utils/helper'
 import DataTable from '../../../../Components/DataTables/tanstack/DataTable'
 import { useBreadcrumb } from '../../../../Components/Breadcrumb/BreadcrumbContext'
+import PropTypes from 'prop-types'
 function ActionsCell({ row }) {
     const { _id, collectionType, status, pubDetails, privDetails } = row.original;
     return (
@@ -18,6 +19,9 @@ function ActionsCell({ row }) {
             </Link>
         </div>
     );
+}
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
 }
 const CollectionsTable = () => {
     const { setBreadcrumb } = useBreadcrumb();
@@ -115,7 +119,7 @@ const CollectionsTable = () => {
                 <div className="flex gap-4 items-center justify-center flex-wrap">
                     <div className="w-max">
                         <Select label="Filter by Collection Type" color="pink" variant="standard" value={type} onChange={(value) => handleType(value)}>
-                            {collectionTypes.map((collectionType, index) => (
+                            {collectionTypes.map((collectionType) => (
                                 <Option key={collectionType} value={collectionType}>{collectionType}</Option>
                             ))}
                         </Select>

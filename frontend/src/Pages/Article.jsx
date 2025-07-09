@@ -44,7 +44,7 @@ const Article = () => {
                 <div className="h-full w-full flex flex-col items-center justify-center p-4">
                     <Typography style={{ color: '#004080' }} className="font-varela text-center" variant={IsLargeScreen ? "h1" : "h2"}>Learn about Breastfeeding and more!</Typography>
                     <div className="w-[80%]">
-                        <Typography variant={IsLargeScreen ? "lead" : "small"} className="mt-4 text-center">Welcome to our Articles Page! Here, you’ll find a wealth of information about breastmilk, breastfeeding, and maternal health. Explore expert tips, inspiring stories, and the latest research to support your journey. Whether you're looking for advice, answers to common questions, or simply inspiration, this is your go-to resource for all things related to human milk and nurturing care.</Typography>
+                        <Typography variant={IsLargeScreen ? "lead" : "small"} className="mt-4 text-center">Welcome to our Articles Page! Here, you&apos;ll find a wealth of information about breastmilk, breastfeeding, and maternal health. Explore expert tips, inspiring stories, and the latest research to support your journey. Whether you&apos;re looking for advice, answers to common questions, or simply inspiration, this is your go-to resource for all things related to human milk and nurturing care.</Typography>
                     </div>
                     <div className="flex items-center lg:w-1/4 mt-4">
                         <Input

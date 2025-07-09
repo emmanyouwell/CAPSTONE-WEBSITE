@@ -12,12 +12,13 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { ArrowLongLeftIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { getFridges, openFridge } from "../../../redux/actions/fridgeActions";
-import { EyeIcon, SquareCheck } from 'lucide-react'
+import { EyeIcon } from 'lucide-react'
 import { getUserDetails } from "../../../redux/actions/userActions";
 import { formatDate } from "../../../utils/helper";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../../../Components/DataTables/tanstack/DataTable";
 import { useBreadcrumb } from "../../../Components/Breadcrumb/BreadcrumbContext";
+import PropTypes from "prop-types";
 
 function AvailableVolume({ row }) {
     const availableVolume = row.original.pasteurizedDetails.bottles.map(b => b.status).filter(b => b === "Available").length * row.original.pasteurizedDetails.bottleType;
@@ -26,6 +27,9 @@ function AvailableVolume({ row }) {
             <p>{availableVolume} ml</p>
         </div>
     );
+}
+AvailableVolume.propTypes = {
+    row: PropTypes.object.isRequired,
 }
 function ActionsCell({ row, handleOpen }) {
 
@@ -42,6 +46,10 @@ function ActionsCell({ row, handleOpen }) {
             <EyeIcon className="h-5 w-5 text-white " />
         </div>
     );
+}
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleOpen: PropTypes.func.isRequired,
 }
 const PasteurizedMilk = () => {
     const { setBreadcrumb } = useBreadcrumb();
@@ -202,7 +210,7 @@ const PasteurizedMilk = () => {
                                 Donors
                             </Typography>
                             <div className="grid grid-cols-3 gap-4">
-                                {inventory?.pasteurizedDetails?.donors.map((donor, index) => (
+                                {inventory?.pasteurizedDetails?.donors.map((donor) => (
                                     <div key={donor._id} className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-md">
                                         <div className="flex items-center space-x-2">
 

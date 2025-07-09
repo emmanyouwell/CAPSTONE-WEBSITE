@@ -30,7 +30,7 @@ export const signSlice = createSlice({
             .addCase(updateSignatories.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(updateSignatories.fulfilled, (state, action) => {
+            .addCase(updateSignatories.fulfilled, (state) => {
                 state.loading = false;
                 state.isUpdated = true;
             })

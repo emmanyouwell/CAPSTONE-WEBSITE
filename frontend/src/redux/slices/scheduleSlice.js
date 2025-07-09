@@ -19,7 +19,7 @@ export const lettingSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(requestSchedule.pending, (state, action) => {
+            .addCase(requestSchedule.pending, (state) => {
                 state.loading = true;
             })
             .addCase(requestSchedule.fulfilled, (state, action) => {
@@ -32,7 +32,7 @@ export const lettingSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(approveSchedule.pending, (state, action) => {
+            .addCase(approveSchedule.pending, (state) => {
                 state.loading = true;
             })
             .addCase(approveSchedule.fulfilled, (state, action) => {
@@ -44,7 +44,7 @@ export const lettingSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getDonorSchedules.pending, (state, action) => {
+            .addCase(getDonorSchedules.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getDonorSchedules.fulfilled, (state, action) => {
@@ -56,7 +56,7 @@ export const lettingSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getAllSchedules.pending, (state, action) => {
+            .addCase(getAllSchedules.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getAllSchedules.fulfilled, (state, action) => {
@@ -68,7 +68,7 @@ export const lettingSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getSingleSchedule.pending, (state, action) => {
+            .addCase(getSingleSchedule.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getSingleSchedule.fulfilled, (state, action) => {
@@ -80,7 +80,7 @@ export const lettingSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(updateSchedule.pending, (state, action) => {
+            .addCase(updateSchedule.pending, (state) => {
                 state.loading = true;
             })
             .addCase(updateSchedule.fulfilled, (state, action) => {

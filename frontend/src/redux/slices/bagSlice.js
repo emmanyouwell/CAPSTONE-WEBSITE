@@ -56,7 +56,7 @@ export const bagSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getSingleBag.pending, (state, action) => {
+      .addCase(getSingleBag.pending, (state) => {
         state.loading = true;
       })
       .addCase(getSingleBag.fulfilled, (state, action) => {
@@ -68,7 +68,7 @@ export const bagSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(updateBag.pending, (state, action) => {
+      .addCase(updateBag.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateBag.fulfilled, (state, action) => {
@@ -79,7 +79,7 @@ export const bagSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(deleteBag.pending, (state, action) => {
+      .addCase(deleteBag.pending, (state) => {
         state.loading = true;
       })
       .addCase(deleteBag.fulfilled, (state, action) => {

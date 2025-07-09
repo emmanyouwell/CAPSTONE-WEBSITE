@@ -15,7 +15,7 @@ export const collectionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(recordPublicRecord.pending, (state, action) => {
+      .addCase(recordPublicRecord.pending, (state) => {
         state.loading = true;
       })
       .addCase(recordPublicRecord.fulfilled, (state, action) => {
@@ -28,7 +28,7 @@ export const collectionSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(recordPrivateRecord.pending, (state, action) => {
+      .addCase(recordPrivateRecord.pending, (state) => {
         state.loading = true;
       })
       .addCase(recordPrivateRecord.fulfilled, (state, action) => {
@@ -40,7 +40,7 @@ export const collectionSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getAllCollections.pending, (state, action) => {
+      .addCase(getAllCollections.pending, (state) => {
         state.loading = true;
         state.error = null;
       })

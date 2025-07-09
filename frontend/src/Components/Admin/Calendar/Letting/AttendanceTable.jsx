@@ -53,7 +53,14 @@ function ActionsCell({ row, from, lettingId, handleOpen, handleDelete, status })
     );
 }
 
-
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    from: PropTypes.string.isRequired,
+    lettingId: PropTypes.string.isRequired,
+    handleOpen: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    status: PropTypes.string.isRequired
+}
 const AttendanceTable = ({ setRefresh, attendance, status, from, lettingId }) => {
     const dispatch = useDispatch();
     const { success } = useSelector((state) => state.lettings);

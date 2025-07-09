@@ -22,12 +22,16 @@ import Select from 'react-select';
 import { toast } from 'react-toastify'
 import { resetUpdate } from '../../../redux/slices/fridgeSlice'
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext'
+import PropTypes from 'prop-types'
 function CustomOption({ option }) {
     return (
         <div className="flex flex-col text-sm">
             <span className="font-semibold">{option.value}</span>
         </div>
     )
+}
+CustomOption.propTypes = {
+    option: PropTypes.object.isRequired,
 }
 const Refrigerator = () => {
     const { setBreadcrumb } = useBreadcrumb();

@@ -47,7 +47,7 @@ const PickUpDetails = () => {
             status: 'Approved'
         }
 
-        dispatch(updateSchedule(data)).then((res) => {
+        dispatch(updateSchedule(data)).then(() => {
             const notifData = {
                 role: "User",
                 title: "Scheduled request update",
@@ -312,7 +312,7 @@ const PickUpDetails = () => {
                                         error={formik2.touched.admin && Boolean(formik2.errors.admin)}
                                     >
 
-                                        {users && users.map((user, index) => (
+                                        {users && users.map((user) => (
                                             <Option key={user._id} value={user._id}>{user.name.first} {user.name.middle} {user.name.last}</Option>
                                         ))}
 
@@ -351,7 +351,7 @@ const PickUpDetails = () => {
                             <DialogBody>
                                 <div className="space-y-4">
 
-                                    {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge, index) => (
+                                    {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge) => (
                                         <div key={fridge._id}>
                                             <input
                                                 type="radio"
@@ -393,7 +393,7 @@ const PickUpDetails = () => {
                 <div className="font-parkinsans text-2xl text-center">Milk Bag Details</div>
 
                 <div className="flex items-stretch gap-4 max-w-screen-2xl overflow-x-auto whitespace-nowrap">
-                    {schedule?.donorDetails?.bags?.map((bag, index) => (
+                    {schedule?.donorDetails?.bags?.map((bag) => (
                         <div key={bag._id} className="min-w-max">
                             <BagDetails bag={bag} status={status} from={from} scheduleId={id} />
                         </div>

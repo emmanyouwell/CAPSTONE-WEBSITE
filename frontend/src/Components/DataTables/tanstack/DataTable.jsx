@@ -12,7 +12,7 @@ import {
     Typography,
 } from '@material-tailwind/react';
 import PropTypes from 'prop-types';
-export default function DataTable({ height, data = [], columns = [], pageSize = 5, editingRowId, setEditingRowId, editedData, setEditedData }) {
+export default function DataTable({ height, data = [], columns = [], pageSize = 5}) {
     const table = useReactTable({
         data,
         columns,

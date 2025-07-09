@@ -13,19 +13,24 @@ import { Link } from 'react-router-dom';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 import Loader from '../../../Components/Loader/Loader';
 import { useBreadcrumb } from '../../../Components/Breadcrumb/BreadcrumbContext';
+import PropTypes from 'prop-types';
 
 function ActionsCell({ row, handleOpen }) {
     const submissionID = row.original.submissionID;
     const _id = row.original._id;
     return (
         <div className="flex gap-2">
-            <a target="_blank" href={`https://script.google.com/macros/s/AKfycbwYOc13QaEjdGoJvdlFEHZ2pSsIlUmx0zksazMKD3qfXYGnYG70eNSB7M5ZX0aOiU1y/exec?submissionId=${submissionID}`}>
+            <a target="_blank" href={`https://script.google.com/macros/s/AKfycbwYOc13QaEjdGoJvdlFEHZ2pSsIlUmx0zksazMKD3qfXYGnYG70eNSB7M5ZX0aOiU1y/exec?submissionId=${submissionID}`} rel="noreferrer">
                 <IconButton variant="text" className="text-secondary rounded-full"><EyeIcon size={25} /></IconButton>
             </a>
             <IconButton variant="text" className="text-secondary rounded-full" onClick={() => handleOpen(_id)}><SquarePenIcon size={22} className="text-secondary" /></IconButton>
 
         </div>
     );
+}
+ActionsCell.propTypes = {
+    row: PropTypes.object.isRequired,
+    handleOpen: PropTypes.func.isRequired,
 }
 const Submissions = () => {
     const { setBreadcrumb } = useBreadcrumb();
@@ -100,15 +105,7 @@ const Submissions = () => {
             ),
         }),
     ];
-    let precisionText;
-
-    if (pythonLoading) {
-        precisionText = <Loader />;
-    } else if (model?.precision?.Overall) {
-        precisionText = `${(Number(model.precision.Overall) * 100).toFixed(2)}%`;
-    } else {
-        precisionText = '0.00%';
-    }
+   
     return (
         <div className="relative w-full h-full">
             <Link to="/dashboard" className="absolute top-4 left-4">
@@ -196,7 +193,7 @@ const Submissions = () => {
                 <DialogBody>
                     <div className="space-y-4">
 
-                        {eligibilityOptions?.length > 0 && eligibilityOptions.map((type, index) => (
+                        {eligibilityOptions?.length > 0 && eligibilityOptions.map((type) => (
                             <div key={type}>
                                 <input
                                     type="radio"

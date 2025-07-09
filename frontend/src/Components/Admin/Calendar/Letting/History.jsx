@@ -33,7 +33,7 @@ const History = () => {
             <div className="text-2xl text-center">Event History</div>
             {loading ? <div>Loading...</div> : <div className="w-[calc(100wh-20rem)] h-[calc(100vh-20rem)] overflow-y-auto mx-auto flex flex-col items-center gap-4">
 
-                {filteredLettings.length > 0 && filteredLettings.map((lets, index) => (
+                {filteredLettings.length > 0 && filteredLettings.map((lets) => (
                     <Card key={lets._id} className='w-full border-l-8 border-secondary p-4 mx-auto mb-4 flex justify-between items-center flex-row'>
                         <div>
                             <div className="text-2xl font-bold text-secondary">{lets.activity}</div>

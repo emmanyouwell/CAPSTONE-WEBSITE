@@ -24,7 +24,7 @@ export const eventSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addEvents.pending, (state, action) => {
+      .addCase(addEvents.pending, (state) => {
         state.loading = true;
       })
       .addCase(addEvents.fulfilled, (state, action) => {
@@ -36,7 +36,7 @@ export const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getEvents.pending, (state, action) => {
+      .addCase(getEvents.pending, (state) => {
         state.loading = true;
       })
       .addCase(getEvents.fulfilled, (state, action) => {
@@ -47,7 +47,7 @@ export const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(editEvents.pending, (state, action) => {
+      .addCase(editEvents.pending, (state) => {
         state.loading = true;
       })
       .addCase(editEvents.fulfilled, (state, action) => {
@@ -58,7 +58,7 @@ export const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getEventDetails.pending, (state, action) => {
+      .addCase(getEventDetails.pending, (state) => {
         state.loading = true;
       })
       .addCase(getEventDetails.fulfilled, (state, action) => {
@@ -70,7 +70,7 @@ export const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload
       })
-      .addCase(deleteEvents.pending, (state, action) => {
+      .addCase(deleteEvents.pending, (state) => {
         state.loading = true;
       })
       .addCase(deleteEvents.fulfilled, (state, action) => {
@@ -81,7 +81,7 @@ export const eventSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getUpcomingEvents.pending, (state, action) => {
+      .addCase(getUpcomingEvents.pending, (state) => {
         state.loading = true;
       })
       .addCase(getUpcomingEvents.fulfilled, (state, action) => {

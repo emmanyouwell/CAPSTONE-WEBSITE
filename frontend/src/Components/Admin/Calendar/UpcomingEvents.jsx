@@ -11,7 +11,7 @@ const UpcomingEvents = ({ events }) => {
                 <span className="h-px flex-1 bg-black"></span>
             </span>
             <div className="flex items-stretch gap-4 w-full overflow-x-auto whitespace-nowrap p-4">
-                {events.length > 0 ? events.map((event, index) => (
+                {events.length > 0 ? events.map((event) => (
                     <EventDetails key={event._id} event={event} />
                 )) : <span className="text-gray-500">No upcoming events</span>}
             </div>

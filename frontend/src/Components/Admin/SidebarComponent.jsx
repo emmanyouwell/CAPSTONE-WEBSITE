@@ -81,7 +81,7 @@ const SidebarComponent = ({ userDetails }) => {
                     </>
                 }
 
-                {Object.entries(groupedItems).map(([category, items], index) => (
+                {Object.entries(groupedItems).map(([category, items]) => (
                     <div key={category}>
 
                         <span className="flex items-center">
