@@ -13,6 +13,7 @@ export default [
       "eas.json",
       "react-native.config.js",
       "eslint.config.mjs",
+      "tailwind.config.js",
     ],
   },
   {
