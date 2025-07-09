@@ -11,7 +11,7 @@ const DonationList = ({ donations }) => {
             </div>
 
             <ul className="mt-4 space-y-2">
-                {donations.map((donation, index) => (
+                {donations.map((donation) => (
                     <div key={donation._id}>
                         {donation.donationType === "Public" ? <li>
                             <p className="flex flex-col h-full rounded-lg border border-gray-500 p-4">

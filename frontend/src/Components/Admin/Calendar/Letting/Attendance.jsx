@@ -196,7 +196,7 @@ const Attendance = () => {
         <DialogBody>
           <div className="space-y-4">
 
-            {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge, index) => (
+            {unpasteurizedFridges?.length > 0 && unpasteurizedFridges.map((fridge) => (
               <div key={fridge._id}>
                 <input
                   type="radio"

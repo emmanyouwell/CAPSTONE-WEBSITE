@@ -19,7 +19,8 @@ import { resetSuccess } from '../../../../redux/slices/lettingSlice';
 import Select from 'react-select';
 import { Check, SquarePen, Trash, X } from 'lucide-react';
 import DatePicker from 'react-datepicker';
-import { formatDate, getDonationDate, getLatestDonationDate } from '../../../../utils/helper';
+import { formatDate, getLatestDonationDate } from '../../../../utils/helper';
+import PropTypes from 'prop-types';
 
 function CustomOption({ option }) {
     return (
@@ -34,7 +35,9 @@ function CustomOption({ option }) {
     )
 }
 
-
+CustomOption.propTypes = {
+    option: PropTypes.object.isRequired,
+}
 const DonationDetails = () => {
     const dispatch = useDispatch();
     const { donors } = useSelector((state) => state.donors);
@@ -148,7 +151,7 @@ const DonationDetails = () => {
 
 
         dispatch(markAttendance(newData))
-            .then((res) => {
+            .then(() => {
                 toast.success("Attendance recorded.", { position: "bottom-right" });
 
             })
@@ -262,7 +265,7 @@ const DonationDetails = () => {
                                                         New Donor
                                                     </Typography>
                                                     <Typography className="font-normal text-gray-600 ">
-                                                        This is the first time I'm donating breast milk.
+                                                        This is the first time I&apos;m donating breast milk.
 
                                                     </Typography>
                                                 </div>

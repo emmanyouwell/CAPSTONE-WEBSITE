@@ -11,7 +11,7 @@ const RequestList = ({ requests }) => {
             </div>
 
             <ul className="mt-4 space-y-2">
-                {requests.map((request, index) => (
+                {requests.map((request) => (
                         <li key={request._id}>
                         <p className="block h-full rounded-lg border border-gray-500 p-4">
                             <strong className="font-medium text-lg text-black">Date: {formatDate(request.date)}</strong>
