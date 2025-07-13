@@ -58,7 +58,7 @@ const EmployeeLogin = () => {
         }
 
         if (error) {
-            toast.error("Invalid Employee ID or Password", { position: "bottom-right" });
+            toast.error(error, { position: "bottom-right" });
             dispatch(resetError());
         }
     }, [isLoggedIn, error])
