@@ -43,7 +43,7 @@ const Login = () => {
       toast.success(`Welcome, ${userDetails.name.first} ${userDetails.name.last}`, { position: "bottom-right" });
     }
     if (error) {
-      toast.error(`Error: ${error}`, { position: "bottom-right" });
+      toast.error(error, { position: "bottom-right" });
       dispatch(resetError());
     }
   }, [isLoggedIn, error])
