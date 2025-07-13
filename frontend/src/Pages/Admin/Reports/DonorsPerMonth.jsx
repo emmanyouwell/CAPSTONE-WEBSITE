@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
     colMonth: { width: '13%' },
     colWide: { width: '13%' },
-    header: {
+    headerColumn: {
 
         textAlign: 'center',
         fontWeight: 'bold',
@@ -80,30 +80,43 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff200',
         fontWeight: 'bold',
     },
+    header: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: '8px',
+    },
+    headerText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginBottom: 4,
+    }
 });
 
-const MyDocument = ({ page1_data, page1_total, page2_data, page2_total, signs }) => (
+const MyDocument = ({ year, page1_data, page1_total, page2_data, page2_total, signs }) => (
     <Document>
         <Page size="LEGAL" orientation="landscape" style={styles.page}>
-            <View>
-                <Image src={header} style={{ width: '300px', height: 100, marginHorizontal: 'auto' }} />
+            <View style={styles.header}>
+                <Image src={header} style={{ width: '300px', height: 75, marginHorizontal: 'auto', marginBottom: '8px' }} />
+                <Text style={styles.headerText}>Report {year.value}</Text>
             </View>
             <View style={styles.table}>
                 {/* Header Row 1 */}
                 <View style={styles.row}>
-                    <Text style={[styles.cell, styles.colMonth, styles.header]} >MONTH</Text>
+                    <Text style={[styles.cell, styles.colMonth, styles.headerColumn]} >MONTH</Text>
                     <View style={styles.multiCol}>
-                        <Text style={[styles.col, styles.header, { borderRightWidth: 0, borderBottomWidth: 1 }]}>BREASTMILK DONORS</Text>
+                        <Text style={[styles.col, styles.headerColumn, { borderRightWidth: 0, borderBottomWidth: 1 }]}>BREASTMILK DONORS</Text>
                         <View style={styles.innerCol}>
-                            <Text style={[styles.col, styles.header, { flex: 1 }]}>Community</Text>
-                            <Text style={[styles.col, styles.header, { flex: 1 }]}>Private</Text>
-                            <Text style={[styles.col, styles.header, { borderRightWidth: 0, flex: 1 }]}>Total</Text>
+                            <Text style={[styles.col, styles.headerColumn, { flex: 1 }]}>Community</Text>
+                            <Text style={[styles.col, styles.headerColumn, { flex: 1 }]}>Private</Text>
+                            <Text style={[styles.col, styles.headerColumn, { borderRightWidth: 0, flex: 1 }]}>Total</Text>
                         </View>
                     </View>
 
-                    <Text style={[styles.cell, styles.header]} hyphenationCallback={(word) => [word]}>INPATIENT RECIPIENT</Text>
-                    <Text style={[styles.cell, styles.header]} hyphenationCallback={(word) => [word]}>OUTPATIENT RECIPIENT</Text>
-                    <Text style={[styles.cell, styles.header]} hyphenationCallback={(word) => [word]}>TOTAL RECIPIENT</Text>
+                    <Text style={[styles.cell, styles.headerColumn]} hyphenationCallback={(word) => [word]}>INPATIENT RECIPIENT</Text>
+                    <Text style={[styles.cell, styles.headerColumn]} hyphenationCallback={(word) => [word]}>OUTPATIENT RECIPIENT</Text>
+                    <Text style={[styles.cell, styles.headerColumn]} hyphenationCallback={(word) => [word]}>TOTAL RECIPIENT</Text>
                 </View>
 
                 {/* Table Data */}
@@ -147,35 +160,36 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total, signs })
             </View>
         </Page>
         <Page size="LEGAL" orientation="landscape" style={styles.page}>
-            <View>
-                <Image src={header} style={{ width: '300px', height: 100, marginHorizontal: 'auto' }} />
+            <View style={styles.header}>
+                <Image src={header} style={{ width: '300px', height: 75, marginHorizontal: 'auto', marginBottom: '8px' }} />
+                <Text style={styles.headerText}>Report {year.value}</Text>
             </View>
             <View style={styles.table}>
                 {/* Header Row 1 */}
                 <View style={styles.row}>
-                    <Text style={[styles.cell, styles.colMonth, styles.header]} >MONTH</Text>
+                    <Text style={[styles.cell, styles.colMonth, styles.headerColumn]} >MONTH</Text>
 
 
 
                     <View style={[styles.multiCol, { width: '37.5%' }]}>
-                        <Text style={[styles.col, styles.header, { borderRightWidth: 0, borderBottomWidth: 1 }]}>BREASTMILK COLLECTED (Liter)</Text>
+                        <Text style={[styles.col, styles.headerColumn, { borderRightWidth: 0, borderBottomWidth: 1 }]}>BREASTMILK COLLECTED (Liter)</Text>
                         <View style={styles.innerCol}>
-                            <Text style={[styles.col, styles.header, { flex: 1 }]}>Milk Letting</Text>
-                            <Text style={[styles.col, styles.header, { flex: 1 }]}>Private</Text>
-                            <Text style={[styles.col, styles.header, { borderRightWidth: 0, flex: 1 }]}>Total</Text>
+                            <Text style={[styles.col, styles.headerColumn, { flex: 1 }]}>Milk Letting</Text>
+                            <Text style={[styles.col, styles.headerColumn, { flex: 1 }]}>Private</Text>
+                            <Text style={[styles.col, styles.headerColumn, { borderRightWidth: 0, flex: 1 }]}>Total</Text>
                         </View>
                     </View>
 
                     <View style={[styles.multiCol, { width: '37.5%' }]}>
-                        <Text style={[styles.col, styles.header, { borderRightWidth: 0, borderBottomWidth: 1 }]}>BREASTMILK DISPENSED (Liter)</Text>
+                        <Text style={[styles.col, styles.headerColumn, { borderRightWidth: 0, borderBottomWidth: 1 }]}>BREASTMILK DISPENSED (Liter)</Text>
                         <View style={styles.innerCol}>
-                            <Text style={[styles.col, styles.header, { flex: 1 }]}>Inpatient</Text>
-                            <Text style={[styles.col, styles.header, { flex: 1 }]}>Outpatient</Text>
-                            <Text style={[styles.col, styles.header, { borderRightWidth: 0, flex: 1 }]}>Total</Text>
+                            <Text style={[styles.col, styles.headerColumn, { flex: 1 }]}>Inpatient</Text>
+                            <Text style={[styles.col, styles.headerColumn, { flex: 1 }]}>Outpatient</Text>
+                            <Text style={[styles.col, styles.headerColumn, { borderRightWidth: 0, flex: 1 }]}>Total</Text>
                         </View>
                     </View>
 
-                    <Text style={[styles.cell, styles.header]} hyphenationCallback={(word) => [word]}>BREASTMILK PASTEURIZED (Liter)</Text>
+                    <Text style={[styles.cell, styles.headerColumn]} hyphenationCallback={(word) => [word]}>BREASTMILK PASTEURIZED (Liter)</Text>
                 </View>
 
                 {/* Table Data */}
@@ -223,6 +237,7 @@ const MyDocument = ({ page1_data, page1_total, page2_data, page2_total, signs })
     </Document>
 );
 MyDocument.propTypes = {
+    year: PropTypes.object,
     page1_data: PropTypes.array,
     page1_total: PropTypes.array,
     page2_data: PropTypes.array,
@@ -262,7 +277,7 @@ const DonorsPerMonth = () => {
     }, [])
     useEffect(() => {
         const generatePdf = async (page1_data, page1_total, page2_data, page2_total, signs) => {
-            const blob = await pdf(<MyDocument page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} signs={signs[0]} />).toBlob();
+            const blob = await pdf(<MyDocument year={selectedYear} page1_data={page1_data} page1_total={page1_total} page2_data={page2_data} page2_total={page2_total} signs={signs[0]} />).toBlob();
             setPdfUrl(URL.createObjectURL(blob));
         }
         generatePdf.propTypes = {
