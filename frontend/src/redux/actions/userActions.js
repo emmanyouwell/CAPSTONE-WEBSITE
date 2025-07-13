@@ -32,6 +32,45 @@ export const loginUser = createAsyncThunk(
   }
 )
 
+export const sendResetPasswordEmail = createAsyncThunk(
+  'user/sendResetPasswordEmail',
+  async (email, thunkAPI) => {
+    const config = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      }
+    };
+    try {
+
+      let url = `${VITE_APP_URL}/api/v1/password/reset`
+      const response = await axios.post(url, email, config);
+      return response.data; // Return the response data if needed
+    } catch (error) {
+      console.log('Error:', error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  });
+
+export const resetPassword = createAsyncThunk(
+  'user/resetPassword',
+  async ({ token, req }, thunkAPI) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true
+    };
+    try {
+      const response = await axios.put(`${VITE_APP_URL}/api/v1/password/reset/${token}`, req, config);
+      return response.data;
+    } catch (error) {
+      console.log('Error:', error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
   async (msg, thunkAPI) => {
@@ -59,11 +98,11 @@ export const getUserDetails = createAsyncThunk(
   'user/getUserDetails',
   async (_, thunkAPI) => {
 
-    
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        
+
       },
       withCredentials: true
     }
@@ -131,11 +170,11 @@ export const getAllUsers = createAsyncThunk(
   'user/getAllUsers',
   async ({ search = "", sortBy = "", order = "", role = "", page = 1, pageSize = 12 }, thunkAPI) => {
 
-    
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        
+
       },
       withCredentials: true
     }

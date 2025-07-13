@@ -55,6 +55,7 @@ import AnnouncementArchive from "./Pages/Admin/Archive/AnnouncementArchive";
 import ArticleArchive from "./Pages/Admin/Archive/ArticleArchive";
 import ReportsLayout from "./Pages/Admin/Reports/ReportsLayout";
 import DonorsPerMonth from "./Pages/Admin/Reports/DonorsPerMonth";
+import ResetPassword from "./Pages/Admin/Profile/ResetPassword";
 
 
 function RoutesComponent() {
@@ -77,10 +78,7 @@ function RoutesComponent() {
         {/* Report paths */}
         <Route path="reports" element={<ProtectedRoute isAdmin={true}><ReportsLayout /></ProtectedRoute>}>
           <Route index element={<ProtectedRoute isAdmin={true}><DonorsPerMonth /></ProtectedRoute>} />
-
         </Route>
-
-
 
         {/* Donor paths */}
         <Route path="donors" element={<ProtectedRoute isAdmin={true}><DonorsPage /></ProtectedRoute>} />
@@ -149,6 +147,7 @@ function RoutesComponent() {
         <Route path="profile" element={<ProtectedRoute isAuthorized={true}><Profile /></ProtectedRoute>} />
         
       </Route>
+      <Route path="/password/reset/:token" element={<ResetPassword/>} />
     </Routes>
   )
 

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginUser, logoutUser, getUserDetails, registerUser, getUser, getAllUsers} from '../actions/userActions';
+import { loginUser, logoutUser, getUserDetails, registerUser, getUser, getAllUsers, sendResetPasswordEmail} from '../actions/userActions';
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -103,7 +103,16 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+      .addCase(sendResetPasswordEmail.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(sendResetPasswordEmail.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(sendResetPasswordEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // Handle error message
+      })
   },
 });
 
