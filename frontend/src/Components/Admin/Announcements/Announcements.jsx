@@ -41,7 +41,7 @@ const Announcements = () => {
                 <Chip value={announcements?.length} color="pink" className="rounded-full mr-4" />
                 <span className="h-px flex-1 bg-black"></span>
             </span>
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <div className="flex flex-col flex-wrap items-center justify-center md:flex-row lg:justify-start gap-4">
                 {announcements && announcements.length > 0 ? <AnnouncementList announcements={announcements} IsLargeScreen={IsLargeScreen} handleDelete={handleDelete} /> : <span className="text-gray-500">No Announcements</span>}
             </div>
 

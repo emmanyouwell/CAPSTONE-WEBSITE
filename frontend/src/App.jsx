@@ -66,8 +66,8 @@ function RoutesComponent() {
       <Route path="/employee/login" element={<EmployeeLogin />} />
       <Route path="/donor-application" element={<DonorApplication />} />
       <Route path="/new-donor-form" element={<NewDonorForm />} />
-      <Route path="/articles" element={<ProtectedRoute><Article /></ProtectedRoute>} />
-      <Route path="/article/:id" element={<ProtectedRoute><SingleArticle /></ProtectedRoute>} />
+      <Route path="/articles" element={<Article />} />
+      <Route path="/article/:id" element={<SingleArticle />} />
       <Route path="/redirect" element={<Redirect />} />
       <Route path="announcements/:id" element={<ProtectedRoute isAuthorized={true}><SingleAnnouncement /></ProtectedRoute>} />
       {/* Superadmin routes */}

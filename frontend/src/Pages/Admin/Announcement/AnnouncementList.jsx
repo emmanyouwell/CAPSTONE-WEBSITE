@@ -24,8 +24,8 @@ const AnnouncementList = ({ announcements }) => {
                     day: 'numeric', // "21"
                 });
                 return (
-                    <div key={announcement._id} className="bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-full max-w-sm h-96">
-                        <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max  overflow-hidden">
+                    <div key={announcement._id} className="bg-white shadow-lg border border-primary-dark p-4 rounded-lg flex flex-col justify-between w-[300px] h-96">
+                        <Carousel className="rounded-xl my-4 bg-gray-400/75 h-max overflow-hidden z-0">
                             {announcement?.images?.map((image, index) => (
                                 <div key={image.url} className="relative h-40 w-full">
                                     <img
