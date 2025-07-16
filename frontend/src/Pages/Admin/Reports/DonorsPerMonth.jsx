@@ -394,10 +394,10 @@ const DonorsPerMonth = () => {
             </Worker>
             <Drawer open={open} onClose={closeDrawer} size={400} className="p-4">
                 <div className="mb-2 flex items-center justify-between">
-                    <Typography variant="h5" color="blue-gray">
+                    <Typography variant="h5" color="black">
                         Settings
                     </Typography>
-                    <IconButton variant="text" color="blue-gray" onClick={closeDrawer}>
+                    <IconButton variant="text" color="black" onClick={closeDrawer}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -414,7 +414,7 @@ const DonorsPerMonth = () => {
                         </svg>
                     </IconButton>
                 </div>
-                <Typography variant="paragraph" className="pr-16" color="blue-gray">
+                <Typography variant="paragraph" className="pr-16" color="black">
                     Change the name of signatories and their positions.
                 </Typography>
                 <span className="flex items-center my-4">
@@ -422,7 +422,7 @@ const DonorsPerMonth = () => {
                 </span>
                 <form onSubmit={onSave}>
                     <div className="mb-4">
-                        <Typography variant="h5" color="gray" className="mb-2 pr-4 font-normal">
+                        <Typography variant="h5" color="black" className="mb-2 pr-4 font-normal">
                             Prepared by:
                         </Typography>
                         <div className="mb-4">
@@ -433,7 +433,7 @@ const DonorsPerMonth = () => {
                         </div>
                     </div>
                     <div className="mb-4">
-                        <Typography variant="h5" color="gray" className="mb-2 pr-4 font-normal">
+                        <Typography variant="h5" color="black" className="mb-2 pr-4 font-normal">
                             Checked by:
                         </Typography>
                         <div className="mb-4">
@@ -444,7 +444,7 @@ const DonorsPerMonth = () => {
                         </div>
                     </div>
                     <div className="mb-4">
-                        <Typography variant="h5" color="gray" className="mb-2 pr-4 font-normal">
+                        <Typography variant="h5" color="black" className="mb-2 pr-4 font-normal">
                             Noted by:
                         </Typography>
                         <div className="mb-4">
