@@ -127,7 +127,7 @@ const CollectionsTable = () => {
                 </div>
             </div>
 
-            <DataTable data={collections} columns={columns} pageSize={10} />
+            <DataTable data={collections} columns={columns} pageSize={10}/>
         </div>
     )
 }

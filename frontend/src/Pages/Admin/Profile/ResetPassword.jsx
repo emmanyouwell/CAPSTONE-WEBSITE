@@ -1,9 +1,8 @@
-import { Typography } from '@material-tailwind/react'
 import React, { useEffect, useState } from 'react'
 import logo from '../../../assets/image/TCHMB-logo.png'
 import StickyNavbar from '../../../Components/Navbar'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import Loader from '../../../Components/Loader/Loader'
@@ -14,7 +13,6 @@ const ResetPassword = () => {
     const { token } = useParams();
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { isLoggedIn, userDetails, error } = useSelector(state => state.users)
     const [load, setLoad] = useState(true)
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);

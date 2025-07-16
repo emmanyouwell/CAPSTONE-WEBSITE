@@ -49,7 +49,7 @@ const PastTables = ({ pasteurizedFridges, handleEdit }) => {
     ];
     return (
         <div className="w-full h-full">
-            <DataTable data={pasteurizedFridges} columns={columns} pageSize={10} />
+            <DataTable data={pasteurizedFridges} columns={columns} pageSize={10} height="h-[calc(100vh-14rem)]"/>
         </div>
     )
 }

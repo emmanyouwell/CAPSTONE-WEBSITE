@@ -105,7 +105,7 @@ const Submissions = () => {
             ),
         }),
     ];
-   
+
     return (
         <div className="relative w-full h-full">
             <Link to="/dashboard" className="absolute top-4 left-4">
@@ -172,7 +172,10 @@ const Submissions = () => {
                 </div>
 
             </div>
-            <DataTable data={submissions} columns={columns} pageSize={10} height="h-[calc(70vh-8rem)]" />
+            <div className="p-4">
+                <DataTable data={submissions} columns={columns} pageSize={10} height="h-[calc(70vh-8rem)]" />
+            </div>
+
             <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
                 <DialogHeader className="relative m-0 block">
                     <Typography variant="h4" color="blue-gray">

@@ -10,9 +10,10 @@ import {
     CardBody,
     Button,
     Typography,
+    CardFooter,
 } from '@material-tailwind/react';
 import PropTypes from 'prop-types';
-export default function DataTable({ height, data = [], columns = [], pageSize = 5}) {
+export default function DataTable({ height, data = [], columns = [], pageSize = 5 }) {
     const table = useReactTable({
         data,
         columns,
@@ -26,7 +27,7 @@ export default function DataTable({ height, data = [], columns = [], pageSize = 
     });
 
     return (
-        <Card className={`w-full ${height ? height : 'h-[calc(100vh-10rem)]'}`}>
+        <Card className={`w-full ${height ? height : 'h-[calc(100vh-12rem)]'}`}>
             <CardBody className="p-0 overflow-auto flex flex-col justify-between h-full">
                 <table className="min-w-full text-left table-auto">
                     <thead className="bg-gray-100">
@@ -72,8 +73,11 @@ export default function DataTable({ height, data = [], columns = [], pageSize = 
                     </tbody>
                 </table>
 
+
+            </CardBody>
+            <CardFooter>
                 {/* Pagination Controls */}
-                <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-white">
+                <div className="flex items-center justify-between pt-3 border-t border-gray-200 bg-white">
                     <Typography variant="small" className="text-gray-600">
                         Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                     </Typography>
@@ -96,8 +100,7 @@ export default function DataTable({ height, data = [], columns = [], pageSize = 
                         </Button>
                     </div>
                 </div>
-            </CardBody>
-
+            </CardFooter>
         </Card>
     );
 }

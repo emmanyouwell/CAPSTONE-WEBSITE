@@ -184,7 +184,7 @@ const DonorsPage = () => {
                     </div>
                 </div>
             </div>
-            <DataTable data={donors} columns={columns} pageSize={15} />
+            <DataTable data={donors} columns={columns} pageSize={15}/>
         </div>
     )
 }

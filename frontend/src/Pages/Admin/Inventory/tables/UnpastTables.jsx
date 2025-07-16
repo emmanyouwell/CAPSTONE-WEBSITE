@@ -48,7 +48,7 @@ const UnpastTables = ({ unpasteurizedFridges, handleEdit }) => {
 
     return (
         <div className="w-full h-full">
-            <DataTable data={unpasteurizedFridges} columns={columns} pageSize={10} />
+            <DataTable data={unpasteurizedFridges} columns={columns} pageSize={10} height="h-[calc(100vh-14rem)]"/>
 
         </div>
     )

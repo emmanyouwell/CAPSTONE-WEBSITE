@@ -106,7 +106,7 @@ export const userSlice = createSlice({
       .addCase(sendResetPasswordEmail.pending, (state) => {
         state.loading = true;
       })
-      .addCase(sendResetPasswordEmail.fulfilled, (state, action) => {
+      .addCase(sendResetPasswordEmail.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(sendResetPasswordEmail.rejected, (state, action) => {
