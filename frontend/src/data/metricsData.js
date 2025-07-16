@@ -2,6 +2,53 @@
 
 import { toTitleCase } from "../utils/helper";
 
+function generateColors(count) {
+    // Carefully curated distinct colors
+    const distinctColors = [
+        'rgba(229, 57, 53, 0.7)',   // Red
+        'rgba(30, 136, 229, 0.7)',  // Blue  
+        'rgba(67, 160, 71, 0.7)',   // Green
+        'rgba(255, 152, 0, 0.7)',   // Orange
+        'rgba(142, 36, 170, 0.7)',  // Purple
+        'rgba(0, 172, 193, 0.7)',   // Cyan
+        'rgba(255, 87, 34, 0.7)',   // Deep Orange
+        'rgba(76, 175, 80, 0.7)',   // Light Green
+        'rgba(156, 39, 176, 0.7)',  // Deep Purple
+        'rgba(3, 169, 244, 0.7)',   // Light Blue
+        'rgba(255, 193, 7, 0.7)',   // Amber
+        'rgba(121, 85, 72, 0.7)',   // Brown
+        'rgba(158, 158, 158, 0.7)', // Gray
+        'rgba(233, 30, 99, 0.7)',   // Pink
+        'rgba(0, 150, 136, 0.7)',   // Teal
+        'rgba(103, 58, 183, 0.7)',  // Deep Purple Alt
+        'rgba(205, 220, 57, 0.7)',  // Lime
+        'rgba(255, 235, 59, 0.7)',  // Yellow
+        'rgba(96, 125, 139, 0.7)',  // Blue Gray
+        'rgba(255, 111, 97, 0.7)',  // Light Red
+    ];
+
+    if (count <= distinctColors.length) {
+        return distinctColors.slice(0, count);
+    }
+
+    // If we need more colors, generate them with maximum separation
+    const colors = [...distinctColors];
+    const remaining = count - distinctColors.length;
+
+    for (let i = 0; i < remaining; i++) {
+        // Use prime numbers for maximum color separation
+        const primes = [181, 211, 241, 271, 307, 337, 367, 397, 431, 461];
+        const primeMultiplier = primes[i % primes.length];
+        const hue = (i * primeMultiplier) % 360;
+        const saturation = 70 + (i * 7) % 25; // 70-95%
+        const lightness = 45 + (i * 11) % 25; // 45-70%
+
+        colors.push(`hsla(${hue}, ${saturation}%, ${lightness}%, 0.7)`);
+    }
+
+    return colors;
+}
+
 export function milkCollectedChartData(stats) {
     const months = Object.keys(stats).filter((key) => key !== 'total');
     const communityData = months.map((month) => stats[month].community);
@@ -225,60 +272,75 @@ export function milkDonatedPerBarangay(volumePerLocation) {
     const locations = entries.map(([location]) => location);
     const labels = locations.map(toTitleCase)
     const dataValues = entries.map(([, volume]) => volume);
-
+    // Generate dynamic colors based on the number of data points
+    const dynamicColors = generateColors(dataValues.length);
     const data = {
         labels,
         datasets: [
             {
                 label: 'Volume',
                 data: dataValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',  // #FF6384
-                    'rgba(54, 162, 235, 0.5)',  // #36A2EB
-                    'rgba(255, 206, 86, 0.5)',  // #FFCE56
-                    'rgba(75, 192, 192, 0.5)',  // #4BC0C0
-                    'rgba(153, 102, 255, 0.5)', // #9966FF
-                    'rgba(255, 159, 64, 0.5)',  // #FF9F40
-                    'rgba(255, 99, 132, 0.5)',  // #FF6384 (again)
-                    'rgba(54, 162, 235, 0.5)',  // #36A2EB (again)
-                    'rgba(201, 203, 207, 0.5)', // #C9CBCF
-                    'rgba(127, 205, 205, 0.5)', // #7FCDCD
-                    'rgba(222, 107, 107, 0.5)'  // #DE6B6B
-                ],
+                backgroundColor: dynamicColors,
                 borderWidth: 1,
             },
         ],
     };
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                display: false
+                display: true,
+                position: 'right',
+                labels: {
+                    boxWidth: 20,
+                    padding: 15, // Adjust this value to control spacing
+                    usePointStyle: true,
+                    font: {
+                        size: 12
+                    }
+                }
             },
             datalabels: {
                 color: '#000',
                 font: {
                     weight: 'semibold',
-                    size: 14,
+                    size: 12, // Reduced from 14 for better fit
                 },
-                anchor: 'end',
-                align: 'start',
-                clamp: true,
                 formatter: (value, context) => {
-                    let label = context.chart.data.labels[context.dataIndex] || '';
-                    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
-                    return `${label}\n${value} ml`;
+                    // Show percentage instead of label + value for cleaner look
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return `${percentage}%`;
                 },
+                display: function (context) {
+                    // Only show labels for slices larger than 5%
+                    const value = context.parsed;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = (value / total) * 100;
+                    return percentage > 5;
+                }
             },
             tooltip: {
                 callbacks: {
                     label: function (tooltipItem) {
                         const value = tooltipItem.raw || 0;
-                        return `Volume: ${value.toLocaleString()}`;
+                        const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        const label = tooltipItem.label || '';
+                        return `${label}: ${value.toLocaleString()} ml (${percentage}%)`;
                     },
                 },
             },
         },
+        layout: {
+            padding: {
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 10
+            }
+        }
     };
 
     return { data, options }
@@ -291,60 +353,75 @@ export function donorsPerBarangay(donorLocation) {
 
     const labels = entries.map(([location]) => location);
     const dataValues = entries.map(([, volume]) => volume);
-
+    // Generate dynamic colors based on the number of data points
+    const dynamicColors = generateColors(dataValues.length);
     const data = {
         labels,
         datasets: [
             {
                 label: 'Volume',
                 data: dataValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',  // #FF6384
-                    'rgba(54, 162, 235, 0.5)',  // #36A2EB
-                    'rgba(255, 206, 86, 0.5)',  // #FFCE56
-                    'rgba(75, 192, 192, 0.5)',  // #4BC0C0
-                    'rgba(153, 102, 255, 0.5)', // #9966FF
-                    'rgba(255, 159, 64, 0.5)',  // #FF9F40
-                    'rgba(255, 99, 132, 0.5)',  // #FF6384 (again)
-                    'rgba(54, 162, 235, 0.5)',  // #36A2EB (again)
-                    'rgba(201, 203, 207, 0.5)', // #C9CBCF
-                    'rgba(127, 205, 205, 0.5)', // #7FCDCD
-                    'rgba(222, 107, 107, 0.5)'  // #DE6B6B
-                ],
+                backgroundColor: dynamicColors,
                 borderWidth: 1,
             },
         ],
     };
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                display: false
+                display: true,
+                position: 'right', // Changed from 'left' to 'right' for better space utilization
+                labels: {
+                    boxWidth: 20, // Reduced from 40 for more chart space
+                    padding: 15, // Increased padding for better spacing
+                    usePointStyle: true,
+                    font: {
+                        size: 12 // Added font size for better readability
+                    }
+                }
             },
             datalabels: {
                 color: '#000',
                 font: {
                     weight: 'semibold',
-                    size: 14,
+                    size: 12, // Reduced from 14 for better fit
                 },
-                anchor: 'end',
-                align: 'start',
-                clamp: true,
                 formatter: (value, context) => {
-                    let label = context.chart.data.labels[context.dataIndex] || '';
-                    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
-                    return `${label}\n${value}`;
+                    // Show percentage instead of label + value for cleaner look
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return `${percentage}%`;
                 },
+                display: function (context) {
+                    // Only show labels for slices larger than 5%
+                    const value = context.parsed;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = (value / total) * 100;
+                    return percentage > 5;
+                }
             },
             tooltip: {
                 callbacks: {
                     label: function (tooltipItem) {
                         const value = tooltipItem.raw || 0;
-                        return `Donors: ${value.toLocaleString()}`;
+                        const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        const label = tooltipItem.label || '';
+                        return `${label}: ${value.toLocaleString()} (${percentage}%)`;
                     },
                 },
             },
         },
+        layout: {
+            padding: {
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 10
+            }
+        }
     };
 
     return { data, options }
@@ -357,60 +434,75 @@ export function patientPerHospital(patientHospital) {
 
     const labels = entries.map(([location]) => location);
     const dataValues = entries.map(([, volume]) => volume);
-
+    // Generate dynamic colors based on the number of data points
+    const dynamicColors = generateColors(dataValues.length);
     const data = {
         labels,
         datasets: [
             {
                 label: 'Volume',
                 data: dataValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',  // #FF6384
-                    'rgba(54, 162, 235, 0.5)',  // #36A2EB
-                    'rgba(255, 206, 86, 0.5)',  // #FFCE56
-                    'rgba(75, 192, 192, 0.5)',  // #4BC0C0
-                    'rgba(153, 102, 255, 0.5)', // #9966FF
-                    'rgba(255, 159, 64, 0.5)',  // #FF9F40
-                    'rgba(255, 99, 132, 0.5)',  // #FF6384 (again)
-                    'rgba(54, 162, 235, 0.5)',  // #36A2EB (again)
-                    'rgba(201, 203, 207, 0.5)', // #C9CBCF
-                    'rgba(127, 205, 205, 0.5)', // #7FCDCD
-                    'rgba(222, 107, 107, 0.5)'  // #DE6B6B
-                ],
+                backgroundColor: dynamicColors,
                 borderWidth: 1,
             },
         ],
     };
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                display: false
+                display: true,
+                position: 'right', // Changed from 'left' to 'right' for better space utilization
+                labels: {
+                    boxWidth: 20, // Reduced from 40 for more chart space
+                    padding: 15, // Increased padding for better spacing
+                    usePointStyle: true,
+                    font: {
+                        size: 12 // Added font size for better readability
+                    }
+                }
             },
             datalabels: {
                 color: '#000',
                 font: {
                     weight: 'semibold',
-                    size: 14,
+                    size: 12, // Reduced from 14 for better fit
                 },
-                anchor: 'end',
-                align: 'start',
-                clamp: true,
                 formatter: (value, context) => {
-                    let label = context.chart.data.labels[context.dataIndex] || '';
-                    label = label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
-                    return `${label}\n${value}`;
+                    // Show percentage instead of label + value for cleaner look
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return `${percentage}%`;
                 },
+                display: function (context) {
+                    // Only show labels for slices larger than 5%
+                    const value = context.parsed;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = (value / total) * 100;
+                    return percentage > 5;
+                }
             },
             tooltip: {
                 callbacks: {
                     label: function (tooltipItem) {
                         const value = tooltipItem.raw || 0;
-                        return `Patients: ${value.toLocaleString()}`;
+                        const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        const label = tooltipItem.label || '';
+                        return `${label}: ${value.toLocaleString()} (${percentage}%)`;
                     },
                 },
             },
         },
+        layout: {
+            padding: {
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 10
+            }
+        }
     };
 
     return { data, options }
@@ -492,7 +584,7 @@ export function donorAgeDemographic(donorAge) {
                 color: "#000"
             },
             legend: {
-                position: 'top'
+                display: false,
             },
             tooltip: {
                 callbacks: {

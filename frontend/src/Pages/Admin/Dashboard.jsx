@@ -93,6 +93,7 @@ const Dashboard = () => {
   }, [donorLocation])
   return (
     <div className="h-[calc(100vh-4rem)] overflow-y-auto w-full">
+      {/* Cards */}
       <div className="min-h-fit grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full p-4">
         <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
           <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Available Pasteurized Milk</span>
@@ -101,7 +102,6 @@ const Dashboard = () => {
             <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
           </div>
         </div>
-
         <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
           <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Unpasteurized Milk</span>
           <div className="flex items-baseline justify-end w-full gap-2">
@@ -109,7 +109,6 @@ const Dashboard = () => {
             <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
           </div>
         </div>
-
         <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
           <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Milk Distributed</span>
           <div className="flex items-baseline justify-end w-full gap-2">
@@ -124,7 +123,6 @@ const Dashboard = () => {
             <span className="font-semibold text-secondary" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }}> ml </span>
           </div>
         </div>
-
         <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
           <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Donors</span>
           <div className="flex items-center justify-end w-full gap-2">
@@ -132,7 +130,6 @@ const Dashboard = () => {
             <UserIcon className="text-secondary w-8 h-8" />
           </div>
         </div>
-
         <div className="flex flex-wrap justify-between items-center gap-4 rounded-lg border border-secondary bg-white p-6">
           <span style={{ fontSize: 'clamp(0.8rem, 2vw, 1.5rem)' }} className="font-parkinsans font-medium text-gray-900">Total Recipients</span>
           <div className="flex items-center justify-end w-full gap-2">
@@ -155,6 +152,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      {/* Charts */}
       <div className="p-4">
         <Accordion open={open === 1} icon={<Icon id={1} open={open} />}>
           <AccordionHeader onClick={() => handleOpen(1)} className="font-sofia">Milk Metrics</AccordionHeader>
@@ -176,8 +174,8 @@ const Dashboard = () => {
                 <CardHeader shadow={false} floated={false}>
                   <Typography variant="h5" color="blue-gray">Collected Milk Per Barangay {volumePerLocation && volumePerLocation.total ? `(${formatNumber(volumePerLocation.total)} ml)` : '(0 ml)'}</Typography>
                 </CardHeader>
-                <div className="max-h-[400px] flex items-center justify-center p-4">
-                  <Pie data={volumeLocationData} options={volumeLocationOptions} />
+                <div className="max-h-[600px] h-full">
+                  <Pie data={volumeLocationData} options={volumeLocationOptions}/>
                 </div>
 
               </Card>
@@ -199,7 +197,7 @@ const Dashboard = () => {
                 <CardHeader shadow={false} floated={false}>
                   <Typography variant="h5" color="blue-gray">Donors Per Barangay {donorLocation && donorLocation.total ? `(${formatNumber(donorLocation.total)})` : '(0)'}</Typography>
                 </CardHeader>
-                <div className="max-h-[400px] flex items-center justify-center p-4">
+                <div className="max-h-[600px] h-full">
                   <Pie data={donorLocationData} options={donorLocationOptions} />
                 </div>
               </Card>
@@ -228,7 +226,7 @@ const Dashboard = () => {
                 <CardHeader shadow={false} floated={false}>
                   <Typography variant="h5" color="blue-gray">Patients Per Hospital {patientHospital && patientHospital.total ? `(${formatNumber(patientHospital.total)})` : '(0)'}</Typography>
                 </CardHeader>
-                <div className="max-h-[400px] flex items-center justify-center p-4">
+                <div className="max-h-[400px] h-full">
                   <Pie data={patientHospitalData} options={patientHospitalOptions} />
                 </div>
               </Card>
