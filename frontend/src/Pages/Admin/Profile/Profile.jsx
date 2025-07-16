@@ -2,18 +2,16 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser, sendResetPasswordEmail } from '../../../redux/actions/userActions';
 import { Button, Chip, Typography } from '@material-tailwind/react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Profile = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { userDetails } = useSelector(state => state.users);
     useEffect(() => {
         dispatch(getUser());
     }, [dispatch])
     const handleReset = () => {
-        dispatch(sendResetPasswordEmail({ email: userDetails.email })).then((res) => {
+        dispatch(sendResetPasswordEmail({ email: userDetails.email })).then(() => {
             toast.success("Reset password email sent successfully. Please check your inbox.");
         }).catch((err) => {
             toast.error(err.message)

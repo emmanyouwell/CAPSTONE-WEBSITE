@@ -52,7 +52,7 @@ const Archive = () => {
         ])
     }, [])
     return (
-        <DataTable data={data} columns={columns} pageSize={10} height="h-[calc(70vh-8rem)]" />
+        <DataTable data={data} columns={columns} pageSize={10} />
     )
 }
 
